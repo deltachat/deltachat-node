@@ -5,7 +5,9 @@
   "main": "module.js",
   "scripts": {
     "start": "node-gyp configure build && node module.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node-gyp rebuild --debug --verbose",
+    "preinstall": "git submodule update --recursive --init",
+    "install": "./scripts/rebuild-all"
   },
   "repository": {
     "type": "git",
