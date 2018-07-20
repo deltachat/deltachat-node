@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+echo ">> Recreating deltachat-core/builddir/"
+rm deltachat-core/builddir -rf && mkdir -p deltachat-core/builddir
+
+echo ">> Moving into deltachat-core/builddir"
+pushd deltachat-core/builddir
+
+echo ">> meson"
+meson --default-library=static
+echo ">> ninja"
+ninja -v
+
+echo ">> Moving back to deltachat-node"
+popd
+
+echo ">> Cleaning build/ and npm install"
+rm build/ -rf && npm run dev
