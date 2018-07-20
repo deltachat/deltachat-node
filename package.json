@@ -1,0 +1,23 @@
+{
+  "name": "n-api-article",
+  "version": "0.1.0",
+  "description": "https://medium.com/@schahriar/n-api-and-getting-started-with-writing-c-addons-for-node-js-cf061b3eae75",
+  "main": "module.js",
+  "scripts": {
+    "start": "node-gyp configure build && node module.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schahriar/n-api-article.git"
+  },
+  "engines": {
+    "node": ">=8.4.0"
+  },
+  "author": "Schahriar SaffarShargh <info@schahriar.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/schahriar/n-api-article/issues"
+  },
+  "homepage": "https://github.com/schahriar/n-api-article#readme"
+}
