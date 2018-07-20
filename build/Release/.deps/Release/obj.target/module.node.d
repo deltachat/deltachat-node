@@ -1,1 +1,0 @@
-cmd_Release/obj.target/module.node := g++ -shared -pthread -rdynamic -m64  -Wl,-soname=module.node -o Release/obj.target/module.node -Wl,--start-group Release/obj.target/module/src/module.o -Wl,--end-group ../deltachat-core/builddir/src/libdeltachat.a ../deltachat-core/builddir/libs/libetpan/libetpan.a ../deltachat-core/builddir/libs/netpgp/libnetpgp.a -lsqlite3 -lsasl2 -lpthread
