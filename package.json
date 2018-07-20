@@ -1,6 +1,7 @@
 {
   "name": "deltachat-node-napi",
   "version": "0.0.0",
+  "description": "node.js bindings for deltachat-core based on napi",
   "main": "module.js",
   "scripts": {
     "start": "node-gyp configure build && node module.js",
@@ -15,5 +16,5 @@
   "engines": {
     "node": ">=8.4.0"
   },
-  "license": "MIT"
+  "license": "GPL-3.0"
 }
