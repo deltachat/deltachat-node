@@ -16,5 +16,8 @@
   "engines": {
     "node": ">=8.4.0"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "node-gyp-build": "^3.4.0"
+  }
 }
