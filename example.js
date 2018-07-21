@@ -1,4 +1,4 @@
-const binding = require('node-gyp-build')(__dirname)
+const binding = require('.')
 const context = binding.dc_context_new()
 
 console.log('context', context)
