@@ -8,46 +8,6 @@ napi_value napi_threadsafe_function_event_handler = NULL;
 pthread_mutex_t mutex_event_handler = PTHREAD_MUTEX_INITIALIZER;
 int event_handler_current_event;
 
-napi_value MyFunction(napi_env env, napi_callback_info info)
-{
-  napi_status status;
-
-  size_t argc = 1;
-  napi_value argv[1];
-  status = napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Failed to parse arguments");
-  }
-
-  int number = 0;
-  status = napi_get_value_int32(env, argv[0], &number);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Invalid number was passed as argument");
-  }
-
-  napi_value myNumber;
-  number = number * 2;
-  status = napi_create_int32(env, number, &myNumber);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create return value");
-  }
-
-  napi_value test;
-  int testInt = 3;
-  status = napi_create_external(env, testInt, NULL, NULL, &test);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create test value");
-  }
-
-  return test;
-}
-
-// dc_context_new
-
 uintptr_t event_handler_func(dc_context_t* context, int event, uintptr_t data1, uintptr_t data2)
 {
   printf("event_handler_func, event: %d\n", event);
@@ -61,6 +21,8 @@ uintptr_t event_handler_func(dc_context_t* context, int event, uintptr_t data1, 
 
   return 0;
 }
+
+// dc_context_new
 
 napi_value napi_dc_context_new(napi_env env, napi_callback_info info)
 {
@@ -86,6 +48,7 @@ napi_value napi_dc_context_new(napi_env env, napi_callback_info info)
 }
 
 // dc_perfom_jobs_start
+
 void* imap_thread_func(void* context)
 {
   while (true) {
@@ -227,22 +190,9 @@ napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info)
   return return_value;
 }
 
-// Init
 napi_value Init(napi_env env, napi_value exports)
 {
   napi_status status;
-
-  napi_value fn_MyFunction;
-  status = napi_create_function(env, NULL, 0, MyFunction, NULL, &fn_MyFunction);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to wrap native function MyFunction");
-  }
-
-  status = napi_set_named_property(env, exports, "MyFunction", fn_MyFunction);
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to populate exports with MyFunction");
-  }
 
   napi_value fn_napi_dc_context_new;
   status = napi_create_function(env, NULL, 0, napi_dc_context_new, NULL, &fn_napi_dc_context_new);
