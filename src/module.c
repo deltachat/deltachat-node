@@ -3,15 +3,15 @@
 #include <deltachat.h>
 #include <pthread.h>
 
-
 napi_value napi_threadsafe_function_event_handler = NULL;
 
 pthread_mutex_t mutex_event_handler = PTHREAD_MUTEX_INITIALIZER;
 int event_handler_current_event;
 
-napi_value MyFunction(napi_env env, napi_callback_info info) {
+napi_value MyFunction(napi_env env, napi_callback_info info)
+{
   napi_status status;
-  
+
   size_t argc = 1;
   napi_value argv[1];
   status = napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
@@ -26,7 +26,7 @@ napi_value MyFunction(napi_env env, napi_callback_info info) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Invalid number was passed as argument");
   }
-  
+
   napi_value myNumber;
   number = number * 2;
   status = napi_create_int32(env, number, &myNumber);
@@ -42,7 +42,7 @@ napi_value MyFunction(napi_env env, napi_callback_info info) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create test value");
   }
-  
+
   return test;
 }
 
@@ -50,19 +50,21 @@ napi_value MyFunction(napi_env env, napi_callback_info info) {
 
 uintptr_t event_handler_func(dc_context_t* context, int event, uintptr_t data1, uintptr_t data2)
 {
-    printf("%i\r\n", event);
-    if(napi_threadsafe_function_event_handler != NULL) {
-      pthread_mutex_lock(&mutex_event_handler);
-      printf("a %d", event);
-      event_handler_current_event = event;
-      napi_call_threadsafe_function(napi_threadsafe_function_event_handler, NULL, napi_tsfn_blocking);
-    }
-    return 0; // for unhandled events, it is always safe to return 0
+  printf("event_handler_func, event: %d\n", event);
+
+  if (napi_threadsafe_function_event_handler != NULL) {
+    pthread_mutex_lock(&mutex_event_handler);
+    printf("a %d\n", event);
+    event_handler_current_event = event;
+    napi_call_threadsafe_function(napi_threadsafe_function_event_handler, NULL, napi_tsfn_blocking);
+  }
+
+  return 0;
 }
 
-napi_value napi_dc_context_new(napi_env env, napi_callback_info info) {
+napi_value napi_dc_context_new(napi_env env, napi_callback_info info)
+{
   napi_status status;
-
 
   size_t argc = 1;
   napi_value argv[1];
@@ -79,29 +81,30 @@ napi_value napi_dc_context_new(napi_env env, napi_callback_info info) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create external dc_context object");
   }
-  
-  return context_napi;
 
+  return context_napi;
 }
 
 // dc_perfom_jobs_start
 void* imap_thread_func(void* context)
 {
-    while (true) {
-        dc_perform_imap_jobs(context);
-        dc_perform_imap_fetch(context);
-        dc_perform_imap_idle(context);
-    }
-}
-void* smtp_thread_func(void* context)
-{
-    while (true) {
-        dc_perform_smtp_jobs(context);
-        dc_perform_smtp_idle(context);
-    }
+  while (true) {
+    dc_perform_imap_jobs(context);
+    dc_perform_imap_fetch(context);
+    dc_perform_imap_idle(context);
+  }
 }
 
-napi_value napi_dc_perform_jobs_start(napi_env env, napi_callback_info info) {
+void* smtp_thread_func(void* context)
+{
+  while (true) {
+    dc_perform_smtp_jobs(context);
+    dc_perform_smtp_idle(context);
+  }
+}
+
+napi_value napi_dc_perform_jobs_start(napi_env env, napi_callback_info info)
+{
   napi_status status;
 
   size_t argc = 1;
@@ -112,7 +115,6 @@ napi_value napi_dc_perform_jobs_start(napi_env env, napi_callback_info info) {
     napi_throw_error(env, NULL, "Failed to parse arguments");
   }
 
-
   dc_context_t* *context;
   status = napi_get_value_external(env, argv[0], &context);
 
@@ -120,12 +122,9 @@ napi_value napi_dc_perform_jobs_start(napi_env env, napi_callback_info info) {
     napi_throw_error(env, NULL, "Invalid context object got passed");
   }
 
- 
   pthread_t imap_thread, smtp_thread;
   pthread_create(&imap_thread, NULL, imap_thread_func, context);
   pthread_create(&smtp_thread, NULL, smtp_thread_func, context);
-  //printf(context);
-  
 
   napi_value return_value;
   status = napi_create_int32(env, 1, &return_value);
@@ -148,7 +147,7 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
 {
   napi_value global;
   napi_status status = napi_get_global(env, &global);
-  
+
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to get global");
   }
@@ -158,7 +157,7 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
   }
-  
+
   napi_value result;
 
   status = napi_call_function(
@@ -168,15 +167,17 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
     1,
     argv,
     &result);
-  
+
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to call event_handler callback");
   }
+
   printf("b %d\n", event_handler_current_event);
   pthread_mutex_unlock(&mutex_event_handler);
 }
 
-napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info) {
+napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info)
+{
   napi_status status;
 
   size_t argc = 2;
@@ -186,7 +187,6 @@ napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Failed to parse arguments");
   }
-
 
   dc_context_t* *context;
   status = napi_get_value_external(env, argv[0], &context);
@@ -216,8 +216,6 @@ napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to get the threadsafe version of the javascript eventHandler callback");
   }
-  
-
 
   napi_value return_value;
   status = napi_create_int32(env, 1, &return_value);
@@ -230,9 +228,10 @@ napi_value napi_dc_set_event_handler_cb(napi_env env, napi_callback_info info) {
 }
 
 // Init
-napi_value Init(napi_env env, napi_value exports) {
+napi_value Init(napi_env env, napi_value exports)
+{
   napi_status status;
-  
+
   napi_value fn_MyFunction;
   status = napi_create_function(env, NULL, 0, MyFunction, NULL, &fn_MyFunction);
 
@@ -245,7 +244,6 @@ napi_value Init(napi_env env, napi_value exports) {
     napi_throw_error(env, NULL, "Unable to populate exports with MyFunction");
   }
 
-
   napi_value fn_napi_dc_context_new;
   status = napi_create_function(env, NULL, 0, napi_dc_context_new, NULL, &fn_napi_dc_context_new);
 
@@ -257,7 +255,7 @@ napi_value Init(napi_env env, napi_value exports) {
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to populate exports with dc_context_new");
   }
-  
+
   napi_value fn_napi_dc_perfom_jobs_start;
   status = napi_create_function(env, NULL, 0, napi_dc_perform_jobs_start, NULL, &fn_napi_dc_perfom_jobs_start);
 
