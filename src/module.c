@@ -93,8 +93,6 @@ NAPI_METHOD(set_event_handler) {
     NULL,
     my_callback,
     &napi_threadsafe_function_event_handler));
-
-  NAPI_RETURN_INT32(1);
 }
 
 void* imap_thread_func(void* arg)
@@ -120,8 +118,6 @@ NAPI_METHOD(start_threads) {
 
   pthread_t smtp_thread;
   pthread_create(&smtp_thread, NULL, smtp_thread_func, NULL);
-
-  NAPI_RETURN_INT32(1);
 }
 
 NAPI_INIT() {
