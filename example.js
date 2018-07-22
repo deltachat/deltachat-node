@@ -5,7 +5,7 @@ let dc_context = binding.dcn_context_new()
 console.log('result of dcn_context_new', dc_context)
 
 let result
-result = binding.dcn_set_event_handler(event => {
+result = binding.dcn_set_event_handler(dc_context, event => {
   console.log('this is really js event int', event)
 })
 console.log('result from set_event_handler:', result)

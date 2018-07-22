@@ -1,18 +1,20 @@
 #define NAPI_EXPERIMENTAL
 
-#include <napi-macros.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <node_api.h>
-#include <deltachat.h>
+#include <napi-macros.h>
 #include <pthread.h>
+#include <deltachat.h>
 
 // Context struct we need for some binding specific things. dcn_context_t will
 // be applied to the dc_context created in dcn_context_new().
 typedef struct dcn_context_t {
-  napi_value napi_threadsafe_function_event_handler;
-  pthread_mutex_t mutex_g;
-  int current_event_g;
+  dc_context_t* dc_context;
+  napi_threadsafe_function napi_event_handler;
+  int current_event;
+  pthread_mutex_t mutex;
 } dcn_context_t;
-
 
 uintptr_t dc_event_handler(dc_context_t* context, int event, uintptr_t data1, uintptr_t data2)
 {
@@ -70,28 +72,42 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
 }
 
 NAPI_METHOD(dcn_context_new) {
-  dc_context_t* dc_context = dc_context_new(dc_event_handler, NULL, NULL);
   
-  napi_value dc_context_napi;
-  napi_status status = napi_create_external(env, dc_context, NULL, NULL, &dc_context_napi);
+  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+  dcn_context->dc_context = NULL; 
+  dcn_context->napi_event_handler = NULL;
+  dcn_context->current_event = 0;
+  pthread_mutex_init(&dcn_context->mutex, NULL);
+  
+  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
+
+  napi_value dcn_context_napi;
+  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
 
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create external dc_context object");
   }
 
-
-  return dc_context_napi;
+  return dcn_context_napi;
 }
 
 NAPI_METHOD(dcn_set_event_handler) {
-  NAPI_ARGV(1);
+  NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
 
-  napi_value callback = argv[0];
+  dcn_context_t* dcn_context;
+  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Invalid context object got passed");
+  }
+
+  napi_value callback = argv[1];
   napi_value async_resource_name;
 
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
 
-  /*NAPI_STATUS_THROWS(napi_create_threadsafe_function(
+  //TODO: Figure out how to release threadsafe_function
+  NAPI_STATUS_THROWS(napi_create_threadsafe_function(
     env,
     callback,
     0,
@@ -102,37 +118,59 @@ NAPI_METHOD(dcn_set_event_handler) {
     my_finalize,
     NULL,
     my_callback,
-    &napi_threadsafe_function_event_handler));
-  */
+    &dcn_context->napi_event_handler));
+
+  return 0;
 }
 
 void* imap_thread_func(void* arg)
 {
-  /*while (true) {
-    dc_perform_imap_jobs(dc_context_g);
-    dc_perform_imap_fetch(dc_context_g);
-    dc_perform_imap_idle(dc_context_g);
-  }*/
+  dc_context_t* dc_context = (dc_context_t*)arg; 
+ 
+  while (true) {
+    dc_perform_imap_jobs(dc_context);
+    dc_perform_imap_fetch(dc_context);
+    dc_perform_imap_idle(dc_context);
+  }
+  
+  return NULL;
 }
 
 void* smtp_thread_func(void* arg)
 {
-  /*while (true) {
-    dc_perform_smtp_jobs(dc_context_g);
-    dc_perform_smtp_idle(dc_context_g);
-  }*/
+  dc_context_t* dc_context = (dc_context_t*)arg; 
+  
+  while (true) {
+    dc_perform_smtp_jobs(dc_context);
+    dc_perform_smtp_idle(dc_context);
+  }
+  
+  return NULL;
 }
 
 NAPI_METHOD(dcn_start_threads) {
+  NAPI_ARGV(2);
+
+  dcn_context_t* dcn_context;
+  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Invalid context object got passed");
+  }
+  
+  dc_context_t* dc_context = dcn_context->dc_context;
+
   pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, NULL);
+  pthread_create(&imap_thread, NULL, imap_thread_func, dc_context);
 
   pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, NULL);
+  pthread_create(&smtp_thread, NULL, smtp_thread_func, dc_context);
+  
+  NAPI_RETURN_INT32(1);
 }
 
 NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_context_new);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
-}
+} 
