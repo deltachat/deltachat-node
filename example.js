@@ -1,9 +1,9 @@
-const binding = require('.')
-const context = binding.dc_context_new()
+const dc = require('.')
 
-console.log('context', context)
-console.log(binding.dc_set_event_handler_cb(context, event => {
+console.log('result of dc.create', dc.create())
+
+console.log('result from set_event_handler:', dc.set_event_handler(event => {
   console.log('this is really js event int', event)
 }))
 
-console.log(binding.dc_perform_jobs_start(context))
+console.log('result from start_threads:', dc.start_threads())
