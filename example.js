@@ -1,5 +1,5 @@
+/* eslint-disable camelcase */
 const binding = require('.')
-
 
 let dcn_context = binding.dcn_context_new()
 console.log('result of dcn_context_new', dcn_context)
