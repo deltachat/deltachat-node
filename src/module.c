@@ -16,29 +16,11 @@ typedef struct dcn_context_t {
   pthread_mutex_t mutex;
 } dcn_context_t;
 
-uintptr_t dc_event_handler(dc_context_t* context, int event, uintptr_t data1, uintptr_t data2)
+static void my_callback(napi_env env, napi_value js_callback, void* context, void* data)
 {
-  printf("dc_event_handler, event: %d\n", event);
-
-  /*if (napi_threadsafe_function_event_handler != NULL) {
-    pthread_mutex_lock(&mutex_g);
-    printf("a %d\n", event);
-    current_event_g = event;
-    // TODO investigate what the data parameter below does (NULL)
-    napi_call_threadsafe_function(napi_threadsafe_function_event_handler, NULL, napi_tsfn_blocking);
-  }*/
-
-  return 0;
-}
-
-void my_finalize(napi_env env, void* finalize_data, void* finalize_hint)
-{
-  printf("my_finalize...\n");
-}
-
-void my_callback(napi_env env, napi_value js_callback, void* context, void* data)
-{
-  /*napi_value global;
+  dcn_context_t* dcn_context = (dcn_context_t*)context;
+  
+  napi_value global;
   napi_status status = napi_get_global(env, &global);
 
   if (status != napi_ok) {
@@ -46,7 +28,7 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
   }
 
   napi_value argv[1];
-  status = napi_create_int32(env, current_event_g, &argv);
+  status = napi_create_int32(env, dcn_context->current_event, &argv);
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
   }
@@ -66,10 +48,33 @@ void my_callback(napi_env env, napi_value js_callback, void* context, void* data
   }
 
 
-  printf("b %d\n", current_event_g);
-  //pthread_mutex_unlock(&mutex_g);*/
+  printf("b %d\n", dcn_context->current_event);
+  pthread_mutex_unlock(&dcn_context->mutex);
 
 }
+
+uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
+{
+  printf("dc_event_handler, event: %d\n", event);
+  dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
+
+  if (dcn_context->napi_event_handler != NULL) {
+    pthread_mutex_lock(&dcn_context->mutex);
+    printf("a %d\n", event);
+    // TODO Take care of strings in data1/2 when putting into dcn_context
+    dcn_context->current_event = event;
+    // TODO investigate what the data parameter below does (NULL)
+    napi_call_threadsafe_function(dcn_context->napi_event_handler, NULL, napi_tsfn_blocking);
+  }
+
+  return 0;
+}
+
+void my_finalize(napi_env env, void* finalize_data, void* finalize_hint)
+{
+  printf("my_finalize...\n");
+}
+
 
 NAPI_METHOD(dcn_context_new) {
   
@@ -116,7 +121,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     3,
     0,
     my_finalize,
-    NULL,
+    dcn_context,
     my_callback,
     &dcn_context->napi_event_handler));
 
