@@ -12,3 +12,6 @@ console.log('result from set_event_handler:', result)
 
 result = binding.dcn_start_threads(dc_context)
 console.log('result from start_threads:', result)
+
+result = binding.dcn_set_config(dc_context, "test234", "asd");
+

@@ -205,8 +205,43 @@ NAPI_METHOD(dcn_start_threads) {
   NAPI_RETURN_INT32(1);
 }
 
+#define NAPI_UTF8(name, val) \
+  size_t name##_size = 0; \
+  status = napi_get_value_string_utf8(env, val, NULL, 0, &name##_size); \
+  name##_size++; \
+  char name[name##_size]; \
+  size_t name##_len; \
+  if (napi_get_value_string_utf8(env, val, (char *) &name, name##_size, &name##_len) != napi_ok) { \
+    napi_throw_error(env, "EINVAL", "Expected string"); \
+    return NULL; \
+  }
+
+NAPI_METHOD(dcn_set_config) {
+  NAPI_ARGV(3);
+
+  dcn_context_t* dcn_context;
+  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Invalid context object got passed");
+  }
+  
+  dc_context_t* dc_context = dcn_context->dc_context;
+
+  NAPI_UTF8(key, argv[1]);
+
+  NAPI_UTF8(value, argv[2]);
+  
+  printf("%s %s\n", key, value);
+
+  int return_value = dc_set_config(dcn_context->dc_context, key, value);
+
+  NAPI_RETURN_INT32(return_value);
+}
+
 NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_context_new);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
+  NAPI_EXPORT_FUNCTION(dcn_set_config);
 } 
