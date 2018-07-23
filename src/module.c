@@ -8,6 +8,22 @@
 #include <pthread.h>
 #include <deltachat.h>
 
+#define NAPI_UTF8(name, val) \
+  size_t name##_size = 0; \
+  NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, val, NULL, 0, &name##_size)); \
+  name##_size++; \
+  char name[name##_size]; \
+  size_t name##_len; \
+  NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, val, (char *) &name, name##_size, &name##_len));
+
+#define NAPI_DCN_CONTEXT() \
+  dcn_context_t* dcn_context; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context));
+
+#define NAPI_RETURN_UNDEFINED() \
+  return 0;
+
+
 // Context struct we need for some binding specific things. dcn_context_t will
 // be applied to the dc_context created in dcn_context_new().
 typedef struct dcn_context_t {
@@ -23,8 +39,32 @@ typedef struct dcn_event_t {
   char* data2_str;
 } dcn_event_t;
 
+
+uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
+{
+  printf("dc_event_handler, event: %d\n", event);
+  dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
+
+  if (dcn_context->napi_event_handler != NULL) {
+    //printf(" -> Locking mutex...\n");
+    //pthread_mutex_lock(&dcn_context->mutex);
+    dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
+    dcn_event->event = event;
+    dcn_event->data1_int = data1;
+    dcn_event->data2_int = data2;
+    dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
+        
+    napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
+  } else {
+    printf("Warning: napi_event_handler not set :/\n");
+  }
+
+  return 0;
+}
+
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
 {
+  printf("Inside call_js_event_handler\n");
   dcn_context_t* dcn_context = (dcn_context_t*)context;
   dcn_event_t* dcn_event = (dcn_event_t*)data;
 
@@ -78,35 +118,9 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
     napi_throw_error(env, NULL, "Unable to call event_handler callback");
   }
 
-  pthread_mutex_unlock(&dcn_context->mutex);
+  //pthread_mutex_unlock(&dcn_context->mutex);
+  //printf(" -> Unlocked mutex...\n");
 }
-
-uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
-{
-  printf("dc_event_handler, event: %d\n", event);
-  dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
-
-  if (dcn_context->napi_event_handler != NULL) {
-    pthread_mutex_lock(&dcn_context->mutex);
-    printf("a %d\n", event);
-    
-    dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
-    dcn_event->event = event;
-    dcn_event->data1_int = data1;
-    dcn_event->data2_int = data2;
-    dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
-        
-    napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
-  }
-
-  return 0;
-}
-
-void my_finalize(napi_env env, void* finalize_data, void* finalize_hint)
-{
-  printf("my_finalize...\n");
-}
-
 
 NAPI_METHOD(dcn_context_new) {
   
@@ -130,12 +144,7 @@ NAPI_METHOD(dcn_context_new) {
 NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
 
-  dcn_context_t* dcn_context;
-  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Invalid context object got passed");
-  }
+  NAPI_DCN_CONTEXT();
 
   napi_value callback = argv[1];
   napi_value async_resource_name;
@@ -156,7 +165,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     call_js_event_handler,
     &dcn_context->napi_event_handler));
 
-  return 0;
+  NAPI_RETURN_INT32(1);
 }
 
 void* imap_thread_func(void* arg)
@@ -187,46 +196,36 @@ void* smtp_thread_func(void* arg)
 NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(2);
 
-  dcn_context_t* dcn_context;
-  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Invalid context object got passed");
-  }
-  
-  dc_context_t* dc_context = dcn_context->dc_context;
+  NAPI_DCN_CONTEXT();
 
   pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, dc_context);
+  pthread_create(&imap_thread, NULL, imap_thread_func, dcn_context->dc_context);
 
   pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, dc_context);
+  pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context->dc_context);
   
   NAPI_RETURN_INT32(1);
 }
 
-#define NAPI_UTF8(name, val) \
-  size_t name##_size = 0; \
-  status = napi_get_value_string_utf8(env, val, NULL, 0, &name##_size); \
-  name##_size++; \
-  char name[name##_size]; \
-  size_t name##_len; \
-  if (napi_get_value_string_utf8(env, val, (char *) &name, name##_size, &name##_len) != napi_ok) { \
-    napi_throw_error(env, "EINVAL", "Expected string"); \
-    return NULL; \
-  }
+NAPI_METHOD(dcn_open) {
+  NAPI_ARGV(3);
+
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(dbfile, argv[1]);
+  NAPI_UTF8(blobdir, argv[2]);
+
+  //TODO: How to handle NULL value blobdir
+  printf("dcn_open %s %s\n", dbfile, blobdir);
+  int status = dc_open(dcn_context->dc_context, dbfile, blobdir);
+  printf("dcn_open successfully opened\n");
+
+  NAPI_RETURN_INT32(status);
+}
 
 NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
 
-  dcn_context_t* dcn_context;
-  napi_status status = napi_get_value_external(env, argv[0], (void**)&dcn_context);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Invalid context object got passed");
-  }
-  
-  dc_context_t* dc_context = dcn_context->dc_context;
+  NAPI_DCN_CONTEXT();
 
   NAPI_UTF8(key, argv[1]);
 
@@ -234,14 +233,41 @@ NAPI_METHOD(dcn_set_config) {
   
   printf("%s %s\n", key, value);
 
-  int return_value = dc_set_config(dcn_context->dc_context, key, value);
+  // TODO: Investigate why this is blocking if the database is not open (hypothesis)
+  int status = dc_set_config(dcn_context->dc_context, key, value);
+  printf("set config\n");
 
-  NAPI_RETURN_INT32(return_value);
+  NAPI_RETURN_INT32(status);
+}
+
+NAPI_METHOD(dcn_configure) {
+  NAPI_ARGV(1);
+
+  NAPI_DCN_CONTEXT();
+
+  dc_configure(dcn_context->dc_context);
+  
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_is_configured) {
+
+  NAPI_ARGV(1);
+
+  NAPI_DCN_CONTEXT();
+
+  int status = dc_is_configured(dcn_context->dc_context);
+
+  NAPI_RETURN_INT32(status);
 }
 
 NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_context_new);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
+
+  NAPI_EXPORT_FUNCTION(dcn_open);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
+  NAPI_EXPORT_FUNCTION(dcn_configure);
+  NAPI_EXPORT_FUNCTION(dcn_is_configured);
 } 
