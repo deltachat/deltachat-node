@@ -25,6 +25,14 @@ console.log('result from open:', result)
 
 result = binding.dcn_set_config(dcn_context, 'addr', argv.email)
 console.log('result from set_event_handler:', result)
+const addr = binding.dcn_get_config(dcn_context, 'addr', 'no')
+console.log('dcn_get_config for addr:', addr)
+
+const configWithDefault = binding.dcn_get_config(dcn_context, 'thisdoesnotexist', 'DEFAULT')
+console.log('dcn_get_config for configWithDefault:', configWithDefault)
+// TODO figure out how to omit parameters
+//const retry = binding.dcn_get_config(dcn_context, 'thisdoesnotexist')
+//console.log('dcn_get_config for retry:', retry)
 
 result = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
 console.log('result from set_event_handler:', result)

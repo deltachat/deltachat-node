@@ -333,7 +333,18 @@ NAPI_METHOD(dcn_context_new) {
 
 //NAPI_METHOD(dcn_get_chatlist) {}
 
-//NAPI_METHOD(dcn_get_config) {}
+NAPI_METHOD(dcn_get_config) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(key, argv[1]);
+  NAPI_UTF8(def, argv[2]);
+
+  // TODO figure out how to read a NULL string, currently
+  // this doesn't work since nap_get_value_string_utf8()
+  // crashes if you omit a parameter
+  char *result = dc_get_config(dcn_context->dc_context, key, def);
+  NAPI_RETURN_STRING(result);
+}
 
 //NAPI_METHOD(dcn_get_config_int) {}
 
@@ -529,9 +540,6 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_UTF8(key, argv[1]);
   NAPI_UTF8(value, argv[2]);
 
-  printf("dcn_set_config key: %s value: %s\n", key, value);
-
-  // TODO: Investigate why this is blocking if the database is not open (hypothesis)
   int status = dc_set_config(dcn_context->dc_context, key, value);
   NAPI_RETURN_INT32(status);
 }
@@ -610,7 +618,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
-  //NAPI_EXPORT_FUNCTION(dcn_get_config);
+  NAPI_EXPORT_FUNCTION(dcn_get_config);
   //NAPI_EXPORT_FUNCTION(dcn_get_config_int);
   //NAPI_EXPORT_FUNCTION(dcn_get_contact);
   //NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
