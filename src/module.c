@@ -278,6 +278,8 @@ NAPI_METHOD(dcn_configure) {
 //NAPI_METHOD(dcn_contact_unref) {}
 
 NAPI_METHOD(dcn_context_new) {
+  // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
+
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = NULL;
   dcn_context->napi_event_handler = NULL;
@@ -504,18 +506,6 @@ NAPI_METHOD(dcn_open) {
   NAPI_RETURN_INT32(status);
 }
 
-//NAPI_METHOD(dcn_openssl_init_not_required) {}
-
-//NAPI_METHOD(dcn_perform_imap_fetch) {}
-
-//NAPI_METHOD(dcn_perform_imap_idle) {}
-
-//NAPI_METHOD(dcn_perform_imap_jobs) {}
-
-//NAPI_METHOD(dcn_perform_smtp_idle) {}
-
-//NAPI_METHOD(dcn_perform_smtp_jobs) {}
-
 //NAPI_METHOD(dcn_remove_contact_from_chat) {}
 
 //NAPI_METHOD(dcn_search_msgs) {}
@@ -702,12 +692,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_msg_set_type);
   //NAPI_EXPORT_FUNCTION(dcn_msg_unref);
   NAPI_EXPORT_FUNCTION(dcn_open);
-  //NAPI_EXPORT_FUNCTION(dcn_openssl_init_not_required);
-  //NAPI_EXPORT_FUNCTION(dcn_perform_imap_fetch);
-  //NAPI_EXPORT_FUNCTION(dcn_perform_imap_idle);
-  //NAPI_EXPORT_FUNCTION(dcn_perform_imap_jobs);
-  //NAPI_EXPORT_FUNCTION(dcn_perform_smtp_idle);
-  //NAPI_EXPORT_FUNCTION(dcn_perform_smtp_jobs);
   //NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   //NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_send_audio_msg);
