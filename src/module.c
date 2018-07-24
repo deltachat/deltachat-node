@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <deltachat.h>
 
+#undef NAPI_UTF8
 #define NAPI_UTF8(name, val) \
   size_t name##_size = 0; \
   NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, val, NULL, 0, &name##_size)); \
@@ -65,7 +66,6 @@ uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1,
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
 {
   printf("Inside call_js_event_handler\n");
-  dcn_context_t* dcn_context = (dcn_context_t*)context;
   dcn_event_t* dcn_event = (dcn_event_t*)data;
 
   napi_value global;
