@@ -53,7 +53,7 @@ uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1,
     dcn_event->data1_int = data1;
     dcn_event->data2_int = data2;
     dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
-        
+
     napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
   } else {
     printf("Warning: napi_event_handler not set :/\n");
@@ -77,7 +77,7 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
 
   const int argc = 3;
   napi_value argv[argc];
-  
+
   status = napi_create_int32(env, dcn_event->event, &argv[0]);
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
@@ -122,25 +122,6 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   //printf(" -> Unlocked mutex...\n");
 }
 
-NAPI_METHOD(dcn_context_new) {
-  
-  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
-  dcn_context->dc_context = NULL; 
-  dcn_context->napi_event_handler = NULL;
-  pthread_mutex_init(&dcn_context->mutex, NULL);
-  
-  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
-
-  napi_value dcn_context_napi;
-  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create external dc_context object");
-  }
-
-  return dcn_context_napi;
-}
-
 NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
 
@@ -170,26 +151,26 @@ NAPI_METHOD(dcn_set_event_handler) {
 
 void* imap_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg; 
- 
+  dc_context_t* dc_context = (dc_context_t*)arg;
+
   while (true) {
     dc_perform_imap_jobs(dc_context);
     dc_perform_imap_fetch(dc_context);
     dc_perform_imap_idle(dc_context);
   }
-  
+
   return NULL;
 }
 
 void* smtp_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg; 
-  
+  dc_context_t* dc_context = (dc_context_t*)arg;
+
   while (true) {
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
-  
+
   return NULL;
 }
 
@@ -203,8 +184,26 @@ NAPI_METHOD(dcn_start_threads) {
 
   pthread_t smtp_thread;
   pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context->dc_context);
-  
+
   NAPI_RETURN_INT32(1);
+}
+
+NAPI_METHOD(dcn_context_new) {
+  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+  dcn_context->dc_context = NULL;
+  dcn_context->napi_event_handler = NULL;
+  pthread_mutex_init(&dcn_context->mutex, NULL);
+
+  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
+
+  napi_value dcn_context_napi;
+  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create external dc_context object");
+  }
+
+  return dcn_context_napi;
 }
 
 NAPI_METHOD(dcn_open) {
@@ -215,9 +214,8 @@ NAPI_METHOD(dcn_open) {
   NAPI_UTF8(blobdir, argv[2]);
 
   //TODO: How to handle NULL value blobdir
-  printf("dcn_open %s %s\n", dbfile, blobdir);
+  printf("dcn_open dbfile: %s blobdir %s\n", dbfile, blobdir);
   int status = dc_open(dcn_context->dc_context, dbfile, blobdir);
-  printf("dcn_open successfully opened\n");
 
   NAPI_RETURN_INT32(status);
 }
@@ -226,48 +224,39 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
 
   NAPI_DCN_CONTEXT();
-
   NAPI_UTF8(key, argv[1]);
-
   NAPI_UTF8(value, argv[2]);
-  
-  printf("%s %s\n", key, value);
+
+  printf("dcn_set_config key: %s value: %s\n", key, value);
 
   // TODO: Investigate why this is blocking if the database is not open (hypothesis)
   int status = dc_set_config(dcn_context->dc_context, key, value);
-  printf("set config\n");
-
   NAPI_RETURN_INT32(status);
 }
 
 NAPI_METHOD(dcn_configure) {
   NAPI_ARGV(1);
-
   NAPI_DCN_CONTEXT();
-
   dc_configure(dcn_context->dc_context);
-  
   NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_is_configured) {
-
   NAPI_ARGV(1);
-
   NAPI_DCN_CONTEXT();
-
   int status = dc_is_configured(dcn_context->dc_context);
-
   NAPI_RETURN_INT32(status);
 }
 
 NAPI_INIT() {
-  NAPI_EXPORT_FUNCTION(dcn_context_new);
+  // Setup functions
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
 
+  // deltachat-core api
+  NAPI_EXPORT_FUNCTION(dcn_context_new);
   NAPI_EXPORT_FUNCTION(dcn_open);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
-} 
+}
