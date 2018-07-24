@@ -552,7 +552,16 @@ NAPI_METHOD(dcn_open) {
 
 //NAPI_METHOD(dcn_send_msg) {}
 
-//NAPI_METHOD(dcn_send_text_msg) {}
+NAPI_METHOD(dcn_send_text_msg) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(chat_id, argv[1]);
+  NAPI_UTF8(text, argv[2]);
+
+  uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
+
+  NAPI_RETURN_INT32(msg_id);
+}
 
 //NAPI_METHOD(dcn_send_vcard_msg) {}
 
@@ -732,7 +741,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_send_file_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_image_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_msg);
-  //NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
+  NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_vcard_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_video_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_voice_msg);
