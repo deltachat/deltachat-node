@@ -14,37 +14,41 @@ console.log('Logging in with', argv.email, argv.password)
 let dcn_context = binding.dcn_context_new()
 console.log('result of dcn_context_new', dcn_context)
 
-let result
+let res
 
-result = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
+res = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
   console.log('this is really js event int', event, data1, data2)
 })
 
-result = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
-console.log('result from open:', result)
+res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
+console.log('result from open:', res)
 
-result = binding.dcn_set_config(dcn_context, 'addr', argv.email)
-console.log('result from set_event_handler:', result)
-const addr = binding.dcn_get_config(dcn_context, 'addr', 'no')
-console.log('dcn_get_config for addr:', addr)
+res = binding.dcn_set_config(dcn_context, 'addr', argv.email)
+console.log('result from set_event_handler:', res)
+res = binding.dcn_get_config(dcn_context, 'addr', 'no')
+console.log('result from dcn_get_config addr:', res)
 
-const configWithDefault = binding.dcn_get_config(dcn_context, 'thisdoesnotexist', 'DEFAULT')
-console.log('dcn_get_config for configWithDefault:', configWithDefault)
-// TODO figure out how to omit parameters
-//const retry = binding.dcn_get_config(dcn_context, 'thisdoesnotexist')
-//console.log('dcn_get_config for retry:', retry)
+res = binding.dcn_get_config(dcn_context, 'notexists', 'DEFAULT')
+console.log('result from dcn_get_config for notexist:', res)
 
-result = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
-console.log('result from set_event_handler:', result)
+res = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
+console.log('result from set_event_handler:', res)
 
-result = binding.dcn_is_configured(dcn_context)
-console.log('result from is_configured:', result)
+res = binding.dcn_set_config_int(dcn_context, 'anumber', 314)
+console.log('result from dcn_set_config_int:', res)
+res = binding.dcn_get_config_int(dcn_context, 'anumber', 1)
+console.log('result from dcn_get_config_int anumber:', res)
+res = binding.dcn_get_config_int(dcn_context, 'anumber2', 444)
+console.log('result from dcn_get_config_int anumber2:', res)
 
-result = binding.dcn_configure(dcn_context)
-console.log('result from configure:', result)
+res = binding.dcn_is_configured(dcn_context)
+console.log('result from is_configured:', res)
 
-result = binding.dcn_is_configured(dcn_context)
-console.log('result from is_configured:', result)
+res = binding.dcn_configure(dcn_context)
+console.log('result from configure:', res)
 
-result = binding.dcn_start_threads(dcn_context)
-console.log('result from start_threads:', result)
+res = binding.dcn_is_configured(dcn_context)
+console.log('result from is_configured:', res)
+
+res = binding.dcn_start_threads(dcn_context)
+console.log('result from start_threads:', res)

@@ -335,18 +335,25 @@ NAPI_METHOD(dcn_context_new) {
 
 NAPI_METHOD(dcn_get_config) {
   NAPI_ARGV(3);
+
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(key, argv[1]);
   NAPI_UTF8(def, argv[2]);
 
-  // TODO figure out how to read a NULL string, currently
-  // this doesn't work since nap_get_value_string_utf8()
-  // crashes if you omit a parameter
-  char *result = dc_get_config(dcn_context->dc_context, key, def);
-  NAPI_RETURN_STRING(result);
+  char *value = dc_get_config(dcn_context->dc_context, key, def);
+  NAPI_RETURN_STRING(value);
 }
 
-//NAPI_METHOD(dcn_get_config_int) {}
+NAPI_METHOD(dcn_get_config_int) {
+  NAPI_ARGV(3);
+
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(key, argv[1]);
+  NAPI_INT32(def, argv[2]);
+
+  int value = dc_get_config_int(dcn_context->dc_context, key, def);
+  NAPI_RETURN_INT32(value);
+}
 
 //NAPI_METHOD(dcn_get_contact) {}
 
@@ -544,7 +551,16 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_RETURN_INT32(status);
 }
 
-//NAPI_METHOD(dcn_set_config_int) {}
+NAPI_METHOD(dcn_set_config_int) {
+  NAPI_ARGV(3);
+
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(key, argv[1]);
+  NAPI_INT32(value, argv[2]);
+
+  int status = dc_set_config_int(dcn_context->dc_context, key, value);
+  NAPI_RETURN_INT32(status);
+}
 
 //NAPI_METHOD(dcn_set_text_draft) {}
 
@@ -619,7 +635,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
   NAPI_EXPORT_FUNCTION(dcn_get_config);
-  //NAPI_EXPORT_FUNCTION(dcn_get_config_int);
+  NAPI_EXPORT_FUNCTION(dcn_get_config_int);
   //NAPI_EXPORT_FUNCTION(dcn_get_contact);
   //NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   //NAPI_EXPORT_FUNCTION(dcn_get_contacts);
@@ -705,7 +721,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
   //NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
-  //NAPI_EXPORT_FUNCTION(dcn_set_config_int);
+  NAPI_EXPORT_FUNCTION(dcn_set_config_int);
   //NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   //NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
