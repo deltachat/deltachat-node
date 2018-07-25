@@ -13,6 +13,7 @@
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
+  int is_offline;
 } dcn_context_t;
 
 typedef struct dcn_event_t {
@@ -28,16 +29,22 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   printf("dc_event_handler, event: %d\n", event);
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
 
-  if (dcn_context->napi_event_handler != NULL) {
-    dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
-    dcn_event->event = event;
-    dcn_event->data1_int = data1;
-    dcn_event->data2_int = data2;
-    dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
+  switch (event) {
+    case DC_EVENT_IS_OFFLINE:
+      return dcn_context->is_offline;
 
-    napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
-  } else {
-    printf("Warning: napi_event_handler not set :/\n");
+    default:
+      if (dcn_context->napi_event_handler) {
+        dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
+        dcn_event->event = event;
+        dcn_event->data1_int = data1;
+        dcn_event->data2_int = data2;
+        dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
+        napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
+      } else {
+        printf("Warning: napi_event_handler not set :/\n");
+      }
+      break;
   }
 
   return 0;
@@ -259,6 +266,7 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->napi_event_handler = NULL;
+  dcn_context->is_offline = 0;
 
   napi_value dcn_context_napi;
   napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
@@ -569,6 +577,19 @@ NAPI_METHOD(dcn_set_config_int) {
   NAPI_RETURN_INT32(status);
 }
 
+NAPI_METHOD(dcn_set_offline) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(is_offline, argv[1]); // param2: 1=we're offline, 0=we're online again
+
+  dcn_context->is_offline = is_offline;
+  if (!is_offline) {
+    dc_interrupt_smtp_idle(dcn_context->dc_context);
+  }
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 //NAPI_METHOD(dcn_set_text_draft) {}
 
 //NAPI_METHOD(dcn_star_msgs) {}
@@ -723,6 +744,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_config_int);
+  NAPI_EXPORT_FUNCTION(dcn_set_offline);
   //NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   //NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
