@@ -13,7 +13,6 @@
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
-  pthread_mutex_t mutex;
 } dcn_context_t;
 
 typedef struct dcn_event_t {
@@ -30,8 +29,6 @@ uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1,
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
 
   if (dcn_context->napi_event_handler != NULL) {
-    //printf(" -> Locking mutex...\n");
-    //pthread_mutex_lock(&dcn_context->mutex);
     dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
     dcn_event->event = event;
     dcn_event->data1_int = data1;
@@ -100,19 +97,14 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to call event_handler callback");
   }
-
-  //pthread_mutex_unlock(&dcn_context->mutex);
-  //printf(" -> Unlocked mutex...\n");
 }
 
 NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
-
   NAPI_DCN_CONTEXT();
-
   napi_value callback = argv[1];
-  napi_value async_resource_name;
 
+  napi_value async_resource_name;
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
 
   //TODO: Figure out how to release threadsafe_function
@@ -159,7 +151,6 @@ void* smtp_thread_func(void* arg)
 
 NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(2);
-
   NAPI_DCN_CONTEXT();
 
   pthread_t imap_thread;
@@ -238,7 +229,9 @@ NAPI_METHOD(dcn_start_threads) {
 NAPI_METHOD(dcn_configure) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
+
   dc_configure(dcn_context->dc_context);
+
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -264,11 +257,8 @@ NAPI_METHOD(dcn_context_new) {
   // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
-  dcn_context->dc_context = NULL;
-  dcn_context->napi_event_handler = NULL;
-  pthread_mutex_init(&dcn_context->mutex, NULL);
-
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
+  dcn_context->napi_event_handler = NULL;
 
   napi_value dcn_context_napi;
   napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
@@ -354,23 +344,23 @@ NAPI_METHOD(dcn_create_group_chat) {
 
 NAPI_METHOD(dcn_get_config) {
   NAPI_ARGV(3);
-
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(key, argv[1]);
   NAPI_UTF8(def, argv[2]);
 
   char *value = dc_get_config(dcn_context->dc_context, key, def);
+
   NAPI_RETURN_AND_FREE_STRING(value);
 }
 
 NAPI_METHOD(dcn_get_config_int) {
   NAPI_ARGV(3);
-
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(key, argv[1]);
   NAPI_INT32(def, argv[2]);
 
   int value = dc_get_config_int(dcn_context->dc_context, key, def);
+
   NAPI_RETURN_INT32(value);
 }
 
@@ -411,7 +401,9 @@ NAPI_METHOD(dcn_get_config_int) {
 NAPI_METHOD(dcn_is_configured) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
+
   int status = dc_is_configured(dcn_context->dc_context);
+
   NAPI_RETURN_INT32(status);
 }
 
@@ -511,12 +503,11 @@ NAPI_METHOD(dcn_is_configured) {
 
 NAPI_METHOD(dcn_open) {
   NAPI_ARGV(3);
-
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(dbfile, argv[1]);
   NAPI_UTF8(blobdir, argv[2]);
 
-  //TODO: How to handle NULL value blobdir
+  // blobdir may be the empty string or NULL for default blobdir
   printf("dcn_open dbfile: %s blobdir %s\n", dbfile, blobdir);
   int status = dc_open(dcn_context->dc_context, dbfile, blobdir);
 
@@ -558,23 +549,23 @@ NAPI_METHOD(dcn_send_text_msg) {
 
 NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
-
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(key, argv[1]);
   NAPI_UTF8(value, argv[2]);
 
   int status = dc_set_config(dcn_context->dc_context, key, value);
+
   NAPI_RETURN_INT32(status);
 }
 
 NAPI_METHOD(dcn_set_config_int) {
   NAPI_ARGV(3);
-
   NAPI_DCN_CONTEXT();
   NAPI_UTF8(key, argv[1]);
   NAPI_INT32(value, argv[2]);
 
   int status = dc_set_config_int(dcn_context->dc_context, key, value);
+
   NAPI_RETURN_INT32(status);
 }
 
