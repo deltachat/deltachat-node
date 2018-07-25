@@ -6,7 +6,7 @@
 #include <node_api.h>
 #include <pthread.h>
 #include <deltachat.h>
-#include "napi-macros.h"
+#include "napi-macros-extensions.h"
 
 // Context struct we need for some binding specific things. dcn_context_t will
 // be applied to the dc_context created in dcn_context_new().
