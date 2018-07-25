@@ -1,7 +1,7 @@
 {
-  "name": "deltachat-node-napi",
+  "name": "deltachat-node",
   "version": "0.0.0",
-  "description": "node.js bindings for deltachat-core based on napi",
+  "description": "node.js bindings for deltachat-core",
   "scripts": {
     "start": "node-gyp rebuild && node example.js",
     "dev": "node-gyp rebuild --debug --verbose",
@@ -9,9 +9,10 @@
     "install": "./scripts/rebuild-all",
     "test": "standard"
   },
+  "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jikstra/deltachat-node-napi.git"
+    "url": "https://github.com/deltachat/deltachat-node.git"
   },
   "engines": {
     "node": ">=8.4.0"
