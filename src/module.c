@@ -23,7 +23,7 @@ typedef struct dcn_event_t {
 } dcn_event_t;
 
 
-uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
+static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
 {
   printf("dc_event_handler, event: %d\n", event);
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
@@ -124,7 +124,7 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_INT32(1);
 }
 
-void* imap_thread_func(void* arg)
+static void* imap_thread_func(void* arg)
 {
   dc_context_t* dc_context = (dc_context_t*)arg;
 
@@ -137,7 +137,7 @@ void* imap_thread_func(void* arg)
   return NULL;
 }
 
-void* smtp_thread_func(void* arg)
+static void* smtp_thread_func(void* arg)
 {
   dc_context_t* dc_context = (dc_context_t*)arg;
 
