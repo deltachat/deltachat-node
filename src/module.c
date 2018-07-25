@@ -24,6 +24,11 @@
 #define NAPI_RETURN_UNDEFINED() \
   return 0;
 
+#define NAPI_RETURN_AND_FREE_STRING(name) \
+  napi_value return_utf8; \
+  napi_create_string_utf8(env, name, NAPI_AUTO_LENGTH, &return_utf8); \
+  free(name); \
+  return return_utf8;
 
 // Context struct we need for some binding specific things. dcn_context_t will
 // be applied to the dc_context created in dcn_context_new().
@@ -377,7 +382,7 @@ NAPI_METHOD(dcn_get_config) {
   NAPI_UTF8(def, argv[2]);
 
   char *value = dc_get_config(dcn_context->dc_context, key, def);
-  NAPI_RETURN_STRING(value);
+  NAPI_RETURN_AND_FREE_STRING(value);
 }
 
 NAPI_METHOD(dcn_get_config_int) {
