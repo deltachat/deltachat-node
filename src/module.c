@@ -301,13 +301,47 @@ NAPI_METHOD(dcn_context_new) {
 
 //NAPI_METHOD(dcn_continue_key_transfer) {}
 
-//NAPI_METHOD(dcn_create_chat_by_contact_id) {}
+NAPI_METHOD(dcn_create_chat_by_contact_id) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(contact_id, argv[1]);
 
-//NAPI_METHOD(dcn_create_chat_by_msg_id) {}
+  uint32_t chat_id = dc_create_chat_by_contact_id(dcn_context->dc_context, contact_id);
 
-//NAPI_METHOD(dcn_create_contact) {}
+  NAPI_RETURN_INT32(chat_id);
+}
 
-//NAPI_METHOD(dcn_create_group_chat) {}
+NAPI_METHOD(dcn_create_chat_by_msg_id) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(msg_id, argv[1]);
+
+  uint32_t chat_id = dc_create_chat_by_msg_id(dcn_context->dc_context, msg_id);
+
+  NAPI_RETURN_INT32(chat_id);
+}
+
+NAPI_METHOD(dcn_create_contact) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(name, argv[1]);
+  NAPI_UTF8(addr, argv[2]);
+
+  uint32_t contact_id = dc_create_contact(dcn_context->dc_context, name, addr);
+
+  NAPI_RETURN_INT32(contact_id);
+}
+
+NAPI_METHOD(dcn_create_group_chat) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(verified, argv[1]);
+  NAPI_UTF8(chat_name, argv[2]);
+
+  uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, verified, chat_name);
+
+  NAPI_RETURN_INT32(chat_id);
+}
 
 //NAPI_METHOD(dcn_delete_chat) {}
 
@@ -518,7 +552,16 @@ NAPI_METHOD(dcn_open) {
 
 //NAPI_METHOD(dcn_send_msg) {}
 
-//NAPI_METHOD(dcn_send_text_msg) {}
+NAPI_METHOD(dcn_send_text_msg) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(chat_id, argv[1]);
+  NAPI_UTF8(text, argv[2]);
+
+  uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
+
+  NAPI_RETURN_INT32(msg_id);
+}
 
 //NAPI_METHOD(dcn_send_vcard_msg) {}
 
@@ -607,10 +650,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_context_new);
   //NAPI_EXPORT_FUNCTION(dcn_context_unref);
   //NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
-  //NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
-  //NAPI_EXPORT_FUNCTION(dcn_create_chat_by_msg_id);
-  //NAPI_EXPORT_FUNCTION(dcn_create_contact);
-  //NAPI_EXPORT_FUNCTION(dcn_create_group_chat);
+  NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
+  NAPI_EXPORT_FUNCTION(dcn_create_chat_by_msg_id);
+  NAPI_EXPORT_FUNCTION(dcn_create_contact);
+  NAPI_EXPORT_FUNCTION(dcn_create_group_chat);
   //NAPI_EXPORT_FUNCTION(dcn_delete_chat);
   //NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   //NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
@@ -698,7 +741,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_send_file_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_image_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_msg);
-  //NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
+  NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_vcard_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_video_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_voice_msg);
