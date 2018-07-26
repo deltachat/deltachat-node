@@ -26,7 +26,6 @@ typedef struct dcn_event_t {
 
 static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
 {
-  printf("dc_event_handler, event: %d\n", event);
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
 
   switch (event) {
@@ -52,7 +51,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
 
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
 {
-  printf("Inside call_js_event_handler\n");
   dcn_event_t* dcn_event = (dcn_event_t*)data;
 
   napi_value global;

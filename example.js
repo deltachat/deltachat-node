@@ -17,7 +17,7 @@ console.log('result of dcn_context_new', dcn_context)
 let res
 
 res = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
-  console.log('this is really js event int', event, data1, data2)
+  console.log('> event', event, 'data1', data1, 'data2', data2)
 })
 
 res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
