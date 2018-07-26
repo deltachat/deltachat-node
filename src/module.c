@@ -13,6 +13,8 @@
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
+  pthread_t smtp_thread;
+  pthread_t imap_thread;
   int is_offline;
   int loop_thread;
 } dcn_context_t;
@@ -167,11 +169,11 @@ NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, dcn_context);
+  //pthread_t imap_thread;
+  pthread_create(&dcn_context->imap_thread, NULL, imap_thread_func, dcn_context);
 
-  pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context);
+  //pthread_t smtp_thread;
+  pthread_create(&dcn_context->smtp_thread, NULL, smtp_thread_func, dcn_context);
 
   NAPI_RETURN_INT32(1);
 }
@@ -192,9 +194,11 @@ NAPI_METHOD(dcn_stop_threads) {
 
   printf("4\n");
   //napi_unref_threadsafe_function(env, dcn_context->napi_event_handler);
-  //printf("5\n");
   //napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_abort);
+  pthread_join(dcn_context->imap_thread, NULL);
   printf("5\n");
+  pthread_join(dcn_context->smtp_thread, NULL);
+  printf("6\n");
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -305,6 +309,8 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->napi_event_handler = NULL;
   dcn_context->is_offline = 0;
   dcn_context->loop_thread = 1;
+  dcn_context->imap_thread = 0;
+  dcn_context->smtp_thread = 0;
 
   napi_value dcn_context_napi;
   napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
