@@ -157,7 +157,7 @@ static void* smtp_thread_func(void* arg)
 }
 
 NAPI_METHOD(dcn_start_threads) {
-  NAPI_ARGV(2);
+  NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
   pthread_t imap_thread;
