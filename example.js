@@ -52,3 +52,10 @@ console.log('result from is_configured:', res)
 
 res = binding.dcn_start_threads(dcn_context)
 console.log('result from start_threads:', res)
+
+setTimeout(function () {
+  res = binding.dcn_get_info(dcn_context)
+  console.log('\n\n\n>>>>>>> BEGIN INFO')
+  console.log(res)
+  console.log('<<<<<<< END INFO\n\n\n')
+}, 10000)
