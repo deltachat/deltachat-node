@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <node_api.h>
 #include <pthread.h>
 #include <deltachat.h>
@@ -14,6 +15,9 @@ typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
   int is_offline;
+  pthread_t smtp_thread;
+  pthread_t imap_thread;
+  int stop_threads;
 } dcn_context_t;
 
 typedef struct dcn_event_t {
@@ -131,26 +135,30 @@ NAPI_METHOD(dcn_set_event_handler) {
 
 static void* imap_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
 
-  while (true) {
-    dc_perform_imap_jobs(dc_context);
-    dc_perform_imap_fetch(dc_context);
-    dc_perform_imap_idle(dc_context);
+  while (dcn_context->stop_threads == 0) {
+    dc_perform_imap_jobs(dcn_context->dc_context);
+    printf("a\n");
+    dc_perform_imap_fetch(dcn_context->dc_context);
+    dc_perform_imap_idle(dcn_context->dc_context);
   }
 
+  printf("Debug: Stopped imap_thread\n");
   return NULL;
 }
 
 static void* smtp_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
 
-  while (true) {
-    dc_perform_smtp_jobs(dc_context);
-    dc_perform_smtp_idle(dc_context);
+  while (dcn_context->stop_threads == 0) {
+    printf("%s\n", dcn_context->stop_threads);
+    dc_perform_smtp_jobs(dcn_context->dc_context);
+    dc_perform_smtp_idle(dcn_context->dc_context);
   }
 
+  printf("Debug: Stopped smtp_thread\n");
   return NULL;
 }
 
@@ -158,12 +166,43 @@ NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, dcn_context->dc_context);
+  pthread_create(&dcn_context->imap_thread, NULL, imap_thread_func, dcn_context);
+  pthread_create(&dcn_context->smtp_thread, NULL, smtp_thread_func, dcn_context);
 
-  pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context->dc_context);
+  NAPI_RETURN_INT32(1);
+}
 
+NAPI_METHOD(dcn_stop_threads) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+  
+  dcn_context->stop_threads = 1;
+
+  struct timespec timeout;
+  timeout.tv_sec = (time_t)10;
+
+  if(dcn_context->imap_thread) {
+    struct timespec timeout;
+    timeout.tv_sec = (time_t)10;
+    dc_interrupt_imap_idle(dcn_context->dc_context);
+    int timed_out = pthread_timedjoin_np(dcn_context->imap_thread, NULL, timeout);
+    
+    if(timed_out != 0) {
+      printf("Debug: Couldn't gracefully shut down imap thread, have to kill it...\n");
+      pthread_cancel(dcn_context->imap_thread);
+    }
+  }
+
+  if(dcn_context->smtp_thread) {
+    dc_interrupt_smtp_idle(dcn_context->dc_context);
+    int timed_out = pthread_timedjoin_np(dcn_context->smtp_thread, NULL, timeout);
+    
+    if(timed_out != 0) {
+      printf("Debug: Couldn't gracefully shut down smtp thread, have to kill it...\n");
+      pthread_cancel(dcn_context->smtp_thread);
+    }
+  }
+ 
   NAPI_RETURN_INT32(1);
 }
 
@@ -179,7 +218,7 @@ NAPI_METHOD(dcn_start_threads) {
 
 //NAPI_METHOD(dcn_array_get_cnt) {}
 
-//NAPI_METHOD(dcn_array_get_id) {}
+///NAPI_METHOD(dcn_array_get_id) {}
 
 //NAPI_METHOD(dcn_array_get_ptr) {}
 
@@ -265,6 +304,9 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->napi_event_handler = NULL;
   dcn_context->is_offline = 0;
+  dcn_context->stop_threads = 0;
+  dcn_context->imap_thread = 0;
+  dcn_context->smtp_thread = 0;
 
   napi_value dcn_context_napi;
   napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
@@ -602,9 +644,10 @@ NAPI_METHOD(dcn_set_offline) {
 //NAPI_METHOD(dcn_stop_ongoing_process) {}
 
 NAPI_INIT() {
-  // Setup functions
+  // Setup/down functions
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
+  NAPI_EXPORT_FUNCTION(dcn_stop_threads);
 
   // deltachat-core api
   //NAPI_EXPORT_FUNCTION(dcn_add_address_book);
