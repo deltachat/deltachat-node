@@ -382,7 +382,14 @@ NAPI_METHOD(dcn_get_config_int) {
 
 //NAPI_METHOD(dcn_get_fresh_msgs) {}
 
-//NAPI_METHOD(dcn_get_info) {}
+NAPI_METHOD(dcn_get_info) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  char *str = dc_get_info(dcn_context->dc_context);
+
+  NAPI_RETURN_AND_FREE_STRING(str);
+}
 
 //NAPI_METHOD(dcn_get_msg) {}
 
@@ -669,7 +676,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_get_contacts);
   //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
   //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msgs);
-  //NAPI_EXPORT_FUNCTION(dcn_get_info);
+  NAPI_EXPORT_FUNCTION(dcn_get_info);
   //NAPI_EXPORT_FUNCTION(dcn_get_msg);
   //NAPI_EXPORT_FUNCTION(dcn_get_msg_cnt);
   //NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
