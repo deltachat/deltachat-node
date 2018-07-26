@@ -13,7 +13,10 @@
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
+  pthread_t smtp_thread;
+  pthread_t imap_thread;
   int is_offline;
+  int loop_thread;
 } dcn_context_t;
 
 typedef struct dcn_event_t {
@@ -131,25 +134,33 @@ NAPI_METHOD(dcn_set_event_handler) {
 
 static void* imap_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
 
-  while (true) {
+  while (dcn_context->loop_thread) {
+    printf("LOOPING imap_thread_func\n");
     dc_perform_imap_jobs(dc_context);
     dc_perform_imap_fetch(dc_context);
     dc_perform_imap_idle(dc_context);
   }
+
+  printf("imap_thread_func RETURNED\n");
 
   return NULL;
 }
 
 static void* smtp_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
 
-  while (true) {
+  while (dcn_context->loop_thread) {
+    printf("LOOPING smtp_thread_func\n");
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
+
+  printf("smtp_thread_func RETURNED\n");
 
   return NULL;
 }
@@ -158,13 +169,38 @@ NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, dcn_context->dc_context);
+  //pthread_t imap_thread;
+  pthread_create(&dcn_context->imap_thread, NULL, imap_thread_func, dcn_context);
 
-  pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context->dc_context);
+  //pthread_t smtp_thread;
+  pthread_create(&dcn_context->smtp_thread, NULL, smtp_thread_func, dcn_context);
 
   NAPI_RETURN_INT32(1);
+}
+
+NAPI_METHOD(dcn_stop_threads) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  //napi_threadsafe_function func = dcn_context->napi_event_handler;
+  //dcn_context->napi_event_handler = NULL;
+
+  printf("1\n");
+  dcn_context->loop_thread = 0;
+  printf("2\n");
+  dc_interrupt_imap_idle(dcn_context->dc_context);
+  printf("3\n");
+  dc_interrupt_smtp_idle(dcn_context->dc_context);
+
+  printf("4\n");
+  //napi_unref_threadsafe_function(env, dcn_context->napi_event_handler);
+  //napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_abort);
+  pthread_join(dcn_context->imap_thread, NULL);
+  printf("5\n");
+  pthread_join(dcn_context->smtp_thread, NULL);
+  printf("6\n");
+
+  NAPI_RETURN_UNDEFINED();
 }
 
 /**
@@ -229,7 +265,14 @@ NAPI_METHOD(dcn_start_threads) {
 
 //NAPI_METHOD(dcn_check_qr) {}
 
-//NAPI_METHOD(dcn_close) {}
+NAPI_METHOD(dcn_close) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_close(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_configure) {
   NAPI_ARGV(1);
@@ -265,6 +308,9 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->napi_event_handler = NULL;
   dcn_context->is_offline = 0;
+  dcn_context->loop_thread = 1;
+  dcn_context->imap_thread = 0;
+  dcn_context->smtp_thread = 0;
 
   napi_value dcn_context_napi;
   napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
@@ -602,9 +648,10 @@ NAPI_METHOD(dcn_set_offline) {
 //NAPI_METHOD(dcn_stop_ongoing_process) {}
 
 NAPI_INIT() {
-  // Setup functions
+  // Setup/Teardown functions
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
+  NAPI_EXPORT_FUNCTION(dcn_stop_threads);
 
   // deltachat-core api
   //NAPI_EXPORT_FUNCTION(dcn_add_address_book);
@@ -636,7 +683,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_unref);
   //NAPI_EXPORT_FUNCTION(dcn_check_password);
   //NAPI_EXPORT_FUNCTION(dcn_check_qr);
-  //NAPI_EXPORT_FUNCTION(dcn_close);
+  NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   //NAPI_EXPORT_FUNCTION(dcn_contact_get_addr);
   //NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
