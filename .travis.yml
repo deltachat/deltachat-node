@@ -1,4 +1,26 @@
+sudo: required
+
 language: node_js
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - python3-pip
+    - python3.5
+    - g++-7
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
+  - ./scripts/travis-before-install.sh
 
 node_js:
   - 10
+
+install:
+  - npm install
+
+script:
+  - npm test
