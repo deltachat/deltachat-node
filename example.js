@@ -17,7 +17,7 @@ console.log('result of dcn_context_new', dcn_context)
 let res
 
 res = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
-  console.log('> event', event, 'data1', data1, 'data2', data2)
+  //console.log('> event', event, 'data1', data1, 'data2', data2)
 })
 
 res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
@@ -53,9 +53,15 @@ console.log('result from is_configured:', res)
 res = binding.dcn_start_threads(dcn_context)
 console.log('result from start_threads:', res)
 
-setTimeout(function () {
+/*setTimeout(function () {
   res = binding.dcn_get_info(dcn_context)
   console.log('\n\n\n>>>>>>> BEGIN INFO')
   console.log(res)
   console.log('<<<<<<< END INFO\n\n\n')
-}, 10000)
+}, 10000)*/
+
+
+setTimeout(() => {
+  console.log("stopping...");
+  binding.dcn_stop_threads(dcn_context);
+}, 9000);
