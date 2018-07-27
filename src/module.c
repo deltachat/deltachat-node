@@ -555,7 +555,6 @@ NAPI_METHOD(dcn_open) {
   NAPI_UTF8(blobdir, argv[2]);
 
   // blobdir may be the empty string or NULL for default blobdir
-  printf("dcn_open dbfile: %s blobdir %s\n", dbfile, blobdir);
   int status = dc_open(dcn_context->dc_context, dbfile, blobdir);
 
   NAPI_RETURN_INT32(status);
