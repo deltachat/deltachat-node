@@ -12,7 +12,7 @@ if (!argv.email || !argv.password) {
 console.log('Logging in with', argv.email, argv.password)
 
 let dcn_context = binding.dcn_context_new()
-console.log('result of dcn_context_new', dcn_context)
+console.log('result from dcn_context_new:', dcn_context)
 
 let res
 
@@ -21,18 +21,13 @@ res = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
 })
 
 res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
-console.log('result from open:', res)
-
-res = binding.dcn_set_config(dcn_context, 'addr', argv.email)
-console.log('result from set_event_handler:', res)
-res = binding.dcn_get_config(dcn_context, 'addr', 'no')
-console.log('result from dcn_get_config addr:', res)
+console.log('result from dcn_open:', res)
 
 res = binding.dcn_get_config(dcn_context, 'notexists', 'DEFAULT')
 console.log('result from dcn_get_config for notexist:', res)
 
 res = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
-console.log('result from set_event_handler:', res)
+console.log('result from dcn_set_config:', res)
 
 res = binding.dcn_set_config_int(dcn_context, 'anumber', 314)
 console.log('result from dcn_set_config_int:', res)
@@ -41,22 +36,27 @@ console.log('result from dcn_get_config_int anumber:', res)
 res = binding.dcn_get_config_int(dcn_context, 'anumber2', 444)
 console.log('result from dcn_get_config_int anumber2:', res)
 
-res = binding.dcn_is_configured(dcn_context)
-console.log('result from is_configured:', res)
+if (binding.dcn_is_configured(dcn_context)) {
+  console.log('IS configured. Skipping!')
+} else {
+  console.log('NOT configured so configuring')
+  res = binding.dcn_set_config(dcn_context, 'addr', argv.email)
+  console.log('result from dcn_set_config:', res)
+  res = binding.dcn_get_config(dcn_context, 'addr', 'no')
+  console.log('result from dcn_get_config addr:', res)
 
-res = binding.dcn_configure(dcn_context)
-console.log('result from configure:', res)
+  res = binding.dcn_configure(dcn_context)
+  console.log('result from dcn_configure:', res)
+  res = binding.dcn_is_configured(dcn_context)
+  console.log('result from dcn_is_configured:', res)
+}
 
-res = binding.dcn_is_configured(dcn_context)
-console.log('result from is_configured:', res)
-
-res = binding.dcn_start_threads(dcn_context)
-console.log('result from start_threads:', res)
+console.log('Starting threads!')
+binding.dcn_start_threads(dcn_context)
 
 setTimeout(function () {
-  res = binding.dcn_get_info(dcn_context)
   console.log('\n\n\n>>>>>>> BEGIN INFO')
-  console.log(res)
+  console.log(binding.dcn_get_info(dcn_context))
   console.log('<<<<<<< END INFO\n\n\n')
   setTimeout(function () {
     console.log('Stopping threads ...')
