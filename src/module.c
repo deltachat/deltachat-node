@@ -16,6 +16,7 @@ typedef struct dcn_context_t {
   napi_threadsafe_function napi_event_handler;
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
+  int loop_thread;
   int is_offline;
 } dcn_context_t;
 
@@ -117,14 +118,13 @@ NAPI_METHOD(dcn_set_event_handler) {
   napi_value async_resource_name;
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
 
-  //TODO: Figure out how to release threadsafe_function
   NAPI_STATUS_THROWS(napi_create_threadsafe_function(
     env,
     callback,
     0,
     async_resource_name,
-    0,
-    3,
+    100,
+    1,
     0,
     NULL, // TODO: file an issue that the finalize parameter should be optional
     dcn_context,
@@ -136,35 +136,66 @@ NAPI_METHOD(dcn_set_event_handler) {
 
 static void imap_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
 
-  while (true) {
+  napi_acquire_threadsafe_function(dcn_context->napi_event_handler);
+
+  while (dcn_context->loop_thread) {
     dc_perform_imap_jobs(dc_context);
     dc_perform_imap_fetch(dc_context);
     dc_perform_imap_idle(dc_context);
   }
+
+  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
 }
 
 static void smtp_thread_func(void* arg)
 {
-  dc_context_t* dc_context = (dc_context_t*)arg;
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
 
-  while (true) {
+  napi_acquire_threadsafe_function(dcn_context->napi_event_handler);
+
+  while (dcn_context->loop_thread) {
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
+
+  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
 }
 
 NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  uv_thread_create(&dcn_context->imap_thread, imap_thread_func,
-                   dcn_context->dc_context);
-  uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func,
-                   dcn_context->dc_context);
+  dcn_context->loop_thread = 1;
+  uv_thread_create(&dcn_context->imap_thread, imap_thread_func, dcn_context);
+  uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func, dcn_context);
 
   NAPI_RETURN_INT32(1);
+}
+
+NAPI_METHOD(dcn_stop_threads) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dcn_context->loop_thread = 0;
+
+  if (dcn_context->imap_thread && dcn_context->smtp_thread) {
+    dc_interrupt_imap_idle(dcn_context->dc_context);
+    dc_interrupt_smtp_idle(dcn_context->dc_context);
+
+    uv_thread_join(&dcn_context->imap_thread);
+    uv_thread_join(&dcn_context->smtp_thread);
+
+    dcn_context->imap_thread = 0;
+    dcn_context->smtp_thread = 0;
+  }
+
+  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
+
+  NAPI_RETURN_UNDEFINED();
 }
 
 /**
@@ -266,6 +297,7 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->napi_event_handler = NULL;
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
+  dcn_context->loop_thread = 0;
   dcn_context->is_offline = 0;
 
   napi_value dcn_context_napi;
@@ -607,6 +639,7 @@ NAPI_INIT() {
   // Setup functions
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
+  NAPI_EXPORT_FUNCTION(dcn_stop_threads);
 
   // deltachat-core api
   //NAPI_EXPORT_FUNCTION(dcn_add_address_book);

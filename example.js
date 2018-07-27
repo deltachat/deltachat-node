@@ -58,4 +58,9 @@ setTimeout(function () {
   console.log('\n\n\n>>>>>>> BEGIN INFO')
   console.log(res)
   console.log('<<<<<<< END INFO\n\n\n')
-}, 10000)
+  setTimeout(function () {
+    console.log('Stopping threads ...')
+    binding.dcn_stop_threads(dcn_context)
+    console.log('Done.')
+  }, 2000)
+}, 5000)
