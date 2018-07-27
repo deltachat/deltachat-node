@@ -4,25 +4,30 @@
 #include <stdio.h>
 #include <string.h>
 #include <node_api.h>
-#include <pthread.h>
+#include <uv.h>
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
 
-// Context struct we need for some binding specific things. dcn_context_t will
-// be applied to the dc_context created in dcn_context_new().
+/**
+ * Custom context
+ */
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function napi_event_handler;
+  uv_thread_t smtp_thread;
+  uv_thread_t imap_thread;
   int is_offline;
 } dcn_context_t;
 
+/**
+ * Event struct for calling back to JavaScript
+ */
 typedef struct dcn_event_t {
   int event;
   uintptr_t data1_int;
   uintptr_t data2_int;
   char* data2_str;
 } dcn_event_t;
-
 
 static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
 {
@@ -129,7 +134,7 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_INT32(1);
 }
 
-static void* imap_thread_func(void* arg)
+static void imap_thread_func(void* arg)
 {
   dc_context_t* dc_context = (dc_context_t*)arg;
 
@@ -138,11 +143,9 @@ static void* imap_thread_func(void* arg)
     dc_perform_imap_fetch(dc_context);
     dc_perform_imap_idle(dc_context);
   }
-
-  return NULL;
 }
 
-static void* smtp_thread_func(void* arg)
+static void smtp_thread_func(void* arg)
 {
   dc_context_t* dc_context = (dc_context_t*)arg;
 
@@ -150,19 +153,16 @@ static void* smtp_thread_func(void* arg)
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
-
-  return NULL;
 }
 
 NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  pthread_t imap_thread;
-  pthread_create(&imap_thread, NULL, imap_thread_func, dcn_context->dc_context);
-
-  pthread_t smtp_thread;
-  pthread_create(&smtp_thread, NULL, smtp_thread_func, dcn_context->dc_context);
+  uv_thread_create(&dcn_context->imap_thread, imap_thread_func,
+                   dcn_context->dc_context);
+  uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func,
+                   dcn_context->dc_context);
 
   NAPI_RETURN_INT32(1);
 }
@@ -264,6 +264,8 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->napi_event_handler = NULL;
+  dcn_context->imap_thread = 0;
+  dcn_context->smtp_thread = 0;
   dcn_context->is_offline = 0;
 
   napi_value dcn_context_napi;
