@@ -26,9 +26,6 @@ console.log('result from dcn_open:', res)
 res = binding.dcn_get_config(dcn_context, 'notexists', 'DEFAULT')
 console.log('result from dcn_get_config for notexist:', res)
 
-res = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
-console.log('result from dcn_set_config:', res)
-
 res = binding.dcn_set_config_int(dcn_context, 'anumber', 314)
 console.log('result from dcn_set_config_int:', res)
 res = binding.dcn_get_config_int(dcn_context, 'anumber', 1)
@@ -41,12 +38,9 @@ if (binding.dcn_is_configured(dcn_context)) {
 } else {
   console.log('NOT configured so configuring')
   res = binding.dcn_set_config(dcn_context, 'addr', argv.email)
-  console.log('result from dcn_set_config:', res)
-  res = binding.dcn_get_config(dcn_context, 'addr', 'no')
-  console.log('result from dcn_get_config addr:', res)
+  res = binding.dcn_set_config(dcn_context, 'mail_pw', argv.password)
 
   res = binding.dcn_configure(dcn_context)
-  console.log('result from dcn_configure:', res)
   res = binding.dcn_is_configured(dcn_context)
   console.log('result from dcn_is_configured:', res)
 }
