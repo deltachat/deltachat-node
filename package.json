@@ -19,8 +19,10 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "debug": "^3.1.0",
     "napi-macros": "ralphtheninja/napi-macros#check-status",
-    "node-gyp-build": "^3.4.0"
+    "node-gyp-build": "^3.4.0",
+    "xtend": "^4.0.1"
   },
   "devDependencies": {
     "standard": "^11.0.1"
