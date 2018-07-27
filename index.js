@@ -20,33 +20,29 @@ function DeltaChat (opts) {
   if (typeof opts.email !== 'string') throw new Error('Missing .email')
   if (typeof opts.password !== 'string') throw new Error('Missing .password')
 
-  const dcn_context = binding.dcn_context_new()
+  const dcn_context = binding.dc_context_new()
+  const dcn_context_t = binding.dcn_context_t
 
-  Object.keys(binding)
-    .sort()
-    .filter(name => name !== 'dcn_context_new')
-    .forEach(name => {
-      const method = name.replace('dcn_', '')
-      debug('binding', name, 'to', method)
-      this[method] = (...args) => {
-        args = [ dcn_context ].concat(args)
-        binding[name].apply(null, args)
-      }
-    })
+  Object.keys(dcn_context_t).forEach(key => {
+    this[key] = (...args) => {
+      args = [ dcn_context ].concat(args)
+      dcn_context_t[key].apply(null, args)
+    }
+  })
 
-  this.set_event_handler((event, data1, data2) => {
+  this.dc_set_event_handler((event, data1, data2) => {
     debug('event', event, 'data1', data1, 'data2', data2)
   })
 
-  this.open(path.join(opts.root, 'db.sqlite'), '')
+  this.dc_open(path.join(opts.root, 'db.sqlite'), '')
 
-  if (!this.is_configured()) {
-    this.set_config('addr', opts.email)
-    this.set_config('mail_pw', opts.password)
-    this.configure()
+  if (!this.dc_is_configured()) {
+    this.dc_set_config('addr', opts.email)
+    this.dc_set_config('mail_pw', opts.password)
+    this.dc_configure()
   }
 
-  this.start_threads()
+  this.dc_start_threads()
 }
 
 inherits(DeltaChat, EventEmitter)

@@ -3,3 +3,4 @@ package-lock.json
 node_modules/
 test.sqlite
 db.sqlite
+db.sqlite-journal
