@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-const binding = require('.')
+const binding = require('./binding')
 const minimist = require('minimist')
 
 var argv = minimist(process.argv.slice(2))
