@@ -167,8 +167,7 @@ NAPI_METHOD(dcn_context_new) {
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
                                           dcn_context_finalize,
-                                          NULL, NULL,
-                                          &result));
+                                          NULL, &result));
   return result;
 }
 
