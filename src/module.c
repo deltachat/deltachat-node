@@ -554,9 +554,23 @@ NAPI_METHOD(dcn_context_t_dc_stop_threads) {
  * dc_chat_t
  */
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_archived) {}
+NAPI_METHOD(dc_chat_t_dc_chat_get_archived) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_draft_timestamp) {}
+  int archived = dc_chat_get_archived(dc_chat);
+
+  NAPI_RETURN_INT32(archived);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_get_draft_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  int draft_timestamp = dc_chat_get_draft_timestamp(dc_chat);
+
+  NAPI_RETURN_INT32(draft_timestamp);
+}
 
 NAPI_METHOD(dc_chat_t_dc_chat_get_id) {
   NAPI_ARGV(1);
@@ -567,21 +581,89 @@ NAPI_METHOD(dc_chat_t_dc_chat_get_id) {
   NAPI_RETURN_UINT32(chat_id);
 }
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_name) {}
+NAPI_METHOD(dc_chat_t_dc_chat_get_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_profile_image) {}
+  char* name = dc_chat_get_name(dc_chat);
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_subtitle) {}
+  NAPI_RETURN_AND_FREE_STRING(name);
+}
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_text_draft) {}
+NAPI_METHOD(dc_chat_t_dc_chat_get_profile_image) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
 
-//NAPI_METHOD(dc_chat_t_dc_chat_get_type) {}
+  char* profile_image = dc_chat_get_profile_image(dc_chat);
 
-//NAPI_METHOD(dc_chat_t_dc_chat_is_self_talk) {}
+  if (profile_image == NULL) {
+    napi_value result;
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
 
-//NAPI_METHOD(dc_chat_t_dc_chat_is_unpromoted) {}
+  NAPI_RETURN_AND_FREE_STRING(profile_image);
+}
 
-//NAPI_METHOD(dc_chat_t_dc_chat_is_verified) {}
+NAPI_METHOD(dc_chat_t_dc_chat_get_subtitle) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  char* subtitle = dc_chat_get_subtitle(dc_chat);
+
+  NAPI_RETURN_AND_FREE_STRING(subtitle);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_get_text_draft) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  char* text_draft = dc_chat_get_text_draft(dc_chat);
+
+  if (text_draft == NULL) {
+    napi_value result;
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  NAPI_RETURN_AND_FREE_STRING(text_draft);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_get_type) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  int type = dc_chat_get_type(dc_chat);
+
+  NAPI_RETURN_INT32(type);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_is_self_talk) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  int is_self_talk = dc_chat_is_self_talk(dc_chat);
+
+  NAPI_RETURN_INT32(is_self_talk);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_is_unpromoted) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  int is_unpromoted = dc_chat_is_unpromoted(dc_chat);
+
+  NAPI_RETURN_INT32(is_unpromoted);
+}
+
+NAPI_METHOD(dc_chat_t_dc_chat_is_verified) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  int is_verified = dc_chat_is_verified(dc_chat);
+
+  NAPI_RETURN_INT32(is_verified);
+}
 
 /**
  * dc_chatlist_t
@@ -798,17 +880,17 @@ NAPI_INIT() {
    * dc_chat_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_archived);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_draft_timestamp);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_archived);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_draft_timestamp);
   NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_id);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_name);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_profile_image);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_subtitle);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_text_draft);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_type);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_self_talk);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_unpromoted);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_verified);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_name);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_profile_image);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_subtitle);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_text_draft);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_type);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_self_talk);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_unpromoted);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_verified);
 
   /**
    * dc_chatlist_t
