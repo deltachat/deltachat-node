@@ -105,10 +105,6 @@ DeltaChat.prototype.getContact = function (contactId) {
   throw new Error('getContact NYI')
 }
 
-DeltaChat.prototype.getContact = function (contactId) {
-  throw new Error('getContact NYI')
-}
-
 DeltaChat.prototype.getContacts = function (listFlags, query) {
   throw new Error('getContacts NYI')
 }
