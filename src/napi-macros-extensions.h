@@ -13,6 +13,10 @@
   dcn_context_t* dcn_context; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context));
 
+#define NAPI_DC_CHAT() \
+  dc_chat_t* dc_chat; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_chat));
+
 #define NAPI_RETURN_UNDEFINED() \
   return 0;
 

@@ -271,7 +271,30 @@ NAPI_METHOD(dcn_context_t_dc_create_group_chat) {
 
 //NAPI_METHOD(dcn_context_t_dc_get_blocked_contacts) {}
 
-//NAPI_METHOD(dcn_context_t_dc_get_chat) {}
+NAPI_METHOD(dcn_context_t_dc_get_chat) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+
+  napi_value result;
+  napi_status status;
+
+  dc_chat_t* chat = dc_get_chat(dcn_context->dc_context, chat_id);
+
+  if (chat == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  // TODO add some clean up here? (try triggering gc from js)
+  status = napi_create_external(env, chat, NULL, NULL, &result);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create external dc_chat_t* object");
+  }
+
+  return result;
+}
 
 //NAPI_METHOD(dcn_context_t_dc_get_chat_contacts) {}
 
@@ -533,29 +556,36 @@ NAPI_METHOD(dcn_context_t_dc_stop_threads) {
  * dc_chat_t
  */
 
-//NAPI_METHOD(dcn_chat_get_archived) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_archived) {}
 
-//NAPI_METHOD(dcn_chat_get_draft_timestamp) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_draft_timestamp) {}
 
-//NAPI_METHOD(dcn_chat_get_id) {}
+NAPI_METHOD(dc_chat_t_dc_chat_get_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
 
-//NAPI_METHOD(dcn_chat_get_name) {}
+  uint32_t chat_id = dc_chat_get_id(dc_chat);
 
-//NAPI_METHOD(dcn_chat_get_profile_image) {}
+  NAPI_RETURN_UINT32(chat_id);
+}
 
-//NAPI_METHOD(dcn_chat_get_subtitle) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_name) {}
 
-//NAPI_METHOD(dcn_chat_get_text_draft) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_profile_image) {}
 
-//NAPI_METHOD(dcn_chat_get_type) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_subtitle) {}
 
-//NAPI_METHOD(dcn_chat_is_self_talk) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_text_draft) {}
 
-//NAPI_METHOD(dcn_chat_is_unpromoted) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_get_type) {}
 
-//NAPI_METHOD(dcn_chat_is_verified) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_is_self_talk) {}
 
-//NAPI_METHOD(dcn_chat_unref) {}
+//NAPI_METHOD(dc_chat_t_dc_chat_is_unpromoted) {}
+
+//NAPI_METHOD(dc_chat_t_dc_chat_is_verified) {}
+
+//NAPI_METHOD(dc_chat_t_dc_chat_unref) {}
 
 /**
  * dc_chatlist_t
@@ -702,7 +732,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_blobdir);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_blocked_cnt);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_blocked_contacts);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chat);
+  NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chat);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chat_contacts);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chat_id_by_contact_id);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chat_media);
@@ -772,18 +802,18 @@ NAPI_INIT() {
    * dc_chat_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_archived);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_draft_timestamp);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_subtitle);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_text_draft);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_is_verified);
-  //NAPI_EXPORT_FUNCTION(dcn_chat_unref);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_archived);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_draft_timestamp);
+  NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_id);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_name);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_profile_image);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_subtitle);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_text_draft);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_get_type);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_self_talk);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_unpromoted);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_verified);
+  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_unref);
 
   /**
    * dc_chatlist_t

@@ -9,10 +9,24 @@ const camelCase = require('camelcase')
 
 const DEFAULTS = { root: process.cwd() }
 
+function Chat (dc_chat) {
+  if (!(this instanceof Chat)) return new Chat(dc_chat)
+
+  this.dc_chat = dc_chat
+  this.binding = binding.dc_chat_t
+
+  Object.keys(this.binding).forEach(key => {
+    const camel = camelCase(key.replace('dc_chat', ''))
+    debug('binding', camel, 'to', key)
+    this[camel] = (...args) => {
+      args = [ this.dc_chat ].concat(args)
+      return this.binding[key].apply(null, args)
+    }
+  })
+}
+
 function DeltaChat (opts) {
-  if (!(this instanceof DeltaChat)) {
-    return new DeltaChat(opts)
-  }
+  if (!(this instanceof DeltaChat)) return new DeltaChat(opts)
 
   EventEmitter.call(this)
 
@@ -21,7 +35,7 @@ function DeltaChat (opts) {
   if (typeof opts.email !== 'string') throw new Error('Missing .email')
   if (typeof opts.password !== 'string') throw new Error('Missing .password')
 
-  const dcn_context = binding.dcn_context_new()
+  this.dcn_context = binding.dcn_context_new()
   this.binding = binding.dcn_context_t
 
   Object.keys(this.binding).forEach(key => {
@@ -31,7 +45,7 @@ function DeltaChat (opts) {
     } else {
       debug('binding', camel, 'to', key)
       this[camel] = (...args) => {
-        args = [ dcn_context ].concat(args)
+        args = [ this.dcn_context ].concat(args)
         return this.binding[key].apply(null, args)
       }
     }
@@ -61,7 +75,14 @@ DeltaChat.prototype.getBlockedContacts = function () {
 }
 
 DeltaChat.prototype.getChat = function (chatId) {
-  throw new Error('getChat NYI')
+  const dc_chat = this.binding.dc_get_chat(this.dcn_context, chatId)
+  if (dc_chat === null) {
+    // TODO we should handle this better, currently throwing, but should
+    // really callback with an error, but good for now to at least handle
+    // the null case
+    throw new Error(`No chat found with id ${chatId}`)
+  }
+  return Chat(dc_chat)
 }
 
 DeltaChat.prototype.getChatContacts = function (chatId) {
