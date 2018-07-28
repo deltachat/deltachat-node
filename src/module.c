@@ -142,6 +142,31 @@ static void smtp_thread_func(void* arg)
 }
 
 /**
+ * Main context.
+ */
+
+NAPI_METHOD(dcn_context_new) {
+  // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
+
+  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
+  dcn_context->napi_event_handler = NULL;
+  dcn_context->imap_thread = 0;
+  dcn_context->smtp_thread = 0;
+  dcn_context->loop_thread = 0;
+  dcn_context->is_offline = 0;
+
+  napi_value dcn_context_napi;
+  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create external dc_context object");
+  }
+
+  return dcn_context_napi;
+}
+
+/**
  * dcn_context_t
  */
 
@@ -185,27 +210,6 @@ NAPI_METHOD(dcn_context_t_dc_configure) {
 //NAPI_METHOD(dcn_context_t_dc_contact_is_verified) {}
 
 //NAPI_METHOD(dcn_context_t_dc_contact_unref) {}
-
-NAPI_METHOD(dcn_context_t_dc_context_new) {
-  // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
-
-  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
-  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
-  dcn_context->napi_event_handler = NULL;
-  dcn_context->imap_thread = 0;
-  dcn_context->smtp_thread = 0;
-  dcn_context->loop_thread = 0;
-  dcn_context->is_offline = 0;
-
-  napi_value dcn_context_napi;
-  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create external dc_context object");
-  }
-
-  return dcn_context_napi;
-}
 
 //NAPI_METHOD(dcn_context_t_dc_context_unref) {}
 
@@ -659,6 +663,12 @@ NAPI_METHOD(dcn_context_t_dc_stop_threads) {
 
 NAPI_INIT() {
   /**
+   * Main context
+   */
+
+  NAPI_EXPORT_FUNCTION(dcn_context_new);
+
+  /**
    * dcn_context_t
    */
 
@@ -679,7 +689,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_blocked);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_verified);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_unref);
-  NAPI_EXPORT_FUNCTION(dcn_context_t_dc_context_new);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_context_unref);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_create_chat_by_contact_id);

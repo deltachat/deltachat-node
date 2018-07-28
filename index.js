@@ -20,7 +20,7 @@ function DeltaChat (opts) {
   if (typeof opts.email !== 'string') throw new Error('Missing .email')
   if (typeof opts.password !== 'string') throw new Error('Missing .password')
 
-  const dcn_context = binding.dc_context_new()
+  const dcn_context = binding.dcn_context_new()
   const dcn_context_t = binding.dcn_context_t
 
   Object.keys(dcn_context_t).forEach(key => {
