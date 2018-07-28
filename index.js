@@ -26,7 +26,7 @@ function DeltaChat (opts) {
   Object.keys(dcn_context_t).forEach(key => {
     this[key] = (...args) => {
       args = [ dcn_context ].concat(args)
-      dcn_context_t[key].apply(null, args)
+      return dcn_context_t[key].apply(null, args)
     }
   })
 
