@@ -5,6 +5,7 @@ const inherits = require('util').inherits
 const xtend = require('xtend')
 const path = require('path')
 const debug = require('debug')('deltachat')
+const camelCase = require('camelcase')
 
 const DEFAULTS = { root: process.cwd() }
 
@@ -21,28 +22,86 @@ function DeltaChat (opts) {
   if (typeof opts.password !== 'string') throw new Error('Missing .password')
 
   const dcn_context = binding.dcn_context_new()
-  const dcn_context_t = binding.dcn_context_t
+  this.binding = binding.dcn_context_t
 
-  Object.keys(dcn_context_t).forEach(key => {
-    this[key] = (...args) => {
-      args = [ dcn_context ].concat(args)
-      return dcn_context_t[key].apply(null, args)
+  Object.keys(this.binding).forEach(key => {
+    const camel = camelCase(key.replace('dc_', ''))
+    if (typeof this[camel] === 'function') {
+      debug('method', camel, 'already exists, skipping!')
+    } else {
+      debug('binding', camel, 'to', key)
+      this[camel] = (...args) => {
+        args = [ dcn_context ].concat(args)
+        return this.binding[key].apply(null, args)
+      }
     }
   })
 
-  this.dc_set_event_handler((event, data1, data2) => {
+  this.setEventHandler((event, data1, data2) => {
     debug('event', event, 'data1', data1, 'data2', data2)
   })
 
-  this.dc_open(path.join(opts.root, 'db.sqlite'), '')
+  this.open(path.join(opts.root, 'db.sqlite'), '')
 
-  if (!this.dc_is_configured()) {
-    this.dc_set_config('addr', opts.email)
-    this.dc_set_config('mail_pw', opts.password)
-    this.dc_configure()
+  if (!this.isConfigured()) {
+    this.setConfig('addr', opts.email)
+    this.setConfig('mail_pw', opts.password)
+    this.configure()
   }
 
-  this.dc_start_threads()
+  this.startThreads()
+}
+
+DeltaChat.prototype.checkQr = function (qr) {
+  throw new Error('checkQr NYI')
+}
+
+DeltaChat.prototype.getBlockedContacts = function () {
+  throw new Error('getBlockedContacts NYI')
+}
+
+DeltaChat.prototype.getChat = function (chatId) {
+  throw new Error('getChat NYI')
+}
+
+DeltaChat.prototype.getChatContacts = function (chatId) {
+  throw new Error('getChatContacts NYI')
+}
+
+DeltaChat.prototype.getChatMedia = function (chatId, msgType, orMsgType) {
+  throw new Error('getChatMedia NYI')
+}
+
+DeltaChat.prototype.getChatMsgs = function (chatId, flags, marker1Before) {
+  throw new Error('getChatMsgs NYI')
+}
+
+DeltaChat.prototype.getChatList = function (listFlags, queryStr, queryId) {
+  throw new Error('getChatList NYI')
+}
+
+DeltaChat.prototype.getContact = function (contactId) {
+  throw new Error('getContact NYI')
+}
+
+DeltaChat.prototype.getContact = function (contactId) {
+  throw new Error('getContact NYI')
+}
+
+DeltaChat.prototype.getContacts = function (listFlags, query) {
+  throw new Error('getContacts NYI')
+}
+
+DeltaChat.prototype.getFreshMsgs = function () {
+  throw new Error('getFreshMsgs NYI')
+}
+
+DeltaChat.prototype.getMsg = function (msgId) {
+  throw new Error('getMsg NYI')
+}
+
+DeltaChat.prototype.searchMsgs = function (chatId, query) {
+  throw new Error('searchMsgs NYI')
 }
 
 inherits(DeltaChat, EventEmitter)
