@@ -156,14 +156,11 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->loop_thread = 0;
   dcn_context->is_offline = 0;
 
-  napi_value dcn_context_napi;
-  napi_status status = napi_create_external(env, dcn_context, NULL, NULL, &dcn_context_napi);
+  napi_value result;
+  NAPI_STATUS_THROWS(napi_create_external(env, dcn_context, NULL, NULL,
+                                          &result));
 
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create external dc_context object");
-  }
-
-  return dcn_context_napi;
+  return result;
 }
 
 /**
@@ -284,7 +281,6 @@ NAPI_METHOD(dcn_context_t_dc_get_chat) {
   NAPI_UINT32(chat_id, argv[1]);
 
   napi_value result;
-  napi_status status;
 
   dc_chat_t* chat = dc_get_chat(dcn_context->dc_context, chat_id);
 
@@ -293,12 +289,8 @@ NAPI_METHOD(dcn_context_t_dc_get_chat) {
     return result;
   }
 
-  status = napi_create_external(env, chat, dc_chat_t_finalize, NULL, &result);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create external dc_chat_t* object");
-  }
-
+  NAPI_STATUS_THROWS(napi_create_external(env, chat, dc_chat_t_finalize,
+                                          NULL, &result));
   return result;
 }
 
