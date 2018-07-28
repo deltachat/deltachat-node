@@ -271,6 +271,13 @@ NAPI_METHOD(dcn_context_t_dc_create_group_chat) {
 
 //NAPI_METHOD(dcn_context_t_dc_get_blocked_contacts) {}
 
+void dc_chat_t_finalize(napi_env env, void* data, void* hint) {
+  if (data) {
+    printf("Freeing dc_chat_t* ptr %p\n", data);
+    dc_chat_unref((dc_chat_t*)data);
+  }
+}
+
 NAPI_METHOD(dcn_context_t_dc_get_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -286,8 +293,7 @@ NAPI_METHOD(dcn_context_t_dc_get_chat) {
     return result;
   }
 
-  // TODO add some clean up here? (try triggering gc from js)
-  status = napi_create_external(env, chat, NULL, NULL, &result);
+  status = napi_create_external(env, chat, dc_chat_t_finalize, NULL, &result);
 
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create external dc_chat_t* object");
@@ -585,8 +591,6 @@ NAPI_METHOD(dc_chat_t_dc_chat_get_id) {
 
 //NAPI_METHOD(dc_chat_t_dc_chat_is_verified) {}
 
-//NAPI_METHOD(dc_chat_t_dc_chat_unref) {}
-
 /**
  * dc_chatlist_t
  */
@@ -813,7 +817,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_self_talk);
   //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_unpromoted);
   //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_is_verified);
-  //NAPI_EXPORT_FUNCTION(dc_chat_t_dc_chat_unref);
 
   /**
    * dc_chatlist_t
