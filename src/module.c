@@ -218,7 +218,7 @@ NAPI_METHOD(dcn_context_t_dc_create_chat_by_contact_id) {
 
   uint32_t chat_id = dc_create_chat_by_contact_id(dcn_context->dc_context, contact_id);
 
-  NAPI_RETURN_INT32(chat_id);
+  NAPI_RETURN_UINT32(chat_id);
 }
 
 NAPI_METHOD(dcn_context_t_dc_create_chat_by_msg_id) {
@@ -228,7 +228,7 @@ NAPI_METHOD(dcn_context_t_dc_create_chat_by_msg_id) {
 
   uint32_t chat_id = dc_create_chat_by_msg_id(dcn_context->dc_context, msg_id);
 
-  NAPI_RETURN_INT32(chat_id);
+  NAPI_RETURN_UINT32(chat_id);
 }
 
 NAPI_METHOD(dcn_context_t_dc_create_contact) {
@@ -239,7 +239,7 @@ NAPI_METHOD(dcn_context_t_dc_create_contact) {
 
   uint32_t contact_id = dc_create_contact(dcn_context->dc_context, name, addr);
 
-  NAPI_RETURN_INT32(contact_id);
+  NAPI_RETURN_UINT32(contact_id);
 }
 
 NAPI_METHOD(dcn_context_t_dc_create_group_chat) {
@@ -250,7 +250,7 @@ NAPI_METHOD(dcn_context_t_dc_create_group_chat) {
 
   uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, verified, chat_name);
 
-  NAPI_RETURN_INT32(chat_id);
+  NAPI_RETURN_UINT32(chat_id);
 }
 
 //NAPI_METHOD(dcn_context_t_dc_delete_chat) {}
@@ -400,7 +400,7 @@ NAPI_METHOD(dcn_context_t_dc_send_text_msg) {
 
   uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
 
-  NAPI_RETURN_INT32(msg_id);
+  NAPI_RETURN_UINT32(msg_id);
 }
 
 //NAPI_METHOD(dcn_context_t_dc_send_vcard_msg) {}
