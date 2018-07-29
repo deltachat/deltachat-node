@@ -685,8 +685,6 @@ NAPI_METHOD(dcn_chat_is_verified) {
 
 //NAPI_METHOD(dcn_chatlist_get_summary) {}
 
-//NAPI_METHOD(dcn_chatlist_unref) {}
-
 /**
  * dc_contact_t
  */
@@ -779,8 +777,6 @@ NAPI_METHOD(dcn_contact_is_verified) {
 
 //NAPI_METHOD(dcn_lot_get_timestamp) {}
 
-//NAPI_METHOD(dcn_lot_unref) {}
-
 /**
  * dc_msg_t
  */
@@ -848,8 +844,6 @@ NAPI_METHOD(dcn_contact_is_verified) {
 //NAPI_METHOD(dcn_msg_set_text) {}
 
 //NAPI_METHOD(dcn_msg_set_type) {}
-
-//NAPI_METHOD(dcn_msg_unref) {}
 
 NAPI_INIT() {
   /**
@@ -964,7 +958,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_context);
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_msg_id);
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary);
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_unref);
 
   /**
    * dc_contact_t
@@ -989,7 +982,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_lot_get_text1_meaning);
   //NAPI_EXPORT_FUNCTION(dcn_lot_get_text2);
   //NAPI_EXPORT_FUNCTION(dcn_lot_get_timestamp);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_unref);
 
   /**
    * dc_msg_t
@@ -1027,5 +1019,4 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
   //NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   //NAPI_EXPORT_FUNCTION(dcn_msg_set_type);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_unref);
 }
