@@ -214,8 +214,6 @@ NAPI_METHOD(dcn_context_t_dc_configure) {
 
 //NAPI_METHOD(dcn_context_t_dc_contact_is_verified) {}
 
-//NAPI_METHOD(dcn_context_t_dc_contact_unref) {}
-
 //NAPI_METHOD(dcn_context_t_dc_continue_key_transfer) {}
 
 NAPI_METHOD(dcn_context_t_dc_create_chat_by_contact_id) {
@@ -332,7 +330,31 @@ NAPI_METHOD(dcn_context_t_dc_get_config_int) {
   NAPI_RETURN_INT32(value);
 }
 
-//NAPI_METHOD(dcn_context_t_dc_get_contact) {}
+void dc_contact_t_finalize(napi_env env, void* data, void* hint) {
+  if (data) {
+    printf("Freeing dc_contact_t* ptr %p\n", data);
+    dc_contact_unref((dc_contact_t*)data);
+  }
+}
+
+NAPI_METHOD(dcn_context_t_dc_get_contact) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(contact_id, argv[1]);
+
+  napi_value result;
+
+  dc_contact_t* contact = dc_get_contact(dcn_context->dc_context, contact_id);
+
+  if (contact == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  NAPI_STATUS_THROWS(napi_create_external(env, contact, dc_contact_t_finalize,
+                                          NULL, &result));
+  return result;
+}
 
 //NAPI_METHOD(dcn_context_t_dc_get_contact_encrinfo) {}
 
@@ -810,7 +832,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_name_n_addr);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_blocked);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_verified);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_unref);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_create_chat_by_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_create_chat_by_msg_id);
@@ -831,7 +852,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_chatlist);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_config);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_config_int);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_contact);
+  NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_contact);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_contact_encrinfo);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_contacts);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_get_fresh_msg_cnt);

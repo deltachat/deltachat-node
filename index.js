@@ -25,6 +25,22 @@ function Chat (dc_chat) {
   })
 }
 
+function Contact (dc_contact) {
+  if (!(this instanceof Contact)) return new Contact(dc_contact)
+
+  this.dc_contact = dc_contact
+  this.binding = binding.dc_contact_t
+
+  Object.keys(this.binding).forEach(key => {
+    const camel = camelCase(key.replace('dc_contact', ''))
+    debug('binding', camel, 'to', key)
+    this[camel] = (...args) => {
+      args = [ this.dc_contact ].concat(args)
+      return this.binding[key].apply(null, args)
+    }
+  })
+}
+
 function DeltaChat (opts) {
   if (!(this instanceof DeltaChat)) return new DeltaChat(opts)
 
@@ -77,9 +93,7 @@ DeltaChat.prototype.getBlockedContacts = function () {
 DeltaChat.prototype.getChat = function (chatId) {
   const dc_chat = this.binding.dc_get_chat(this.dcn_context, chatId)
   if (dc_chat === null) {
-    // TODO we should handle this better, currently throwing, but should
-    // really callback with an error, but good for now to at least handle
-    // the null case
+    // TODO callback with error
     throw new Error(`No chat found with id ${chatId}`)
   }
   return Chat(dc_chat)
@@ -102,7 +116,12 @@ DeltaChat.prototype.getChatList = function (listFlags, queryStr, queryId) {
 }
 
 DeltaChat.prototype.getContact = function (contactId) {
-  throw new Error('getContact NYI')
+  const dc_contact = this.binding.dc_get_contact(this.dcn_context, contactId)
+  if (dc_contact === null) {
+    // TODO callback with error
+    throw new Error(`No contact found with id ${contactId}`)
+  }
+  return Contact(dc_contact)
 }
 
 DeltaChat.prototype.getContacts = function (listFlags, query) {

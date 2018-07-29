@@ -15,6 +15,12 @@ keys.filter(key => key.startsWith('dc_chat_t_')).forEach(key => {
   exports.dc_chat_t[method] = binding[key]
 })
 
+exports.dc_contact_t = {}
+keys.filter(key => key.startsWith('dc_contact_t_')).forEach(key => {
+  const method = key.replace('dc_contact_t_', '')
+  exports.dc_contact_t[method] = binding[key]
+})
+
 if (!module.parent) {
   console.log(exports)
 }
