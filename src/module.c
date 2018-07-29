@@ -263,7 +263,6 @@ NAPI_METHOD(dcn_create_group_chat) {
 
 void dc_chat_t_finalize(napi_env env, void* data, void* hint) {
   if (data) {
-    printf("Freeing dc_chat_t* ptr %p\n", data);
     dc_chat_unref((dc_chat_t*)data);
   }
 }
@@ -326,7 +325,6 @@ NAPI_METHOD(dcn_get_config_int) {
 
 void dc_contact_t_finalize(napi_env env, void* data, void* hint) {
   if (data) {
-    printf("Freeing dc_contact_t* ptr %p\n", data);
     dc_contact_unref((dc_contact_t*)data);
   }
 }
