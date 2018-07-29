@@ -964,69 +964,320 @@ NAPI_METHOD(dcn_lot_get_timestamp) {
  * dc_msg_t
  */
 
-//NAPI_METHOD(dcn_msg_get_chat_id) {}
+NAPI_METHOD(dcn_msg_get_chat_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_duration) {}
+  uint32_t chat_id = dc_msg_get_chat_id(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_file) {}
+  NAPI_RETURN_UINT32(chat_id);
+}
 
-//NAPI_METHOD(dcn_msg_get_filebytes) {}
+NAPI_METHOD(dcn_msg_get_duration) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_filemime) {}
+  int duration = dc_msg_get_duration(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_filename) {}
+  NAPI_RETURN_INT32(duration);
+}
 
-//NAPI_METHOD(dcn_msg_get_from_id) {}
+NAPI_METHOD(dcn_msg_get_file) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_height) {}
+  char* file = dc_msg_get_file(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_id) {}
+  NAPI_RETURN_AND_FREE_STRING(file);
+}
 
-//NAPI_METHOD(dcn_msg_get_mediainfo) {}
+NAPI_METHOD(dcn_msg_get_filebytes) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_setupcodebegin) {}
+  uint64_t filebytes = dc_msg_get_filebytes(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_showpadlock) {}
+  NAPI_RETURN_UINT64(filebytes);
+}
 
-//NAPI_METHOD(dcn_msg_get_state) {}
+NAPI_METHOD(dcn_msg_get_filemime) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_summary) {}
+  char* filemime = dc_msg_get_filemime(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_summarytext) {}
+  NAPI_RETURN_AND_FREE_STRING(filemime);
+}
 
-//NAPI_METHOD(dcn_msg_get_text) {}
+NAPI_METHOD(dcn_msg_get_filename) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_get_timestamp) {}
+  char* filename = dc_msg_get_filename(dc_msg);
 
-//NAPI_METHOD(dcn_msg_get_type) {}
+  NAPI_RETURN_AND_FREE_STRING(filename);
+}
 
-//NAPI_METHOD(dcn_msg_get_width) {}
+NAPI_METHOD(dcn_msg_get_from_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_is_forwarded) {}
+  uint32_t contact_id = dc_msg_get_from_id(dc_msg);
 
-//NAPI_METHOD(dcn_msg_is_increation) {}
+  NAPI_RETURN_UINT32(contact_id);
+}
 
-//NAPI_METHOD(dcn_msg_is_info) {}
+NAPI_METHOD(dcn_msg_get_height) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_is_sent) {}
+  int height = dc_msg_get_height(dc_msg);
 
-//NAPI_METHOD(dcn_msg_is_setupmessage) {}
+  NAPI_RETURN_INT32(height);
+}
 
-//NAPI_METHOD(dcn_msg_is_starred) {}
+NAPI_METHOD(dcn_msg_get_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_latefiling_mediasize) {}
+  uint32_t msg_id = dc_msg_get_id(dc_msg);
 
-//NAPI_METHOD(dcn_msg_set_dimension) {}
+  NAPI_RETURN_UINT32(msg_id);
+}
 
-//NAPI_METHOD(dcn_msg_set_duration) {}
+NAPI_METHOD(dcn_msg_get_mediainfo) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_set_file) {}
+  dc_lot_t* mediainfo = dc_msg_get_mediainfo(dc_msg);
 
-//NAPI_METHOD(dcn_msg_set_mediainfo) {}
+  napi_value result;
+  NAPI_STATUS_THROWS(napi_create_external(env, mediainfo,
+                                          dc_lot_finalize,
+                                          NULL, &result));
+  return result;
+}
 
-//NAPI_METHOD(dcn_msg_set_text) {}
+NAPI_METHOD(dcn_msg_get_setupcodebegin) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
 
-//NAPI_METHOD(dcn_msg_set_type) {}
+  char* setupcodebegin = dc_msg_get_setupcodebegin(dc_msg);
+
+  NAPI_RETURN_AND_FREE_STRING(setupcodebegin);
+}
+
+NAPI_METHOD(dcn_msg_get_showpadlock) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int showpadlock = dc_msg_get_showpadlock(dc_msg);
+
+  NAPI_RETURN_INT32(showpadlock);
+}
+
+NAPI_METHOD(dcn_msg_get_state) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int state = dc_msg_get_state(dc_msg);
+
+  NAPI_RETURN_INT32(state);
+}
+
+NAPI_METHOD(dcn_msg_get_summary) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+
+  dc_chat_t* dc_chat = NULL;
+  napi_get_value_external(env, argv[1], (void**)&dc_chat);
+
+  dc_lot_t* summary = dc_msg_get_summary(dc_msg, dc_chat);
+
+  napi_value result;
+  NAPI_STATUS_THROWS(napi_create_external(env, summary,
+                                          dc_lot_finalize,
+                                          NULL, &result));
+  return result;
+}
+
+NAPI_METHOD(dcn_msg_get_summarytext) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_INT32(approx_characters, argv[1]);
+
+  char* summarytext = dc_msg_get_summarytext(dc_msg, approx_characters);
+
+  NAPI_RETURN_AND_FREE_STRING(summarytext);
+}
+
+NAPI_METHOD(dcn_msg_get_text) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  char* text = dc_msg_get_text(dc_msg);
+
+  NAPI_RETURN_AND_FREE_STRING(text);
+}
+
+NAPI_METHOD(dcn_msg_get_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int timestamp = dc_msg_get_timestamp(dc_msg);
+
+  NAPI_RETURN_INT32(timestamp);
+}
+
+NAPI_METHOD(dcn_msg_get_type) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int type = dc_msg_get_type(dc_msg);
+
+  NAPI_RETURN_INT32(type);
+}
+
+NAPI_METHOD(dcn_msg_get_width) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int width = dc_msg_get_width(dc_msg);
+
+  NAPI_RETURN_INT32(width);
+}
+
+NAPI_METHOD(dcn_msg_is_forwarded) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_forwarded = dc_msg_is_forwarded(dc_msg);
+
+  NAPI_RETURN_INT32(is_forwarded);
+}
+
+NAPI_METHOD(dcn_msg_is_increation) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_increation = dc_msg_is_increation(dc_msg);
+
+  NAPI_RETURN_INT32(is_increation);
+}
+
+NAPI_METHOD(dcn_msg_is_info) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_info = dc_msg_is_info(dc_msg);
+
+  NAPI_RETURN_INT32(is_info);
+}
+
+NAPI_METHOD(dcn_msg_is_sent) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_sent = dc_msg_is_sent(dc_msg);
+
+  NAPI_RETURN_INT32(is_sent);
+}
+
+NAPI_METHOD(dcn_msg_is_setupmessage) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_setupmessage = dc_msg_is_setupmessage(dc_msg);
+
+  NAPI_RETURN_INT32(is_setupmessage);
+}
+
+NAPI_METHOD(dcn_msg_is_starred) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int is_starred = dc_msg_is_starred(dc_msg);
+
+  NAPI_RETURN_INT32(is_starred);
+}
+
+NAPI_METHOD(dcn_msg_latefiling_mediasize) {
+  NAPI_ARGV(4);
+  NAPI_DC_MSG();
+  NAPI_INT32(width, argv[1]);
+  NAPI_INT32(height, argv[2]);
+  NAPI_INT32(duration, argv[3]);
+
+  dc_msg_latefiling_mediasize(dc_msg, width, height, duration);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_dimension) {
+  NAPI_ARGV(3);
+  NAPI_DC_MSG();
+  NAPI_INT32(width, argv[1]);
+  NAPI_INT32(height, argv[2]);
+
+  dc_msg_set_dimension(dc_msg, width, height);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_duration) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_INT32(duration, argv[1]);
+
+  dc_msg_set_duration(dc_msg, duration);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_file) {
+  NAPI_ARGV(3);
+  NAPI_DC_MSG();
+  NAPI_UTF8(file, argv[1]);
+  NAPI_UTF8(filemime, argv[2]);
+
+  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
+  dc_msg_set_file(dc_msg, file, filemime_null);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_mediainfo) {
+  NAPI_ARGV(3);
+  NAPI_DC_MSG();
+  NAPI_UTF8(author, argv[1]);
+  NAPI_UTF8(trackname, argv[2]);
+
+  char* author_null = strlen(author) > 0 ? author : NULL;
+  char* trackname_null = strlen(trackname) > 0 ? trackname : NULL;
+  dc_msg_set_mediainfo(dc_msg, author_null, trackname_null);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_text) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_UTF8(text, argv[1]);
+
+  dc_msg_set_text(dc_msg, text);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_type) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_INT32(type, argv[1]);
+
+  dc_msg_set_type(dc_msg, type);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_INIT() {
   /**
@@ -1169,36 +1420,36 @@ NAPI_INIT() {
    * dc_msg_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_chat_id);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_duration);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_file);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_filebytes);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_filemime);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_filename);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_mediainfo);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_state);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_summary);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_summarytext);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_text);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_type);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_info);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_sent);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_setupmessage);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_is_starred);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_latefiling_mediasize);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_set_type);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_chat_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_duration);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_file);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_filebytes);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_filemime);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_filename);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_mediainfo);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_state);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_summary);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_summarytext);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_text);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_type);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_info);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_sent);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_setupmessage);
+  NAPI_EXPORT_FUNCTION(dcn_msg_is_starred);
+  NAPI_EXPORT_FUNCTION(dcn_msg_latefiling_mediasize);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_type);
 }

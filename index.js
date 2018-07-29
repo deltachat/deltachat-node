@@ -170,6 +170,171 @@ class Message {
   constructor (dc_msg) {
     this.dc_msg = dc_msg
   }
+
+  getChatId () {
+    return binding.dcn_msg_get_chat_id(this.dc_msg)
+  }
+
+  getDuration () {
+    return binding.dcn_msg_get_duration(this.dc_msg)
+  }
+
+  getFile () {
+    return binding.dcn_msg_get_file(this.dc_msg)
+  }
+
+  getFilebytes () {
+    return binding.dcn_msg_get_filebytes(this.dc_msg)
+  }
+
+  getFilemime () {
+    return binding.dcn_msg_get_filemime(this.dc_msg)
+  }
+
+  getFilename () {
+    return binding.dcn_msg_get_filename(this.dc_msg)
+  }
+
+  getFromId () {
+    return binding.dcn_msg_get_from_id(this.dc_msg)
+  }
+
+  getHeight () {
+    return binding.dcn_msg_get_height(this.dc_msg)
+  }
+
+  getId () {
+    return binding.dcn_msg_get_id(this.dc_msg)
+  }
+
+  getMediainfo () {
+    return new Lot(binding.dcn_msg_get_mediainfo(this.dc_msg))
+  }
+
+  getSetupcodebegin () {
+    return binding.dcn_msg_get_setupcodebegin(this.dc_msg)
+  }
+
+  getShowpadlock () {
+    return binding.dcn_msg_get_showpadlock(this.dc_msg)
+  }
+
+  getState () {
+    // TODO this returns an integer, we might want to use strings
+    // *or* add extra methods which calls _this_ function and
+    // compares to known integers (typical higher level functionality)
+
+    // We could also return a separate message state with some
+    // defined properties, e.g.
+
+    // msg.getState().fresh
+    // msg.getState().noticed
+    // msg.getState().seen
+    // msg.getState().pending
+    // msg.getState().failed
+    // msg.getState().fresh
+    // msg.getState().delivered
+    // msg.getState().received
+
+    return binding.dcn_msg_get_state(this.dc_msg)
+  }
+
+  getSummary (chat) {
+    const dc_chat = (chat && chat.dc_chat) || null
+    return new Lot(binding.dcn_msg_get_summary(this.dc_msg, dc_chat))
+  }
+
+  getSummarytext (approxCharacters) {
+    approxCharacters = approxCharacters || 0
+    return binding.dcn_msg_get_summarytext(this.dc_msg, approxCharacters)
+  }
+
+  getText () {
+    return binding.dcn_msg_get_text(this.dc_msg)
+  }
+
+  getTimestamp () {
+    return binding.dcn_msg_get_timestamp(this.dc_msg)
+  }
+
+  getType () {
+    // TODO this returns an integer, we might want to do some
+    // similar things as to message state, e.g.
+
+    // msg.getType().text
+    // msg.getType().image
+    // msg.getType().gif
+    // msg.getType().audio
+    // msg.getType().voice
+    // msg.getType().video
+    // msg.getType().file
+    // msg.getType().undefined
+
+    return binding.dcn_msg_get_type(this.dc_msg)
+  }
+
+  getWidth () {
+    return binding.dcn_msg_get_width(this.dc_msg)
+  }
+
+  isForwarded () {
+    return Boolean(binding.dcn_msg_is_forwarded(this.dc_msg))
+  }
+
+  isIncreation () {
+    return Boolean(binding.dcn_msg_is_increation(this.dc_msg))
+  }
+
+  isInfo () {
+    return Boolean(binding.dcn_msg_is_info(this.dc_msg))
+  }
+
+  isSent () {
+    return Boolean(binding.dcn_msg_is_sent(this.dc_msg))
+  }
+
+  isSetupmessage () {
+    return Boolean(binding.dcn_msg_is_setupmessage(this.dc_msg))
+  }
+
+  isStarred () {
+    return Boolean(binding.dcn_msg_is_starred(this.dc_msg))
+  }
+
+  latefilingMediasize (width, height, duration) {
+    width = width || 0
+    height = height || 0
+    duration = duration || 0
+    binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
+  }
+
+  setDimension (width, height) {
+    width = width || 0
+    height = height || 0
+    binding.dcn_msg_set_dimension(this.dc_msg, width, height)
+  }
+
+  setDuration (duration) {
+    duration = duration || 0
+    binding.dcn_msg_set_duration(this.dc_msg, duration)
+  }
+
+  setFile (file, mime) {
+    if (typeof file !== 'string' && !mime) throw new Error('Missing filename')
+    binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
+  }
+
+  setMediainfo (author, trackName) {
+    binding.dcn_msg_set_mediainfo(this.dc_msg, author || '', trackName || '')
+  }
+
+  setText (text) {
+    binding.dcn_msg_set_text(this.dc_msg, text)
+  }
+
+  setType (type) {
+    binding.dcn_msg_set_type(this.dc_msg, type)
+  }
 }
 
 /**
@@ -234,9 +399,9 @@ class DeltaChat extends EventEmitter {
   getChatList (listFlags, queryStr, queryContactId) {
     // TODO figure out how to do flags correctly, compare with the docs for
     // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef
-    if (!listFlags) listFlags = 0
-    if (!queryStr) queryStr = ''
-    if (!queryContactId) queryContactId = 0
+    listFlags = listFlags || 0
+    queryStr = queryStr || ''
+    queryContactId = queryContactId || 0
 
     const dc_chatlist = binding.dcn_get_chatlist(this.dcn_context,
       listFlags,
