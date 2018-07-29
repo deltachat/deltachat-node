@@ -65,6 +65,37 @@ Chat.prototype.isVerified = function () {
 /**
  *
  */
+function ChatList (dc_chatlist) {
+  if (!(this instanceof ChatList)) {
+    return new ChatList(dc_chatlist)
+  }
+  this.dc_chatlist = dc_chatlist
+}
+
+ChatList.prototype.getChatId = function (index) {
+  return binding.dcn_chatlist_get_chat_id(this.dc_chatlist, index)
+}
+
+ChatList.prototype.getCount = function () {
+  return binding.dcn_chatlist_get_cnt(this.dc_chatlist)
+}
+
+ChatList.prototype.getMsgId = function (index) {
+  return binding.dcn_chatlist_get_msg_id(this.dc_chatlist, index)
+}
+
+ChatList.prototype.getSummary = function (index, chat) {
+  const dc_chat = chat && chat.dc_chat || null
+  console.log('passed in dc_chat', dc_chat)
+  return binding.dcn_chatlist_get_summary(this.dc_chatlist, index, dc_chat)
+  // TODO We should return a wrapped object here
+  // const dc_lot = binding.dcn_chatlist_get_summary(this.dc_chatlist, index, dc_chat)
+  // return Lot(dc_lot)
+}
+
+/**
+ *
+ */
 function Contact (dc_contact) {
   if (!(this instanceof Contact)) {
     return new Contact(dc_contact)
@@ -163,6 +194,20 @@ DeltaChat.prototype.getChat = function (chatId) {
     throw new Error(`No chat found with id ${chatId}`)
   }
   return Chat(dc_chat)
+}
+
+DeltaChat.prototype.getChatList = function (listFlags, queryStr, queryContactId) {
+  // TODO figure out how to do flags correctly, compare with the docs for
+  // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef
+  if (!listFlags) listFlags = 0
+  if (!queryStr) queryStr = ''
+  if (!queryContactId) queryContactId = 0
+
+  const dc_chatlist = binding.dcn_get_chatlist(this.dcn_context,
+                                               listFlags,
+                                               queryStr,
+                                               queryContactId)
+  return ChatList(dc_chatlist)
 }
 
 DeltaChat.prototype.getConfig = function (key, def) {

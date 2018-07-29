@@ -294,7 +294,36 @@ NAPI_METHOD(dcn_get_chat) {
 
 //NAPI_METHOD(dcn_get_chat_msgs) {}
 
-//NAPI_METHOD(dcn_get_chatlist) {}
+void dc_chatlist_t_finalize(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_chatlist_unref((dc_chatlist_t*)data);
+  }
+}
+
+NAPI_METHOD(dcn_get_chatlist) {
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(listflags, argv[1]);
+  NAPI_UTF8(query_str, argv[2]);
+  NAPI_UINT32(query_contact_id, argv[3]);
+
+  // query_str HAS to be a string, if empty pass NULL
+  char* query_str_null = strlen(query_str) > 0 ? query_str : NULL;
+  dc_chatlist_t* chatlist = dc_get_chatlist(dcn_context->dc_context,
+                                            listflags,
+                                            query_str_null,
+                                            query_contact_id);
+
+  free(query_str);
+
+  napi_value result;
+  NAPI_STATUS_THROWS(napi_create_external(env,
+                                          chatlist,
+                                          dc_chatlist_t_finalize,
+                                          NULL,
+                                          &result));
+  return result;
+}
 
 NAPI_METHOD(dcn_get_config) {
   NAPI_ARGV(3);
@@ -693,15 +722,63 @@ NAPI_METHOD(dcn_chat_is_verified) {
  * dc_chatlist_t
  */
 
-//NAPI_METHOD(dcn_chatlist_get_chat_id) {}
+NAPI_METHOD(dcn_chatlist_get_chat_id) {
+  NAPI_ARGV(2);
+  NAPI_DC_CHATLIST();
+  NAPI_INT32(index, argv[1]);
 
-//NAPI_METHOD(dcn_chatlist_get_cnt) {}
+  uint32_t chat_id = dc_chatlist_get_chat_id(dc_chatlist, index);
 
-//NAPI_METHOD(dcn_chatlist_get_context) {}
+  NAPI_RETURN_UINT32(chat_id);
+}
 
-//NAPI_METHOD(dcn_chatlist_get_msg_id) {}
+NAPI_METHOD(dcn_chatlist_get_cnt) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHATLIST();
 
-//NAPI_METHOD(dcn_chatlist_get_summary) {}
+  int count = dc_chatlist_get_cnt(dc_chatlist);
+
+  NAPI_RETURN_INT32(count);
+}
+
+NAPI_METHOD(dcn_chatlist_get_msg_id) {
+  NAPI_ARGV(2);
+  NAPI_DC_CHATLIST();
+  NAPI_INT32(index, argv[1]);
+
+  uint32_t message_id = dc_chatlist_get_msg_id(dc_chatlist, index);
+
+  NAPI_RETURN_UINT32(message_id);
+}
+
+void dc_lot_finalize(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_lot_unref((dc_lot_t*)data);
+  }
+}
+
+NAPI_METHOD(dcn_chatlist_get_summary) {
+  NAPI_ARGV(3);
+  NAPI_DC_CHATLIST();
+  NAPI_INT32(index, argv[1]);
+
+  dc_chat_t* dc_chat = NULL;
+  napi_get_value_external(env, argv[2], (void**)&dc_chat);
+
+  dc_lot_t* summary = dc_chatlist_get_summary(dc_chatlist, index, dc_chat);
+
+  napi_value result;
+
+  if (summary == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  NAPI_STATUS_THROWS(napi_create_external(env, summary,
+                                          dc_lot_finalize,
+                                          NULL, &result));
+  return result;
+}
 
 /**
  * dc_contact_t
@@ -899,7 +976,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_id_by_contact_id);
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
-  //NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
+  NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
   NAPI_EXPORT_FUNCTION(dcn_get_config);
   NAPI_EXPORT_FUNCTION(dcn_get_config_int);
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
@@ -971,11 +1048,10 @@ NAPI_INIT() {
    * dc_chatlist_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_chat_id);
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_cnt);
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_context);
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_msg_id);
-  //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary);
+  NAPI_EXPORT_FUNCTION(dcn_chatlist_get_chat_id);
+  NAPI_EXPORT_FUNCTION(dcn_chatlist_get_cnt);
+  NAPI_EXPORT_FUNCTION(dcn_chatlist_get_msg_id);
+  NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary);
 
   /**
    * dc_contact_t

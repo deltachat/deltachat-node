@@ -18,6 +18,10 @@
   dc_chat_t* dc_chat; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_chat));
 
+#define NAPI_DC_CHATLIST() \
+  dc_chatlist_t* dc_chatlist; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_chatlist));
+
 #define NAPI_DC_CONTACT() \
   dc_contact_t* dc_contact; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_contact));
