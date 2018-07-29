@@ -71,8 +71,8 @@ console.log('lot text2', lot.getText2())
 console.log('lot timestamp', lot.getTimestamp())
 
 // Lets send a message to chat2
-// const msgId = dc.sendTextMsg(chat2Id, 'Hi!' + Math.random())
-const msgId = 10
+const msgId = dc.sendTextMsg(chat2Id, 'Hi!' + Math.random())
+// const msgId = 10
 console.log('sent message to chat2 got msgId', msgId)
 console.log('message info', dc.getMsgInfo(msgId))
 console.log('number of messages in chat2', dc.getMsgCount(chat2Id))
