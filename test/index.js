@@ -14,10 +14,10 @@ console.log('rtn2 id', rtn2)
 const rtn3 = dc.createContact('rtn3', 'rtn3@deltachat.de')
 console.log('rtn3 id', rtn3)
 
-const chat2 = dc.createChatByContactId(rtn2)
-console.log('rtn2 chat id', chat2)
-const chat3 = dc.createChatByContactId(rtn3)
-console.log('rtn3 chat id', chat3)
+const chat2Id = dc.createChatByContactId(rtn2)
+console.log('rtn2 chat id', chat2Id)
+const chat3Id = dc.createChatByContactId(rtn3)
+console.log('rtn3 chat id', chat3Id)
 
 // Seems the group chats are not unique, so calling these
 // lines below will create new groups each time
@@ -28,7 +28,7 @@ console.log('BBB id', group2)
 
 // TODO test dc.createChatByMsgId()
 
-let chat = dc.getChat(chat2)
+let chat = dc.getChat(chat2Id)
 console.log('chat archived', chat.getArchived())
 console.log('chat draft timestamp', chat.getDraftTimestamp())
 console.log('chat id', chat.getId())
@@ -70,11 +70,22 @@ console.log('lot text1 meaning', lot.getText1Meaning())
 console.log('lot text2', lot.getText2())
 console.log('lot timestamp', lot.getTimestamp())
 
+// Lets send a message to chat2
+// const msgId = dc.sendTextMsg(chat2Id, 'Hi!' + Math.random())
+const msgId = 10
+console.log('sent message to chat2 got msgId', msgId)
+console.log('message info', dc.getMsgInfo(msgId))
+console.log('number of messages in chat2', dc.getMsgCount(chat2Id))
+
+let msg = dc.getMsg(msgId)
+console.log('got msg', msg)
+
 // Testing gc
-//if (global.gc) {
-  //chat = null
-  //contact = null
-  //chatList = null
-  //lot2 = null
-  //global.gc()
-//}
+// if (global.gc) {
+// chat = null
+// contact = null
+// chatList = null
+// lot2 = null
+// msg = null
+// global.gc()
+// }

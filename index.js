@@ -166,6 +166,15 @@ class Contact {
 /**
  *
  */
+class Message {
+  constructor (dc_msg) {
+    this.dc_msg = dc_msg
+  }
+}
+
+/**
+ *
+ */
 class DeltaChat extends EventEmitter {
   constructor (opts) {
     super()
@@ -255,6 +264,23 @@ class DeltaChat extends EventEmitter {
 
   getInfo () {
     return binding.dcn_get_info(this.dcn_context)
+  }
+
+  getMsg (msgId) {
+    const dc_msg = binding.dcn_get_msg(this.dcn_context, msgId)
+    if (dc_msg === null) {
+      // TODO callback with error
+      throw new Error(`No msg found with id ${msgId}`)
+    }
+    return new Message(dc_msg)
+  }
+
+  getMsgCount (chatId) {
+    return binding.dcn_get_msg_cnt(this.dcn_context, chatId)
+  }
+
+  getMsgInfo (msgId) {
+    return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
   isConfigured () {
