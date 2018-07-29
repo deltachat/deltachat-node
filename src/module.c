@@ -475,7 +475,17 @@ NAPI_METHOD(dcn_is_configured) {
 
 //NAPI_METHOD(dcn_markseen_msgs) {}
 
-//NAPI_METHOD(dcn_msg_new) {}
+NAPI_METHOD(dcn_msg_new) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+
+  napi_value result;
+  dc_msg_t* msg = dc_msg_new(dcn_context->dc_context);
+
+  NAPI_STATUS_THROWS(napi_create_external(env, msg, dc_msg_t_finalize,
+                                          NULL, &result));
+  return result;
+}
 
 NAPI_METHOD(dcn_open) {
   NAPI_ARGV(3);
@@ -502,7 +512,18 @@ NAPI_METHOD(dcn_open) {
 
 //NAPI_METHOD(dcn_send_image_msg) {}
 
-//NAPI_METHOD(dcn_send_msg) {}
+NAPI_METHOD(dcn_send_msg) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+
+  dc_msg_t* dc_msg;
+  napi_get_value_external(env, argv[2], (void**)&dc_msg);
+
+  uint32_t msg_id = dc_send_msg(dcn_context->dc_context, chat_id, dc_msg);
+
+  NAPI_RETURN_UINT32(msg_id);
+}
 
 NAPI_METHOD(dcn_send_text_msg) {
   NAPI_ARGV(3);
@@ -1342,14 +1363,14 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   //NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
-  //NAPI_EXPORT_FUNCTION(dcn_msg_new);
+  NAPI_EXPORT_FUNCTION(dcn_msg_new);
   NAPI_EXPORT_FUNCTION(dcn_open);
   //NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   //NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_send_audio_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_file_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_image_msg);
-  //NAPI_EXPORT_FUNCTION(dcn_send_msg);
+  NAPI_EXPORT_FUNCTION(dcn_send_msg);
   NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_vcard_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_video_msg);

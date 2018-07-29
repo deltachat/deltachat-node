@@ -157,6 +157,16 @@ console.log('  msg type after', msg.getType())
 msg.setType(40000)
 console.log('  msg type after (2)', msg.getType())
 
+let msg2 = dc.msgNew()
+msg2.setText('created a new message')
+console.log('msg2 text', msg2.getText())
+console.log('msg2 id', msg2.getId())
+
+msg2.setText('lets send it')
+let msg2Id = dc.sendMsg(chat3Id, msg2)
+console.log('msg2 id after sent', msg2Id)
+console.log('msg2 state', msg2.getState())
+
 process.exit(1)
 
 // Testing gc

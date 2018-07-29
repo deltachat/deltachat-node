@@ -452,8 +452,16 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_is_configured(this.dcn_context)
   }
 
+  msgNew () {
+    return new Message(binding.dcn_msg_new(this.dcn_context))
+  }
+
   open (dbFile, blobDir) {
     return binding.dcn_open(this.dcn_context, dbFile, blobDir)
+  }
+
+  sendMsg (chatId, msg) {
+    return binding.dcn_send_msg(this.dcn_context, chatId, msg.dc_msg)
   }
 
   sendTextMsg (chatId, text) {
