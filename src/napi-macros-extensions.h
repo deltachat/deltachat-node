@@ -17,6 +17,10 @@
   dc_chat_t* dc_chat; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_chat));
 
+#define NAPI_DC_CONTACT() \
+  dc_contact_t* dc_contact; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_contact));
+
 #define NAPI_RETURN_UNDEFINED() \
   return 0;
 

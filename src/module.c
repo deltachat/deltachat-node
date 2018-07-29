@@ -198,22 +198,6 @@ NAPI_METHOD(dcn_context_t_dc_configure) {
   NAPI_RETURN_UNDEFINED();
 }
 
-//NAPI_METHOD(dcn_context_t_dc_contact_get_addr) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_get_display_name) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_get_first_name) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_get_id) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_get_name) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_get_name_n_addr) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_is_blocked) {}
-
-//NAPI_METHOD(dcn_context_t_dc_contact_is_verified) {}
-
 //NAPI_METHOD(dcn_context_t_dc_continue_key_transfer) {}
 
 NAPI_METHOD(dcn_context_t_dc_create_chat_by_contact_id) {
@@ -718,6 +702,33 @@ NAPI_METHOD(dc_chat_t_dc_chat_is_verified) {
 //NAPI_METHOD(dcn_chatlist_unref) {}
 
 /**
+ * dc_contact_t
+ */
+
+NAPI_METHOD(dc_contact_t_dc_contact_get_addr) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  char* addr = dc_contact_get_addr(dc_contact);
+
+  NAPI_RETURN_AND_FREE_STRING(addr);
+}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_get_display_name) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_get_first_name) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_get_id) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_get_name) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_get_name_n_addr) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_is_blocked) {}
+
+//NAPI_METHOD(dc_contact_t_dc_contact_is_verified) {}
+
+/**
  * dc_lot_t
  */
 
@@ -824,14 +835,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_check_qr);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_close);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_configure);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_addr);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_display_name);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_first_name);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_name);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_get_name_n_addr);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_blocked);
-  //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_contact_is_verified);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_create_chat_by_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_create_chat_by_msg_id);
@@ -938,6 +941,19 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_msg_id);
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary);
   //NAPI_EXPORT_FUNCTION(dcn_chatlist_unref);
+
+  /**
+   * dc_contact_t
+   */
+
+  NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_addr);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_display_name);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_first_name);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_id);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_name);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_get_name_n_addr);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_is_blocked);
+  //NAPI_EXPORT_FUNCTION(dc_contact_t_dc_contact_is_verified);
 
   /**
    * dc_lot_t
