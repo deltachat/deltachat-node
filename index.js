@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 const binding = require('./binding')
 const EventEmitter = require('events').EventEmitter
-const inherits = require('util').inherits
 const xtend = require('xtend')
 const path = require('path')
 const debug = require('debug')('deltachat')
@@ -13,51 +12,51 @@ const DEFAULTS = { root: process.cwd() }
  */
 
 class Chat {
-  constructor(dc_chat) {
+  constructor (dc_chat) {
     this.dc_chat = dc_chat
   }
-  
-  getArchived() {
+
+  getArchived () {
     return binding.dcn_chat_get_archived(this.dc_chat)
   }
 
-  getDraftTimestamp() {
+  getDraftTimestamp () {
     return binding.dcn_chat_get_draft_timestamp(this.dc_chat)
   }
 
-  getId() {
+  getId () {
     return binding.dcn_chat_get_id(this.dc_chat)
   }
 
-  getName() {
+  getName () {
     return binding.dcn_chat_get_name(this.dc_chat)
   }
 
-  getProfileImage() {
+  getProfileImage () {
     return binding.dcn_chat_get_profile_image(this.dc_chat)
   }
 
-  getSubtitle() {
+  getSubtitle () {
     return binding.dcn_chat_get_subtitle(this.dc_chat)
   }
 
-  getTextDraft() {
+  getTextDraft () {
     return binding.dcn_chat_get_text_draft(this.dc_chat)
   }
 
-  getType() {
+  getType () {
     return binding.dcn_chat_get_type(this.dc_chat)
   }
 
-  isSelfTalk() {
+  isSelfTalk () {
     return binding.dcn_chat_is_self_talk(this.dc_chat)
   }
 
-  isUnpromoted() {
+  isUnpromoted () {
     return binding.dcn_chat_is_unpromoted(this.dc_chat)
   }
 
-  isVerified() {
+  isVerified () {
     return binding.dcn_chat_is_verified(this.dc_chat)
   }
 }
@@ -66,26 +65,26 @@ class Chat {
  *
  */
 class ChatList {
-  constructor(dc_chatlist) {
+  constructor (dc_chatlist) {
     this.dc_chatlist = dc_chatlist
   }
 
-  getChatId(index) {
+  getChatId (index) {
     return binding.dcn_chatlist_get_chat_id(this.dc_chatlist, index)
   }
 
-  getCount() {
+  getCount () {
     return binding.dcn_chatlist_get_cnt(this.dc_chatlist)
   }
 
-  getMsgId(index) {
+  getMsgId (index) {
     return binding.dcn_chatlist_get_msg_id(this.dc_chatlist, index)
   }
 
-  getSummary(index, chat) {
-    const dc_chat = chat && chat.dc_chat || null
+  getSummary (index, chat) {
+    const dc_chat = (chat && chat.dc_chat) || null
     const dc_lot = binding.dcn_chatlist_get_summary(this.dc_chatlist,
-                                                    index, dc_chat)
+      index, dc_chat)
     return new Lot(dc_lot)
   }
 }
@@ -94,31 +93,31 @@ class ChatList {
  *
  */
 class Lot {
-  constructor(dc_lot) {
+  constructor (dc_lot) {
     this.dc_lot = dc_lot
   }
 
-  getId() {
+  getId () {
     return binding.dcn_lot_get_id(this.dc_lot)
   }
 
-  getState() {
+  getState () {
     return binding.dcn_lot_get_state(this.dc_lot)
   }
 
-  getText1() {
+  getText1 () {
     return binding.dcn_lot_get_text1(this.dc_lot)
   }
 
-  getText1Meaning() {
+  getText1Meaning () {
     return binding.dcn_lot_get_text1_meaning(this.dc_lot)
   }
 
-  getText2() {
+  getText2 () {
     return binding.dcn_lot_get_text2(this.dc_lot)
   }
 
-  getTimestamp() {
+  getTimestamp () {
     return binding.dcn_lot_get_timestamp(this.dc_lot)
   }
 }
@@ -127,39 +126,39 @@ class Lot {
  *
  */
 class Contact {
-  constructor(dc_contact) {
+  constructor (dc_contact) {
     this.dc_contact = dc_contact
   }
 
-  getAddr() {
+  getAddr () {
     return binding.dcn_contact_get_addr(this.dc_contact)
   }
 
-  getDisplayName() {
+  getDisplayName () {
     return binding.dcn_contact_get_display_name(this.dc_contact)
   }
 
-  getFirstName() {
+  getFirstName () {
     return binding.dcn_contact_get_first_name(this.dc_contact)
   }
 
-  getId() {
+  getId () {
     return binding.dcn_contact_get_id(this.dc_contact)
   }
 
-  getName() {
+  getName () {
     return binding.dcn_contact_get_name(this.dc_contact)
   }
 
-  getNameNAddr() {
+  getNameNAddr () {
     return binding.dcn_contact_get_name_n_addr(this.dc_contact)
   }
 
-  isBlocked() {
+  isBlocked () {
     return binding.dcn_contact_is_blocked(this.dc_contact)
   }
 
-  isVerified() {
+  isVerified () {
     return binding.dcn_contact_is_verified(this.dc_contact)
   }
 }
@@ -168,9 +167,9 @@ class Contact {
  *
  */
 class DeltaChat extends EventEmitter {
-  constructor(opts) {
+  constructor (opts) {
     super()
-    //EventEmitter.call(this)
+    // EventEmitter.call(this)
 
     opts = xtend(DEFAULTS, opts || {})
 
@@ -194,27 +193,27 @@ class DeltaChat extends EventEmitter {
     this.startThreads()
   }
 
-  configure() {
+  configure () {
     return binding.dcn_configure(this.dcn_context)
   }
 
-  createChatByContactId(contactId) {
+  createChatByContactId (contactId) {
     return binding.dcn_create_chat_by_contact_id(this.dcn_context, contactId)
   }
 
-  createChatByMsgId(msgId) {
+  createChatByMsgId (msgId) {
     return binding.dcn_create_chat_by_msg_id(this.dcn_context, msgId)
   }
 
-  createContact(name, addr) {
+  createContact (name, addr) {
     return binding.dcn_create_contact(this.dcn_context, name, addr)
   }
 
-  createGroupChat(verified, chatName) {
+  createGroupChat (verified, chatName) {
     return binding.dcn_create_group_chat(this.dcn_context, verified, chatName)
   }
 
-  getChat(chatId) {
+  getChat (chatId) {
     const dc_chat = binding.dcn_get_chat(this.dcn_context, chatId)
     if (dc_chat === null) {
       // TODO callback with error
@@ -223,7 +222,7 @@ class DeltaChat extends EventEmitter {
     return new Chat(dc_chat)
   }
 
-  getChatList(listFlags, queryStr, queryContactId) {
+  getChatList (listFlags, queryStr, queryContactId) {
     // TODO figure out how to do flags correctly, compare with the docs for
     // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef
     if (!listFlags) listFlags = 0
@@ -231,21 +230,21 @@ class DeltaChat extends EventEmitter {
     if (!queryContactId) queryContactId = 0
 
     const dc_chatlist = binding.dcn_get_chatlist(this.dcn_context,
-                                                 listFlags,
-                                                 queryStr,
-                                                 queryContactId)
+      listFlags,
+      queryStr,
+      queryContactId)
     return new ChatList(dc_chatlist)
   }
 
-  getConfig(key, def) {
+  getConfig (key, def) {
     return binding.dcn_get_config(this.dcn_context, key, def)
   }
 
-  getConfigInt(key, def) {
+  getConfigInt (key, def) {
     return binding.dcn_get_config_int(this.dcn_context, key, def)
   }
 
-  getContact(contactId) {
+  getContact (contactId) {
     const dc_contact = binding.dcn_get_contact(this.dcn_context, contactId)
     if (dc_contact === null) {
       // TODO callback with error
@@ -254,47 +253,47 @@ class DeltaChat extends EventEmitter {
     return new Contact(dc_contact)
   }
 
-  getInfo() {
+  getInfo () {
     return binding.dcn_get_info(this.dcn_context)
   }
 
-  isConfigured() {
+  isConfigured () {
     return binding.dcn_is_configured(this.dcn_context)
   }
 
-  open(dbFile, blobDir) {
+  open (dbFile, blobDir) {
     return binding.dcn_open(this.dcn_context, dbFile, blobDir)
   }
 
-  sendTextMsg(chatId, text) {
+  sendTextMsg (chatId, text) {
     return binding.dcn_send_text_msg(this.dcn_context, chatId, text)
   }
 
-  setConfig(key, value) {
+  setConfig (key, value) {
     return binding.dcn_set_config(this.dcn_context, key, value)
   }
 
-  setConfigInt(key, value) {
+  setConfigInt (key, value) {
     return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
-  setEventHandler(cb) {
+  setEventHandler (cb) {
     return binding.dcn_set_event_handler(this.dcn_context, cb)
   }
 
-  setOffline(isOffline) {
+  setOffline (isOffline) {
     return binding.dcn_set_offline(this.dcn_context, isOffline)
   }
 
-  startThreads() {
+  startThreads () {
     return binding.dcn_start_threads(this.dcn_context)
   }
 
-  stopThreads() {
+  stopThreads () {
     return binding.dcn_stop_threads(this.dcn_context)
   }
 
-  unsetEventHandler() {
+  unsetEventHandler () {
     return binding.dcn_unset_event_handler(this.dcn_context)
   }
 }
