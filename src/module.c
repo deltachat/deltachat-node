@@ -803,7 +803,6 @@ NAPI_METHOD(dcn_chatlist_get_summary) {
   dc_lot_t* summary = dc_chatlist_get_summary(dc_chatlist, index, dc_chat);
 
   napi_value result;
-
   if (summary == NULL) {
     NAPI_STATUS_THROWS(napi_get_null(env, &result));
     return result;
@@ -919,6 +918,12 @@ NAPI_METHOD(dcn_lot_get_text1) {
 
   char* text1 = dc_lot_get_text1(dc_lot);
 
+  napi_value result;
+  if (text1 == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
   NAPI_RETURN_AND_FREE_STRING(text1);
 }
 
@@ -936,6 +941,12 @@ NAPI_METHOD(dcn_lot_get_text2) {
   NAPI_DC_LOT();
 
   char* text2 = dc_lot_get_text2(dc_lot);
+
+  napi_value result;
+  if (text2 == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
 
   NAPI_RETURN_AND_FREE_STRING(text2);
 }
