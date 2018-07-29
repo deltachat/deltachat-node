@@ -228,6 +228,9 @@ NAPI_METHOD(dcn_create_contact) {
 
   uint32_t contact_id = dc_create_contact(dcn_context->dc_context, name, addr);
 
+  free(name);
+  free(addr);
+
   NAPI_RETURN_UINT32(contact_id);
 }
 
@@ -238,6 +241,8 @@ NAPI_METHOD(dcn_create_group_chat) {
   NAPI_UTF8(chat_name, argv[2]);
 
   uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, verified, chat_name);
+
+  free(chat_name);
 
   NAPI_RETURN_UINT32(chat_id);
 }
@@ -300,6 +305,9 @@ NAPI_METHOD(dcn_get_config) {
 
   char *value = dc_get_config(dcn_context->dc_context, key, def);
 
+  free(key);
+  free(def);
+
   NAPI_RETURN_AND_FREE_STRING(value);
 }
 
@@ -310,6 +318,8 @@ NAPI_METHOD(dcn_get_config_int) {
   NAPI_INT32(def, argv[2]);
 
   int value = dc_get_config_int(dcn_context->dc_context, key, def);
+
+  free(key);
 
   NAPI_RETURN_INT32(value);
 }
@@ -414,6 +424,9 @@ NAPI_METHOD(dcn_open) {
   // blobdir may be the empty string or NULL for default blobdir
   int status = dc_open(dcn_context->dc_context, dbfile, blobdir);
 
+  free(dbfile);
+  free(blobdir);
+
   NAPI_RETURN_INT32(status);
 }
 
@@ -437,6 +450,8 @@ NAPI_METHOD(dcn_send_text_msg) {
 
   uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
 
+  free(text);
+
   NAPI_RETURN_UINT32(msg_id);
 }
 
@@ -458,6 +473,9 @@ NAPI_METHOD(dcn_set_config) {
 
   int status = dc_set_config(dcn_context->dc_context, key, value);
 
+  free(key);
+  free(value);
+
   NAPI_RETURN_INT32(status);
 }
 
@@ -468,6 +486,9 @@ NAPI_METHOD(dcn_set_config_int) {
   NAPI_INT32(value, argv[2]);
 
   int status = dc_set_config_int(dcn_context->dc_context, key, value);
+
+  free(key);
+  free(value);
 
   NAPI_RETURN_INT32(status);
 }
