@@ -860,17 +860,59 @@ NAPI_METHOD(dcn_contact_is_verified) {
  * dc_lot_t
  */
 
-//NAPI_METHOD(dcn_lot_get_id) {}
+NAPI_METHOD(dcn_lot_get_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
 
-//NAPI_METHOD(dcn_lot_get_state) {}
+  uint32_t id = dc_lot_get_id(dc_lot);
 
-//NAPI_METHOD(dcn_lot_get_text1) {}
+  NAPI_RETURN_UINT32(id);
+}
 
-//NAPI_METHOD(dcn_lot_get_text1_meaning) {}
+NAPI_METHOD(dcn_lot_get_state) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
 
-//NAPI_METHOD(dcn_lot_get_text2) {}
+  int state = dc_lot_get_state(dc_lot);
 
-//NAPI_METHOD(dcn_lot_get_timestamp) {}
+  NAPI_RETURN_INT32(state);
+}
+
+NAPI_METHOD(dcn_lot_get_text1) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
+
+  char* text1 = dc_lot_get_text1(dc_lot);
+
+  NAPI_RETURN_AND_FREE_STRING(text1);
+}
+
+NAPI_METHOD(dcn_lot_get_text1_meaning) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
+
+  int text1_meaning = dc_lot_get_text1_meaning(dc_lot);
+
+  NAPI_RETURN_INT32(text1_meaning);
+}
+
+NAPI_METHOD(dcn_lot_get_text2) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
+
+  char* text2 = dc_lot_get_text2(dc_lot);
+
+  NAPI_RETURN_AND_FREE_STRING(text2);
+}
+
+NAPI_METHOD(dcn_lot_get_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_LOT();
+
+  int timestamp = dc_lot_get_timestamp(dc_lot);
+
+  NAPI_RETURN_INT32(timestamp);
+}
 
 /**
  * dc_msg_t
@@ -1070,12 +1112,12 @@ NAPI_INIT() {
    * dc_lot_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_state);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_text1);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_text1_meaning);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_text2);
-  //NAPI_EXPORT_FUNCTION(dcn_lot_get_timestamp);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_state);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_text1);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_text1_meaning);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_text2);
+  NAPI_EXPORT_FUNCTION(dcn_lot_get_timestamp);
 
   /**
    * dc_msg_t

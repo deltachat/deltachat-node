@@ -26,6 +26,10 @@
   dc_contact_t* dc_contact; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_contact));
 
+#define NAPI_DC_LOT() \
+  dc_lot_t* dc_lot; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_lot));
+
 #define NAPI_RETURN_UNDEFINED() \
   return 0;
 

@@ -86,11 +86,43 @@ ChatList.prototype.getMsgId = function (index) {
 
 ChatList.prototype.getSummary = function (index, chat) {
   const dc_chat = chat && chat.dc_chat || null
-  console.log('passed in dc_chat', dc_chat)
-  return binding.dcn_chatlist_get_summary(this.dc_chatlist, index, dc_chat)
-  // TODO We should return a wrapped object here
-  // const dc_lot = binding.dcn_chatlist_get_summary(this.dc_chatlist, index, dc_chat)
-  // return Lot(dc_lot)
+  const dc_lot = binding.dcn_chatlist_get_summary(this.dc_chatlist,
+                                                  index, dc_chat)
+  return Lot(dc_lot)
+}
+
+/**
+ *
+ */
+function Lot (dc_lot) {
+  if (!(this instanceof Lot)) {
+    return new Lot(dc_lot)
+  }
+  this.dc_lot = dc_lot
+}
+
+Lot.prototype.getId = function () {
+  return binding.dcn_lot_get_id(this.dc_lot)
+}
+
+Lot.prototype.getState = function () {
+  return binding.dcn_lot_get_state(this.dc_lot)
+}
+
+Lot.prototype.getText1 = function () {
+  return binding.dcn_lot_get_text1(this.dc_lot)
+}
+
+Lot.prototype.getText1Meaning = function () {
+  return binding.dcn_lot_get_text1_meaning(this.dc_lot)
+}
+
+Lot.prototype.getText2 = function () {
+  return binding.dcn_lot_get_text2(this.dc_lot)
+}
+
+Lot.prototype.getTimestamp = function () {
+  return binding.dcn_lot_get_timestamp(this.dc_lot)
 }
 
 /**
