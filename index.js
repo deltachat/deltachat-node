@@ -76,6 +76,34 @@ Contact.prototype.getAddr = function () {
   return binding.dcn_contact_get_addr(this.dc_contact)
 }
 
+Contact.prototype.getDisplayName = function () {
+  return binding.dcn_contact_get_display_name(this.dc_contact)
+}
+
+Contact.prototype.getFirstName = function () {
+  return binding.dcn_contact_get_first_name(this.dc_contact)
+}
+
+Contact.prototype.getId = function () {
+  return binding.dcn_contact_get_id(this.dc_contact)
+}
+
+Contact.prototype.getName = function () {
+  return binding.dcn_contact_get_name(this.dc_contact)
+}
+
+Contact.prototype.getNameNAddr = function () {
+  return binding.dcn_contact_get_name_n_addr(this.dc_contact)
+}
+
+Contact.prototype.isBlocked = function () {
+  return binding.dcn_contact_is_blocked(this.dc_contact)
+}
+
+Contact.prototype.isVerified = function () {
+  return binding.dcn_contact_is_verified(this.dc_contact)
+}
+
 /**
  *
  */

@@ -714,19 +714,68 @@ NAPI_METHOD(dcn_contact_get_addr) {
   NAPI_RETURN_AND_FREE_STRING(addr);
 }
 
-//NAPI_METHOD(dcn_contact_get_display_name) {}
+NAPI_METHOD(dcn_contact_get_display_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
 
-//NAPI_METHOD(dcn_contact_get_first_name) {}
+  char* display_name = dc_contact_get_display_name(dc_contact);
 
-//NAPI_METHOD(dcn_contact_get_id) {}
+  NAPI_RETURN_AND_FREE_STRING(display_name);
+}
 
-//NAPI_METHOD(dcn_contact_get_name) {}
+NAPI_METHOD(dcn_contact_get_first_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
 
-//NAPI_METHOD(dcn_contact_get_name_n_addr) {}
+  char* first_name = dc_contact_get_first_name(dc_contact);
 
-//NAPI_METHOD(dcn_contact_is_blocked) {}
+  NAPI_RETURN_AND_FREE_STRING(first_name);
+}
 
-//NAPI_METHOD(dcn_contact_is_verified) {}
+NAPI_METHOD(dcn_contact_get_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  uint32_t contact_id = dc_contact_get_id(dc_contact);
+
+  NAPI_RETURN_UINT32(contact_id);
+}
+
+NAPI_METHOD(dcn_contact_get_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  char* name = dc_contact_get_name(dc_contact);
+
+  NAPI_RETURN_AND_FREE_STRING(name);
+}
+
+NAPI_METHOD(dcn_contact_get_name_n_addr) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  char* name_n_addr = dc_contact_get_name_n_addr(dc_contact);
+
+  NAPI_RETURN_AND_FREE_STRING(name_n_addr);
+}
+
+NAPI_METHOD(dcn_contact_is_blocked) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  int is_blocked = dc_contact_is_blocked(dc_contact);
+
+  NAPI_RETURN_UINT32(is_blocked);
+}
+
+NAPI_METHOD(dcn_contact_is_verified) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  int is_verified = dc_contact_is_verified(dc_contact);
+
+  NAPI_RETURN_UINT32(is_verified);
+}
 
 /**
  * dc_lot_t
@@ -946,13 +995,13 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_contact_get_addr);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_get_first_name);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_get_name);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_get_name_n_addr);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_is_blocked);
-  //NAPI_EXPORT_FUNCTION(dcn_contact_is_verified);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_first_name);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_name);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_name_n_addr);
+  NAPI_EXPORT_FUNCTION(dcn_contact_is_blocked);
+  NAPI_EXPORT_FUNCTION(dcn_contact_is_verified);
 
   /**
    * dc_lot_t
