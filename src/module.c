@@ -486,7 +486,6 @@ NAPI_METHOD(dcn_set_config_int) {
   int status = dc_set_config_int(dcn_context->dc_context, key, value);
 
   free(key);
-  free(value);
 
   NAPI_RETURN_INT32(status);
 }
