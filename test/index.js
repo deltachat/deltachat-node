@@ -1,8 +1,8 @@
 const DeltaChat = require('../')
 
 const dc = new DeltaChat({
-  email: 'FOO',
-  password: 'FOO'
+  email: process.env.DC_USER,
+  password: process.env.DC_PASSWORD
 })
 
 // TODO it would be nice if we could get some sort of event
