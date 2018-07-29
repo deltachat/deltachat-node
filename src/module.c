@@ -557,20 +557,6 @@ NAPI_METHOD(dcn_unset_event_handler) {
 }
 
 /**
- * dc_array_t
- */
-
-//NAPI_METHOD(dcn_array_get_cnt) {}
-
-//NAPI_METHOD(dcn_array_get_id) {}
-
-//NAPI_METHOD(dcn_array_get_ptr) {}
-
-//NAPI_METHOD(dcn_array_get_uint) {}
-
-//NAPI_METHOD(dcn_array_unref) {}
-
-/**
  * dc_chat_t
  */
 
@@ -952,16 +938,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_stop_threads);
   //NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
   NAPI_EXPORT_FUNCTION(dcn_unset_event_handler);
-
-  /**
-   * dc_array_t
-   */
-
-  //NAPI_EXPORT_FUNCTION(dcn_array_get_cnt);
-  //NAPI_EXPORT_FUNCTION(dcn_array_get_id);
-  //NAPI_EXPORT_FUNCTION(dcn_array_get_ptr);
-  //NAPI_EXPORT_FUNCTION(dcn_array_get_uint);
-  //NAPI_EXPORT_FUNCTION(dcn_array_unref);
 
   /**
    * dc_chat_t
