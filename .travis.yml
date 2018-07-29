@@ -24,4 +24,6 @@ install:
 
 script:
   - npm test
+  - echo $EMAIL
+  - echo $EMAIL_PASSWORD
   - node example-binding.js --email $EMAIL --password $EMAIL_PASSWORD
