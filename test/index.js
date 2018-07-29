@@ -1,6 +1,6 @@
 const DeltaChat = require('../')
 
-const dc = DeltaChat({
+const dc = new DeltaChat({
   email: 'FOO',
   password: 'FOO'
 })
