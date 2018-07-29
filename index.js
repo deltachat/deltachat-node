@@ -5,7 +5,6 @@ const inherits = require('util').inherits
 const xtend = require('xtend')
 const path = require('path')
 const debug = require('debug')('deltachat')
-const camelCase = require('camelcase')
 
 const DEFAULTS = { root: process.cwd() }
 
