@@ -56,6 +56,7 @@ setTimeout(function () {
   setTimeout(function () {
     console.log('Stopping threads ...')
     b.dc_stop_threads(dcn_context)
+    b.dc_unset_event_handler(dcn_context)
     console.log('Done.')
   }, 2000)
 }, 5000)

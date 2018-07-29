@@ -13,7 +13,7 @@
  */
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
-  napi_threadsafe_function napi_event_handler;
+  napi_threadsafe_function threadsafe_event_handler;
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
   int loop_thread;
@@ -39,15 +39,15 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       return dcn_context->is_offline;
 
     default:
-      if (dcn_context->napi_event_handler) {
+      if (dcn_context->threadsafe_event_handler) {
         dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
         dcn_event->event = event;
         dcn_event->data1_int = data1;
         dcn_event->data2_int = data2;
         dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
-        napi_call_threadsafe_function(dcn_context->napi_event_handler, dcn_event, napi_tsfn_blocking);
+        napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
       } else {
-        printf("Warning: napi_event_handler not set :/\n");
+        printf("Warning: threadsafe_event_handler not set :/\n");
       }
       break;
   }
@@ -115,7 +115,7 @@ static void imap_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
-  napi_acquire_threadsafe_function(dcn_context->napi_event_handler);
+  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
 
   while (dcn_context->loop_thread) {
     dc_perform_imap_jobs(dc_context);
@@ -123,7 +123,7 @@ static void imap_thread_func(void* arg)
     dc_perform_imap_idle(dc_context);
   }
 
-  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 }
 
 static void smtp_thread_func(void* arg)
@@ -131,14 +131,14 @@ static void smtp_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
-  napi_acquire_threadsafe_function(dcn_context->napi_event_handler);
+  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
 
   while (dcn_context->loop_thread) {
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
 
-  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 }
 
 /**
@@ -158,7 +158,7 @@ NAPI_METHOD(dcn_context_new) {
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
-  dcn_context->napi_event_handler = NULL;
+  dcn_context->threadsafe_event_handler = NULL;
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
@@ -507,8 +507,17 @@ NAPI_METHOD(dcn_context_t_dc_set_event_handler) {
     NULL, // TODO: file an issue that the finalize parameter should be optional
     dcn_context,
     call_js_event_handler,
-    &dcn_context->napi_event_handler));
+    &dcn_context->threadsafe_event_handler));
 
+  NAPI_RETURN_INT32(1);
+}
+
+NAPI_METHOD(dcn_context_t_dc_unset_event_handler) {
+  NAPI_ARGV(1); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
+  NAPI_DCN_CONTEXT();
+  
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
+  
   NAPI_RETURN_INT32(1);
 }
 
@@ -557,7 +566,6 @@ NAPI_METHOD(dcn_context_t_dc_stop_threads) {
     dcn_context->smtp_thread = 0;
   }
 
-  napi_release_threadsafe_function(dcn_context->napi_event_handler, napi_tsfn_release);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -885,6 +893,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_set_config);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_set_config_int);
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_set_event_handler);
+  NAPI_EXPORT_FUNCTION(dcn_context_t_dc_unset_event_handler);
+
   NAPI_EXPORT_FUNCTION(dcn_context_t_dc_set_offline);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_set_text_draft);
   //NAPI_EXPORT_FUNCTION(dcn_context_t_dc_star_msgs);
