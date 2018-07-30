@@ -137,9 +137,28 @@ test('new message and basic methods', t => {
   t.end()
 })
 
-// TODO send message and check status delivered etc
+// TODO send text message to chat, check message count and
+// delivered status etc
 
 // TODO test dc.createChatByMsgId()
+
+test('contact methods', t => {
+  const contactId = dc.createContact('First Last', 'first.last@site.org')
+  let contact = dc.getContact(contactId)
+
+  t.is(contact.getAddr(), 'first.last@site.org', 'correct address')
+  t.is(contact.getDisplayName(), 'First Last', 'correct display name')
+  t.is(contact.getFirstName(), 'First', 'correct first name')
+  t.is(contact.getId(), contactId, 'contact id matches')
+  t.is(contact.getName(), 'First Last', 'correct name')
+  t.is(contact.getNameNAddr(), 'First Last (first.last@site.org)')
+  t.is(contact.isBlocked(), false, 'not blocked')
+  t.is(contact.isVerified(), 0, 'unverified status')
+
+  // TODO test verifying a contact
+
+  t.end()
+})
 
 test('create and delete contacts', t => {
   let id = dc.createContact('someuser', 'someuser@site.com')
@@ -182,40 +201,32 @@ test('blocking contacts', t => {
   t.end()
 })
 
+test('chatlist methods', t => {
+  const ids = [
+    dc.createGroupChat(0, 'groupchat1'),
+    dc.createGroupChat(0, 'groupchat11'),
+    dc.createGroupChat(0, 'groupchat111')
+  ]
+
+  let chatList = dc.getChatList(0, 'groupchat1')
+  t.is(chatList.getCount(), 3, 'should contain above chats')
+  t.notEqual(ids.indexOf(chatList.getChatId(0)), -1)
+  t.notEqual(ids.indexOf(chatList.getChatId(1)), -1)
+  t.notEqual(ids.indexOf(chatList.getChatId(2)), -1)
+
+  let lot = chatList.getSummary(0)
+  t.is(lot.getId(), 0, 'lot has no id')
+  t.is(lot.getState(), 0, 'lot has no state')
+  t.is(lot.getText1(), 'Draft', 'text1 is set')
+  t.is(lot.getText1Meaning(), 1)
+  t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
+  t.ok(lot.getTimestamp() > 0, 'timestamp set')
+
+  t.end()
+})
+
 test('tearDown dc context', t => {
   // TODO dc.close() should callback
   dc.close()
   t.end()
 })
-
-/*
-let contact = dc.getContact(rtn2)
-console.log('contact addr', contact.getAddr())
-console.log('contact display name', contact.getDisplayName())
-console.log('contact first name', contact.getFirstName())
-console.log('contact id', contact.getId())
-console.log('contact name', contact.getName())
-console.log('contact name & addr', contact.getNameNAddr())
-console.log('contact is blocked', contact.isBlocked())
-console.log('contact is verified', contact.isVerified())
-
-let chatList = dc.getChatList(0, 'AAA')
-console.log('chat list chat id', chatList.getChatId(0))
-console.log('chat list count', chatList.getCount())
-console.log('chat list message id', chatList.getMsgId(0))
-
-let lot = chatList.getSummary(0)
-console.log('lot id', lot.getId())
-console.log('lot state', lot.getState())
-console.log('lot text1', lot.getText1())
-console.log('lot text1 meaning', lot.getText1Meaning())
-console.log('lot text2', lot.getText2())
-console.log('lot timestamp', lot.getTimestamp())
-
-// Lets send a message to chat2
-const msgId = dc.sendTextMsg(chat2Id, 'Hi!' + Math.random())
-// const msgId = 10
-console.log('sent message to chat2 got msgId', msgId)
-console.log('message info', dc.getMsgInfo(msgId))
-console.log('number of messages in chat2', dc.getMsgCount(chat2Id))
-*/

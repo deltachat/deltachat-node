@@ -90,39 +90,6 @@ class ChatList {
 /**
  *
  */
-class Lot {
-  constructor (dc_lot) {
-    this.dc_lot = dc_lot
-  }
-
-  getId () {
-    return binding.dcn_lot_get_id(this.dc_lot)
-  }
-
-  getState () {
-    return binding.dcn_lot_get_state(this.dc_lot)
-  }
-
-  getText1 () {
-    return binding.dcn_lot_get_text1(this.dc_lot)
-  }
-
-  getText1Meaning () {
-    return binding.dcn_lot_get_text1_meaning(this.dc_lot)
-  }
-
-  getText2 () {
-    return binding.dcn_lot_get_text2(this.dc_lot)
-  }
-
-  getTimestamp () {
-    return binding.dcn_lot_get_timestamp(this.dc_lot)
-  }
-}
-
-/**
- *
- */
 class Contact {
   constructor (dc_contact) {
     this.dc_contact = dc_contact
@@ -158,6 +125,39 @@ class Contact {
 
   isVerified () {
     return binding.dcn_contact_is_verified(this.dc_contact)
+  }
+}
+
+/**
+ *
+ */
+class Lot {
+  constructor (dc_lot) {
+    this.dc_lot = dc_lot
+  }
+
+  getId () {
+    return binding.dcn_lot_get_id(this.dc_lot)
+  }
+
+  getState () {
+    return binding.dcn_lot_get_state(this.dc_lot)
+  }
+
+  getText1 () {
+    return binding.dcn_lot_get_text1(this.dc_lot)
+  }
+
+  getText1Meaning () {
+    return binding.dcn_lot_get_text1_meaning(this.dc_lot)
+  }
+
+  getText2 () {
+    return binding.dcn_lot_get_text2(this.dc_lot)
+  }
+
+  getTimestamp () {
+    return binding.dcn_lot_get_timestamp(this.dc_lot)
   }
 }
 
