@@ -466,8 +466,6 @@ NAPI_METHOD(dcn_is_configured) {
 
 //NAPI_METHOD(dcn_is_contact_in_chat) {}
 
-//NAPI_METHOD(dcn_is_open) {}
-
 //NAPI_METHOD(dcn_join_securejoin) {}
 
 //NAPI_METHOD(dcn_marknoticed_chat) {}
@@ -1408,7 +1406,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   //NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_is_open);
   //NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
