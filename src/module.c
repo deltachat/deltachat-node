@@ -261,7 +261,14 @@ NAPI_METHOD(dcn_create_group_chat) {
 
 //NAPI_METHOD(dcn_forward_msgs) {}
 
-//NAPI_METHOD(dcn_get_blobdir) {}
+NAPI_METHOD(dcn_get_blobdir) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  char* blobdir = dc_get_blobdir(dcn_context->dc_context);
+
+  NAPI_RETURN_AND_FREE_STRING(blobdir);
+}
 
 //NAPI_METHOD(dcn_get_blocked_cnt) {}
 
@@ -1378,7 +1385,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   //NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
-  //NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
+  NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
   //NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
   //NAPI_EXPORT_FUNCTION(dcn_get_blocked_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat);

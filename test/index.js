@@ -1,8 +1,17 @@
 const DeltaChat = require('../')
 
 const dc = new DeltaChat({
-  email: process.env.DC_USER,
+  email: process.env.DC_EMAIL,
   password: process.env.DC_PASSWORD
+})
+
+dc.on('open', () => {
+  console.log('is open')
+  console.log('blobdir is', dc.getBlobdir())
+  console.log('CLOSING in 3 seconds')
+  setTimeout(() => {
+    dc.close()
+  }, 3000)
 })
 
 // TODO it would be nice if we could get some sort of event
@@ -166,8 +175,6 @@ msg2.setText('lets send it')
 let msg2Id = dc.sendMsg(chat3Id, msg2)
 console.log('msg2 id after sent', msg2Id)
 console.log('msg2 state', msg2.getState())
-
-process.exit(1)
 
 // Testing gc
 // if (global.gc) {

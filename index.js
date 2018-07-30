@@ -397,6 +397,10 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_create_group_chat(this.dcn_context, verified, chatName)
   }
 
+  getBlobdir () {
+    return binding.dcn_get_blobdir(this.dcn_context)
+  }
+
   getChat (chatId) {
     const dc_chat = binding.dcn_get_chat(this.dcn_context, chatId)
     if (dc_chat === null) {
