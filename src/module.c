@@ -648,7 +648,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     call_js_event_handler,
     &dcn_context->threadsafe_event_handler));
 
-  NAPI_RETURN_INT32(1);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_set_offline) {
@@ -676,7 +676,7 @@ NAPI_METHOD(dcn_start_threads) {
   uv_thread_create(&dcn_context->imap_thread, imap_thread_func, dcn_context);
   uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func, dcn_context);
 
-  NAPI_RETURN_INT32(1);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_stop_threads) {
@@ -708,7 +708,7 @@ NAPI_METHOD(dcn_unset_event_handler) {
 
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 
-  NAPI_RETURN_INT32(1);
+  NAPI_RETURN_UNDEFINED();
 }
 
 /**

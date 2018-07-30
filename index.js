@@ -478,11 +478,11 @@ class DeltaChat extends EventEmitter {
   }
 
   setOffline (isOffline) {
-    return binding.dcn_set_offline(this.dcn_context, isOffline)
+    binding.dcn_set_offline(this.dcn_context, isOffline)
   }
 
   _configure () {
-    return binding.dcn_configure(this.dcn_context)
+    binding.dcn_configure(this.dcn_context)
   }
 
   _close () {
@@ -498,19 +498,19 @@ class DeltaChat extends EventEmitter {
   }
 
   _setEventHandler (cb) {
-    return binding.dcn_set_event_handler(this.dcn_context, cb)
+    binding.dcn_set_event_handler(this.dcn_context, cb)
   }
 
   _startThreads () {
-    return binding.dcn_start_threads(this.dcn_context)
+    binding.dcn_start_threads(this.dcn_context)
   }
 
   _stopThreads () {
-    return binding.dcn_stop_threads(this.dcn_context)
+    binding.dcn_stop_threads(this.dcn_context)
   }
 
   _unsetEventHandler () {
-    return binding.dcn_unset_event_handler(this.dcn_context)
+    binding.dcn_unset_event_handler(this.dcn_context)
   }
 }
 
