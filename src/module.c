@@ -455,12 +455,6 @@ NAPI_METHOD(dcn_get_msg_info) {
 
 //NAPI_METHOD(dcn_initiate_key_transfer) {}
 
-// TODO remove? dc_interrupt_imap_idle is used internally
-//NAPI_METHOD(dcn_interrupt_imap_idle) {}
-
-// TODO remove? dc_interrupt_smtp_idle is used internally
-//NAPI_METHOD(dcn_interrupt_smtp_idle) {}
-
 NAPI_METHOD(dcn_is_configured) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
@@ -1412,8 +1406,6 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_imex);
   //NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
   //NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
-  //NAPI_EXPORT_FUNCTION(dcn_interrupt_imap_idle);
-  //NAPI_EXPORT_FUNCTION(dcn_interrupt_smtp_idle);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   //NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
   //NAPI_EXPORT_FUNCTION(dcn_is_open);
