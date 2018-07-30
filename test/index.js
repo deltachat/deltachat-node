@@ -14,6 +14,19 @@ test('setUp dc context', t => {
   dc.on('open', t.end.bind(t))
 })
 
+test('create and delete chats', t => {
+  let chatId = dc.createGroupChat(0, 'GROUPCHAT')
+  let chat = dc.getChat(chatId)
+  t.is(chat.getId(), chatId, 'correct chatId')
+  dc.deleteChat(chat)
+  t.same(dc.getChat(chatId), null, 'chat removed using chat object')
+  chatId = dc.createGroupChat(0, 'GROUPCHAT')
+  chat = dc.getChat(chatId)
+  dc.deleteChat(chat.getId())
+  t.same(dc.getChat(chatId), null, 'chat removed using id')
+  t.end()
+})
+
 test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
 

@@ -409,6 +409,11 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_create_group_chat(this.dcn_context, verified, chatName)
   }
 
+  deleteChat (chat) {
+    let chatId = (typeof chat === 'number' ? chat : chat.getId())
+    binding.dcn_delete_chat(this.dcn_context, chatId)
+  }
+
   getBlobdir () {
     return binding.dcn_get_blobdir(this.dcn_context)
   }
