@@ -341,36 +341,43 @@ class Message {
  *
  */
 class DeltaChat extends EventEmitter {
-  constructor (opts) {
+  constructor (opts, cb) {
     super()
-    // EventEmitter.call(this)
 
     opts = xtend(DEFAULTS, opts || {})
 
-    if (typeof opts.email !== 'string') throw new Error('Missing .email')
-    if (typeof opts.password !== 'string') throw new Error('Missing .password')
+    if (typeof opts.email !== 'string') {
+      throw new Error('Missing .email')
+    }
+    if (typeof opts.password !== 'string') {
+      throw new Error('Missing .password')
+    }
 
     this.dcn_context = binding.dcn_context_new()
 
-    this.setEventHandler((event, data1, data2) => {
+    this._setEventHandler((event, data1, data2) => {
       debug('event', event, 'data1', data1, 'data2', data2)
     })
 
-    this.open(path.join(opts.root, 'db.sqlite'), '', () => {
+    this._open(path.join(opts.root, 'db.sqlite'), '', () => {
       this.emit('open')
+      cb && cb()
     })
 
-    if (!this.isConfigured()) {
+    if (!this._isConfigured()) {
       this.setConfig('addr', opts.email)
       this.setConfig('mail_pw', opts.password)
-      this.configure()
+      this._configure()
     }
 
-    this.startThreads()
+    this._startThreads()
   }
 
-  configure () {
-    return binding.dcn_configure(this.dcn_context)
+  // TODO close should take a cb
+  close () {
+    // TODO we should close the db here as well
+    this._unsetEventHandler()
+    this._stopThreads()
   }
 
   createChatByContactId (contactId) {
@@ -450,16 +457,8 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
-  isConfigured () {
-    return binding.dcn_is_configured(this.dcn_context)
-  }
-
   msgNew () {
     return new Message(binding.dcn_msg_new(this.dcn_context))
-  }
-
-  open (dbFile, blobDir, cb) {
-    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
   }
 
   sendMsg (chatId, msg) {
@@ -478,23 +477,35 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
-  setEventHandler (cb) {
-    return binding.dcn_set_event_handler(this.dcn_context, cb)
-  }
-
   setOffline (isOffline) {
     return binding.dcn_set_offline(this.dcn_context, isOffline)
   }
 
-  startThreads () {
+  _configure () {
+    return binding.dcn_configure(this.dcn_context)
+  }
+
+  _isConfigured () {
+    return binding.dcn_is_configured(this.dcn_context)
+  }
+
+  _open (dbFile, blobDir, cb) {
+    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
+  }
+
+  _setEventHandler (cb) {
+    return binding.dcn_set_event_handler(this.dcn_context, cb)
+  }
+
+  _startThreads () {
     return binding.dcn_start_threads(this.dcn_context)
   }
 
-  stopThreads () {
+  _stopThreads () {
     return binding.dcn_stop_threads(this.dcn_context)
   }
 
-  unsetEventHandler () {
+  _unsetEventHandler () {
     return binding.dcn_unset_event_handler(this.dcn_context)
   }
 }
