@@ -413,6 +413,10 @@ class DeltaChat extends EventEmitter {
     binding.dcn_delete_chat(this.dcn_context, chatId)
   }
 
+  deleteContact (contactId) {
+    return Boolean(binding.dcn_delete_contact(this.dcn_context, contactId))
+  }
+
   getBlobdir () {
     return binding.dcn_get_blobdir(this.dcn_context)
   }

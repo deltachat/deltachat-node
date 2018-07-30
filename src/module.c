@@ -272,7 +272,15 @@ NAPI_METHOD(dcn_delete_chat) {
   NAPI_RETURN_UNDEFINED();
 }
 
-//NAPI_METHOD(dcn_delete_contact) {}
+NAPI_METHOD(dcn_delete_contact) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(contact_id, argv[1]);
+
+  int result = dc_delete_contact(dcn_context->dc_context, contact_id);
+
+  NAPI_RETURN_INT32(result);
+}
 
 //NAPI_METHOD(dcn_delete_msgs) {}
 
@@ -1428,7 +1436,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_create_contact);
   NAPI_EXPORT_FUNCTION(dcn_create_group_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_delete_contact);
+  NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   //NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_blobdir);

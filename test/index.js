@@ -104,6 +104,17 @@ test('new message and basic methods', t => {
 
 // TODO send message and check status delivered etc
 
+test('create and delete contacts', t => {
+  let id = dc.createContact('someuser', 'someuser@site.com')
+  let contact = dc.getContact(id)
+
+  t.is(contact.getId(), id, 'contact id matches')
+  t.is(dc.deleteContact(id), true, 'delete call succesful')
+  t.is(dc.getContact(id), null, 'contact is gone')
+
+  t.end()
+})
+
 test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
 
