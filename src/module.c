@@ -696,11 +696,17 @@ NAPI_METHOD(dcn_stop_threads) {
     dcn_context->smtp_thread = 0;
   }
 
-
   NAPI_RETURN_UNDEFINED();
 }
 
-//NAPI_METHOD(dcn_stop_ongoing_process) {}
+NAPI_METHOD(dcn_stop_ongoing_process) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_stop_ongoing_process(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_unset_event_handler) {
   NAPI_ARGV(1); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
@@ -1437,7 +1443,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
   NAPI_EXPORT_FUNCTION(dcn_stop_threads);
-  //NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
+  NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
   NAPI_EXPORT_FUNCTION(dcn_unset_event_handler);
 
   /**

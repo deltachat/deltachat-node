@@ -375,6 +375,7 @@ class DeltaChat extends EventEmitter {
 
   // TODO close should take a cb
   close () {
+    this._stopOngoingProcess()
     this._close()
     this._unsetEventHandler()
     this._stopThreads()
@@ -507,6 +508,10 @@ class DeltaChat extends EventEmitter {
 
   _stopThreads () {
     binding.dcn_stop_threads(this.dcn_context)
+  }
+
+  _stopOngoingProcess () {
+    binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 
   _unsetEventHandler () {
