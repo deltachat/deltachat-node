@@ -5,11 +5,10 @@ const tempy = require('tempy')
 let dc = null
 
 test('setUp dc context', t => {
-  const root = tempy.directory()
   dc = new DeltaChat({
     email: process.env.DC_EMAIL,
     password: process.env.DC_PASSWORD,
-    root: root
+    root: tempy.directory()
   })
   dc.on('open', t.end.bind(t))
 })
@@ -26,6 +25,84 @@ test('create and delete chats', t => {
   t.same(dc.getChat(chatId), null, 'chat removed using id')
   t.end()
 })
+
+test('new message and basic methods', t => {
+  const text = 'w00t!'
+  let msg = dc.msgNew()
+  msg.setText(text)
+
+  t.is(msg.getChatId(), 0, 'chat id 0 before sent')
+  t.is(msg.getDuration(), 0, 'duration 0 before sent')
+  t.is(msg.getFile(), '', 'no file set by default')
+  t.is(msg.getFilename(), '', 'no filename set by default')
+  // TODO standard can't parse 0 bigint
+  // t.is(msg.getFilebytes(), 0n, 'and file bytes is 0n')
+  t.is(msg.getFilemime(), '', 'no filemime by default')
+  t.is(msg.getFromId(), 0, 'no contact id set by default')
+  t.is(msg.getHeight(), 0, 'plain text message have height 0')
+  t.is(msg.getId(), 0, 'id 0 before sent')
+
+  let mi = msg.getMediainfo()
+  t.is(mi.getId(), 0, 'no mediainfo id')
+  t.is(mi.getState(), 0, 'no mediainfo state')
+  t.is(mi.getText1(), null, 'no mediainfo text1')
+  t.is(mi.getText1Meaning(), 0, 'no mediainfo text1 meaning')
+  t.is(mi.getText2(), null, 'no mediainfo text2')
+  t.is(mi.getTimestamp(), 0, 'no mediainfo timestamp')
+
+  t.is(msg.getSetupcodebegin(), '', 'no setupcode begin')
+  t.is(msg.getShowpadlock(), false, 'no padlock by default')
+  t.is(msg.getState(), 0, 'no state by default')
+
+  let summary = msg.getSummary()
+  t.is(summary.getId(), 0, 'no summary id')
+  t.is(summary.getState(), 0, 'no summary state')
+  t.is(summary.getText1(), null, 'no summary text1')
+  t.is(summary.getText1Meaning(), 0, 'no summary text1 meaning')
+  t.is(summary.getText2(), null, 'no summary text2')
+  t.is(summary.getTimestamp(), 0, 'no summary timestamp')
+
+  t.is(msg.getSummarytext(), text, 'summary text is text')
+  t.is(msg.getText(), text, 'msg text set correctly')
+  t.is(msg.getType(), 0, 'no message type set')
+  t.is(msg.getWidth(), 0, 'no message width')
+  t.is(msg.isForwarded(), false, 'not forwarded')
+  // TODO check this, shouldn't this be true for a new message?
+  t.is(msg.isIncreation(), false, 'not in creation')
+  t.is(msg.isInfo(), false, 'not an info message')
+  t.is(msg.isSent(), false, 'messge is not sent')
+  t.is(msg.isSetupmessage(), false, 'not an autocrypt setup message')
+  t.is(msg.isStarred(), false, 'not starred')
+
+  msg.latefilingMediasize(10, 20, 30)
+  t.is(msg.getWidth(), 10, 'message width set correctly')
+  t.is(msg.getHeight(), 20, 'message height set correctly')
+  t.is(msg.getDuration(), 30, 'message duration set correctly')
+
+  msg.setDimension(100, 200)
+  t.is(msg.getWidth(), 100, 'message width set correctly')
+  t.is(msg.getHeight(), 200, 'message height set correctly')
+
+  msg.setDuration(314)
+  t.is(msg.getDuration(), 314, 'message duration set correctly')
+
+  msg.setFile('notexisting.jpeg', 'image/jpeg')
+  t.is(msg.getFile(), 'notexisting.jpeg', 'file set correctly')
+  t.is(msg.getFilemime(), 'image/jpeg', 'mime set correctly')
+
+  msg.setMediainfo('deltaX', 'rules')
+
+  mi = msg.getMediainfo()
+  t.is(mi.getText1(), 'deltaX', 'text1 set')
+  t.is(mi.getText2(), 'rules', 'text2 set')
+
+  msg.setType(40)
+  t.is(msg.getType(), 40, 'type set correctly')
+
+  t.end()
+})
+
+// TODO send message and check status delivered etc
 
 test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
@@ -63,9 +140,6 @@ test('tearDown dc context', t => {
   t.end()
 })
 
-// TODO it would be nice if we could get some sort of event
-// when we're 'ready' because right now we are blocked by
-// the constructor
 /*
 const rtn2 = dc.createContact('rtn2', 'rtn2@deltachat.de')
 console.log('rtn2 id', rtn2)
@@ -76,13 +150,6 @@ const chat2Id = dc.createChatByContactId(rtn2)
 console.log('rtn2 chat id', chat2Id)
 const chat3Id = dc.createChatByContactId(rtn3)
 console.log('rtn3 chat id', chat3Id)
-
-// Seems the group chats are not unique, so calling these
-// lines below will create new groups each time
-const group1 = dc.createGroupChat(0, 'AAA')
-console.log('AAA id', group1)
-const group2 = dc.createGroupChat(1, 'BBB')
-console.log('BBB id', group2)
 
 // TODO test dc.createChatByMsgId()
 
@@ -128,100 +195,4 @@ const msgId = dc.sendTextMsg(chat2Id, 'Hi!' + Math.random())
 console.log('sent message to chat2 got msgId', msgId)
 console.log('message info', dc.getMsgInfo(msgId))
 console.log('number of messages in chat2', dc.getMsgCount(chat2Id))
-
-let msg = dc.getMsg(msgId)
-console.log('msg chat id', msg.getChatId())
-console.log('msg duration', msg.getDuration())
-console.log('msg file', msg.getFile())
-console.log('msg filebytes', msg.getFilebytes())
-console.log('msg filemime', msg.getFilemime())
-console.log('msg filename', msg.getFilename())
-console.log('msg from id', msg.getFromId())
-console.log('msg height', msg.getHeight())
-console.log('msg id', msg.getId())
-
-let mediainfo = msg.getMediainfo()
-console.log('    mediainfo id', mediainfo.getId())
-console.log('    mediainfo state', mediainfo.getState())
-console.log('    mediainfo text1', mediainfo.getText1())
-console.log('    mediainfo text1 meaning', mediainfo.getText1Meaning())
-console.log('    mediainfo text2', mediainfo.getText2())
-console.log('    mediainfo timestamp', mediainfo.getTimestamp())
-
-console.log('msg setupcodebegin', msg.getSetupcodebegin())
-console.log('msg showpadlock', msg.getShowpadlock())
-console.log('msg state', msg.getState())
-
-let summary = msg.getSummary()
-console.log('    summary id', summary.getId())
-console.log('    summary state', summary.getState())
-console.log('    summary text1', summary.getText1())
-console.log('    summary text1 meaning', summary.getText1Meaning())
-console.log('    summary text2', summary.getText2())
-console.log('    summary timestamp', summary.getTimestamp())
-
-console.log('msg summary text', msg.getSummarytext())
-console.log('msg summary text (5)', msg.getSummarytext(5))
-console.log('msg text', msg.getText())
-console.log('msg timestamp', msg.getTimestamp())
-console.log('msg type', msg.getType())
-console.log('msg width', msg.getWidth())
-console.log('msg forwarded', msg.isForwarded())
-console.log('msg increation', msg.isIncreation())
-console.log('msg is info', msg.isInfo())
-console.log('msg is sent', msg.isSent())
-console.log('msg is setupmessage', msg.isSetupmessage())
-console.log('msg is starred', msg.isStarred())
-
-console.log('msg latefiling mediasize')
-msg.latefilingMediasize(10, 20, 30)
-console.log('  after latefiling width', msg.getWidth())
-console.log('  after latefiling height', msg.getHeight())
-console.log('  after latefiling duration', msg.getDuration())
-
-console.log('msg setting dimension')
-msg.setDimension(100, 200)
-console.log('  width after', msg.getWidth())
-console.log('  height after', msg.getHeight())
-
-console.log('msg setting duration')
-msg.setDuration(314)
-console.log('  duration after', msg.getDuration())
-
-console.log('msg setting file data')
-msg.setFile('notexisting.jpeg', 'image/jpeg')
-console.log('  file after', msg.getFile())
-console.log('  filemime after', msg.getFilemime())
-console.log('  filename after', msg.getFilename())
-
-console.log('msg set mediainfo')
-msg.setMediainfo('deltaX', 'rules')
-
-let mediainfo2 = msg.getMediainfo()
-console.log('    mediainfo id', mediainfo2.getId())
-console.log('    mediainfo state', mediainfo2.getState())
-console.log('    mediainfo text1', mediainfo2.getText1())
-console.log('    mediainfo text1 meaning', mediainfo2.getText1Meaning())
-console.log('    mediainfo text2', mediainfo2.getText2())
-console.log('    mediainfo timestamp', mediainfo2.getTimestamp())
-
-console.log('msg set text')
-msg.setText('NEW TEXT WOOOHOOO!!11oneone')
-console.log('  msg text after', msg.getText())
-
-console.log('msg set type')
-msg.setType(40)
-console.log('  msg type after', msg.getType())
-msg.setType(40000)
-console.log('  msg type after (2)', msg.getType())
-
-let msg2 = dc.msgNew()
-msg2.setText('created a new message')
-console.log('msg2 text', msg2.getText())
-console.log('msg2 id', msg2.getId())
-
-msg2.setText('lets send it')
-let msg2Id = dc.sendMsg(chat3Id, msg2)
-console.log('msg2 id after sent', msg2Id)
-console.log('msg2 state', msg2.getState())
 */

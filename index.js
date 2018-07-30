@@ -5,8 +5,6 @@ const xtend = require('xtend')
 const path = require('path')
 const debug = require('debug')('deltachat')
 
-const DEFAULTS = { root: process.cwd() }
-
 /**
  *
  */
@@ -216,7 +214,7 @@ class Message {
   }
 
   getShowpadlock () {
-    return binding.dcn_msg_get_showpadlock(this.dc_msg)
+    return Boolean(binding.dcn_msg_get_showpadlock(this.dc_msg))
   }
 
   getState () {
@@ -344,6 +342,7 @@ class DeltaChat extends EventEmitter {
   constructor (opts, cb) {
     super()
 
+    const DEFAULTS = { root: process.cwd() }
     opts = xtend(DEFAULTS, opts || {})
 
     if (typeof opts.email !== 'string') {
