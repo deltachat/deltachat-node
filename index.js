@@ -356,7 +356,9 @@ class DeltaChat extends EventEmitter {
       debug('event', event, 'data1', data1, 'data2', data2)
     })
 
-    this.open(path.join(opts.root, 'db.sqlite'), '')
+    this.open(path.join(opts.root, 'db.sqlite'), '', () => {
+      this.emit('open')
+    })
 
     if (!this.isConfigured()) {
       this.setConfig('addr', opts.email)
@@ -456,8 +458,8 @@ class DeltaChat extends EventEmitter {
     return new Message(binding.dcn_msg_new(this.dcn_context))
   }
 
-  open (dbFile, blobDir) {
-    return binding.dcn_open(this.dcn_context, dbFile, blobDir)
+  open (dbFile, blobDir, cb) {
+    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
   }
 
   sendMsg (chatId, msg) {

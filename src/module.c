@@ -131,7 +131,7 @@ static void smtp_thread_func(void* arg)
   dc_context_t* dc_context = dcn_context->dc_context;
 
   napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-  
+
   while (dcn_context->loop_thread) {
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
@@ -344,7 +344,7 @@ NAPI_METHOD(dcn_get_config_int) {
   NAPI_INT32(def, argv[2]);
 
   int value = dc_get_config_int(dcn_context->dc_context, key, def);
-  
+
   free(key);
 
   NAPI_RETURN_INT32(value);
@@ -498,7 +498,7 @@ typedef struct dcn_open_carrier_t {
 
 void dcn_open_execute(napi_env env, void* data) {
   dcn_open_carrier_t* dcn_open_carrier = (dcn_open_carrier_t*)data;
-  
+
   // blobdir may be the empty string or NULL for default blobdir
   dcn_open_carrier->dc_open_status = dc_open(
       dcn_open_carrier->dcn_context->dc_context,
@@ -524,9 +524,6 @@ void dcn_open_complete(napi_env env, napi_status status, void* data) {
   NAPI_STATUS_THROWS(napi_get_reference_value(env, dcn_open_carrier->callback_ref, &callback));
   napi_value result;
   NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, &result));
-
-  //NAPI_STATUS_THROWS(napi_delete_reference(env, &dcn_open_carrier->callback_ref));
-  //NAPI_STATUS_THROWS(napi_delete_async_work(env, dcn_open_carrier->async_work));
 }
 
 NAPI_METHOD(dcn_open) {
@@ -535,7 +532,6 @@ NAPI_METHOD(dcn_open) {
   NAPI_UTF8(dbfile, argv[1]);
   NAPI_UTF8(blobdir, argv[2]);
   napi_value callback = argv[3];
-
 
   dcn_open_carrier_t* dcn_open_carrier = calloc(1, sizeof(dcn_open_carrier_t));
   dcn_open_carrier->dcn_context = dcn_context;

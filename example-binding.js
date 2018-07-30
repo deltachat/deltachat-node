@@ -20,7 +20,9 @@ res = binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
   console.log('> event', event, 'data1', data1, 'data2', data2)
 })
 
-res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir')
+res = binding.dcn_open(dcn_context, './test.sqlite', './blobdir', function () {
+  console.log('OPEN DONE')
+})
 console.log('result from dc_open:', res)
 
 res = binding.dcn_get_config(dcn_context, 'notexists', 'DEFAULT')
