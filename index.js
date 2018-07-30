@@ -375,7 +375,7 @@ class DeltaChat extends EventEmitter {
 
   // TODO close should take a cb
   close () {
-    // TODO we should close the db here as well
+    this._close()
     this._unsetEventHandler()
     this._stopThreads()
   }
@@ -483,6 +483,10 @@ class DeltaChat extends EventEmitter {
 
   _configure () {
     return binding.dcn_configure(this.dcn_context)
+  }
+
+  _close () {
+    binding.dcn_close(this.dcn_context)
   }
 
   _isConfigured () {

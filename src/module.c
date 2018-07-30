@@ -186,7 +186,14 @@ NAPI_METHOD(dcn_context_new) {
 
 //NAPI_METHOD(dcn_check_qr) {}
 
-//NAPI_METHOD(dcn_close) {}
+NAPI_METHOD(dcn_close) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_close(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_configure) {
   NAPI_ARGV(1);
@@ -1362,7 +1369,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_block_contact);
   //NAPI_EXPORT_FUNCTION(dcn_check_password);
   //NAPI_EXPORT_FUNCTION(dcn_check_qr);
-  //NAPI_EXPORT_FUNCTION(dcn_close);
+  NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   //NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
