@@ -423,11 +423,7 @@ class DeltaChat extends EventEmitter {
 
   getChat (chatId) {
     const dc_chat = binding.dcn_get_chat(this.dcn_context, chatId)
-    if (dc_chat === null) {
-      // TODO callback with error
-      throw new Error(`No chat found with id ${chatId}`)
-    }
-    return new Chat(dc_chat)
+    return dc_chat ? new Chat(dc_chat) : null
   }
 
   getChatList (listFlags, queryStr, queryContactId) {
@@ -454,11 +450,7 @@ class DeltaChat extends EventEmitter {
 
   getContact (contactId) {
     const dc_contact = binding.dcn_get_contact(this.dcn_context, contactId)
-    if (dc_contact === null) {
-      // TODO callback with error
-      throw new Error(`No contact found with id ${contactId}`)
-    }
-    return new Contact(dc_contact)
+    return dc_contact ? new Contact(dc_contact) : null
   }
 
   getInfo () {
@@ -467,11 +459,7 @@ class DeltaChat extends EventEmitter {
 
   getMsg (msgId) {
     const dc_msg = binding.dcn_get_msg(this.dcn_context, msgId)
-    if (dc_msg === null) {
-      // TODO callback with error
-      throw new Error(`No msg found with id ${msgId}`)
-    }
-    return new Message(dc_msg)
+    return dc_msg ? new Message(dc_msg) : null
   }
 
   getMsgCount (chatId) {
