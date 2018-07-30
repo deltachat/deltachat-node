@@ -372,6 +372,14 @@ class DeltaChat extends EventEmitter {
     this._startThreads()
   }
 
+  archiveChat (chat, archive) {
+    let id = (typeof chat === 'number' ? chat : chat.getId())
+    if (typeof archive !== 'boolean') {
+      throw new Error('archive parameter must be a boolean')
+    }
+    binding.dcn_archive_chat(this.dcn_context, id, archive ? 1 : 0)
+  }
+
   blockContact (contact, block) {
     let id = (typeof contact === 'number' ? contact : contact.getId())
     if (typeof block !== 'boolean') {

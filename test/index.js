@@ -19,9 +19,6 @@ test('create chat from contact and chat methods', t => {
   let chatId = dc.createChatByContactId(contactId)
   let chat = dc.getChat(chatId)
 
-  // TODO test archiving and unarchiving chats when
-  // dcn_archive_chat has been implemented
-
   t.is(chat.getArchived(), 0, 'not archived')
   t.is(chat.getDraftTimestamp(), 0, 'no timestamp')
   t.is(chat.getId(), chatId, 'chat id matches')
@@ -34,6 +31,11 @@ test('create chat from contact and chat methods', t => {
   // TODO make sure this is really the case!
   t.is(chat.isUnpromoted(), false, 'not unpromoted')
   t.is(chat.isVerified(), false, 'not verified')
+
+  dc.archiveChat(chatId, true)
+  t.is(dc.getChat(chatId).getArchived(), 1, 'chat archived')
+  dc.archiveChat(chatId, false)
+  t.is(dc.getChat(chatId).getArchived(), 0, 'chat unarchived')
 
   chatId = dc.createGroupChat(0, 'unverified group')
   chat = dc.getChat(chatId)
@@ -221,6 +223,10 @@ test('chatlist methods', t => {
   t.is(lot.getText1Meaning(), 1)
   t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
+
+  dc.archiveChat(ids[0], true)
+  chatList = dc.getChatList(0x01, 'groupchat1')
+  t.is(chatList.getCount(), 1, 'only one archived')
 
   t.end()
 })

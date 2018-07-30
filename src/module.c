@@ -178,7 +178,16 @@ NAPI_METHOD(dcn_context_new) {
 
 //NAPI_METHOD(dcn_add_contact_to_chat) {}
 
-//NAPI_METHOD(dcn_archive_chat) {}
+NAPI_METHOD(dcn_archive_chat) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_INT32(archive, argv[2]);
+
+  dc_archive_chat(dcn_context->dc_context, chat_id, archive);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_block_contact) {
   NAPI_ARGV(3);
@@ -1424,7 +1433,7 @@ NAPI_INIT() {
 
   //NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   //NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_archive_chat);
+  NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   //NAPI_EXPORT_FUNCTION(dcn_check_password);
   //NAPI_EXPORT_FUNCTION(dcn_check_qr);
