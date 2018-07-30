@@ -180,7 +180,16 @@ NAPI_METHOD(dcn_context_new) {
 
 //NAPI_METHOD(dcn_archive_chat) {}
 
-//NAPI_METHOD(dcn_block_contact) {}
+NAPI_METHOD(dcn_block_contact) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_INT32(new_blocking, argv[2]);
+
+  dc_block_contact(dcn_context->dc_context, contact_id, new_blocking);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 //NAPI_METHOD(dcn_check_password) {}
 
@@ -270,9 +279,38 @@ NAPI_METHOD(dcn_get_blobdir) {
   NAPI_RETURN_AND_FREE_STRING(blobdir);
 }
 
-//NAPI_METHOD(dcn_get_blocked_cnt) {}
+NAPI_METHOD(dcn_get_blocked_cnt) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
 
-//NAPI_METHOD(dcn_get_blocked_contacts) {}
+  int blocked_cnt = dc_get_blocked_cnt(dcn_context->dc_context);
+
+  NAPI_RETURN_INT32(blocked_cnt);
+}
+
+NAPI_METHOD(dcn_get_blocked_contacts) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_array_t* contacts = dc_get_blocked_contacts(dcn_context->dc_context);
+
+  napi_value array;
+  const int length = dc_array_get_cnt(contacts);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t contact_id = dc_array_get_id(contacts, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, contact_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  dc_array_unref(contacts);
+
+  return array;
+}
 
 void dc_chat_t_finalize(napi_env env, void* data, void* hint) {
   if (data) {
@@ -1371,7 +1409,7 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   //NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
   //NAPI_EXPORT_FUNCTION(dcn_archive_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_block_contact);
+  NAPI_EXPORT_FUNCTION(dcn_block_contact);
   //NAPI_EXPORT_FUNCTION(dcn_check_password);
   //NAPI_EXPORT_FUNCTION(dcn_check_qr);
   NAPI_EXPORT_FUNCTION(dcn_close);
@@ -1386,8 +1424,8 @@ NAPI_INIT() {
   //NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
-  //NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
-  //NAPI_EXPORT_FUNCTION(dcn_get_blocked_contacts);
+  NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
+  NAPI_EXPORT_FUNCTION(dcn_get_blocked_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat);
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_contacts);
   //NAPI_EXPORT_FUNCTION(dcn_get_chat_id_by_contact_id);

@@ -155,7 +155,7 @@ class Contact {
   }
 
   isBlocked () {
-    return binding.dcn_contact_is_blocked(this.dc_contact)
+    return Boolean(binding.dcn_contact_is_blocked(this.dc_contact))
   }
 
   isVerified () {
@@ -373,10 +373,22 @@ class DeltaChat extends EventEmitter {
     this._startThreads()
   }
 
+  blockContact (contact, block) {
+    let id = (typeof contact === 'number' ? contact : contact.getId())
+    if (typeof block !== 'boolean') {
+      throw new Error('block parameter must be a boolean')
+    }
+    binding.dcn_block_contact(this.dcn_context, id, block ? 1 : 0)
+  }
+
   // TODO close should take a cb
   close () {
-    this._stopOngoingProcess()
-    this._close()
+    // TODO close() doesn't always work, figure out a way to be
+    // sure we can stop and callback when done
+    // _stopOngoingProcess() and _close() seems to mess it up
+    // even more
+    // this._stopOngoingProcess()
+    // this._close()
     this._unsetEventHandler()
     this._stopThreads()
   }
@@ -399,6 +411,14 @@ class DeltaChat extends EventEmitter {
 
   getBlobdir () {
     return binding.dcn_get_blobdir(this.dcn_context)
+  }
+
+  getBlockedCount () {
+    return binding.dcn_get_blocked_cnt(this.dcn_context)
+  }
+
+  getBlockedContacts () {
+    return binding.dcn_get_blocked_contacts(this.dcn_context)
   }
 
   getChat (chatId) {

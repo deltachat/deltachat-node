@@ -1,23 +1,64 @@
 const DeltaChat = require('../')
+const tape = require('tape')
+const tempy = require('tempy')
 
-const dc = new DeltaChat({
-  email: process.env.DC_EMAIL,
-  password: process.env.DC_PASSWORD
-})
+function test (desc, cb) {
+  const root = tempy.directory()
+  console.log('# setting up DeltaChat at', root)
 
-dc.on('open', () => {
-  console.log('is open')
-  console.log('blobdir is', dc.getBlobdir())
-  console.log('CLOSING in 3 seconds')
-  setTimeout(() => {
-    dc.close()
-  }, 3000)
+  // TODO we SMTP and IMAP servers set up locally
+  const dc = new DeltaChat({
+    email: process.env.DC_EMAIL,
+    password: process.env.DC_PASSWORD,
+    root: root
+  })
+
+  dc.on('open', () => {
+    tape(desc, t => {
+      const done = t.end.bind(t)
+      t.end = function () {
+        dc.close()
+        done()
+      }
+      cb(t, dc)
+    })
+  })
+}
+
+test('blocking contacts', (t, dc) => {
+  let id = dc.createContact('badcontact', 'bad@site.com')
+
+  t.is(dc.getBlockedCount(), 0)
+  t.same(dc.getContact(id).isBlocked(), false)
+  t.same(dc.getBlockedContacts(), [])
+
+  dc.blockContact(dc.getContact(id), true)
+  t.is(dc.getBlockedCount(), 1)
+  t.same(dc.getContact(id).isBlocked(), true)
+  t.same(dc.getBlockedContacts(), [ id ])
+
+  dc.blockContact(dc.getContact(id), false)
+  t.is(dc.getBlockedCount(), 0)
+  t.same(dc.getContact(id).isBlocked(), false)
+  t.same(dc.getBlockedContacts(), [])
+
+  dc.blockContact(id, true)
+  t.is(dc.getBlockedCount(), 1)
+  t.same(dc.getContact(id).isBlocked(), true)
+  t.same(dc.getBlockedContacts(), [ id ])
+
+  dc.blockContact(id, false)
+  t.is(dc.getBlockedCount(), 0)
+  t.same(dc.getContact(id).isBlocked(), false)
+  t.same(dc.getBlockedContacts(), [])
+
+  t.end()
 })
 
 // TODO it would be nice if we could get some sort of event
 // when we're 'ready' because right now we are blocked by
 // the constructor
-
+/*
 const rtn2 = dc.createContact('rtn2', 'rtn2@deltachat.de')
 console.log('rtn2 id', rtn2)
 const rtn3 = dc.createContact('rtn3', 'rtn3@deltachat.de')
@@ -175,13 +216,4 @@ msg2.setText('lets send it')
 let msg2Id = dc.sendMsg(chat3Id, msg2)
 console.log('msg2 id after sent', msg2Id)
 console.log('msg2 state', msg2.getState())
-
-// Testing gc
-// if (global.gc) {
-// chat = null
-// contact = null
-// chatList = null
-// lot2 = null
-// msg = null
-// global.gc()
-// }
+*/
