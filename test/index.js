@@ -13,7 +13,42 @@ test('setUp dc context', t => {
   dc.on('open', t.end.bind(t))
 })
 
-test('create and delete chats', t => {
+test('create chat from contact and chat methods', t => {
+  const contactId = dc.createContact('aaa', 'aaa@site.org')
+
+  let chatId = dc.createChatByContactId(contactId)
+  let chat = dc.getChat(chatId)
+
+  // TODO test archiving and unarchiving chats when
+  // dcn_archive_chat has been implemented
+
+  t.is(chat.getArchived(), 0, 'not archived')
+  t.is(chat.getDraftTimestamp(), 0, 'no timestamp')
+  t.is(chat.getId(), chatId, 'chat id matches')
+  t.is(chat.getName(), 'aaa', 'chat name matches')
+  t.is(chat.getProfileImage(), null, 'no profile image')
+  t.is(chat.getSubtitle(), 'aaa@site.org', 'correct subtitle')
+  t.is(chat.getTextDraft(), null, 'no text draft')
+  t.is(chat.getType(), 100, 'type 100 with single chat')
+  t.is(chat.isSelfTalk(), false, 'no self talk')
+  // TODO make sure this is really the case!
+  t.is(chat.isUnpromoted(), false, 'not unpromoted')
+  t.is(chat.isVerified(), false, 'not verified')
+
+  chatId = dc.createGroupChat(0, 'unverified group')
+  chat = dc.getChat(chatId)
+  t.is(chat.isVerified(), false, 'is not verified')
+  t.is(chat.getType(), 120, 'type 120 for group chat')
+
+  chatId = dc.createGroupChat(1, 'a verified group')
+  chat = dc.getChat(chatId)
+  t.is(chat.isVerified(), true, 'is verified')
+  t.is(chat.getType(), 130, 'type 130 for verified group chat')
+
+  t.end()
+})
+
+test('create and delete chat', t => {
   let chatId = dc.createGroupChat(0, 'GROUPCHAT')
   let chat = dc.getChat(chatId)
   t.is(chat.getId(), chatId, 'correct chatId')
@@ -104,6 +139,8 @@ test('new message and basic methods', t => {
 
 // TODO send message and check status delivered etc
 
+// TODO test dc.createChatByMsgId()
+
 test('create and delete contacts', t => {
   let id = dc.createContact('someuser', 'someuser@site.com')
   let contact = dc.getContact(id)
@@ -152,31 +189,6 @@ test('tearDown dc context', t => {
 })
 
 /*
-const rtn2 = dc.createContact('rtn2', 'rtn2@deltachat.de')
-console.log('rtn2 id', rtn2)
-const rtn3 = dc.createContact('rtn3', 'rtn3@deltachat.de')
-console.log('rtn3 id', rtn3)
-
-const chat2Id = dc.createChatByContactId(rtn2)
-console.log('rtn2 chat id', chat2Id)
-const chat3Id = dc.createChatByContactId(rtn3)
-console.log('rtn3 chat id', chat3Id)
-
-// TODO test dc.createChatByMsgId()
-
-let chat = dc.getChat(chat2Id)
-console.log('chat archived', chat.getArchived())
-console.log('chat draft timestamp', chat.getDraftTimestamp())
-console.log('chat id', chat.getId())
-console.log('chat name', chat.getName())
-console.log('chat profile image', chat.getProfileImage())
-console.log('chat sub title', chat.getSubtitle())
-console.log('chat text draft', chat.getTextDraft())
-console.log('chat type', chat.getType())
-console.log('chat self talk', chat.isSelfTalk())
-console.log('chat is unpromoted', chat.isUnpromoted())
-console.log('chat is verified', chat.isVerified())
-
 let contact = dc.getContact(rtn2)
 console.log('contact addr', contact.getAddr())
 console.log('contact display name', contact.getDisplayName())

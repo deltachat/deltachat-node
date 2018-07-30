@@ -47,15 +47,15 @@ class Chat {
   }
 
   isSelfTalk () {
-    return binding.dcn_chat_is_self_talk(this.dc_chat)
+    return Boolean(binding.dcn_chat_is_self_talk(this.dc_chat))
   }
 
   isUnpromoted () {
-    return binding.dcn_chat_is_unpromoted(this.dc_chat)
+    return Boolean(binding.dcn_chat_is_unpromoted(this.dc_chat))
   }
 
   isVerified () {
-    return binding.dcn_chat_is_verified(this.dc_chat)
+    return Boolean(binding.dcn_chat_is_verified(this.dc_chat))
   }
 }
 
