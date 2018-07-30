@@ -24,3 +24,4 @@ install:
 
 script:
   - npm test
+  - node example-binding.js 
