@@ -1,31 +1,20 @@
 const DeltaChat = require('../')
-const tape = require('tape')
+const test = require('tape')
 const tempy = require('tempy')
 
-function test (desc, cb) {
-  const root = tempy.directory()
-  console.log('# setting up DeltaChat at', root)
+let dc = null
 
-  // TODO we SMTP and IMAP servers set up locally
-  const dc = new DeltaChat({
+test('setUp dc context', t => {
+  const root = tempy.directory()
+  dc = new DeltaChat({
     email: process.env.DC_EMAIL,
     password: process.env.DC_PASSWORD,
     root: root
   })
+  dc.on('open', t.end.bind(t))
+})
 
-  dc.on('open', () => {
-    tape(desc, t => {
-      const done = t.end.bind(t)
-      t.end = function () {
-        dc.close()
-        done()
-      }
-      cb(t, dc)
-    })
-  })
-}
-
-test('blocking contacts', (t, dc) => {
+test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
 
   t.is(dc.getBlockedCount(), 0)
@@ -52,6 +41,12 @@ test('blocking contacts', (t, dc) => {
   t.same(dc.getContact(id).isBlocked(), false)
   t.same(dc.getBlockedContacts(), [])
 
+  t.end()
+})
+
+test('tearDown dc context', t => {
+  // TODO dc.close() should callback
+  dc.close()
   t.end()
 })
 
