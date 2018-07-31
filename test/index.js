@@ -54,12 +54,8 @@ test('create and delete chat', t => {
   let chatId = dc.createGroupChat(0, 'GROUPCHAT')
   let chat = dc.getChat(chatId)
   t.is(chat.getId(), chatId, 'correct chatId')
-  dc.deleteChat(chat)
-  t.same(dc.getChat(chatId), null, 'chat removed using chat object')
-  chatId = dc.createGroupChat(0, 'GROUPCHAT')
-  chat = dc.getChat(chatId)
   dc.deleteChat(chat.getId())
-  t.same(dc.getChat(chatId), null, 'chat removed using id')
+  t.same(dc.getChat(chatId), null, 'chat removed')
   t.end()
 })
 
@@ -176,16 +172,6 @@ test('create and delete contacts', t => {
 test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
 
-  t.is(dc.getBlockedCount(), 0)
-  t.same(dc.getContact(id).isBlocked(), false)
-  t.same(dc.getBlockedContacts(), [])
-
-  dc.blockContact(dc.getContact(id), true)
-  t.is(dc.getBlockedCount(), 1)
-  t.same(dc.getContact(id).isBlocked(), true)
-  t.same(dc.getBlockedContacts(), [ id ])
-
-  dc.blockContact(dc.getContact(id), false)
   t.is(dc.getBlockedCount(), 0)
   t.same(dc.getContact(id).isBlocked(), false)
   t.same(dc.getBlockedContacts(), [])

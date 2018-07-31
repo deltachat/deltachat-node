@@ -372,20 +372,18 @@ class DeltaChat extends EventEmitter {
     this._startThreads()
   }
 
-  archiveChat (chat, archive) {
-    let id = (typeof chat === 'number' ? chat : chat.getId())
+  archiveChat (chatId, archive) {
     if (typeof archive !== 'boolean') {
       throw new Error('archive parameter must be a boolean')
     }
-    binding.dcn_archive_chat(this.dcn_context, id, archive ? 1 : 0)
+    binding.dcn_archive_chat(this.dcn_context, chatId, archive ? 1 : 0)
   }
 
-  blockContact (contact, block) {
-    let id = (typeof contact === 'number' ? contact : contact.getId())
+  blockContact (contactId, block) {
     if (typeof block !== 'boolean') {
       throw new Error('block parameter must be a boolean')
     }
-    binding.dcn_block_contact(this.dcn_context, id, block ? 1 : 0)
+    binding.dcn_block_contact(this.dcn_context, contactId, block ? 1 : 0)
   }
 
   // TODO close should take a cb
@@ -416,8 +414,7 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_create_group_chat(this.dcn_context, verified, chatName)
   }
 
-  deleteChat (chat) {
-    let chatId = (typeof chat === 'number' ? chat : chat.getId())
+  deleteChat (chatId) {
     binding.dcn_delete_chat(this.dcn_context, chatId)
   }
 
