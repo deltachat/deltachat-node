@@ -348,8 +348,8 @@ class DeltaChat extends EventEmitter {
     if (typeof opts.email !== 'string') {
       throw new Error('Missing .email')
     }
-    if (typeof opts.password !== 'string') {
-      throw new Error('Missing .password')
+    if (typeof opts.mail_pw !== 'string') {
+      throw new Error('Missing .mail_pw')
     }
 
     this.dcn_context = binding.dcn_context_new()
@@ -365,7 +365,7 @@ class DeltaChat extends EventEmitter {
 
     if (!this._isConfigured()) {
       this.setConfig('addr', opts.email)
-      this.setConfig('mail_pw', opts.password)
+      this.setConfig('mail_pw', opts.mail_pw)
       this._configure()
     }
 

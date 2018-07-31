@@ -7,7 +7,7 @@ let dc = null
 test('setUp dc context', t => {
   dc = new DeltaChat({
     email: process.env.DC_EMAIL,
-    password: process.env.DC_PASSWORD,
+    mail_pw: process.env.DC_MAIL_PW,
     root: tempy.directory()
   })
   dc.on('open', t.end.bind(t))
