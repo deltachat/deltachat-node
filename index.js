@@ -592,6 +592,14 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
+  getNextMediaMessage (msgId) {
+    return binding.dcn_get_next_media(this.dcn_context, msgId, 1)
+  }
+
+  getPreviousMediaMessage (msgId) {
+    return binding.dcn_get_next_media(this.dcn_context, msgId, -1)
+  }
+
   importExport (what, param1, param2) {
     binding.dcn_imex(this.dcn_context, what, param1, param2)
   }
