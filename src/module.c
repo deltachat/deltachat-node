@@ -646,9 +646,38 @@ NAPI_METHOD(dcn_get_msg_info) {
 
 //NAPI_METHOD(dcn_get_securejoin_qr) {}
 
-//NAPI_METHOD(dcn_imex) {}
+NAPI_METHOD(dcn_imex) {
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_INT32(what, argv[1]);
+  NAPI_UTF8(param1, argv[2]);
+  NAPI_UTF8(param2, argv[3]);
 
-//NAPI_METHOD(dcn_imex_has_backup) {}
+  dc_imex(dcn_context->dc_context, what, param1, param2);
+
+  free(param1);
+  free(param2);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_imex_has_backup) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(dir_name, argv[1]);
+
+  char* file = dc_imex_has_backup(dcn_context->dc_context, dir_name);
+
+  free(dir_name);
+
+  if (file == NULL) {
+    napi_value result;
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  NAPI_RETURN_AND_FREE_STRING(file);
+}
 
 NAPI_METHOD(dcn_initiate_key_transfer) {
   NAPI_ARGV(1);
@@ -1624,8 +1653,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
   //NAPI_EXPORT_FUNCTION(dcn_get_next_media);
   //NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
-  //NAPI_EXPORT_FUNCTION(dcn_imex);
-  //NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
+  NAPI_EXPORT_FUNCTION(dcn_imex);
+  NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);

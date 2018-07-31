@@ -548,6 +548,14 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
+  imex (what, param1, param2) {
+    binding.dcn_imex(this.dcn_context, what, param1, param2)
+  }
+
+  imexHasBackup (dirName) {
+    return binding.dcn_imex_has_backup(this.dcn_context, dirName)
+  }
+
   initiateKeyTransfer () {
     return binding.dcn_initiate_key_transfer(this.dcn_context)
   }
