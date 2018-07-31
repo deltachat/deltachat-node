@@ -141,16 +141,51 @@ static void smtp_thread_func(void* arg)
 }
 
 /**
- * Main context.
+ * Finalize functions. These are called once the corresponding
+ * external is garbage collected on the JavaScript side.
  */
 
-void dcn_context_finalize(napi_env env, void* data, void* hint) {
+static void finalize_chat(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_chat_unref((dc_chat_t*)data);
+  }
+}
+
+static void finalize_chatlist(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_chatlist_unref((dc_chatlist_t*)data);
+  }
+}
+
+static void finalize_contact(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_contact_unref((dc_contact_t*)data);
+  }
+}
+
+static void finalize_context(napi_env env, void* data, void* hint) {
   if (data) {
     dcn_context_t* dcn_context = (dcn_context_t*)data;
     dc_context_unref(dcn_context->dc_context);
     free(dcn_context);
   }
 }
+
+static void finalize_lot(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_lot_unref((dc_lot_t*)data);
+  }
+}
+
+static void finalize_msg(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_msg_unref((dc_msg_t*)data);
+  }
+}
+
+/**
+ * Main context.
+ */
 
 NAPI_METHOD(dcn_context_new) {
   // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
@@ -165,7 +200,7 @@ NAPI_METHOD(dcn_context_new) {
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
-                                          dcn_context_finalize,
+                                          finalize_context,
                                           NULL, &result));
   return result;
 }
@@ -367,12 +402,6 @@ NAPI_METHOD(dcn_get_blocked_contacts) {
   return array;
 }
 
-void dc_chat_t_finalize(napi_env env, void* data, void* hint) {
-  if (data) {
-    dc_chat_unref((dc_chat_t*)data);
-  }
-}
-
 NAPI_METHOD(dcn_get_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -386,7 +415,7 @@ NAPI_METHOD(dcn_get_chat) {
     return result;
   }
 
-  NAPI_STATUS_THROWS(napi_create_external(env, chat, dc_chat_t_finalize,
+  NAPI_STATUS_THROWS(napi_create_external(env, chat, finalize_chat,
                                           NULL, &result));
   return result;
 }
@@ -431,12 +460,6 @@ NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
 
 //NAPI_METHOD(dcn_get_chat_msgs) {}
 
-void dc_chatlist_t_finalize(napi_env env, void* data, void* hint) {
-  if (data) {
-    dc_chatlist_unref((dc_chatlist_t*)data);
-  }
-}
-
 NAPI_METHOD(dcn_get_chatlist) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
@@ -456,7 +479,7 @@ NAPI_METHOD(dcn_get_chatlist) {
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env,
                                           chatlist,
-                                          dc_chatlist_t_finalize,
+                                          finalize_chatlist,
                                           NULL,
                                           &result));
   return result;
@@ -489,12 +512,6 @@ NAPI_METHOD(dcn_get_config_int) {
   NAPI_RETURN_INT32(value);
 }
 
-void dc_contact_t_finalize(napi_env env, void* data, void* hint) {
-  if (data) {
-    dc_contact_unref((dc_contact_t*)data);
-  }
-}
-
 NAPI_METHOD(dcn_get_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -508,7 +525,8 @@ NAPI_METHOD(dcn_get_contact) {
     return result;
   }
 
-  NAPI_STATUS_THROWS(napi_create_external(env, contact, dc_contact_t_finalize,
+  NAPI_STATUS_THROWS(napi_create_external(env, contact,
+                                          finalize_contact,
                                           NULL, &result));
   return result;
 }
@@ -557,12 +575,6 @@ NAPI_METHOD(dcn_get_info) {
   NAPI_RETURN_AND_FREE_STRING(str);
 }
 
-void dc_msg_t_finalize(napi_env env, void* data, void* hint) {
-  if (data) {
-    dc_msg_unref((dc_msg_t*)data);
-  }
-}
-
 NAPI_METHOD(dcn_get_msg) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -576,7 +588,7 @@ NAPI_METHOD(dcn_get_msg) {
     return result;
   }
 
-  NAPI_STATUS_THROWS(napi_create_external(env, msg, dc_msg_t_finalize,
+  NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
                                           NULL, &result));
   return result;
 }
@@ -650,7 +662,7 @@ NAPI_METHOD(dcn_msg_new) {
   napi_value result;
   dc_msg_t* msg = dc_msg_new(dcn_context->dc_context);
 
-  NAPI_STATUS_THROWS(napi_create_external(env, msg, dc_msg_t_finalize,
+  NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
                                           NULL, &result));
   return result;
 }
@@ -1036,12 +1048,6 @@ NAPI_METHOD(dcn_chatlist_get_msg_id) {
   NAPI_RETURN_UINT32(message_id);
 }
 
-void dc_lot_finalize(napi_env env, void* data, void* hint) {
-  if (data) {
-    dc_lot_unref((dc_lot_t*)data);
-  }
-}
-
 NAPI_METHOD(dcn_chatlist_get_summary) {
   NAPI_ARGV(3);
   NAPI_DC_CHATLIST();
@@ -1059,7 +1065,7 @@ NAPI_METHOD(dcn_chatlist_get_summary) {
   }
 
   NAPI_STATUS_THROWS(napi_create_external(env, summary,
-                                          dc_lot_finalize,
+                                          finalize_lot,
                                           NULL, &result));
   return result;
 }
@@ -1303,7 +1309,7 @@ NAPI_METHOD(dcn_msg_get_mediainfo) {
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, mediainfo,
-                                          dc_lot_finalize,
+                                          finalize_lot,
                                           NULL, &result));
   return result;
 }
@@ -1346,7 +1352,7 @@ NAPI_METHOD(dcn_msg_get_summary) {
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, summary,
-                                          dc_lot_finalize,
+                                          finalize_lot,
                                           NULL, &result));
   return result;
 }
