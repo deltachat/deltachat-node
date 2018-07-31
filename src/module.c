@@ -525,9 +525,65 @@ NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
   NAPI_RETURN_UINT32(chat_id);
 }
 
-//NAPI_METHOD(dcn_get_chat_media) {}
+NAPI_METHOD(dcn_get_chat_media) {
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_INT32(msg_type, argv[2]);
+  NAPI_INT32(or_msg_type, argv[3]);
 
-//NAPI_METHOD(dcn_get_chat_msgs) {}
+  dc_array_t* msg_ids = dc_get_chat_media(dcn_context->dc_context,
+                                          chat_id,
+                                          msg_type,
+                                          or_msg_type);
+
+  napi_value array;
+  const int length = dc_array_get_cnt(msg_ids);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  dc_array_unref(msg_ids);
+
+  return array;
+}
+
+NAPI_METHOD(dcn_get_chat_msgs) {
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_UINT32(flags, argv[2]);
+  NAPI_UINT32(marker1before, argv[3]);
+
+  dc_array_t* msg_ids = dc_get_chat_msgs(dcn_context->dc_context,
+                                         chat_id,
+                                         flags,
+                                         marker1before);
+
+  napi_value array;
+  const int length = dc_array_get_cnt(msg_ids);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  dc_array_unref(msg_ids);
+
+  return array;
+}
 
 NAPI_METHOD(dcn_get_chatlist) {
   NAPI_ARGV(4);
@@ -1698,8 +1754,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_chat);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_id_by_contact_id);
-  //NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
-  //NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
+  NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
   NAPI_EXPORT_FUNCTION(dcn_get_config);
   NAPI_EXPORT_FUNCTION(dcn_get_config_int);
