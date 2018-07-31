@@ -69,7 +69,7 @@ test('create and delete chat', t => {
 
 test('new message and Message methods', t => {
   const text = 'w00t!'
-  let msg = dc.msgNew()
+  let msg = dc.messageNew()
   msg.setText(text)
 
   t.is(msg.getChatId(), 0, 'chat id 0 before sent')
@@ -152,12 +152,12 @@ test('Contact methods', t => {
   const contactId = dc.createContact('First Last', 'first.last@site.org')
   let contact = dc.getContact(contactId)
 
-  t.is(contact.getAddr(), 'first.last@site.org', 'correct address')
+  t.is(contact.getAddress(), 'first.last@site.org', 'correct address')
   t.is(contact.getDisplayName(), 'First Last', 'correct display name')
   t.is(contact.getFirstName(), 'First', 'correct first name')
   t.is(contact.getId(), contactId, 'contact id matches')
   t.is(contact.getName(), 'First Last', 'correct name')
-  t.is(contact.getNameNAddr(), 'First Last (first.last@site.org)')
+  t.is(contact.getNameAndAddress(), 'First Last (first.last@site.org)')
   t.is(contact.isBlocked(), false, 'not blocked')
   t.is(contact.isVerified(), 0, 'unverified status')
 
