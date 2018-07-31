@@ -26,11 +26,15 @@ test('create chat from contact and chat methods', t => {
   t.is(chat.getProfileImage(), null, 'no profile image')
   t.is(chat.getSubtitle(), 'aaa@site.org', 'correct subtitle')
   t.is(chat.getTextDraft(), null, 'no text draft')
+  // TODO replace magic number
   t.is(chat.getType(), 100, 'type 100 with single chat')
   t.is(chat.isSelfTalk(), false, 'no self talk')
   // TODO make sure this is really the case!
   t.is(chat.isUnpromoted(), false, 'not unpromoted')
   t.is(chat.isVerified(), false, 'not verified')
+
+  t.is(dc.getChatIdByContactId(contactId), chatId)
+  t.same(dc.getChatContacts(chatId), [ contactId ])
 
   dc.archiveChat(chatId, true)
   t.is(dc.getChat(chatId).getArchived(), 1, 'chat archived')
@@ -40,11 +44,15 @@ test('create chat from contact and chat methods', t => {
   chatId = dc.createGroupChat(0, 'unverified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), false, 'is not verified')
+  // TODO replace magic number
   t.is(chat.getType(), 120, 'type 120 for group chat')
+  // TODO replace magic number
+  t.same(dc.getChatContacts(chatId), [ 1 ])
 
   chatId = dc.createGroupChat(1, 'a verified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), true, 'is verified')
+  // TODO replace magic number
   t.is(chat.getType(), 130, 'type 130 for verified group chat')
 
   t.end()
@@ -206,11 +214,13 @@ test('chatlist methods', t => {
   t.is(lot.getId(), 0, 'lot has no id')
   t.is(lot.getState(), 0, 'lot has no state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
+  // TODO replace magic number
   t.is(lot.getText1Meaning(), 1)
   t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
 
   dc.archiveChat(ids[0], true)
+  // TODO replace magic number
   chatList = dc.getChatList(0x01, 'groupchat1')
   t.is(chatList.getCount(), 1, 'only one archived')
 

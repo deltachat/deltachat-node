@@ -439,6 +439,14 @@ class DeltaChat extends EventEmitter {
     return dc_chat ? new Chat(dc_chat) : null
   }
 
+  getChatContacts (chatId) {
+    return binding.dcn_get_chat_contacts(this.dcn_context, chatId)
+  }
+
+  getChatIdByContactId (contactId) {
+    return binding.dcn_get_chat_id_by_contact_id(this.dcn_context, contactId)
+  }
+
   getChatList (listFlags, queryStr, queryContactId) {
     // TODO figure out how to do flags correctly, compare with the docs for
     // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef
