@@ -428,6 +428,16 @@ class DeltaChat extends EventEmitter {
     binding.dcn_configure(this.dcn_context)
   }
 
+  continueKeyTransfer (msgId, setupCode) {
+    return Boolean(
+      binding.dcn_continue_key_transfer(
+        this.dcn_context,
+        msgId,
+        setupCode
+      )
+    )
+  }
+
   createChatByContactId (contactId) {
     return binding.dcn_create_chat_by_contact_id(this.dcn_context, contactId)
   }
@@ -527,14 +537,18 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
-  isContactInChat (chatId, contactId) {
-    return Boolean(binding.dcn_is_contact_in_chat(this.dcn_context,
-      chatId,
-      contactId))
+  initiateKeyTransfer () {
+    return binding.dcn_initiate_key_transfer(this.dcn_context)
   }
 
   _isConfigured () {
     return binding.dcn_is_configured(this.dcn_context)
+  }
+
+  isContactInChat (chatId, contactId) {
+    return Boolean(binding.dcn_is_contact_in_chat(this.dcn_context,
+      chatId,
+      contactId))
   }
 
   msgNew () {
