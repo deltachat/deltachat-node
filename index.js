@@ -403,6 +403,11 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_check_password(this.dcn_context, password))
   }
 
+  checkQr (qr) {
+    const dc_lot = binding.dcn_check_qr(this.dcn_context, qr)
+    return dc_lot ? new Lot(dc_lot) : null
+  }
+
   // TODO close should take a cb
   close () {
     // TODO close() doesn't always work, figure out a way to be

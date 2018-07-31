@@ -267,7 +267,26 @@ NAPI_METHOD(dcn_check_password) {
   NAPI_RETURN_INT32(result);
 }
 
-//NAPI_METHOD(dcn_check_qr) {}
+NAPI_METHOD(dcn_check_qr) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(qr, argv[1]);
+
+  dc_lot_t* lot = dc_check_qr(dcn_context->dc_context, qr);
+
+  free(qr);
+
+  napi_value result;
+  if (lot == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+    return result;
+  }
+
+  NAPI_STATUS_THROWS(napi_create_external(env, lot,
+                                          finalize_lot,
+                                          NULL, &result));
+  return result;
+}
 
 NAPI_METHOD(dcn_close) {
   NAPI_ARGV(1);
@@ -1551,7 +1570,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_password);
-  //NAPI_EXPORT_FUNCTION(dcn_check_qr);
+  NAPI_EXPORT_FUNCTION(dcn_check_qr);
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   //NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
