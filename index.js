@@ -470,6 +470,13 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_delete_contact(this.dcn_context, contactId))
   }
 
+  deleteMsgs (msgs) {
+    if (!Array.isArray(msgs)) {
+      throw new Error('msgs parameter must be an array')
+    }
+    binding.dcn_delete_msgs(this.dcn_context, msgs)
+  }
+
   getBlobdir () {
     return binding.dcn_get_blobdir(this.dcn_context)
   }
