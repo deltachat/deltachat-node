@@ -399,6 +399,10 @@ class DeltaChat extends EventEmitter {
     binding.dcn_block_contact(this.dcn_context, contactId, block ? 1 : 0)
   }
 
+  checkPassword (password) {
+    return Boolean(binding.dcn_check_password(this.dcn_context, password))
+  }
+
   // TODO close should take a cb
   close () {
     // TODO close() doesn't always work, figure out a way to be
