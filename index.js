@@ -379,6 +379,12 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_add_address_book(this.dcn_context, addressBook)
   }
 
+  addContactToChat (chatId, contactId) {
+    return Boolean(binding.dcn_add_contact_to_chat(this.dcn_context,
+      chatId,
+      contactId))
+  }
+
   archiveChat (chatId, archive) {
     if (typeof archive !== 'boolean') {
       throw new Error('archive parameter must be a boolean')
@@ -403,6 +409,14 @@ class DeltaChat extends EventEmitter {
     // this._close()
     this._unsetEventHandler()
     this._stopThreads()
+  }
+
+  _close () {
+    binding.dcn_close(this.dcn_context)
+  }
+
+  _configure () {
+    binding.dcn_configure(this.dcn_context)
   }
 
   createChatByContactId (contactId) {
@@ -504,8 +518,28 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, msgId)
   }
 
+  isContactInChat (chatId, contactId) {
+    return Boolean(binding.dcn_is_contact_in_chat(this.dcn_context,
+      chatId,
+      contactId))
+  }
+
+  _isConfigured () {
+    return binding.dcn_is_configured(this.dcn_context)
+  }
+
   msgNew () {
     return new Message(binding.dcn_msg_new(this.dcn_context))
+  }
+
+  _open (dbFile, blobDir, cb) {
+    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
+  }
+
+  removeContactFromChat (chatId, contactId) {
+    return Boolean(binding.dcn_remove_contact_from_chat(this.dcn_context,
+      chatId,
+      contactId))
   }
 
   sendMsg (chatId, msg) {
@@ -524,28 +558,12 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
-  setOffline (isOffline) {
-    binding.dcn_set_offline(this.dcn_context, isOffline)
-  }
-
-  _configure () {
-    binding.dcn_configure(this.dcn_context)
-  }
-
-  _close () {
-    binding.dcn_close(this.dcn_context)
-  }
-
-  _isConfigured () {
-    return binding.dcn_is_configured(this.dcn_context)
-  }
-
-  _open (dbFile, blobDir, cb) {
-    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
-  }
-
   _setEventHandler (cb) {
     binding.dcn_set_event_handler(this.dcn_context, cb)
+  }
+
+  setOffline (isOffline) {
+    binding.dcn_set_offline(this.dcn_context, isOffline)
   }
 
   _startThreads () {

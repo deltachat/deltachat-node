@@ -199,6 +199,18 @@ test('delete contacts', t => {
   t.end()
 })
 
+test('adding and removing a contact from a chat', t => {
+  const chatId = dc.createGroupChat(0, 'adding_and_removing')
+  const contactId = dc.createContact('Add Remove', 'add.remove@site.com')
+
+  t.is(dc.addContactToChat(chatId, contactId), true, 'contact added')
+  t.is(dc.isContactInChat(chatId, contactId), true, 'contact in chat')
+  t.is(dc.removeContactFromChat(chatId, contactId), true, 'contact removed')
+  t.is(dc.isContactInChat(chatId, contactId), false, 'contact not in chat')
+
+  t.end()
+})
+
 test('blocking contacts', t => {
   let id = dc.createContact('badcontact', 'bad@site.com')
 
