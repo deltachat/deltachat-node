@@ -159,7 +159,7 @@ test('Contact methods', t => {
   t.is(contact.getName(), 'First Last', 'correct name')
   t.is(contact.getNameAndAddress(), 'First Last (first.last@site.org)')
   t.is(contact.isBlocked(), false, 'not blocked')
-  t.is(contact.isVerified(), 0, 'unverified status')
+  t.is(contact.isVerified(), false, 'unverified status')
 
   // TODO test verifying a contact
 

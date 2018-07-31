@@ -128,7 +128,7 @@ class Contact {
   }
 
   isVerified () {
-    return binding.dcn_contact_is_verified(this.dc_contact)
+    return Boolean(binding.dcn_contact_is_verified(this.dc_contact))
   }
 }
 
@@ -617,7 +617,7 @@ class DeltaChat extends EventEmitter {
   }
 
   _isConfigured () {
-    return binding.dcn_is_configured(this.dcn_context)
+    return Boolean(binding.dcn_is_configured(this.dcn_context))
   }
 
   isContactInChat (chatId, contactId) {
