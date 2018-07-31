@@ -389,25 +389,45 @@ NAPI_METHOD(dcn_delete_msgs) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
   napi_value array = argv[1];
+  uint32_t msg_cnt = 0;
+  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
 
-  uint32_t length = 0;
-  napi_get_array_length(env, argv[1], &length);
-
-  uint32_t* msg_ids = calloc(length, sizeof(uint32_t));
-  for (uint32_t i = 0; i < length; i++) {
+  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
+  for (uint32_t i = 0; i < msg_cnt; i++) {
     napi_value napi_element;
-    napi_get_element(env, array, i, &napi_element);
-    napi_get_value_uint32(env, napi_element, &msg_ids[i]);
+    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
+    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
   }
 
-  dc_delete_msgs(dcn_context->dc_context, msg_ids, length);
+  dc_delete_msgs(dcn_context->dc_context, msg_ids, msg_cnt);
 
   free(msg_ids);
 
   NAPI_RETURN_UNDEFINED();
 }
 
-//NAPI_METHOD(dcn_forward_msgs) {}
+NAPI_METHOD(dcn_forward_msgs) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  napi_value array = argv[1];
+  uint32_t msg_cnt = 0;
+  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  NAPI_UINT32(chat_id, argv[2]);
+
+  // TODO refactor the uint32_t array stuff with dcn_delete_msgs
+  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
+  for (uint32_t i = 0; i < msg_cnt; i++) {
+    napi_value napi_element;
+    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
+    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
+  }
+
+  dc_forward_msgs(dcn_context->dc_context, msg_ids, msg_cnt, chat_id);
+
+  free(msg_ids);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_get_blobdir) {
   NAPI_ARGV(1);
@@ -1650,7 +1670,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_delete_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
-  //NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_contacts);
