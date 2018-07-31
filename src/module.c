@@ -636,9 +636,6 @@ NAPI_METHOD(dcn_get_msg_info) {
 
 //NAPI_METHOD(dcn_get_securejoin_qr) {}
 
-// TODO remove (only used internally)
-//NAPI_METHOD(dcn_get_userdata) {}
-
 //NAPI_METHOD(dcn_imex) {}
 
 //NAPI_METHOD(dcn_imex_has_backup) {}
@@ -1604,7 +1601,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
   //NAPI_EXPORT_FUNCTION(dcn_get_next_media);
   //NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
-  //NAPI_EXPORT_FUNCTION(dcn_get_userdata);
   //NAPI_EXPORT_FUNCTION(dcn_imex);
   //NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
   //NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
