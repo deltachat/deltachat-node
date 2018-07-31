@@ -785,10 +785,20 @@ NAPI_METHOD(dcn_get_next_media) {
 
   uint32_t next_id = dc_get_next_media(dcn_context->dc_context,
                                        msg_id, dir);
+
   NAPI_RETURN_UINT32(next_id);
 }
 
-//NAPI_METHOD(dcn_get_securejoin_qr) {}
+NAPI_METHOD(dcn_get_securejoin_qr) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(group_chat_id, argv[1]);
+
+  char* code = dc_get_securejoin_qr(dcn_context->dc_context,
+                                    group_chat_id);
+
+  NAPI_RETURN_AND_FREE_STRING(code);
+}
 
 NAPI_METHOD(dcn_imex) {
   NAPI_ARGV(4);
@@ -1817,7 +1827,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_msg_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
   NAPI_EXPORT_FUNCTION(dcn_get_next_media);
-  //NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
+  NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
   NAPI_EXPORT_FUNCTION(dcn_imex);
   NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);

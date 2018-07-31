@@ -411,8 +411,8 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_check_password(this.dcn_context, password))
   }
 
-  checkQr (qr) {
-    const dc_lot = binding.dcn_check_qr(this.dcn_context, qr)
+  checkQrCode (qrCode) {
+    const dc_lot = binding.dcn_check_qr(this.dcn_context, qrCode)
     return dc_lot ? new Lot(dc_lot) : null
   }
 
@@ -598,6 +598,10 @@ class DeltaChat extends EventEmitter {
 
   getPreviousMediaMessage (msgId) {
     return binding.dcn_get_next_media(this.dcn_context, msgId, -1)
+  }
+
+  getSecurejoinQrCode (groupChatId) {
+    return binding.dcn_get_securejoin_qr(this.dcn_context, groupChatId)
   }
 
   importExport (what, param1, param2) {
