@@ -696,9 +696,39 @@ NAPI_METHOD(dcn_get_contacts) {
   return array;
 }
 
-//NAPI_METHOD(dcn_get_fresh_msg_cnt) {}
+NAPI_METHOD(dcn_get_fresh_msg_cnt) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
 
-//NAPI_METHOD(dcn_get_fresh_msgs) {}
+  int msg_cnt = dc_get_fresh_msg_cnt(dcn_context->dc_context, chat_id);
+
+  NAPI_RETURN_INT32(msg_cnt);
+}
+
+NAPI_METHOD(dcn_get_fresh_msgs) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_array_t* msg_ids = dc_get_fresh_msgs(dcn_context->dc_context);
+
+  napi_value array;
+  const int length = dc_array_get_cnt(msg_ids);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  dc_array_unref(msg_ids);
+
+  return array;
+}
 
 NAPI_METHOD(dcn_get_info) {
   NAPI_ARGV(1);
@@ -1771,8 +1801,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   NAPI_EXPORT_FUNCTION(dcn_get_contacts);
-  //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
-  //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
+  NAPI_EXPORT_FUNCTION(dcn_get_fresh_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_info);
   NAPI_EXPORT_FUNCTION(dcn_get_msg);
   NAPI_EXPORT_FUNCTION(dcn_get_msg_cnt);

@@ -567,6 +567,14 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_contacts(this.dcn_context, listFlags, query)
   }
 
+  getFreshMessageCount (chatId) {
+    return binding.dcn_get_fresh_msg_cnt(this.dcn_context, chatId)
+  }
+
+  getFreshMessages () {
+    return binding.dcn_get_fresh_msgs(this.dcn_context)
+  }
+
   getInfo () {
     return binding.dcn_get_info(this.dcn_context)
   }
