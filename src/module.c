@@ -676,7 +676,7 @@ typedef struct dcn_open_carrier_t {
   int dc_open_status;
 } dcn_open_carrier_t;
 
-void dcn_open_execute(napi_env env, void* data) {
+static void dcn_open_execute(napi_env env, void* data) {
   dcn_open_carrier_t* dcn_open_carrier = (dcn_open_carrier_t*)data;
 
   // blobdir may be the empty string or NULL for default blobdir
@@ -686,7 +686,7 @@ void dcn_open_execute(napi_env env, void* data) {
       dcn_open_carrier->blobdir);
 }
 
-void dcn_open_complete(napi_env env, napi_status status, void* data) {
+static void dcn_open_complete(napi_env env, napi_status status, void* data) {
   dcn_open_carrier_t* dcn_open_carrier = (dcn_open_carrier_t*)data;
 
   if (status != napi_ok) {
