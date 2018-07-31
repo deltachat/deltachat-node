@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "module",
+      "target_name": "deltachat",
       "sources": [
         "./src/module.c"
       ],
