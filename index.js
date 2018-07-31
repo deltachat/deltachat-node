@@ -81,9 +81,13 @@ class ChatList {
 
   getSummary (index, chat) {
     const dc_chat = (chat && chat.dc_chat) || null
-    const dc_lot = binding.dcn_chatlist_get_summary(this.dc_chatlist,
-      index, dc_chat)
-    return new Lot(dc_lot)
+    return new Lot(
+      binding.dcn_chatlist_get_summary(
+        this.dc_chatlist,
+        index,
+        dc_chat
+      )
+    )
   }
 }
 
@@ -380,9 +384,13 @@ class DeltaChat extends EventEmitter {
   }
 
   addContactToChat (chatId, contactId) {
-    return Boolean(binding.dcn_add_contact_to_chat(this.dcn_context,
-      chatId,
-      contactId))
+    return Boolean(
+      binding.dcn_add_contact_to_chat(
+        this.dcn_context,
+        chatId,
+        contactId
+      )
+    )
   }
 
   archiveChat (chatId, archive) {
@@ -494,11 +502,14 @@ class DeltaChat extends EventEmitter {
     queryStr = queryStr || ''
     queryContactId = queryContactId || 0
 
-    const dc_chatlist = binding.dcn_get_chatlist(this.dcn_context,
-      listFlags,
-      queryStr,
-      queryContactId)
-    return new ChatList(dc_chatlist)
+    return new ChatList(
+      binding.dcn_get_chatlist(
+        this.dcn_context,
+        listFlags,
+        queryStr,
+        queryContactId
+      )
+    )
   }
 
   getConfig (key, def) {
@@ -546,9 +557,13 @@ class DeltaChat extends EventEmitter {
   }
 
   isContactInChat (chatId, contactId) {
-    return Boolean(binding.dcn_is_contact_in_chat(this.dcn_context,
-      chatId,
-      contactId))
+    return Boolean(
+      binding.dcn_is_contact_in_chat(
+        this.dcn_context,
+        chatId,
+        contactId
+      )
+    )
   }
 
   msgNew () {
@@ -560,9 +575,13 @@ class DeltaChat extends EventEmitter {
   }
 
   removeContactFromChat (chatId, contactId) {
-    return Boolean(binding.dcn_remove_contact_from_chat(this.dcn_context,
-      chatId,
-      contactId))
+    return Boolean(
+      binding.dcn_remove_contact_from_chat(
+        this.dcn_context,
+        chatId,
+        contactId
+      )
+    )
   }
 
   sendMsg (chatId, msg) {
