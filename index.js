@@ -557,6 +557,10 @@ class DeltaChat extends EventEmitter {
     return dc_contact ? new Contact(dc_contact) : null
   }
 
+  getContactEncrInfo (contactId) {
+    return binding.dcn_get_contact_encrinfo(this.dcn_context, contactId)
+  }
+
   getContacts (listFlags, query) {
     listFlags = listFlags || 0
     query = query || ''
