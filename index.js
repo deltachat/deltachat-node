@@ -630,6 +630,13 @@ class DeltaChat extends EventEmitter {
     binding.dcn_set_offline(this.dcn_context, isOffline)
   }
 
+  starMsgs (msgIds, star) {
+    if (!Array.isArray(msgIds)) {
+      throw new Error('msgsIds parameter must be an array')
+    }
+    binding.dcn_star_msgs(this.dcn_context, msgIds, star ? 1 : 0)
+  }
+
   _startThreads () {
     binding.dcn_start_threads(this.dcn_context)
   }

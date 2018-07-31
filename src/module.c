@@ -957,7 +957,28 @@ NAPI_METHOD(dcn_set_offline) {
 
 //NAPI_METHOD(dcn_set_text_draft) {}
 
-//NAPI_METHOD(dcn_star_msgs) {}
+NAPI_METHOD(dcn_star_msgs) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  napi_value array = argv[1];
+  uint32_t msg_cnt = 0;
+  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  NAPI_INT32(star, argv[2]);
+
+  // TODO refactor the uint32_t array stuff with dcn_delete_msgs
+  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
+  for (uint32_t i = 0; i < msg_cnt; i++) {
+    napi_value napi_element;
+    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
+    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
+  }
+
+  dc_star_msgs(dcn_context->dc_context, msg_ids, msg_cnt, star);
+
+  free(msg_ids);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 NAPI_METHOD(dcn_start_threads) {
   NAPI_ARGV(1);
@@ -1721,7 +1742,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_offline);
   //NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
-  //NAPI_EXPORT_FUNCTION(dcn_star_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
   NAPI_EXPORT_FUNCTION(dcn_stop_threads);
   NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
