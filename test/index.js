@@ -13,7 +13,7 @@ test('setUp dc context', t => {
   dc.on('open', t.end.bind(t))
 })
 
-test('create chat from contact and chat methods', t => {
+test('create chat from contact and Chat methods', t => {
   const contactId = dc.createContact('aaa', 'aaa@site.org')
 
   let chatId = dc.createChatByContactId(contactId)
@@ -67,7 +67,7 @@ test('create and delete chat', t => {
   t.end()
 })
 
-test('new message and basic methods', t => {
+test('new message and Message methods', t => {
   const text = 'w00t!'
   let msg = dc.msgNew()
   msg.setText(text)
@@ -148,7 +148,7 @@ test('new message and basic methods', t => {
 
 // TODO test dc.createChatByMsgId()
 
-test('contact methods', t => {
+test('Contact methods', t => {
   const contactId = dc.createContact('First Last', 'first.last@site.org')
   let contact = dc.getContact(contactId)
 
@@ -166,7 +166,29 @@ test('contact methods', t => {
   t.end()
 })
 
-test('create and delete contacts', t => {
+test('create contacts from address book', t => {
+  const addresses = [
+    'Name One',
+    'name1@site.org',
+    'Name Two',
+    'name2@site.org',
+    'Name Three',
+    'name3@site.org'
+  ]
+
+  const count = dc.addAddressBook(addresses.join('\n'))
+  t.is(count, addresses.length / 2)
+
+  dc.getContacts(0, 'Name ')
+    .map(id => dc.getContact(id))
+    .forEach(contact => {
+      t.ok(contact.getName().startsWith('Name '))
+    })
+
+  t.end()
+})
+
+test('delete contacts', t => {
   let id = dc.createContact('someuser', 'someuser@site.com')
   let contact = dc.getContact(id)
 
@@ -197,7 +219,7 @@ test('blocking contacts', t => {
   t.end()
 })
 
-test('chatlist methods', t => {
+test('ChatList methods', t => {
   const ids = [
     dc.createGroupChat(0, 'groupchat1'),
     dc.createGroupChat(0, 'groupchat11'),

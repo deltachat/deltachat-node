@@ -174,7 +174,17 @@ NAPI_METHOD(dcn_context_new) {
  * dcn_context_t
  */
 
-//NAPI_METHOD(dcn_add_address_book) {}
+NAPI_METHOD(dcn_add_address_book) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(address_book, argv[1]);
+
+  int result = dc_add_address_book(dcn_context->dc_context, address_book);
+
+  free(address_book);
+
+  NAPI_RETURN_INT32(result);
+}
 
 //NAPI_METHOD(dcn_add_contact_to_chat) {}
 
@@ -485,7 +495,34 @@ NAPI_METHOD(dcn_get_contact) {
 
 //NAPI_METHOD(dcn_get_contact_encrinfo) {}
 
-//NAPI_METHOD(dcn_get_contacts) {}
+NAPI_METHOD(dcn_get_contacts) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(listflags, argv[1]);
+  NAPI_UTF8(query, argv[2]);
+
+  char* query_null = strlen(query) > 0 ? query : NULL;
+  dc_array_t* contacts = dc_get_contacts(dcn_context->dc_context,
+                                         listflags, query_null);
+
+  napi_value array;
+  const int length = dc_array_get_cnt(contacts);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t contact_id = dc_array_get_id(contacts, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, contact_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  free(query);
+  dc_array_unref(contacts);
+
+  return array;
+}
 
 //NAPI_METHOD(dcn_get_fresh_msg_cnt) {}
 
@@ -1463,7 +1500,7 @@ NAPI_INIT() {
    * dcn_context_t
    */
 
-  //NAPI_EXPORT_FUNCTION(dcn_add_address_book);
+  NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   //NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
@@ -1493,7 +1530,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_config_int);
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   //NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
-  //NAPI_EXPORT_FUNCTION(dcn_get_contacts);
+  NAPI_EXPORT_FUNCTION(dcn_get_contacts);
   //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
   //NAPI_EXPORT_FUNCTION(dcn_get_fresh_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_info);

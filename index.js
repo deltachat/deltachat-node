@@ -372,6 +372,13 @@ class DeltaChat extends EventEmitter {
     this._startThreads()
   }
 
+  addAddressBook (addressBook) {
+    if (typeof addressBook !== 'string') {
+      throw new Error('address book must be a string')
+    }
+    return binding.dcn_add_address_book(this.dcn_context, addressBook)
+  }
+
   archiveChat (chatId, archive) {
     if (typeof archive !== 'boolean') {
       throw new Error('archive parameter must be a boolean')
@@ -472,6 +479,12 @@ class DeltaChat extends EventEmitter {
   getContact (contactId) {
     const dc_contact = binding.dcn_get_contact(this.dcn_context, contactId)
     return dc_contact ? new Contact(dc_contact) : null
+  }
+
+  getContacts (listFlags, query) {
+    listFlags = listFlags || 0
+    query = query || ''
+    return binding.dcn_get_contacts(this.dcn_context, listFlags, query)
   }
 
   getInfo () {
