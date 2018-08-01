@@ -366,7 +366,7 @@ class DeltaChat extends EventEmitter {
       if (err) {
         this.emit('error', err)
       } else {
-        this.emit('open')
+        this.emit('ready')
       }
       cb && cb(err)
     })

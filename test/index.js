@@ -10,7 +10,7 @@ test('setUp dc context', t => {
     mail_pw: process.env.DC_MAIL_PW,
     root: tempy.directory()
   })
-  dc.on('open', t.end.bind(t))
+  dc.on('ready', t.end.bind(t))
 })
 
 test('create chat from contact and Chat methods', t => {
