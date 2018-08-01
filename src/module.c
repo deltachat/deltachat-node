@@ -315,6 +315,8 @@ NAPI_METHOD(dcn_continue_key_transfer) {
   int result = dc_continue_key_transfer(dcn_context->dc_context,
                                         msg_id, setup_code);
 
+  free(setup_code);
+
   NAPI_RETURN_INT32(result);
 }
 
@@ -878,6 +880,8 @@ NAPI_METHOD(dcn_join_securejoin) {
 
   uint32_t chat_id = dc_join_securejoin(dcn_context->dc_context, qr_code);
 
+  free(qr_code);
+
   NAPI_RETURN_UINT32(chat_id);
 }
 
@@ -980,10 +984,11 @@ NAPI_METHOD(dcn_open) {
   NAPI_UTF8(blobdir, argv[2]);
   napi_value callback = argv[3];
 
+  // TODO clean up dcn_open_carrier
   dcn_open_carrier_t* dcn_open_carrier = calloc(1, sizeof(dcn_open_carrier_t));
   dcn_open_carrier->dcn_context = dcn_context;
-  dcn_open_carrier->dbfile = dbfile;
-  dcn_open_carrier->blobdir = blobdir;
+  dcn_open_carrier->dbfile = strdup(dbfile);
+  dcn_open_carrier->blobdir = strdup(blobdir);
 
   napi_value async_resource_name;
   NAPI_STATUS_THROWS(napi_create_reference(env, argv[3], 1, &dcn_open_carrier->callback_ref));
@@ -991,7 +996,10 @@ NAPI_METHOD(dcn_open) {
   NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name, dcn_open_execute, dcn_open_complete, dcn_open_carrier, &dcn_open_carrier->async_work));
   NAPI_STATUS_THROWS(napi_queue_async_work(env, dcn_open_carrier->async_work));
 
-  return NULL;
+  free(dbfile);
+  free(blobdir);
+
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_remove_contact_from_chat) {
@@ -1962,6 +1970,9 @@ NAPI_METHOD(dcn_msg_set_file) {
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   dc_msg_set_file(dc_msg, file, filemime_null);
 
+  free(file);
+  free(filemime);
+
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -1975,6 +1986,9 @@ NAPI_METHOD(dcn_msg_set_mediainfo) {
   char* trackname_null = strlen(trackname) > 0 ? trackname : NULL;
   dc_msg_set_mediainfo(dc_msg, author_null, trackname_null);
 
+  free(author);
+  free(trackname);
+
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -1984,6 +1998,8 @@ NAPI_METHOD(dcn_msg_set_text) {
   NAPI_UTF8(text, argv[1]);
 
   dc_msg_set_text(dc_msg, text);
+
+  free(text);
 
   NAPI_RETURN_UNDEFINED();
 }
