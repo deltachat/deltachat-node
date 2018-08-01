@@ -441,11 +441,11 @@ class DeltaChat extends EventEmitter {
     binding.dcn_configure(this.dcn_context)
   }
 
-  continueKeyTransfer (msgId, setupCode) {
+  continueKeyTransfer (messageId, setupCode) {
     return Boolean(
       binding.dcn_continue_key_transfer(
         this.dcn_context,
-        msgId,
+        messageId,
         setupCode
       )
     )
@@ -455,8 +455,8 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_create_chat_by_contact_id(this.dcn_context, contactId)
   }
 
-  createChatByMessageId (msgId) {
-    return binding.dcn_create_chat_by_msg_id(this.dcn_context, msgId)
+  createChatByMessageId (messageId) {
+    return binding.dcn_create_chat_by_msg_id(this.dcn_context, messageId)
   }
 
   createContact (name, addr) {
@@ -475,18 +475,18 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_delete_contact(this.dcn_context, contactId))
   }
 
-  deleteMessages (msgIds) {
-    if (!Array.isArray(msgIds)) {
+  deleteMessages (messageIds) {
+    if (!Array.isArray(messageIds)) {
       throw new Error('msgsIds parameter must be an array')
     }
-    binding.dcn_delete_msgs(this.dcn_context, msgIds)
+    binding.dcn_delete_msgs(this.dcn_context, messageIds)
   }
 
-  forwardMessages (msgIds, chatId) {
-    if (!Array.isArray(msgIds)) {
+  forwardMessages (messageIds, chatId) {
+    if (!Array.isArray(messageIds)) {
       throw new Error('msgsIds parameter must be an array')
     }
-    binding.dcn_forward_msgs(this.dcn_context, msgIds, chatId)
+    binding.dcn_forward_msgs(this.dcn_context, messageIds, chatId)
   }
 
   getBlobdir () {
@@ -584,8 +584,8 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_info(this.dcn_context)
   }
 
-  getMessages (msgId) {
-    const dc_msg = binding.dcn_get_msg(this.dcn_context, msgId)
+  getMessages (messageId) {
+    const dc_msg = binding.dcn_get_msg(this.dcn_context, messageId)
     return dc_msg ? new Message(dc_msg) : null
   }
 
@@ -593,16 +593,16 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_cnt(this.dcn_context, chatId)
   }
 
-  getMessageInfo (msgId) {
-    return binding.dcn_get_msg_info(this.dcn_context, msgId)
+  getMessageInfo (messageId) {
+    return binding.dcn_get_msg_info(this.dcn_context, messageId)
   }
 
-  getNextMediaMessage (msgId) {
-    return binding.dcn_get_next_media(this.dcn_context, msgId, 1)
+  getNextMediaMessage (messageId) {
+    return binding.dcn_get_next_media(this.dcn_context, messageId, 1)
   }
 
-  getPreviousMediaMessage (msgId) {
-    return binding.dcn_get_next_media(this.dcn_context, msgId, -1)
+  getPreviousMediaMessage (messageId) {
+    return binding.dcn_get_next_media(this.dcn_context, messageId, -1)
   }
 
   getSecurejoinQrCode (groupChatId) {
@@ -780,19 +780,19 @@ class DeltaChat extends EventEmitter {
     binding.dcn_set_event_handler(this.dcn_context, cb)
   }
 
-  setOffline (isOffline) {
-    binding.dcn_set_offline(this.dcn_context, isOffline)
+  setOffline (offline) {
+    binding.dcn_set_offline(this.dcn_context, offline)
   }
 
   setTextDraft (chatId, text) {
     binding.dcn_set_text_draft(this.dcn_context, chatId, text)
   }
 
-  starMessages (msgIds, star) {
-    if (!Array.isArray(msgIds)) {
+  starMessages (messageIds, star) {
+    if (!Array.isArray(messageIds)) {
       throw new Error('msgsIds parameter must be an array')
     }
-    binding.dcn_star_msgs(this.dcn_context, msgIds, star ? 1 : 0)
+    binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
 
   _startThreads () {
