@@ -49,6 +49,11 @@ test('create chat from contact and Chat methods', t => {
   // TODO replace magic number
   t.same(dc.getChatContacts(chatId), [ 1 ])
 
+  dc.setChatName(chatId, 'NEW NAME')
+  t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
+  dc.setChatProfileImage(chatId, 'image.jpeg')
+  t.is(dc.getChat(chatId).getProfileImage(), 'image.jpeg', 'image updated')
+
   chatId = dc.createGroupChat(1, 'a verified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), true, 'is verified')

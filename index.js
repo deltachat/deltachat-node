@@ -743,6 +743,26 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  setChatName (chatId, name) {
+    return Boolean(
+      binding.dcn_set_chat_name(
+        this.dcn_context,
+        chatId,
+        name
+      )
+    )
+  }
+
+  setChatProfileImage (chatId, image) {
+    return Boolean(
+      binding.dcn_set_chat_profile_image(
+        this.dcn_context,
+        chatId,
+        image
+      )
+    )
+  }
+
   setConfig (key, value) {
     return binding.dcn_set_config(this.dcn_context, key, value)
   }

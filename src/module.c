@@ -1184,9 +1184,35 @@ NAPI_METHOD(dcn_send_voice_msg) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
-//NAPI_METHOD(dcn_set_chat_name) {}
+NAPI_METHOD(dcn_set_chat_name) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_UTF8(name, argv[2]);
 
-//NAPI_METHOD(dcn_set_chat_profile_image) {}
+  int result = dc_set_chat_name(dcn_context->dc_context,
+                                chat_id,
+                                name);
+
+  free(name);
+
+  NAPI_RETURN_INT32(result);
+}
+
+NAPI_METHOD(dcn_set_chat_profile_image) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_UTF8(image, argv[2]);
+
+  int result = dc_set_chat_profile_image(dcn_context->dc_context,
+                                         chat_id,
+                                         image);
+
+  free(image);
+
+  NAPI_RETURN_INT32(result);
+}
 
 NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
@@ -2032,8 +2058,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_send_vcard_msg);
   NAPI_EXPORT_FUNCTION(dcn_send_video_msg);
   NAPI_EXPORT_FUNCTION(dcn_send_voice_msg);
-  //NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
-  //NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
+  NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
+  NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_config_int);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
