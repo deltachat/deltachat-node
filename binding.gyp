@@ -11,6 +11,7 @@
         "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
         "-lsqlite3",
         "-lsasl2",
+        "-lssl",
         "-lpthread"
       ],
       "include_dirs": [
