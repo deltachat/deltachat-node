@@ -636,6 +636,18 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_join_securejoin(this.dcn_context, qrCode)
   }
 
+  markNoticedChat (chatId) {
+    binding.dcn_marknoticed_chat(this.dcn_context, chatId)
+  }
+
+  markNoticedContact (contactId) {
+    binding.dcn_marknoticed_contact(this.dcn_context, contactId)
+  }
+
+  markSeenMessages (messageIds) {
+    binding.dcn_markseen_msgs(this.dcn_context, messageIds)
+  }
+
   messageNew () {
     return new Message(binding.dcn_msg_new(this.dcn_context))
   }
