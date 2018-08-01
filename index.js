@@ -365,10 +365,11 @@ class DeltaChat extends EventEmitter {
     this._open(path.join(opts.root, 'db.sqlite'), '', err => {
       if (err) {
         this.emit('error', err)
+        cb && cb(err)
       } else {
         this.emit('ready')
+        cb && cb(null)
       }
-      cb && cb(err)
     })
 
     if (!this._isConfigured()) {
