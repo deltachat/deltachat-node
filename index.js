@@ -630,6 +630,12 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  // TODO this should most likely be async, see
+  // https://deltachat.github.io/api/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7
+  joinSecurejoin (qrCode) {
+    return binding.dcn_join_securejoin(this.dcn_context, qrCode)
+  }
+
   messageNew () {
     return new Message(binding.dcn_msg_new(this.dcn_context))
   }

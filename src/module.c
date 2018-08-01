@@ -869,7 +869,15 @@ NAPI_METHOD(dcn_is_contact_in_chat) {
   NAPI_RETURN_INT32(result);
 }
 
-//NAPI_METHOD(dcn_join_securejoin) {}
+NAPI_METHOD(dcn_join_securejoin) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_UTF8(qr_code, argv[1]);
+
+  uint32_t chat_id = dc_join_securejoin(dcn_context->dc_context, qr_code);
+
+  NAPI_RETURN_UINT32(chat_id);
+}
 
 //NAPI_METHOD(dcn_marknoticed_chat) {}
 
@@ -1833,7 +1841,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
+  NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
   //NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   //NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
