@@ -1,0 +1,5 @@
+.travis.yml
+deltachat-core/
+test/index.js
+build/
+scripts/travis-before-install.sh
