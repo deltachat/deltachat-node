@@ -362,9 +362,13 @@ class DeltaChat extends EventEmitter {
       debug('event', event, 'data1', data1, 'data2', data2)
     })
 
-    this._open(path.join(opts.root, 'db.sqlite'), '', () => {
-      this.emit('open')
-      cb && cb()
+    this._open(path.join(opts.root, 'db.sqlite'), '', err => {
+      if (err) {
+        this.emit('error', err)
+      } else {
+        this.emit('open')
+      }
+      cb && cb(err)
     })
 
     if (!this._isConfigured()) {

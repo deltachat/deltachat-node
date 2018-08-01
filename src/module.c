@@ -944,21 +944,19 @@ typedef struct dcn_open_carrier_t {
   char* blobdir;
   napi_ref callback_ref;
   napi_async_work async_work;
-  int dc_open_status;
+  int result;
 } dcn_open_carrier_t;
 
 static void dcn_open_execute(napi_env env, void* data) {
-  dcn_open_carrier_t* dcn_open_carrier = (dcn_open_carrier_t*)data;
+  dcn_open_carrier_t* carrier = (dcn_open_carrier_t*)data;
 
-  // blobdir may be the empty string or NULL for default blobdir
-  dcn_open_carrier->dc_open_status = dc_open(
-      dcn_open_carrier->dcn_context->dc_context,
-      dcn_open_carrier->dbfile,
-      dcn_open_carrier->blobdir);
+  carrier->result = dc_open(carrier->dcn_context->dc_context,
+                            carrier->dbfile,
+                            carrier->blobdir);
 }
 
 static void dcn_open_complete(napi_env env, napi_status status, void* data) {
-  dcn_open_carrier_t* dcn_open_carrier = (dcn_open_carrier_t*)data;
+  dcn_open_carrier_t* carrier = (dcn_open_carrier_t*)data;
 
   if (status != napi_ok) {
     napi_throw_type_error(env, NULL, "Execute callback failed.");
@@ -967,14 +965,28 @@ static void dcn_open_complete(napi_env env, napi_status status, void* data) {
 
   const int argc = 1;
   napi_value argv[argc];
-  NAPI_STATUS_THROWS(napi_create_int32(env, dcn_open_carrier->dc_open_status, &argv[0]));
+
+  if (carrier->result == 1) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+  } else {
+    const char* err_string = "Failed to open";
+    napi_value msg;
+    NAPI_STATUS_THROWS(napi_create_string_utf8(env, err_string, strlen(err_string), &msg));
+    NAPI_STATUS_THROWS(napi_create_error(env, NULL, msg, &argv[0]));
+  }
 
   napi_value global;
   NAPI_STATUS_THROWS(napi_get_global(env, &global));
   napi_value callback;
-  NAPI_STATUS_THROWS(napi_get_reference_value(env, dcn_open_carrier->callback_ref, &callback));
-  napi_value result;
-  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, &result));
+  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
+  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
+
+  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
+
+  free(carrier->dbfile);
+  free(carrier->blobdir);
+  free(carrier);
 }
 
 NAPI_METHOD(dcn_open) {
@@ -984,17 +996,20 @@ NAPI_METHOD(dcn_open) {
   NAPI_UTF8(blobdir, argv[2]);
   napi_value callback = argv[3];
 
-  // TODO clean up dcn_open_carrier
-  dcn_open_carrier_t* dcn_open_carrier = calloc(1, sizeof(dcn_open_carrier_t));
-  dcn_open_carrier->dcn_context = dcn_context;
-  dcn_open_carrier->dbfile = strdup(dbfile);
-  dcn_open_carrier->blobdir = strdup(blobdir);
+  dcn_open_carrier_t* carrier = calloc(1, sizeof(dcn_open_carrier_t));
+  carrier->dcn_context = dcn_context;
+  carrier->dbfile = strdup(dbfile);
+  carrier->blobdir = strdup(blobdir);
 
   napi_value async_resource_name;
-  NAPI_STATUS_THROWS(napi_create_reference(env, argv[3], 1, &dcn_open_carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_open_callback", NAPI_AUTO_LENGTH, &async_resource_name));
-  NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name, dcn_open_execute, dcn_open_complete, dcn_open_carrier, &dcn_open_carrier->async_work));
-  NAPI_STATUS_THROWS(napi_queue_async_work(env, dcn_open_carrier->async_work));
+  NAPI_STATUS_THROWS(napi_create_reference(env, argv[3], 1, &carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_open_callback",
+                                             NAPI_AUTO_LENGTH,
+                                             &async_resource_name));
+  NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name,
+                                            dcn_open_execute, dcn_open_complete,
+                                            carrier, &carrier->async_work));
+  NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work));
 
   free(dbfile);
   free(blobdir);
