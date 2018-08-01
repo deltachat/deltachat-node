@@ -666,7 +666,14 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  searchMessages (chatId, query) {
+    return binding.dcn_search_msgs(this.dcn_context, chatId, query)
+  }
+
   sendMessage (chatId, msg) {
+    if (!msg || !msg.dc_msg) {
+      throw new Error('msg parameter is not a valid Message object')
+    }
     return binding.dcn_send_msg(this.dcn_context, chatId, msg.dc_msg)
   }
 

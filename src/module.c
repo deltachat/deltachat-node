@@ -1006,7 +1006,32 @@ NAPI_METHOD(dcn_remove_contact_from_chat) {
   NAPI_RETURN_INT32(result);
 }
 
-//NAPI_METHOD(dcn_search_msgs) {}
+NAPI_METHOD(dcn_search_msgs) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_UTF8(query, argv[1]);
+
+  dc_array_t* msg_ids = dc_search_msgs(dcn_context->dc_context,
+                                       chat_id, query);
+  napi_value array;
+  const int length = dc_array_get_cnt(msg_ids);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
+      napi_value id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
+      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
+    }
+  }
+
+  dc_array_unref(msg_ids);
+  free(query);
+
+  return array;
+}
 
 //NAPI_METHOD(dcn_send_audio_msg) {}
 
@@ -1885,7 +1910,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
   NAPI_EXPORT_FUNCTION(dcn_open);
   NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
-  //NAPI_EXPORT_FUNCTION(dcn_search_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   //NAPI_EXPORT_FUNCTION(dcn_send_audio_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_file_msg);
   //NAPI_EXPORT_FUNCTION(dcn_send_image_msg);
