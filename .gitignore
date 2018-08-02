@@ -4,3 +4,4 @@ node_modules/
 test.sqlite
 db.sqlite
 db.sqlite-journal
+.nyc_output/

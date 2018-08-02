@@ -25,5 +25,8 @@ install:
 script:
   - npm test
 
+after_success:
+  - npm run coverage
+
 notifications:
   email: false
