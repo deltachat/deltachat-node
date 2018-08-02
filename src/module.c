@@ -828,12 +828,6 @@ NAPI_METHOD(dcn_imex_has_backup) {
 
   free(dir_name);
 
-  if (file == NULL) {
-    napi_value result;
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
-
   NAPI_RETURN_AND_FREE_STRING(file);
 }
 
@@ -842,12 +836,6 @@ NAPI_METHOD(dcn_initiate_key_transfer) {
   NAPI_DCN_CONTEXT();
 
   char* code = dc_initiate_key_transfer(dcn_context->dc_context);
-
-  if (code == NULL) {
-    napi_value result;
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
 
   NAPI_RETURN_AND_FREE_STRING(code);
 }
@@ -1432,12 +1420,6 @@ NAPI_METHOD(dcn_chat_get_profile_image) {
 
   char* profile_image = dc_chat_get_profile_image(dc_chat);
 
-  if (profile_image == NULL) {
-    napi_value result;
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
-
   NAPI_RETURN_AND_FREE_STRING(profile_image);
 }
 
@@ -1455,12 +1437,6 @@ NAPI_METHOD(dcn_chat_get_text_draft) {
   NAPI_DC_CHAT();
 
   char* text_draft = dc_chat_get_text_draft(dc_chat);
-
-  if (text_draft == NULL) {
-    napi_value result;
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
 
   NAPI_RETURN_AND_FREE_STRING(text_draft);
 }
@@ -1660,12 +1636,6 @@ NAPI_METHOD(dcn_lot_get_text1) {
 
   char* text1 = dc_lot_get_text1(dc_lot);
 
-  napi_value result;
-  if (text1 == NULL) {
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
-
   NAPI_RETURN_AND_FREE_STRING(text1);
 }
 
@@ -1683,12 +1653,6 @@ NAPI_METHOD(dcn_lot_get_text2) {
   NAPI_DC_LOT();
 
   char* text2 = dc_lot_get_text2(dc_lot);
-
-  napi_value result;
-  if (text2 == NULL) {
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-    return result;
-  }
 
   NAPI_RETURN_AND_FREE_STRING(text2);
 }

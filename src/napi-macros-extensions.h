@@ -43,7 +43,11 @@
   return return_int64;
 
 #define NAPI_RETURN_AND_FREE_STRING(name) \
-  napi_value return_utf8; \
-  napi_create_string_utf8(env, name, NAPI_AUTO_LENGTH, &return_utf8); \
+  napi_value return_value; \
+  if (name == NULL) { \
+    NAPI_STATUS_THROWS(napi_get_null(env, &return_value)); \
+    return return_value; \
+  } \
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, name, NAPI_AUTO_LENGTH, &return_value)); \
   free(name); \
-  return return_utf8;
+  return return_value;
