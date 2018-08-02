@@ -1,6 +1,6 @@
 {
   "name": "deltachat-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "node.js bindings for deltachat-core",
   "scripts": {
     "start": "node-gyp rebuild && node example.js",
