@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node-gyp rebuild && node example.js",
     "dev": "node-gyp rebuild --debug --verbose",
-    "preinstall": "git submodule update --recursive --init",
+    "submodule": "git submodule update --recursive --init",
     "install": "./scripts/rebuild-all",
     "test": "standard && node test/index.js"
   },

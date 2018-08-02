@@ -19,6 +19,7 @@
 * [Usage](#usage)
 * [API](#api)
 * [Events](#events)
+* [Developing](#developing)
 * [License](#license)
 
 ## Install
@@ -621,6 +622,21 @@ Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://d
 | Event     | Description                 | Arguments            |
 |:----------|:----------------------------|:---------------------|
 | `ready`     | `DeltaChat` is ready to receive commands        | -   |
+
+## Developing
+
+If you're cloning this repository in order to hack on it, you need to setup `deltachat-core` dependencies correctly, before doing `npm install`.
+
+The following commands should be enough to get started.
+
+```
+git clone https://github.com/deltachat/deltachat-node.git
+cd deltachat-node
+npm run submodule
+npm install
+```
+
+**Note** that `deltachat-core` in turn has external dependencies. Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for more information.
 
 ## License
 
