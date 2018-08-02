@@ -641,6 +641,8 @@ npm install
 
 ## License
 
-`deltachat-node` is licensed under the [GPLv3](./LICENSE) license.
+Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
+
+Copyright © 2018-present Delta Chat contributors.
 
 [deltachat-core]: https://github.com/deltachat/deltachat-core
