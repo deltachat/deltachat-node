@@ -14,7 +14,7 @@
 * A high level JavaScript api with syntactic sugar
 * A low level c binding api around  [`deltachat-core`][deltachat-core]
 
-**Note** Because `deltachat-core` uses a particular threading model, the c bindings are based on [`N-API`](https://nodejs.org/dist/latest-v10.x/docs/api/n-api.html) with experimental features enabled. Currently, this means you must use node.js with a minimal version of `v10.6.0`.
+**Note** Because `deltachat-core` uses a particular threading model, the c bindings are based on [`N-API`](https://nodejs.org/dist/latest-v10.x/docs/api/n-api.html) with experimental features enabled. Currently, this means you must use node.js with a minimal version of `v10.7.0`.
 
 * [Install](#install)
 * [Usage](#usage)
