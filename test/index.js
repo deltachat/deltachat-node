@@ -47,7 +47,7 @@ test('create chat from contact and Chat methods', t => {
   dc.archiveChat(chatId, false)
   t.is(dc.getChat(chatId).getArchived(), 0, 'chat unarchived')
 
-  chatId = dc.createGroupChat(0, 'unverified group')
+  chatId = dc.createUnverifiedGroupChat('unverified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), false, 'is not verified')
   t.is(chat.getType(), c.DC_CHAT_TYPE_GROUP, 'group chat')
@@ -60,7 +60,7 @@ test('create chat from contact and Chat methods', t => {
   dc.setTextDraft(chatId, 'NEW DRAFT')
   t.is(dc.getChat(chatId).getTextDraft(), 'NEW DRAFT', 'draft updated')
 
-  chatId = dc.createGroupChat(1, 'a verified group')
+  chatId = dc.createVerifiedGroupChat('a verified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), true, 'is verified')
   t.is(chat.getType(), c.DC_CHAT_TYPE_VERIFIED_GROUP, 'verified group chat')
@@ -69,7 +69,7 @@ test('create chat from contact and Chat methods', t => {
 })
 
 test('create and delete chat', t => {
-  let chatId = dc.createGroupChat(0, 'GROUPCHAT')
+  let chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
   let chat = dc.getChat(chatId)
   t.is(chat.getId(), chatId, 'correct chatId')
   dc.deleteChat(chat.getId())
@@ -210,7 +210,7 @@ test('delete contacts', t => {
 })
 
 test('adding and removing a contact from a chat', t => {
-  const chatId = dc.createGroupChat(0, 'adding_and_removing')
+  const chatId = dc.createUnverifiedGroupChat('adding_and_removing')
   const contactId = dc.createContact('Add Remove', 'add.remove@site.com')
 
   t.is(dc.addContactToChat(chatId, contactId), true, 'contact added')
@@ -243,9 +243,9 @@ test('blocking contacts', t => {
 
 test('ChatList methods', t => {
   const ids = [
-    dc.createGroupChat(0, 'groupchat1'),
-    dc.createGroupChat(0, 'groupchat11'),
-    dc.createGroupChat(0, 'groupchat111')
+    dc.createUnverifiedGroupChat('groupchat1'),
+    dc.createUnverifiedGroupChat('groupchat11'),
+    dc.createUnverifiedGroupChat('groupchat111')
   ]
 
   let chatList = dc.getChatList(0, 'groupchat1')

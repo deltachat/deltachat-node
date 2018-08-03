@@ -121,9 +121,13 @@ Create a normal chat or group chat by a message id. Corresponds to [`dc_create_c
 
 Add a single contact as a result of an _explicit_ user action. Corresponds to [`dc_create_contact()`](https://deltachat.github.io/api/classdc__context__t.html#aaa30fc04300944691d6d7073ce16d053).
 
-#### `dc.createGroupChat(verified, chatName)`
+#### `dc.createUnverifiedGroupChat(chatName)`
 
-Create a new group chat. Corresponds to [`dc_create_group_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a639ab7677583444896e2461710437a2e).
+Create a new _unverified_ group chat. Corresponds to [`dc_create_group_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a639ab7677583444896e2461710437a2e).
+
+#### `dc.createVerifiedGroupChat(chatName)`
+
+Create a new _verified_ group chat. Corresponds to [`dc_create_group_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a639ab7677583444896e2461710437a2e).
 
 #### `dc.deleteChat(chatId)`
 

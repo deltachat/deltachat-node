@@ -463,8 +463,12 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_create_contact(this.dcn_context, name, addr)
   }
 
-  createGroupChat (verified, chatName) {
-    return binding.dcn_create_group_chat(this.dcn_context, verified, chatName)
+  createUnverifiedGroupChat (chatName) {
+    return binding.dcn_create_group_chat(this.dcn_context, 0, chatName)
+  }
+
+  createVerifiedGroupChat (chatName) {
+    return binding.dcn_create_group_chat(this.dcn_context, 1, chatName)
   }
 
   deleteChat (chatId) {
