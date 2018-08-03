@@ -202,6 +202,24 @@ static uint32_t* js_array_to_uint32(napi_env env, napi_value js_array, uint32_t*
   return array;
 }
 
+static napi_value dc_array_to_js_array(napi_env env, dc_array_t* array) {
+  napi_value js_array;
+
+  const int length = dc_array_get_cnt(array);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &js_array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t id = dc_array_get_id(array, i);
+      napi_value napi_id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, id, &napi_id));
+      NAPI_STATUS_THROWS(napi_set_element(env, js_array, i, napi_id));
+    }
+  }
+
+  return js_array;
+}
+
 /**
  * Main context.
  */
@@ -456,23 +474,10 @@ NAPI_METHOD(dcn_get_blocked_contacts) {
   NAPI_DCN_CONTEXT();
 
   dc_array_t* contacts = dc_get_blocked_contacts(dcn_context->dc_context);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(contacts);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t contact_id = dc_array_get_id(contacts, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, contact_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, contacts);
   dc_array_unref(contacts);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_chat) {
@@ -499,23 +504,10 @@ NAPI_METHOD(dcn_get_chat_contacts) {
   NAPI_UINT32(chat_id, argv[1]);
 
   dc_array_t* contacts = dc_get_chat_contacts(dcn_context->dc_context, chat_id);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(contacts);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t contact_id = dc_array_get_id(contacts, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, contact_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, contacts);
   dc_array_unref(contacts);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
@@ -540,23 +532,10 @@ NAPI_METHOD(dcn_get_chat_media) {
                                           chat_id,
                                           msg_type,
                                           or_msg_type);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(msg_ids);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, msg_ids);
   dc_array_unref(msg_ids);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_chat_msgs) {
@@ -570,23 +549,10 @@ NAPI_METHOD(dcn_get_chat_msgs) {
                                          chat_id,
                                          flags,
                                          marker1before);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(msg_ids);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, msg_ids);
   dc_array_unref(msg_ids);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_chatlist) {
@@ -680,24 +646,11 @@ NAPI_METHOD(dcn_get_contacts) {
   char* query_null = strlen(query) > 0 ? query : NULL;
   dc_array_t* contacts = dc_get_contacts(dcn_context->dc_context,
                                          listflags, query_null);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(contacts);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t contact_id = dc_array_get_id(contacts, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, contact_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, contacts);
   free(query);
   dc_array_unref(contacts);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_fresh_msg_cnt) {
@@ -715,23 +668,10 @@ NAPI_METHOD(dcn_get_fresh_msgs) {
   NAPI_DCN_CONTEXT();
 
   dc_array_t* msg_ids = dc_get_fresh_msgs(dcn_context->dc_context);
-
-  napi_value array;
-  const int length = dc_array_get_cnt(msg_ids);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, msg_ids);
   dc_array_unref(msg_ids);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_get_info) {
@@ -1017,23 +957,11 @@ NAPI_METHOD(dcn_search_msgs) {
 
   dc_array_t* msg_ids = dc_search_msgs(dcn_context->dc_context,
                                        chat_id, query);
-  napi_value array;
-  const int length = dc_array_get_cnt(msg_ids);
-  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &array));
-
-  if (length > 0) {
-    for (int i = 0; i < length; i++) {
-      const uint32_t msg_id = dc_array_get_id(msg_ids, i);
-      napi_value id;
-      NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &id));
-      NAPI_STATUS_THROWS(napi_set_element(env, array, i, id));
-    }
-  }
-
+  napi_value js_array = dc_array_to_js_array(env, msg_ids);
   dc_array_unref(msg_ids);
   free(query);
 
-  return array;
+  return js_array;
 }
 
 NAPI_METHOD(dcn_send_audio_msg) {
