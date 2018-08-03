@@ -184,6 +184,25 @@ static void finalize_msg(napi_env env, void* data, void* hint) {
 }
 
 /**
+ * Helpers.
+ */
+
+static uint32_t* js_array_to_uint32(napi_env env, napi_value js_array, uint32_t* length) {
+  *length = 0;
+  NAPI_STATUS_THROWS(napi_get_array_length(env, js_array, length));
+
+  uint32_t* array = calloc(*length, sizeof(uint32_t));
+
+  for (uint32_t i = 0; i < *length; i++) {
+    napi_value napi_element;
+    NAPI_STATUS_THROWS(napi_get_element(env, js_array, i, &napi_element));
+    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &array[i]));
+  }
+
+  return array;
+}
+
+/**
  * Main context.
  */
 
@@ -390,19 +409,11 @@ NAPI_METHOD(dcn_delete_contact) {
 NAPI_METHOD(dcn_delete_msgs) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  napi_value array = argv[1];
-  uint32_t msg_cnt = 0;
-  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  napi_value js_array = argv[1];
 
-  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
-  for (uint32_t i = 0; i < msg_cnt; i++) {
-    napi_value napi_element;
-    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
-    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
-  }
-
-  dc_delete_msgs(dcn_context->dc_context, msg_ids, msg_cnt);
-
+  uint32_t length;
+  uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
+  dc_delete_msgs(dcn_context->dc_context, msg_ids, length);
   free(msg_ids);
 
   NAPI_RETURN_UNDEFINED();
@@ -411,23 +422,12 @@ NAPI_METHOD(dcn_delete_msgs) {
 NAPI_METHOD(dcn_forward_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  napi_value array = argv[1];
-  uint32_t msg_cnt = 0;
-  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  napi_value js_array = argv[1];
   NAPI_UINT32(chat_id, argv[2]);
 
-  // TODO throw if msg_cnt == 0 (and do the same in similar functions)
-
-  // TODO refactor the uint32_t array stuff with dcn_delete_msgs
-  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
-  for (uint32_t i = 0; i < msg_cnt; i++) {
-    napi_value napi_element;
-    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
-    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
-  }
-
-  dc_forward_msgs(dcn_context->dc_context, msg_ids, msg_cnt, chat_id);
-
+  uint32_t length;
+  uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
+  dc_forward_msgs(dcn_context->dc_context, msg_ids, length, chat_id);
   free(msg_ids);
 
   NAPI_RETURN_UNDEFINED();
@@ -896,19 +896,11 @@ NAPI_METHOD(dcn_marknoticed_contact) {
 NAPI_METHOD(dcn_markseen_msgs) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  napi_value array = argv[1];
-  uint32_t msg_cnt = 0;
-  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  napi_value js_array = argv[1];
 
-  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
-  for (uint32_t i = 0; i < msg_cnt; i++) {
-    napi_value napi_element;
-    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
-    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
-  }
-
-  dc_markseen_msgs(dcn_context->dc_context, msg_ids, msg_cnt);
-
+  uint32_t length;
+  uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
+  dc_markseen_msgs(dcn_context->dc_context, msg_ids, length);
   free(msg_ids);
 
   NAPI_RETURN_UNDEFINED();
@@ -1305,21 +1297,12 @@ NAPI_METHOD(dcn_set_text_draft) {
 NAPI_METHOD(dcn_star_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  napi_value array = argv[1];
-  uint32_t msg_cnt = 0;
-  NAPI_STATUS_THROWS(napi_get_array_length(env, array, &msg_cnt));
+  napi_value js_array = argv[1];
   NAPI_INT32(star, argv[2]);
 
-  // TODO refactor the uint32_t array stuff with dcn_delete_msgs
-  uint32_t* msg_ids = calloc(msg_cnt, sizeof(uint32_t));
-  for (uint32_t i = 0; i < msg_cnt; i++) {
-    napi_value napi_element;
-    NAPI_STATUS_THROWS(napi_get_element(env, array, i, &napi_element));
-    NAPI_STATUS_THROWS(napi_get_value_uint32(env, napi_element, &msg_ids[i]));
-  }
-
-  dc_star_msgs(dcn_context->dc_context, msg_ids, msg_cnt, star);
-
+  uint32_t length;
+  uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
+  dc_star_msgs(dcn_context->dc_context, msg_ids, length, star);
   free(msg_ids);
 
   NAPI_RETURN_UNDEFINED();
