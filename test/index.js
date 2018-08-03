@@ -1,6 +1,8 @@
 const DeltaChat = require('../')
 const test = require('tape')
 const tempy = require('tempy')
+const c = require('../constants')
+
 const env = process.env
 
 if (!env.DC_EMAIL || !env.DC_MAIL_PW) {
@@ -31,8 +33,7 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.getProfileImage(), null, 'no profile image')
   t.is(chat.getSubtitle(), 'aaa@site.org', 'correct subtitle')
   t.is(chat.getTextDraft(), null, 'no text draft')
-  // TODO replace magic number
-  t.is(chat.getType(), 100, 'type 100 with single chat')
+  t.is(chat.getType(), c.DC_CHAT_TYPE_SINGLE, 'single chat')
   t.is(chat.isSelfTalk(), false, 'no self talk')
   // TODO make sure this is really the case!
   t.is(chat.isUnpromoted(), false, 'not unpromoted')
@@ -49,10 +50,8 @@ test('create chat from contact and Chat methods', t => {
   chatId = dc.createGroupChat(0, 'unverified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), false, 'is not verified')
-  // TODO replace magic number
-  t.is(chat.getType(), 120, 'type 120 for group chat')
-  // TODO replace magic number
-  t.same(dc.getChatContacts(chatId), [ 1 ])
+  t.is(chat.getType(), c.DC_CHAT_TYPE_GROUP, 'group chat')
+  t.same(dc.getChatContacts(chatId), [ c.DC_CONTACT_ID_SELF ])
 
   dc.setChatName(chatId, 'NEW NAME')
   t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
@@ -64,8 +63,7 @@ test('create chat from contact and Chat methods', t => {
   chatId = dc.createGroupChat(1, 'a verified group')
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), true, 'is verified')
-  // TODO replace magic number
-  t.is(chat.getType(), 130, 'type 130 for verified group chat')
+  t.is(chat.getType(), c.DC_CHAT_TYPE_VERIFIED_GROUP, 'verified group chat')
 
   t.end()
 })
@@ -260,14 +258,12 @@ test('ChatList methods', t => {
   t.is(lot.getId(), 0, 'lot has no id')
   t.is(lot.getState(), 0, 'lot has no state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
-  // TODO replace magic number
-  t.is(lot.getText1Meaning(), 1)
+  t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT)
   t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
 
   dc.archiveChat(ids[0], true)
-  // TODO replace magic number
-  chatList = dc.getChatList(0x01, 'groupchat1')
+  chatList = dc.getChatList(c.DC_GCL_ARCHIVED_ONLY, 'groupchat1')
   t.is(chatList.getCount(), 1, 'only one archived')
 
   t.end()
