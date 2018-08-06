@@ -8,7 +8,7 @@
     "submodule": "git submodule update --recursive --init",
     "install": "./scripts/rebuild-all",
     "generate-constants": "./scripts/generate-constants.js",
-    "test": "standard && nyc node test/index.js",
+    "test": "standard && DEBUG=deltachat nyc node test/index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
