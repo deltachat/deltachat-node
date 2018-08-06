@@ -373,6 +373,8 @@ class DeltaChat extends EventEmitter {
         return
       }
 
+      this._startThreads()
+
       const ready = () => {
         this.emit('ready')
         cb && cb(null)
@@ -387,8 +389,6 @@ class DeltaChat extends EventEmitter {
         return ready()
       }
     })
-
-    this._startThreads()
   }
 
   addAddressBook (addressBook) {
