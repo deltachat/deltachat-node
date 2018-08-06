@@ -953,7 +953,7 @@ NAPI_METHOD(dcn_search_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
   NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(query, argv[1]);
+  NAPI_UTF8_MALLOC(query, argv[2]);
 
   dc_array_t* msg_ids = dc_search_msgs(dcn_context->dc_context,
                                        chat_id, query);
