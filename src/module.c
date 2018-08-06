@@ -249,7 +249,7 @@ NAPI_METHOD(dcn_context_new) {
 NAPI_METHOD(dcn_add_address_book) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(address_book, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(address_book, 1);
 
   int result = dc_add_address_book(dcn_context->dc_context, address_book);
 
@@ -261,8 +261,8 @@ NAPI_METHOD(dcn_add_address_book) {
 NAPI_METHOD(dcn_add_contact_to_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UINT32(contact_id, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(contact_id, 2);
 
   int result = dc_add_contact_to_chat(dcn_context->dc_context,
                                       chat_id, contact_id);
@@ -273,8 +273,8 @@ NAPI_METHOD(dcn_add_contact_to_chat) {
 NAPI_METHOD(dcn_archive_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_INT32(archive, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_INT32(archive, 2);
 
   dc_archive_chat(dcn_context->dc_context, chat_id, archive);
 
@@ -284,8 +284,8 @@ NAPI_METHOD(dcn_archive_chat) {
 NAPI_METHOD(dcn_block_contact) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
-  NAPI_INT32(new_blocking, argv[2]);
+  NAPI_ARGV_UINT32(contact_id, 1);
+  NAPI_ARGV_INT32(new_blocking, 2);
 
   dc_block_contact(dcn_context->dc_context, contact_id, new_blocking);
 
@@ -295,7 +295,7 @@ NAPI_METHOD(dcn_block_contact) {
 NAPI_METHOD(dcn_check_password) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(password, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(password, 1);
 
   int result = dc_check_password(dcn_context->dc_context, password);
 
@@ -307,7 +307,7 @@ NAPI_METHOD(dcn_check_password) {
 NAPI_METHOD(dcn_check_qr) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(qr, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(qr, 1);
 
   dc_lot_t* lot = dc_check_qr(dcn_context->dc_context, qr);
 
@@ -346,8 +346,8 @@ NAPI_METHOD(dcn_configure) {
 NAPI_METHOD(dcn_continue_key_transfer) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(msg_id, argv[1]);
-  NAPI_UTF8_MALLOC(setup_code, argv[2]);
+  NAPI_ARGV_UINT32(msg_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(setup_code, 2);
 
   int result = dc_continue_key_transfer(dcn_context->dc_context,
                                         msg_id, setup_code);
@@ -360,7 +360,7 @@ NAPI_METHOD(dcn_continue_key_transfer) {
 NAPI_METHOD(dcn_create_chat_by_contact_id) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(contact_id, argv[1]);
+  NAPI_ARGV_INT32(contact_id, 1);
 
   uint32_t chat_id = dc_create_chat_by_contact_id(dcn_context->dc_context, contact_id);
 
@@ -370,7 +370,7 @@ NAPI_METHOD(dcn_create_chat_by_contact_id) {
 NAPI_METHOD(dcn_create_chat_by_msg_id) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(msg_id, argv[1]);
+  NAPI_ARGV_INT32(msg_id, 1);
 
   uint32_t chat_id = dc_create_chat_by_msg_id(dcn_context->dc_context, msg_id);
 
@@ -380,8 +380,8 @@ NAPI_METHOD(dcn_create_chat_by_msg_id) {
 NAPI_METHOD(dcn_create_contact) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(name, argv[1]);
-  NAPI_UTF8_MALLOC(addr, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(name, 1);
+  NAPI_ARGV_UTF8_MALLOC(addr, 2);
 
   uint32_t contact_id = dc_create_contact(dcn_context->dc_context, name, addr);
 
@@ -394,8 +394,8 @@ NAPI_METHOD(dcn_create_contact) {
 NAPI_METHOD(dcn_create_group_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(verified, argv[1]);
-  NAPI_UTF8_MALLOC(chat_name, argv[2]);
+  NAPI_ARGV_INT32(verified, 1);
+  NAPI_ARGV_UTF8_MALLOC(chat_name, 2);
 
   uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, verified, chat_name);
 
@@ -407,7 +407,7 @@ NAPI_METHOD(dcn_create_group_chat) {
 NAPI_METHOD(dcn_delete_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   dc_delete_chat(dcn_context->dc_context, chat_id);
 
@@ -417,7 +417,7 @@ NAPI_METHOD(dcn_delete_chat) {
 NAPI_METHOD(dcn_delete_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_ARGV_UINT32(contact_id, 1);
 
   int result = dc_delete_contact(dcn_context->dc_context, contact_id);
 
@@ -441,7 +441,7 @@ NAPI_METHOD(dcn_forward_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
   napi_value js_array = argv[1];
-  NAPI_UINT32(chat_id, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 2);
 
   uint32_t length;
   uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
@@ -483,7 +483,7 @@ NAPI_METHOD(dcn_get_blocked_contacts) {
 NAPI_METHOD(dcn_get_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   napi_value result;
   dc_chat_t* chat = dc_get_chat(dcn_context->dc_context, chat_id);
@@ -501,7 +501,7 @@ NAPI_METHOD(dcn_get_chat) {
 NAPI_METHOD(dcn_get_chat_contacts) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   dc_array_t* contacts = dc_get_chat_contacts(dcn_context->dc_context, chat_id);
   napi_value js_array = dc_array_to_js_array(env, contacts);
@@ -513,7 +513,7 @@ NAPI_METHOD(dcn_get_chat_contacts) {
 NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_ARGV_UINT32(contact_id, 1);
 
   uint32_t chat_id = dc_get_chat_id_by_contact_id(dcn_context->dc_context,
                                                   contact_id);
@@ -524,9 +524,9 @@ NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
 NAPI_METHOD(dcn_get_chat_media) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_INT32(msg_type, argv[2]);
-  NAPI_INT32(or_msg_type, argv[3]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_INT32(msg_type, 2);
+  NAPI_ARGV_INT32(or_msg_type, 3);
 
   dc_array_t* msg_ids = dc_get_chat_media(dcn_context->dc_context,
                                           chat_id,
@@ -541,9 +541,9 @@ NAPI_METHOD(dcn_get_chat_media) {
 NAPI_METHOD(dcn_get_chat_msgs) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UINT32(flags, argv[2]);
-  NAPI_UINT32(marker1before, argv[3]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(flags, 2);
+  NAPI_ARGV_UINT32(marker1before, 3);
 
   dc_array_t* msg_ids = dc_get_chat_msgs(dcn_context->dc_context,
                                          chat_id,
@@ -558,9 +558,9 @@ NAPI_METHOD(dcn_get_chat_msgs) {
 NAPI_METHOD(dcn_get_chatlist) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(listflags, argv[1]);
-  NAPI_UTF8_MALLOC(query_str, argv[2]);
-  NAPI_UINT32(query_contact_id, argv[3]);
+  NAPI_ARGV_INT32(listflags, 1);
+  NAPI_ARGV_UTF8_MALLOC(query_str, 2);
+  NAPI_ARGV_UINT32(query_contact_id, 3);
 
   // query_str HAS to be a string, if empty pass NULL
   char* query_str_null = strlen(query_str) > 0 ? query_str : NULL;
@@ -583,8 +583,8 @@ NAPI_METHOD(dcn_get_chatlist) {
 NAPI_METHOD(dcn_get_config) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(key, argv[1]);
-  NAPI_UTF8_MALLOC(def, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(key, 1);
+  NAPI_ARGV_UTF8_MALLOC(def, 2);
 
   char *value = dc_get_config(dcn_context->dc_context, key, def);
 
@@ -597,8 +597,8 @@ NAPI_METHOD(dcn_get_config) {
 NAPI_METHOD(dcn_get_config_int) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(key, argv[1]);
-  NAPI_INT32(def, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(key, 1);
+  NAPI_ARGV_INT32(def, 2);
 
   int value = dc_get_config_int(dcn_context->dc_context, key, def);
 
@@ -610,7 +610,7 @@ NAPI_METHOD(dcn_get_config_int) {
 NAPI_METHOD(dcn_get_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_ARGV_UINT32(contact_id, 1);
 
   napi_value result;
   dc_contact_t* contact = dc_get_contact(dcn_context->dc_context, contact_id);
@@ -629,7 +629,7 @@ NAPI_METHOD(dcn_get_contact) {
 NAPI_METHOD(dcn_get_contact_encrinfo) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_ARGV_UINT32(contact_id, 1);
 
   char* encr_info = dc_get_contact_encrinfo(dcn_context->dc_context,
                                             contact_id);
@@ -640,8 +640,8 @@ NAPI_METHOD(dcn_get_contact_encrinfo) {
 NAPI_METHOD(dcn_get_contacts) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(listflags, argv[1]);
-  NAPI_UTF8_MALLOC(query, argv[2]);
+  NAPI_ARGV_UINT32(listflags, 1);
+  NAPI_ARGV_UTF8_MALLOC(query, 2);
 
   char* query_null = strlen(query) > 0 ? query : NULL;
   dc_array_t* contacts = dc_get_contacts(dcn_context->dc_context,
@@ -656,7 +656,7 @@ NAPI_METHOD(dcn_get_contacts) {
 NAPI_METHOD(dcn_get_fresh_msg_cnt) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   int msg_cnt = dc_get_fresh_msg_cnt(dcn_context->dc_context, chat_id);
 
@@ -686,7 +686,7 @@ NAPI_METHOD(dcn_get_info) {
 NAPI_METHOD(dcn_get_msg) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(msg_id, argv[1]);
+  NAPI_ARGV_UINT32(msg_id, 1);
 
   napi_value result;
   dc_msg_t* msg = dc_get_msg(dcn_context->dc_context, msg_id);
@@ -704,7 +704,7 @@ NAPI_METHOD(dcn_get_msg) {
 NAPI_METHOD(dcn_get_msg_cnt) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   int msg_cnt = dc_get_msg_cnt(dcn_context->dc_context, chat_id);
 
@@ -714,7 +714,7 @@ NAPI_METHOD(dcn_get_msg_cnt) {
 NAPI_METHOD(dcn_get_msg_info) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(msg_id, argv[1]);
+  NAPI_ARGV_UINT32(msg_id, 1);
 
   char* msg_info = dc_get_msg_info(dcn_context->dc_context, msg_id);
 
@@ -724,8 +724,8 @@ NAPI_METHOD(dcn_get_msg_info) {
 NAPI_METHOD(dcn_get_next_media) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(msg_id, argv[1]);
-  NAPI_INT32(dir, argv[2]);
+  NAPI_ARGV_UINT32(msg_id, 1);
+  NAPI_ARGV_INT32(dir, 2);
 
   uint32_t next_id = dc_get_next_media(dcn_context->dc_context,
                                        msg_id, dir);
@@ -736,7 +736,7 @@ NAPI_METHOD(dcn_get_next_media) {
 NAPI_METHOD(dcn_get_securejoin_qr) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(group_chat_id, argv[1]);
+  NAPI_ARGV_UINT32(group_chat_id, 1);
 
   char* code = dc_get_securejoin_qr(dcn_context->dc_context,
                                     group_chat_id);
@@ -747,9 +747,9 @@ NAPI_METHOD(dcn_get_securejoin_qr) {
 NAPI_METHOD(dcn_imex) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(what, argv[1]);
-  NAPI_UTF8_MALLOC(param1, argv[2]);
-  NAPI_UTF8_MALLOC(param2, argv[3]);
+  NAPI_ARGV_INT32(what, 1);
+  NAPI_ARGV_UTF8_MALLOC(param1, 2);
+  NAPI_ARGV_UTF8_MALLOC(param2, 3);
 
   dc_imex(dcn_context->dc_context, what, param1, param2);
 
@@ -762,7 +762,7 @@ NAPI_METHOD(dcn_imex) {
 NAPI_METHOD(dcn_imex_has_backup) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(dir_name, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(dir_name, 1);
 
   char* file = dc_imex_has_backup(dcn_context->dc_context, dir_name);
 
@@ -792,8 +792,8 @@ NAPI_METHOD(dcn_is_configured) {
 NAPI_METHOD(dcn_is_contact_in_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UINT32(contact_id, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(contact_id, 2);
 
   int result = dc_is_contact_in_chat(dcn_context->dc_context,
                                      chat_id, contact_id);
@@ -804,7 +804,7 @@ NAPI_METHOD(dcn_is_contact_in_chat) {
 NAPI_METHOD(dcn_join_securejoin) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(qr_code, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(qr_code, 1);
 
   uint32_t chat_id = dc_join_securejoin(dcn_context->dc_context, qr_code);
 
@@ -816,7 +816,7 @@ NAPI_METHOD(dcn_join_securejoin) {
 NAPI_METHOD(dcn_marknoticed_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   dc_marknoticed_chat(dcn_context->dc_context, chat_id);
 
@@ -826,7 +826,7 @@ NAPI_METHOD(dcn_marknoticed_chat) {
 NAPI_METHOD(dcn_marknoticed_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(contact_id, argv[1]);
+  NAPI_ARGV_UINT32(contact_id, 1);
 
   dc_marknoticed_contact(dcn_context->dc_context, contact_id);
 
@@ -912,8 +912,8 @@ static void dcn_open_complete(napi_env env, napi_status status, void* data) {
 NAPI_METHOD(dcn_open) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(dbfile, argv[1]);
-  NAPI_UTF8_MALLOC(blobdir, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(dbfile, 1);
+  NAPI_ARGV_UTF8_MALLOC(blobdir, 2);
   napi_value callback = argv[3];
 
   dcn_open_carrier_t* carrier = calloc(1, sizeof(dcn_open_carrier_t));
@@ -922,7 +922,7 @@ NAPI_METHOD(dcn_open) {
   carrier->blobdir = strdup(blobdir);
 
   napi_value async_resource_name;
-  NAPI_STATUS_THROWS(napi_create_reference(env, argv[3], 1, &carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_create_reference(env, callback, 1, &carrier->callback_ref));
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_open_callback",
                                              NAPI_AUTO_LENGTH,
                                              &async_resource_name));
@@ -940,8 +940,8 @@ NAPI_METHOD(dcn_open) {
 NAPI_METHOD(dcn_remove_contact_from_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UINT32(contact_id, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(contact_id, 2);
 
   int result = dc_remove_contact_from_chat(dcn_context->dc_context,
                                            chat_id, contact_id);
@@ -952,8 +952,8 @@ NAPI_METHOD(dcn_remove_contact_from_chat) {
 NAPI_METHOD(dcn_search_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(query, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(query, 2);
 
   dc_array_t* msg_ids = dc_search_msgs(dcn_context->dc_context,
                                        chat_id, query);
@@ -967,12 +967,12 @@ NAPI_METHOD(dcn_search_msgs) {
 NAPI_METHOD(dcn_send_audio_msg) {
   NAPI_ARGV(7);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(file, argv[2]);
-  NAPI_UTF8_MALLOC(filemime, argv[3]);
-  NAPI_INT32(duration, argv[4]);
-  NAPI_UTF8_MALLOC(author, argv[5]);
-  NAPI_UTF8_MALLOC(track_name, argv[6]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(file, 2);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
+  NAPI_ARGV_INT32(duration, 4);
+  NAPI_ARGV_UTF8_MALLOC(author, 5);
+  NAPI_ARGV_UTF8_MALLOC(track_name, 6);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   char* author_null = strlen(author) > 0 ? author : NULL;
@@ -995,9 +995,9 @@ NAPI_METHOD(dcn_send_audio_msg) {
 NAPI_METHOD(dcn_send_file_msg) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(file, argv[2]);
-  NAPI_UTF8_MALLOC(filemime, argv[3]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(file, 2);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   uint32_t msg_id = dc_send_file_msg(dcn_context->dc_context,
@@ -1013,11 +1013,11 @@ NAPI_METHOD(dcn_send_file_msg) {
 NAPI_METHOD(dcn_send_image_msg) {
   NAPI_ARGV(6);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(file, argv[2]);
-  NAPI_UTF8_MALLOC(filemime, argv[3]);
-  NAPI_INT32(width, argv[4]);
-  NAPI_INT32(height, argv[5]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(file, 2);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
+  NAPI_ARGV_INT32(width, 4);
+  NAPI_ARGV_INT32(height, 5);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   uint32_t msg_id = dc_send_image_msg(dcn_context->dc_context,
@@ -1035,7 +1035,7 @@ NAPI_METHOD(dcn_send_image_msg) {
 NAPI_METHOD(dcn_send_msg) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
+  NAPI_ARGV_UINT32(chat_id, 1);
 
   dc_msg_t* dc_msg;
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
@@ -1048,8 +1048,8 @@ NAPI_METHOD(dcn_send_msg) {
 NAPI_METHOD(dcn_send_text_msg) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(text, argv[2]);
+  NAPI_ARGV_INT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(text, 2);
 
   uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
 
@@ -1061,8 +1061,8 @@ NAPI_METHOD(dcn_send_text_msg) {
 NAPI_METHOD(dcn_send_vcard_msg) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UINT32(contact_id, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(contact_id, 2);
 
   uint32_t msg_id = dc_send_vcard_msg(dcn_context->dc_context,
                                       chat_id,
@@ -1074,12 +1074,12 @@ NAPI_METHOD(dcn_send_vcard_msg) {
 NAPI_METHOD(dcn_send_video_msg) {
   NAPI_ARGV(7);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(file, argv[2]);
-  NAPI_UTF8_MALLOC(filemime, argv[3]);
-  NAPI_INT32(width, argv[4]);
-  NAPI_INT32(height, argv[5]);
-  NAPI_INT32(duration, argv[6]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(file, 2);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
+  NAPI_ARGV_INT32(width, 4);
+  NAPI_ARGV_INT32(height, 5);
+  NAPI_ARGV_INT32(duration, 6);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   uint32_t msg_id = dc_send_video_msg(dcn_context->dc_context,
@@ -1098,10 +1098,10 @@ NAPI_METHOD(dcn_send_video_msg) {
 NAPI_METHOD(dcn_send_voice_msg) {
   NAPI_ARGV(5);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(file, argv[2]);
-  NAPI_UTF8_MALLOC(filemime, argv[3]);
-  NAPI_INT32(duration, argv[4]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(file, 2);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
+  NAPI_ARGV_INT32(duration, 4);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   uint32_t msg_id = dc_send_voice_msg(dcn_context->dc_context,
@@ -1118,8 +1118,8 @@ NAPI_METHOD(dcn_send_voice_msg) {
 NAPI_METHOD(dcn_set_chat_name) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(name, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(name, 2);
 
   int result = dc_set_chat_name(dcn_context->dc_context,
                                 chat_id,
@@ -1133,8 +1133,8 @@ NAPI_METHOD(dcn_set_chat_name) {
 NAPI_METHOD(dcn_set_chat_profile_image) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(image, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(image, 2);
 
   int result = dc_set_chat_profile_image(dcn_context->dc_context,
                                          chat_id,
@@ -1148,8 +1148,8 @@ NAPI_METHOD(dcn_set_chat_profile_image) {
 NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(key, argv[1]);
-  NAPI_UTF8_MALLOC(value, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(key, 1);
+  NAPI_ARGV_UTF8_MALLOC(value, 2);
 
   int status = dc_set_config(dcn_context->dc_context, key, value);
 
@@ -1162,8 +1162,8 @@ NAPI_METHOD(dcn_set_config) {
 NAPI_METHOD(dcn_set_config_int) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UTF8_MALLOC(key, argv[1]);
-  NAPI_INT32(value, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(key, 1);
+  NAPI_ARGV_INT32(value, 2);
 
   int status = dc_set_config_int(dcn_context->dc_context, key, value);
 
@@ -1199,7 +1199,7 @@ NAPI_METHOD(dcn_set_event_handler) {
 NAPI_METHOD(dcn_set_offline) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
-  NAPI_INT32(is_offline, argv[1]); // param2: 1=we're offline, 0=we're online again
+  NAPI_ARGV_INT32(is_offline, 1); // param2: 1=we're offline, 0=we're online again
 
   dcn_context->is_offline = is_offline;
   if (!is_offline) {
@@ -1212,8 +1212,8 @@ NAPI_METHOD(dcn_set_offline) {
 NAPI_METHOD(dcn_set_text_draft) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_UINT32(chat_id, argv[1]);
-  NAPI_UTF8_MALLOC(text, argv[2]);
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(text, 2);
 
   dc_set_text_draft(dcn_context->dc_context, chat_id, text);
 
@@ -1226,7 +1226,7 @@ NAPI_METHOD(dcn_star_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
   napi_value js_array = argv[1];
-  NAPI_INT32(star, argv[2]);
+  NAPI_ARGV_INT32(star, 2);
 
   uint32_t length;
   uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
@@ -1395,7 +1395,7 @@ NAPI_METHOD(dcn_chat_is_verified) {
 NAPI_METHOD(dcn_chatlist_get_chat_id) {
   NAPI_ARGV(2);
   NAPI_DC_CHATLIST();
-  NAPI_INT32(index, argv[1]);
+  NAPI_ARGV_INT32(index, 1);
 
   uint32_t chat_id = dc_chatlist_get_chat_id(dc_chatlist, index);
 
@@ -1414,7 +1414,7 @@ NAPI_METHOD(dcn_chatlist_get_cnt) {
 NAPI_METHOD(dcn_chatlist_get_msg_id) {
   NAPI_ARGV(2);
   NAPI_DC_CHATLIST();
-  NAPI_INT32(index, argv[1]);
+  NAPI_ARGV_INT32(index, 1);
 
   uint32_t message_id = dc_chatlist_get_msg_id(dc_chatlist, index);
 
@@ -1424,7 +1424,7 @@ NAPI_METHOD(dcn_chatlist_get_msg_id) {
 NAPI_METHOD(dcn_chatlist_get_summary) {
   NAPI_ARGV(3);
   NAPI_DC_CHATLIST();
-  NAPI_INT32(index, argv[1]);
+  NAPI_ARGV_INT32(index, 1);
 
   dc_chat_t* dc_chat = NULL;
   napi_get_value_external(env, argv[2], (void**)&dc_chat);
@@ -1721,7 +1721,7 @@ NAPI_METHOD(dcn_msg_get_summary) {
 NAPI_METHOD(dcn_msg_get_summarytext) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
-  NAPI_INT32(approx_characters, argv[1]);
+  NAPI_ARGV_INT32(approx_characters, 1);
 
   char* summarytext = dc_msg_get_summarytext(dc_msg, approx_characters);
 
@@ -1821,9 +1821,9 @@ NAPI_METHOD(dcn_msg_is_starred) {
 NAPI_METHOD(dcn_msg_latefiling_mediasize) {
   NAPI_ARGV(4);
   NAPI_DC_MSG();
-  NAPI_INT32(width, argv[1]);
-  NAPI_INT32(height, argv[2]);
-  NAPI_INT32(duration, argv[3]);
+  NAPI_ARGV_INT32(width, 1);
+  NAPI_ARGV_INT32(height, 2);
+  NAPI_ARGV_INT32(duration, 3);
 
   dc_msg_latefiling_mediasize(dc_msg, width, height, duration);
 
@@ -1833,8 +1833,8 @@ NAPI_METHOD(dcn_msg_latefiling_mediasize) {
 NAPI_METHOD(dcn_msg_set_dimension) {
   NAPI_ARGV(3);
   NAPI_DC_MSG();
-  NAPI_INT32(width, argv[1]);
-  NAPI_INT32(height, argv[2]);
+  NAPI_ARGV_INT32(width, 1);
+  NAPI_ARGV_INT32(height, 2);
 
   dc_msg_set_dimension(dc_msg, width, height);
 
@@ -1844,7 +1844,7 @@ NAPI_METHOD(dcn_msg_set_dimension) {
 NAPI_METHOD(dcn_msg_set_duration) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
-  NAPI_INT32(duration, argv[1]);
+  NAPI_ARGV_INT32(duration, 1);
 
   dc_msg_set_duration(dc_msg, duration);
 
@@ -1854,8 +1854,8 @@ NAPI_METHOD(dcn_msg_set_duration) {
 NAPI_METHOD(dcn_msg_set_file) {
   NAPI_ARGV(3);
   NAPI_DC_MSG();
-  NAPI_UTF8_MALLOC(file, argv[1]);
-  NAPI_UTF8_MALLOC(filemime, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(file, 1);
+  NAPI_ARGV_UTF8_MALLOC(filemime, 2);
 
   char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
   dc_msg_set_file(dc_msg, file, filemime_null);
@@ -1869,8 +1869,8 @@ NAPI_METHOD(dcn_msg_set_file) {
 NAPI_METHOD(dcn_msg_set_mediainfo) {
   NAPI_ARGV(3);
   NAPI_DC_MSG();
-  NAPI_UTF8_MALLOC(author, argv[1]);
-  NAPI_UTF8_MALLOC(trackname, argv[2]);
+  NAPI_ARGV_UTF8_MALLOC(author, 1);
+  NAPI_ARGV_UTF8_MALLOC(trackname, 2);
 
   char* author_null = strlen(author) > 0 ? author : NULL;
   char* trackname_null = strlen(trackname) > 0 ? trackname : NULL;
@@ -1885,7 +1885,7 @@ NAPI_METHOD(dcn_msg_set_mediainfo) {
 NAPI_METHOD(dcn_msg_set_text) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
-  NAPI_UTF8_MALLOC(text, argv[1]);
+  NAPI_ARGV_UTF8_MALLOC(text, 1);
 
   dc_msg_set_text(dc_msg, text);
 
@@ -1897,7 +1897,7 @@ NAPI_METHOD(dcn_msg_set_text) {
 NAPI_METHOD(dcn_msg_set_type) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
-  NAPI_INT32(type, argv[1]);
+  NAPI_ARGV_INT32(type, 1);
 
   dc_msg_set_type(dc_msg, type);
 
