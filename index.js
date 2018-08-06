@@ -360,6 +360,10 @@ class DeltaChat extends EventEmitter {
 
     this._setEventHandler((event, data1, data2) => {
       debug('event', event, 'data1', data1, 'data2', data2)
+      this.emit('event', event, data1, data2)
+      if (event === 2041 && data1 === 1000) {
+        this.emit('configure-complete')
+      }
     })
 
     this._open(path.join(opts.root, 'db.sqlite'), '', err => {
