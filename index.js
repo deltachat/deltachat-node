@@ -370,17 +370,23 @@ class DeltaChat extends EventEmitter {
       if (err) {
         this.emit('error', err)
         cb && cb(err)
-      } else {
+        return
+      }
+
+      const ready = () => {
         this.emit('ready')
         cb && cb(null)
       }
-    })
 
-    if (!this._isConfigured()) {
-      this.setConfig('addr', opts.email)
-      this.setConfig('mail_pw', opts.mail_pw)
-      this._configure()
-    }
+      if (!this._isConfigured()) {
+        this.once('configure-complete', ready)
+        this.setConfig('addr', opts.email)
+        this.setConfig('mail_pw', opts.mail_pw)
+        this._configure()
+      } else {
+        return ready()
+      }
+    })
 
     this._startThreads()
   }
