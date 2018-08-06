@@ -179,7 +179,7 @@ Get all message ids belonging to a chat. Corresponds to [`dc_get_chat_msgs()`](h
 
 #### `dc.getChatList(listFlags, queryStr, queryContactId)`
 
-Get a list of chats. Corresponds to [`dc_get_chatlist()`](https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
+Get a list of chats. Returns a `ChatList` object. Corresponds to [`dc_get_chatlist()`](https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
 
 #### `dc.getConfig(key, def)`
 
