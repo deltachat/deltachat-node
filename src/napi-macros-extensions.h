@@ -1,8 +1,6 @@
 #include <napi-macros.h>
 
-#undef NAPI_UTF8
-
-#define NAPI_UTF8(name, val) \
+#define NAPI_UTF8_MALLOC(name, val) \
   size_t name##_size = 0; \
   NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, val, NULL, 0, &name##_size)); \
   char* name = malloc((name##_size + 1) * sizeof(char)); \
