@@ -785,7 +785,7 @@ class DeltaChat extends EventEmitter {
   }
 
   setOffline (offline) {
-    binding.dcn_set_offline(this.dcn_context, offline)
+    binding.dcn_set_offline(this.dcn_context, offline ? 1 : 0)
   }
 
   setTextDraft (chatId, text) {
