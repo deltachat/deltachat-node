@@ -46,8 +46,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
         dcn_event->data2_int = data2;
         dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
         napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
-      } else {
-        printf("Warning: threadsafe_event_handler not set :/\n");
       }
       break;
   }
