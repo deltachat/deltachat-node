@@ -361,10 +361,66 @@ class DeltaChat extends EventEmitter {
 
     this._setEventHandler((event, data1, data2) => {
       debug('event', event, 'data1', data1, 'data2', data2)
-      this.emit('event', event, data1, data2)
+
+      this.emit('ALL', event, data1, data2)
+
       const eventStr = events[event]
-      if (eventStr === 'DC_EVENT_CONFIGURE_PROGRESS' && data1 === 1000) {
-        this.emit('_configured')
+
+      switch (eventStr) {
+        case 'DC_EVENT_INFO':
+          this.emit(eventStr, data2)
+          break
+        case 'DC_EVENT_WARNING':
+          this.emit(eventStr, data2)
+          break
+        case 'DC_EVENT_ERROR':
+          // TODO data1 should be translated into a string
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_MSGS_CHANGED':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_INCOMING_MSG':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_MSG_DELIVERED':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_MSG_FAILED':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_MSG_READ':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_CHAT_MODIFIED':
+          this.emit(eventStr, data1)
+          break
+        case 'DC_EVENT_CONTACTS_CHANGED':
+          this.emit(eventStr, data1)
+          break
+        case 'DC_EVENT_CONFIGURE_PROGRESS':
+          if (data1 === 1000) this.emit('_configured')
+          this.emit(eventStr, data1)
+          break
+        case 'DC_EVENT_IMEX_PROGRESS':
+          this.emit(eventStr, data1)
+          break
+        case 'DC_EVENT_IMEX_FILE_WRITTEN':
+          this.emit(eventStr, data1)
+          break
+        case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS':
+          this.emit(eventStr, data1, data2)
+          break
+        case 'DC_EVENT_IS_OFFLINE':
+        case 'DC_EVENT_GET_STRING':
+        case 'DC_EVENT_GET_QUANTITY_STRING':
+        case 'DC_EVENT_HTTP_GET':
+          break
+        default:
+          debug('Unknown event')
       }
     })
 

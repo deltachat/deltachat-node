@@ -626,7 +626,23 @@ Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://d
 
 | Event     | Description                 | Arguments            |
 |:----------|:----------------------------|:---------------------|
-| `ready`     | `DeltaChat` is ready to receive commands        | -   |
+| `ready`     | `DeltaChat` is ready        | -   |
+| [`DC_EVENT_INFO`](https://deltachat.github.io/api/group__DC__EVENT.html#ga0f492424e22941431e2562731a5f21ba)  | Info string    | `(info)`  |
+| [`DC_EVENT_WARNING`](https://deltachat.github.io/api/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)  | Warning string    | `(warning)`  |
+| [`DC_EVENT_ERROR`](https://deltachat.github.io/api/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)  | Error string    | `(code, error)`  |
+| [`DC_EVENT_MSGS_CHANGED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga0f52cdaad70dd24f7540abda6193cc2d)  | Messages or chats changed    | `(chatId, msgId)`  |
+| [`DC_EVENT_INCOMING_MSG`](https://deltachat.github.io/api/group__DC__EVENT.html#ga3f0831ca83189879a2f224b424d8b58f)  | There is a fresh message    | `(chatId, msgId)`  |
+| [`DC_EVENT_MSG_DELIVERED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga4438030310448a61af0a4bc72c6765dc)  | Message was sent successfully    | `(chatId, msgId)`  |
+| [`DC_EVENT_MSG_FAILED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga1690a84950e2bc948c674d0271262d2a)  | Message could not be sent    | `(chatId, msgId)`  |
+| [`DC_EVENT_MSG_READ`](https://deltachat.github.io/api/group__DC__EVENT.html#ga750f252b4bc82d91dfdd788860f36989)  | Message read by the receiver    | `(chatId, msgId)`  |
+| [`DC_EVENT_CHAT_MODIFIED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga27512e465c573fcf295014f8e0075adf)  | Chat modified    | `(chatId)`  |
+| [`DC_EVENT_CONTACTS_CHANGED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga658b9fc4315badab7afe265b7fa8c2af)  | Contact changed    | `(contactId)`  |
+| [`DC_EVENT_CONFIGURE_PROGRESS`](https://deltachat.github.io/api/group__DC__EVENT.html#gae047f9361d57c42d82a794324f5b9fd6)  | Configuration progress    | `(progress)`  |
+| [`DC_EVENT_IMEX_PROGRESS`](https://deltachat.github.io/api/group__DC__EVENT.html#ga006ea41d9c1a76ffc672752484c61e6c)  | Import/export progress    | `(progress)`  |
+| [`DC_EVENT_IMEX_FILE_WRITTEN`](https://deltachat.github.io/api/group__DC__EVENT.html#ga7ffbea55be6a5e6da7ac7e35ba6bf985)  | A file has been exported    | `(fileName)`  |
+| [`DC_EVENT_SECUREJOIN_INVITER_PROGRESS`](https://deltachat.github.io/api/group__DC__EVENT.html#gae1b19779138b8ea63d1b6a5b450c181a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
+| [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://deltachat.github.io/api/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
+| `ALL`     | All events from [`deltachat-core`](https://deltachat.github.io/api/group__DC__EVENT.html)        | `(event, data1, data2)`   |
 
 ## Developing
 
