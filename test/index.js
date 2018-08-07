@@ -2,6 +2,7 @@ const DeltaChat = require('../')
 const test = require('tape')
 const tempy = require('tempy')
 const c = require('../constants')
+const events = require('../events')
 
 const env = process.env
 
@@ -266,6 +267,21 @@ test('ChatList methods', t => {
   chatList = dc.getChatList(c.DC_GCL_ARCHIVED_ONLY, 'groupchat1')
   t.is(chatList.getCount(), 1, 'only one archived')
 
+  t.end()
+})
+
+test('reverse lookup of events', t => {
+  const eventKeys = Object.keys(events).map(k => Number(k))
+  const eventValues = Object.values(events)
+  const reverse = eventValues.map(v => c[v])
+  t.same(reverse, eventKeys, 'reverse lookup ok')
+  t.end()
+})
+
+test('event constants are consistent', t => {
+  const eventKeys = Object.keys(c).filter(k => k.startsWith('DC_EVENT_'))
+  const eventValues = Object.values(events)
+  t.same(eventKeys, eventValues, 'identical')
   t.end()
 })
 

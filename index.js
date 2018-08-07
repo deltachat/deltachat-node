@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const binding = require('./binding')
+const events = require('./events')
 const EventEmitter = require('events').EventEmitter
 const xtend = require('xtend')
 const path = require('path')
@@ -361,7 +362,8 @@ class DeltaChat extends EventEmitter {
     this._setEventHandler((event, data1, data2) => {
       debug('event', event, 'data1', data1, 'data2', data2)
       this.emit('event', event, data1, data2)
-      if (event === 2041 && data1 === 1000) {
+      const eventStr = events[event]
+      if (eventStr === 'DC_EVENT_CONFIGURE_PROGRESS' && data1 === 1000) {
         this.emit('_configured')
       }
     })
