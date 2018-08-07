@@ -362,7 +362,7 @@ class DeltaChat extends EventEmitter {
       debug('event', event, 'data1', data1, 'data2', data2)
       this.emit('event', event, data1, data2)
       if (event === 2041 && data1 === 1000) {
-        this.emit('configure-complete')
+        this.emit('_configured')
       }
     })
 
@@ -381,12 +381,12 @@ class DeltaChat extends EventEmitter {
       }
 
       if (!this._isConfigured()) {
-        this.once('configure-complete', ready)
+        this.once('_configured', ready)
         this.setConfig('addr', opts.email)
         this.setConfig('mail_pw', opts.mail_pw)
         this._configure()
       } else {
-        return ready()
+        ready()
       }
     })
   }
