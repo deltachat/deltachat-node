@@ -57,6 +57,7 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class Contact</b></code>](#class_contact)
 * [<code><b>class Lot</b></code>](#class_lot)
 * [<code><b>class Message</b></code>](#class_message)
+* [<code><b>class MessageState</b></code>](#class_message_state)
 
 <a name="deltachat_ctor"></a>
 ### `dc = DeltaChat(options[, callback])`
@@ -542,7 +543,7 @@ Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_g
 
 #### `message.getState()`
 
-Get the state of the message. Corresponds to [`dc_msg_get_state()`](https://deltachat.github.io/api/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
+Get the state of the message. Returns a `MessageState` object. Corresponds to [`dc_msg_get_state()`](https://deltachat.github.io/api/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
 
 #### `message.getSummary(chat)`
 
@@ -619,6 +620,43 @@ Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://d
 #### `message.setType(type)`
 
 Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://deltachat.github.io/api/classdc__msg__t.html#a5d5568d88453a31a1379299d9c155c4f).
+
+<a name="class_message_state"></a>
+### `class MessageState`
+
+An object representing a `Message` state.
+
+#### `state.isUndefined()`
+
+Message state is `DC_STATE_UNDEFINED`.
+
+#### `state.isFresh()`
+
+Message state is `DC_STATE_IN_FRESH`.
+
+#### `state.isNoticed()`
+
+Message state is `DC_STATE_IN_NOTICED`.
+
+#### `state.isSeen()`
+
+Message state is `DC_STATE_IN_SEEN`.
+
+#### `state.isPending()`
+
+Message state is `DC_STATE_OUT_PENDING`.
+
+#### `state.isFailed()`
+
+Message state is `DC_STATE_OUT_FAILED`.
+
+#### `state.isDelivered()`
+
+Message state is `DC_STATE_OUT_DELIVERED`.
+
+#### `state.isReceived()`
+
+Message state is `DC_STATE_OUT_MDN_RCVD`.
 
 ## Events
 

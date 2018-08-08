@@ -104,7 +104,7 @@ test('new message and Message methods', t => {
 
   t.is(msg.getSetupcodebegin(), '', 'no setupcode begin')
   t.is(msg.getShowpadlock(), false, 'no padlock by default')
-  t.is(msg.getState(), 0, 'no state by default')
+  t.is(msg.getState().isUndefined(), true, 'no state by default')
 
   let summary = msg.getSummary()
   t.is(summary.getId(), 0, 'no summary id')

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const binding = require('./binding')
+const constants = require('./constants')
 const events = require('./events')
 const EventEmitter = require('events').EventEmitter
 const xtend = require('xtend')
@@ -169,6 +170,48 @@ class Lot {
 /**
  *
  */
+
+class MessageState {
+  constructor (state) {
+    this._state = state
+  }
+
+  isUndefined () {
+    return this._state === constants.DC_STATE_UNDEFINED
+  }
+
+  isFresh () {
+    return this._state === constants.DC_STATE_IN_FRESH
+  }
+
+  isNoticed () {
+    return this._state === constants.DC_STATE_IN_NOTICED
+  }
+
+  isSeen () {
+    return this._state === constants.DC_STATE_IN_SEEN
+  }
+
+  isPending () {
+    return this._state === constants.DC_STATE_OUT_PENDING
+  }
+
+  isFailed () {
+    return this._state === constants.DC_STATE_OUT_FAILED
+  }
+
+  isDelivered () {
+    return this._state === constants.DC_STATE_OUT_DELIVERED
+  }
+
+  isReceived () {
+    return this._state === constants.DC_STATE_OUT_MDN_RCVD
+  }
+}
+
+/**
+ *
+ */
 class Message {
   constructor (dc_msg) {
     this.dc_msg = dc_msg
@@ -223,23 +266,7 @@ class Message {
   }
 
   getState () {
-    // TODO this returns an integer, we might want to use strings
-    // *or* add extra methods which calls _this_ function and
-    // compares to known integers (typical higher level functionality)
-
-    // We could also return a separate message state with some
-    // defined properties, e.g.
-
-    // msg.getState().fresh
-    // msg.getState().noticed
-    // msg.getState().seen
-    // msg.getState().pending
-    // msg.getState().failed
-    // msg.getState().fresh
-    // msg.getState().delivered
-    // msg.getState().received
-
-    return binding.dcn_msg_get_state(this.dc_msg)
+    return new MessageState(binding.dcn_msg_get_state(this.dc_msg))
   }
 
   getSummary (chat) {
