@@ -22,7 +22,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "debug": "^3.1.0",
-    "napi-macros": "ralphtheninja/napi-macros#napi-utf8-malloc",
+    "napi-macros": "^1.7.0",
     "node-gyp-build": "^3.4.0",
     "xtend": "^4.0.1"
   },
