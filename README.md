@@ -663,6 +663,6 @@ npm install
 
 Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 
-Copyright © 2018-present Delta Chat contributors.
+Copyright © 2018 Delta Chat contributors.
 
 [deltachat-core]: https://github.com/deltachat/deltachat-core
