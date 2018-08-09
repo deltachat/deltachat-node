@@ -173,39 +173,39 @@ class Lot {
 
 class MessageState {
   constructor (state) {
-    this._state = state
+    this.state = state
   }
 
   isUndefined () {
-    return this._state === constants.DC_STATE_UNDEFINED
+    return this.state === constants.DC_STATE_UNDEFINED
   }
 
   isFresh () {
-    return this._state === constants.DC_STATE_IN_FRESH
+    return this.state === constants.DC_STATE_IN_FRESH
   }
 
   isNoticed () {
-    return this._state === constants.DC_STATE_IN_NOTICED
+    return this.state === constants.DC_STATE_IN_NOTICED
   }
 
   isSeen () {
-    return this._state === constants.DC_STATE_IN_SEEN
+    return this.state === constants.DC_STATE_IN_SEEN
   }
 
   isPending () {
-    return this._state === constants.DC_STATE_OUT_PENDING
+    return this.state === constants.DC_STATE_OUT_PENDING
   }
 
   isFailed () {
-    return this._state === constants.DC_STATE_OUT_FAILED
+    return this.state === constants.DC_STATE_OUT_FAILED
   }
 
   isDelivered () {
-    return this._state === constants.DC_STATE_OUT_DELIVERED
+    return this.state === constants.DC_STATE_OUT_DELIVERED
   }
 
   isReceived () {
-    return this._state === constants.DC_STATE_OUT_MDN_RCVD
+    return this.state === constants.DC_STATE_OUT_MDN_RCVD
   }
 }
 

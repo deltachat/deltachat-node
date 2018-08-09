@@ -658,6 +658,10 @@ Message state is `DC_STATE_OUT_DELIVERED`.
 
 Message state is `DC_STATE_OUT_MDN_RCVD`.
 
+#### `state.state`
+
+Internal `state` property.
+
 ## Events
 
 `DeltaChat` is an [`EventEmitter`](https://nodejs.org/api/events.html) and emits the following events.
