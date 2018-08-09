@@ -571,7 +571,12 @@ class DeltaChat extends EventEmitter {
   }
 
   deleteContact (contactId) {
-    return Boolean(binding.dcn_delete_contact(this.dcn_context, contactId))
+    return Boolean(
+      binding.dcn_delete_contact(
+        this.dcn_context,
+        Number(contactId)
+      )
+    )
   }
 
   deleteMessages (messageIds) {
@@ -657,7 +662,10 @@ class DeltaChat extends EventEmitter {
   }
 
   getContact (contactId) {
-    const dc_contact = binding.dcn_get_contact(this.dcn_context, contactId)
+    const dc_contact = binding.dcn_get_contact(
+      this.dcn_context,
+      Number(contactId)
+    )
     return dc_contact ? new Contact(dc_contact) : null
   }
 
