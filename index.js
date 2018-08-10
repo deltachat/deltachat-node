@@ -692,7 +692,7 @@ class DeltaChat extends EventEmitter {
   }
 
   getMessage (messageId) {
-    const dc_msg = binding.dcn_get_msg(this.dcn_context, messageId)
+    const dc_msg = binding.dcn_get_msg(this.dcn_context, Number(messageId))
     return dc_msg ? new Message(dc_msg) : null
   }
 
