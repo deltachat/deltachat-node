@@ -547,11 +547,17 @@ class DeltaChat extends EventEmitter {
   }
 
   createChatByContactId (contactId) {
-    return binding.dcn_create_chat_by_contact_id(this.dcn_context, contactId)
+    return binding.dcn_create_chat_by_contact_id(
+      this.dcn_context,
+      Number(contactId)
+    )
   }
 
   createChatByMessageId (messageId) {
-    return binding.dcn_create_chat_by_msg_id(this.dcn_context, messageId)
+    return binding.dcn_create_chat_by_msg_id(
+      this.dcn_context,
+      Number(messageId)
+    )
   }
 
   createContact (name, addr) {
@@ -567,7 +573,7 @@ class DeltaChat extends EventEmitter {
   }
 
   deleteChat (chatId) {
-    binding.dcn_delete_chat(this.dcn_context, chatId)
+    binding.dcn_delete_chat(this.dcn_context, Number(chatId))
   }
 
   deleteContact (contactId) {
