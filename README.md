@@ -174,6 +174,10 @@ Check, if there is a normal chat with a given contact. Corresponds to [`dc_get_c
 
 Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://deltachat.github.io/api/classdc__context__t.html#a8ca56905333780d5989e11692118f7a9).
 
+#### `dc.getStarredMessages()`
+
+Returns an array of starred messages.
+
 #### `dc.getChatMessages(chatId, flags, marker1before)`
 
 Get all message ids belonging to a chat. Corresponds to [`dc_get_chat_msgs()`](https://deltachat.github.io/api/classdc__context__t.html#a51353ff6b85fa9278d2ec476c3c95eda).

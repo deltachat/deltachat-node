@@ -629,6 +629,10 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  getStarredMessages () {
+    return this.getChatMessages(constants.DC_CHAT_ID_STARRED, 0, 0)
+  }
+
   getChatMessages (chatId, flags, marker1before) {
     return binding.dcn_get_chat_msgs(
       this.dcn_context,
