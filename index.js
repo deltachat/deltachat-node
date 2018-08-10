@@ -897,7 +897,7 @@ class DeltaChat extends EventEmitter {
 
   starMessages (messageIds, star) {
     if (!Array.isArray(messageIds)) {
-      throw new Error('msgsIds parameter must be an array')
+      messageIds = [ messageIds ]
     }
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
