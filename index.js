@@ -899,6 +899,7 @@ class DeltaChat extends EventEmitter {
     if (!Array.isArray(messageIds)) {
       messageIds = [ messageIds ]
     }
+    messageIds = messageIds.map(id => Number(id))
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
 
