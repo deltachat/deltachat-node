@@ -581,15 +581,17 @@ class DeltaChat extends EventEmitter {
 
   deleteMessages (messageIds) {
     if (!Array.isArray(messageIds)) {
-      throw new Error('msgsIds parameter must be an array')
+      messageIds = [ messageIds ]
     }
+    messageIds = messageIds.map(id => Number(id))
     binding.dcn_delete_msgs(this.dcn_context, messageIds)
   }
 
   forwardMessages (messageIds, chatId) {
     if (!Array.isArray(messageIds)) {
-      throw new Error('msgsIds parameter must be an array')
+      messageIds = [ messageIds ]
     }
+    messageIds = messageIds.map(id => Number(id))
     binding.dcn_forward_msgs(this.dcn_context, messageIds, chatId)
   }
 
@@ -757,6 +759,10 @@ class DeltaChat extends EventEmitter {
   }
 
   markSeenMessages (messageIds) {
+    if (!Array.isArray(messageIds)) {
+      messageIds = [ messageIds ]
+    }
+    messageIds = messageIds.map(id => Number(id))
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
   }
 
