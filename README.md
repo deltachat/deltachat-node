@@ -160,7 +160,7 @@ Get blocked contacts. Corresponds to [`dc_get_blocked_contacts()`](https://delta
 
 #### `dc.getChat(chatId)`
 
-Get `Chat` object by a chat id. Corresponds to [`dc_get_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
+Get [`Chat`](#class_chat) object by a chat id. Corresponds to [`dc_get_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
 
 #### `dc.getChatContacts(chatId)`
 
@@ -184,7 +184,7 @@ Get all message ids belonging to a chat. Corresponds to [`dc_get_chat_msgs()`](h
 
 #### `dc.getChatList(listFlags, queryStr, queryContactId)`
 
-Get a list of chats. Returns a `ChatList` object. Corresponds to [`dc_get_chatlist()`](https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
+Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds to [`dc_get_chatlist()`](https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
 
 #### `dc.getConfig(key, def)`
 
@@ -196,7 +196,7 @@ Get a configuration option. Corresponds to [`dc_get_config_int()`](https://delta
 
 #### `dc.getContact(contactId)`
 
-Get a single `Contact` object. Corresponds to [`dc_get_contact()`](https://deltachat.github.io/api/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
+Get a single [`Contact`](#class_contact) object. Corresponds to [`dc_get_contact()`](https://deltachat.github.io/api/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
 
 #### `dc.getContactEncryptionInfo(contactId)`
 
@@ -220,7 +220,7 @@ Get info about the context. Corresponds to [`dc_get_info()`](https://deltachat.g
 
 #### `dc.getMessage(messageId)`
 
-Get a single `Message` object. Corresponds to [`dc_get_msg()`](https://deltachat.github.io/api/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
+Get a single [`Message`](#class_message) object. Corresponds to [`dc_get_msg()`](https://deltachat.github.io/api/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
 
 #### `dc.getMessageCount(chatId)`
 
@@ -276,7 +276,7 @@ Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to 
 
 #### `dc.messageNew()`
 
-Create a new `Message` object. Corresponds to [`dc_msg_new()`](https://deltachat.github.io/api/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
+Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://deltachat.github.io/api/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
 
 #### `dc.removeContactFromChat(chatId, contactId)`
 
@@ -418,7 +418,7 @@ Get a single message id of a chatlist. Corresponds to [`dc_chatlist_get_msg_id()
 
 #### `list.getSummary(index, chat)`
 
-Get a summary for a chatlist index. Returns a `Lot` object. Corresponds to [`dc_chatlist_get_summary()`](https://deltachat.github.io/api/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
+Get a summary for a chatlist index. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_chatlist_get_summary()`](https://deltachat.github.io/api/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
 
 ------------------------------------
 
@@ -535,7 +535,7 @@ Get the id of the message. Corresponds to [`dc_msg_get_id()`](https://deltachat.
 
 #### `message.getMediainfo()`
 
-Get real author and title. Returns a `Lot` object. Corresponds to [`dc_msg_get_mediainfo()`](https://deltachat.github.io/api/classdc__msg__t.html#a4e963387430c148a588cb268c18827d3).
+Get real author and title. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_mediainfo()`](https://deltachat.github.io/api/classdc__msg__t.html#a4e963387430c148a588cb268c18827d3).
 
 #### `message.getSetupcodebegin()`
 
@@ -547,11 +547,11 @@ Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_g
 
 #### `message.getState()`
 
-Get the state of the message. Returns a `MessageState` object. Corresponds to [`dc_msg_get_state()`](https://deltachat.github.io/api/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
+Get the state of the message. Returns a [`MessageState`](#class_message_state) object. Corresponds to [`dc_msg_get_state()`](https://deltachat.github.io/api/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
 
 #### `message.getSummary(chat)`
 
-Get a summary of a message. Returns a `Lot` object. Corresponds to [`dc_msg_get_summary()`](https://deltachat.github.io/api/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
+Get a summary of a message. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_summary()`](https://deltachat.github.io/api/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
 
 #### `message.getSummarytext(approxCharacters)`
 
@@ -625,10 +625,12 @@ Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://d
 
 Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://deltachat.github.io/api/classdc__msg__t.html#a5d5568d88453a31a1379299d9c155c4f).
 
+------------------------------------
+
 <a name="class_message_state"></a>
 ### `class MessageState`
 
-An object representing a `Message` state.
+An object representing a [`Message`](#class_message) state.
 
 #### `state.isUndefined()`
 
