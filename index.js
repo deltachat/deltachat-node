@@ -614,16 +614,16 @@ class DeltaChat extends EventEmitter {
   }
 
   getChat (chatId) {
-    const dc_chat = binding.dcn_get_chat(this.dcn_context, chatId)
+    const dc_chat = binding.dcn_get_chat(this.dcn_context, Number(chatId))
     return dc_chat ? new Chat(dc_chat) : null
   }
 
   getChatContacts (chatId) {
-    return binding.dcn_get_chat_contacts(this.dcn_context, chatId)
+    return binding.dcn_get_chat_contacts(this.dcn_context, Number(chatId))
   }
 
   getChatIdByContactId (contactId) {
-    return binding.dcn_get_chat_id_by_contact_id(this.dcn_context, contactId)
+    return binding.dcn_get_chat_id_by_contact_id(this.dcn_context, Number(contactId))
   }
 
   getChatMedia (chatId, msgType, orMsgType) {
