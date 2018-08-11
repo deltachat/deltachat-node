@@ -573,6 +573,10 @@ Get the type of the message. Corresponds to [`dc_msg_get_type()`](https://deltac
 
 Get the width of image or video. Corresponds to [`dc_msg_get_width()`](https://deltachat.github.io/api/classdc__msg__t.html#a5249ddd8d5eea3155a3c0bc121722a1d).
 
+#### `message.isDeadDrop()`
+
+Check if the message belongs to the virtual dead drop chat.
+
 #### `message.isForwarded()`
 
 Check if the message is a forwarded message. Corresponds to [`dc_msg_is_forwarded()`](https://deltachat.github.io/api/classdc__msg__t.html#a6d5b3b500fc36d7e1fc53bc2622c7dad).

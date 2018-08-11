@@ -307,6 +307,10 @@ class Message {
     return binding.dcn_msg_get_width(this.dc_msg)
   }
 
+  isDeadDrop () {
+    return this.getChatId() === constants.DC_CHAT_ID_DEADDROP
+  }
+
   isForwarded () {
     return Boolean(binding.dcn_msg_is_forwarded(this.dc_msg))
   }
