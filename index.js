@@ -652,6 +652,16 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  getChats (listFlags, queryStr, queryContactId) {
+    const result = []
+    const list = this.getChatList(listFlags, queryStr, queryContactId)
+    const count = list.getCount()
+    for (let i = 0; i < count; i++) {
+      result.push(list.getChatId(i))
+    }
+    return result
+  }
+
   getChatList (listFlags, queryStr, queryContactId) {
     // TODO figure out how to do flags correctly, compare with the docs for
     // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef

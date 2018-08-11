@@ -182,6 +182,10 @@ Returns an array of starred messages.
 
 Get all message ids belonging to a chat. Corresponds to [`dc_get_chat_msgs()`](https://deltachat.github.io/api/classdc__context__t.html#a51353ff6b85fa9278d2ec476c3c95eda).
 
+#### `dc.getChats(listFlags, queryStr, queryContactId)`
+
+Like `dc.getChatList()` but returns a JavaScript array of ids.
+
 #### `dc.getChatList(listFlags, queryStr, queryContactId)`
 
 Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds to [`dc_get_chatlist()`](https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
