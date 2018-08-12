@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2018-08-12
+
+### Changed
+* Change `MessageState#_state` to a public property (@ralphtheninja)
+* Allow passing in non array to `DeltaChat#starMessages` (@ralphtheninja)
+* Link to classes in README (@ralphtheninja)
+* Make all methods taking some form of id to accept strings as well as numbers (@ralphtheninja)
+
+### Added
+* Add `DeltaChat#getStarredMessages()` (@ralphtheninja)
+* Add `DeltaChat#getChats()` (@ralphtheninja)
+* Add `Message#isDeadDrop()` (@ralphtheninja)
+* Add npm package version badge (@ralphtheninja)
+
 ## [0.3.0] - 2018-08-09
 
 ### Changed
@@ -50,7 +64,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/deltachat/deltachat-node/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/deltachat/deltachat-node/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/deltachat/deltachat-node/compare/v0.1.0...v0.1.1
