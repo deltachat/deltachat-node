@@ -2,6 +2,7 @@
 
 > node.js bindings for [`deltachat-core`][deltachat-core]
 
+[![npm](https://img.shields.io/npm/v/deltachat-node.svg)](https://www.npmjs.com/package/deltachat-node)
 [![Build Status](https://travis-ci.org/deltachat/deltachat-node.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-node)
 ![Node version](https://img.shields.io/node/v/deltachat-node.svg)
 [![Coverage Status](https://coveralls.io/repos/github/deltachat/deltachat-node/badge.svg)](https://coveralls.io/github/deltachat/deltachat-node)
