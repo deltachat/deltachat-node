@@ -491,8 +491,8 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_add_contact_to_chat(
         this.dcn_context,
-        chatId,
-        contactId
+        Number(chatId),
+        Number(contactId)
       )
     )
   }
@@ -546,7 +546,7 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_continue_key_transfer(
         this.dcn_context,
-        messageId,
+        Number(messageId),
         setupCode
       )
     )
@@ -635,7 +635,7 @@ class DeltaChat extends EventEmitter {
   getChatMedia (chatId, msgType, orMsgType) {
     return binding.dcn_get_chat_media(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       msgType,
       orMsgType
     )
@@ -648,7 +648,7 @@ class DeltaChat extends EventEmitter {
   getChatMessages (chatId, flags, marker1before) {
     return binding.dcn_get_chat_msgs(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       flags,
       marker1before
     )
@@ -676,7 +676,7 @@ class DeltaChat extends EventEmitter {
         this.dcn_context,
         listFlags,
         queryStr,
-        queryContactId
+        Number(queryContactId)
       )
     )
   }
@@ -698,7 +698,7 @@ class DeltaChat extends EventEmitter {
   }
 
   getContactEncryptionInfo (contactId) {
-    return binding.dcn_get_contact_encrinfo(this.dcn_context, contactId)
+    return binding.dcn_get_contact_encrinfo(this.dcn_context, Number(contactId))
   }
 
   getContacts (listFlags, query) {
@@ -708,7 +708,7 @@ class DeltaChat extends EventEmitter {
   }
 
   getFreshMessageCount (chatId) {
-    return binding.dcn_get_fresh_msg_cnt(this.dcn_context, chatId)
+    return binding.dcn_get_fresh_msg_cnt(this.dcn_context, Number(chatId))
   }
 
   getFreshMessages () {
@@ -725,23 +725,23 @@ class DeltaChat extends EventEmitter {
   }
 
   getMessageCount (chatId) {
-    return binding.dcn_get_msg_cnt(this.dcn_context, chatId)
+    return binding.dcn_get_msg_cnt(this.dcn_context, Number(chatId))
   }
 
   getMessageInfo (messageId) {
-    return binding.dcn_get_msg_info(this.dcn_context, messageId)
+    return binding.dcn_get_msg_info(this.dcn_context, Number(messageId))
   }
 
   getNextMediaMessage (messageId) {
-    return binding.dcn_get_next_media(this.dcn_context, messageId, 1)
+    return binding.dcn_get_next_media(this.dcn_context, Number(messageId), 1)
   }
 
   getPreviousMediaMessage (messageId) {
-    return binding.dcn_get_next_media(this.dcn_context, messageId, -1)
+    return binding.dcn_get_next_media(this.dcn_context, Number(messageId), -1)
   }
 
   getSecurejoinQrCode (groupChatId) {
-    return binding.dcn_get_securejoin_qr(this.dcn_context, groupChatId)
+    return binding.dcn_get_securejoin_qr(this.dcn_context, Number(groupChatId))
   }
 
   importExport (what, param1, param2) {
@@ -764,8 +764,8 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_is_contact_in_chat(
         this.dcn_context,
-        chatId,
-        contactId
+        Number(chatId),
+        Number(contactId)
       )
     )
   }
@@ -777,11 +777,11 @@ class DeltaChat extends EventEmitter {
   }
 
   markNoticedChat (chatId) {
-    binding.dcn_marknoticed_chat(this.dcn_context, chatId)
+    binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
 
   markNoticedContact (contactId) {
-    binding.dcn_marknoticed_contact(this.dcn_context, contactId)
+    binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
   }
 
   markSeenMessages (messageIds) {
@@ -804,20 +804,20 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_remove_contact_from_chat(
         this.dcn_context,
-        chatId,
-        contactId
+        Number(chatId),
+        Number(contactId)
       )
     )
   }
 
   searchMessages (chatId, query) {
-    return binding.dcn_search_msgs(this.dcn_context, chatId, query)
+    return binding.dcn_search_msgs(this.dcn_context, Number(chatId), query)
   }
 
   sendAudioMessage (chatId, file, fileMime, duration, author, trackName) {
     return binding.dcn_send_audio_msg(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       file,
       fileMime,
       duration,
@@ -829,7 +829,7 @@ class DeltaChat extends EventEmitter {
   sendFileMessage (chatId, file, fileMime) {
     return binding.dcn_send_file_msg(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       file,
       fileMime
     )
@@ -838,7 +838,7 @@ class DeltaChat extends EventEmitter {
   sendImageMessage (chatId, file, fileMime, width, height) {
     return binding.dcn_send_image_msg(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       file,
       fileMime,
       width,
@@ -850,25 +850,25 @@ class DeltaChat extends EventEmitter {
     if (!msg || !msg.dc_msg) {
       throw new Error('msg parameter is not a valid Message object')
     }
-    return binding.dcn_send_msg(this.dcn_context, chatId, msg.dc_msg)
+    return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
   }
 
   sendTextMessage (chatId, text) {
-    return binding.dcn_send_text_msg(this.dcn_context, chatId, text)
+    return binding.dcn_send_text_msg(this.dcn_context, Number(chatId), text)
   }
 
   sendVcardMessage (chatId, contactId) {
     return binding.dcn_send_vcard_msg(
       this.dcn_context,
-      chatId,
-      contactId
+      Number(chatId),
+      Number(contactId)
     )
   }
 
   sendVideoMessage (chatId, file, fileMime, width, height, duration) {
     return binding.dcn_send_video_msg(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       file,
       fileMime,
       width,
@@ -880,7 +880,7 @@ class DeltaChat extends EventEmitter {
   sendVoiceMessage (chatId, file, fileMime, duration) {
     return binding.dcn_send_voice_msg(
       this.dcn_context,
-      chatId,
+      Number(chatId),
       file,
       fileMime,
       duration
@@ -891,7 +891,7 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_set_chat_name(
         this.dcn_context,
-        chatId,
+        Number(chatId),
         name
       )
     )
@@ -901,7 +901,7 @@ class DeltaChat extends EventEmitter {
     return Boolean(
       binding.dcn_set_chat_profile_image(
         this.dcn_context,
-        chatId,
+        Number(chatId),
         image
       )
     )
@@ -924,7 +924,7 @@ class DeltaChat extends EventEmitter {
   }
 
   setTextDraft (chatId, text) {
-    binding.dcn_set_text_draft(this.dcn_context, chatId, text)
+    binding.dcn_set_text_draft(this.dcn_context, Number(chatId), text)
   }
 
   starMessages (messageIds, star) {
