@@ -498,17 +498,19 @@ class DeltaChat extends EventEmitter {
   }
 
   archiveChat (chatId, archive) {
-    if (typeof archive !== 'boolean') {
-      throw new Error('archive parameter must be a boolean')
-    }
-    binding.dcn_archive_chat(this.dcn_context, chatId, archive ? 1 : 0)
+    binding.dcn_archive_chat(
+      this.dcn_context,
+      Number(chatId),
+      archive ? 1 : 0
+    )
   }
 
   blockContact (contactId, block) {
-    if (typeof block !== 'boolean') {
-      throw new Error('block parameter must be a boolean')
-    }
-    binding.dcn_block_contact(this.dcn_context, contactId, block ? 1 : 0)
+    binding.dcn_block_contact(
+      this.dcn_context,
+      Number(contactId),
+      block ? 1 : 0
+    )
   }
 
   checkPassword (password) {
