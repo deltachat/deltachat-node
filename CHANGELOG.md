@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2018-08-14
+
+### Changed
+* Bump `deltachat-core` to version without symlinks, which removes the need of having `libetpan-dev` installed system wide (@ralphtheninja)
+
 ## [0.4.0] - 2018-08-12
 
 ### Changed
@@ -64,7 +69,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/deltachat/deltachat-node/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/deltachat/deltachat-node/compare/v0.1.1...v0.2.0
