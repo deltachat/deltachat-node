@@ -67,6 +67,7 @@ Creates a new `DeltaChat` instance.
 
 The `options` object takes the following properties:
 
+* `options.cwd` *(string, optional)*: Path to working directory, defaults to current working directory
 * `options.addr` *(string, required)*: Email address of the chat user
 * `options.mail_pw` *(string, required)*: Email password of the chat user
 

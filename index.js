@@ -375,11 +375,10 @@ class Message {
  *
  */
 class DeltaChat extends EventEmitter {
-  constructor (opts, cb) {
+  constructor (opts) {
     super()
 
-    const DEFAULTS = { root: process.cwd() }
-    this.opts = xtend(DEFAULTS, opts || {})
+    this.opts = xtend({ cwd: process.cwd() }, opts)
 
     if (typeof this.opts.addr !== 'string') {
       throw new Error('Missing .addr')
@@ -775,7 +774,7 @@ class DeltaChat extends EventEmitter {
 
   open (cb) {
     const opts = this.opts
-    this._open(path.join(opts.root, 'db.sqlite'), '', err => {
+    this._open(path.join(opts.cwd, 'db.sqlite'), '', err => {
       if (err) return cb(err)
 
       this._startThreads()
