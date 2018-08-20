@@ -16,7 +16,7 @@ test('setUp dc context', t => {
   dc = new DeltaChat({
     addr: env.DC_ADDR,
     mail_pw: env.DC_MAIL_PW,
-    root: tempy.directory()
+    cwd: tempy.directory()
   })
   dc.open(err => {
     t.error(err, 'no error during open')
