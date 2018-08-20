@@ -379,42 +379,17 @@ class DeltaChat extends EventEmitter {
     super()
 
     const DEFAULTS = { root: process.cwd() }
-    opts = xtend(DEFAULTS, opts || {})
+    this.opts = xtend(DEFAULTS, opts || {})
 
-    if (typeof opts.email !== 'string') {
+    if (typeof this.opts.email !== 'string') {
       throw new Error('Missing .email')
     }
-    if (typeof opts.mail_pw !== 'string') {
+    if (typeof this.opts.mail_pw !== 'string') {
       throw new Error('Missing .mail_pw')
     }
 
     this.dcn_context = binding.dcn_context_new()
-
     this._setEventHandler(this._eventHandler.bind(this))
-
-    this._open(path.join(opts.root, 'db.sqlite'), '', err => {
-      if (err) {
-        this.emit('error', err)
-        cb && cb(err)
-        return
-      }
-
-      this._startThreads()
-
-      const ready = () => {
-        this.emit('ready')
-        cb && cb(null)
-      }
-
-      if (!this._isConfigured()) {
-        this.once('_configured', ready)
-        this.setConfig('addr', opts.email)
-        this.setConfig('mail_pw', opts.mail_pw)
-        this._configure()
-      } else {
-        ready()
-      }
-    })
   }
 
   addAddressBook (addressBook) {
@@ -796,6 +771,26 @@ class DeltaChat extends EventEmitter {
 
   messageNew () {
     return new Message(binding.dcn_msg_new(this.dcn_context))
+  }
+
+  open (cb) {
+    const opts = this.opts
+    this._open(path.join(opts.root, 'db.sqlite'), '', err => {
+      if (err) return cb(err)
+
+      this._startThreads()
+
+      const ready = () => cb(null)
+
+      if (!this._isConfigured()) {
+        this.once('_configured', ready)
+        this.setConfig('addr', opts.email)
+        this.setConfig('mail_pw', opts.mail_pw)
+        this._configure()
+      } else {
+        ready()
+      }
+    })
   }
 
   _open (dbFile, blobDir, cb) {

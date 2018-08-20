@@ -40,7 +40,7 @@ const dc = new DeltaChat({
   mail_pw: 'password'
 })
 
-dc.on('ready', () => {
+dc.open(() => {
   const contactId = dc.createContact('homie', 'friend@site.org')
   const chatId = dc.createChatByContactId(contactId)
   dc.sendTextMessage(chatId, 'Hi!')
@@ -61,16 +61,16 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class MessageState</b></code>](#class_message_state)
 
 <a name="deltachat_ctor"></a>
-### `dc = DeltaChat(options[, callback])`
+### `dc = DeltaChat(options)`
 
-The main entry point for creating a new `DeltaChat` instance.
+Creates a new `DeltaChat` instance.
 
 The `options` object takes the following properties:
 
 * `options.email` *(string, required)*: Email address of the chat user
 * `options.mail_pw` *(string, required)*: Email password of the chat user
 
-The optional `callback` is called with an error if the internal `._open()` operation failed, otherwise `null`. You can omit this callback and instead listen for the `'ready'` event.
+Initializes the main context and sets up event handling. Call `dc.open(cb)` to start.
 
 ------------------------------------
 
@@ -282,6 +282,10 @@ Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to 
 #### `dc.messageNew()`
 
 Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://deltachat.github.io/api/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
+
+#### `dc.open(callback)`
+
+Opens the underlying database and configures the application. The callback is called when ready or with an error if the database could not be opened.
 
 #### `dc.removeContactFromChat(chatId, contactId)`
 
@@ -683,7 +687,6 @@ Internal `state` property.
 
 | Event     | Description                 | Arguments            |
 |:----------|:----------------------------|:---------------------|
-| `ready`     | `DeltaChat` is ready        | -   |
 | [`DC_EVENT_INFO`](https://deltachat.github.io/api/group__DC__EVENT.html#ga0f492424e22941431e2562731a5f21ba)  | Info string    | `(info)`  |
 | [`DC_EVENT_WARNING`](https://deltachat.github.io/api/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)  | Warning string    | `(warning)`  |
 | [`DC_EVENT_ERROR`](https://deltachat.github.io/api/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)  | Error string    | `(code, error)`  |
