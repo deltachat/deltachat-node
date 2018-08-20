@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2018-08-20
+
+### Changed
+* Bump `deltachat-core` for updated constants and fallbacks to `cyrussasl`, `iconv` and `openssl` (@ralphtheninja)
+* Refactor event handler code (constructor doing too much) (@ralphtheninja)
+* Use `.addr` instead of `.email` for consistency with `deltachat-core` (@ralphtheninja)
+* Rename `.root` to `.cwd` (@ralphtheninja)
+
+### Added
+* Add `DeltaChat#open(cb)` (constructor doing too much) (@ralphtheninja)
+
+### Removed
+* Remove `'ready'` event because `.open()` calls back when done (@ralphtheninja)
+* Remove `DEBUG` output from tests (@ralphtheninja)
+
 ## [0.4.1] - 2018-08-14
 
 ### Changed
@@ -69,7 +84,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/deltachat/deltachat-node/compare/v0.2.0...v0.3.0
