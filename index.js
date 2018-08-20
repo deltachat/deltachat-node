@@ -775,11 +775,17 @@ class DeltaChat extends EventEmitter {
   open (cb) {
     const opts = this.opts
     this._open(path.join(opts.cwd, 'db.sqlite'), '', err => {
-      if (err) return cb(err)
+      if (err) {
+        cb && cb(err)
+        return
+      }
 
       this._startThreads()
 
-      const ready = () => cb(null)
+      const ready = () => {
+        this.emit('ready')
+        cb && cb(null)
+      }
 
       if (!this._isConfigured()) {
         this.once('_configured', ready)
