@@ -381,8 +381,8 @@ class DeltaChat extends EventEmitter {
     const DEFAULTS = { root: process.cwd() }
     this.opts = xtend(DEFAULTS, opts || {})
 
-    if (typeof this.opts.email !== 'string') {
-      throw new Error('Missing .email')
+    if (typeof this.opts.addr !== 'string') {
+      throw new Error('Missing .addr')
     }
     if (typeof this.opts.mail_pw !== 'string') {
       throw new Error('Missing .mail_pw')
@@ -784,7 +784,7 @@ class DeltaChat extends EventEmitter {
 
       if (!this._isConfigured()) {
         this.once('_configured', ready)
-        this.setConfig('addr', opts.email)
+        this.setConfig('addr', opts.addr)
         this.setConfig('mail_pw', opts.mail_pw)
         this._configure()
       } else {

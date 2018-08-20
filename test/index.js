@@ -6,15 +6,15 @@ const events = require('../events')
 
 const env = process.env
 
-if (!env.DC_EMAIL || !env.DC_MAIL_PW) {
-  throw new Error('No credentials. Please specify $DC_EMAIL and $DC_MAIL_PW !')
+if (!env.DC_ADDR || !env.DC_MAIL_PW) {
+  throw new Error('No credentials. Please specify $DC_ADDR and $DC_MAIL_PW !')
 }
 
 let dc = null
 
 test('setUp dc context', t => {
   dc = new DeltaChat({
-    email: env.DC_EMAIL,
+    addr: env.DC_ADDR,
     mail_pw: env.DC_MAIL_PW,
     root: tempy.directory()
   })

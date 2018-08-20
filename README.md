@@ -36,7 +36,7 @@ npm install deltachat-node
 const DeltaChat = require('deltachat-node')
 
 const dc = new DeltaChat({
-  email: 'user@site.org',
+  addr: 'user@site.org',
   mail_pw: 'password'
 })
 
@@ -67,7 +67,7 @@ Creates a new `DeltaChat` instance.
 
 The `options` object takes the following properties:
 
-* `options.email` *(string, required)*: Email address of the chat user
+* `options.addr` *(string, required)*: Email address of the chat user
 * `options.mail_pw` *(string, required)*: Email password of the chat user
 
 Initializes the main context and sets up event handling. Call `dc.open(cb)` to start.
