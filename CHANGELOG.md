@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.5.1] - 2018-08-20
+
+### Changed
+* Put back `'ready'` event (@ralphtheninja)
+
+### Fixed
+* Fix broken tests (@ralphtheninja)
+
 ## [0.5.0] - 2018-08-20
 
 ### Changed
@@ -84,7 +92,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...v0.4.0
