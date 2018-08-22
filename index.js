@@ -230,6 +230,7 @@ class Message {
   }
 
   getFilebytes () {
+    // TODO this is broken and always returns 0 for now
     return binding.dcn_msg_get_filebytes(this.dc_msg)
   }
 
@@ -788,10 +789,20 @@ class DeltaChat extends EventEmitter {
       }
 
       if (!this._isConfigured()) {
-        this.once('_configured', ready)
+        // TODO this event should work even when we're polling
+        // but the polling should be made for all events
+        // this.once('_configured', ready)
         this.setConfig('addr', opts.addr)
         this.setConfig('mail_pw', opts.mail_pw)
         this._configure()
+        // TODO this polling should instead be replaced with
+        // a generic polling mechanism for _all_ events
+        const interval = setInterval(() => {
+          if (this._isConfigured()) {
+            clearInterval(interval)
+            ready()
+          }
+        }, 100)
       } else {
         ready()
       }

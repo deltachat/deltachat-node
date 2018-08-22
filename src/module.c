@@ -1,5 +1,10 @@
 #define NAPI_EXPERIMENTAL
 
+// TODO uncomment this line once electron is based on node v10.7.0
+// (we can get away with v10.6.0 if file size doesn't need 64 bits
+// big integers)
+//#define NODE_10_7
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,7 +18,9 @@
  */
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
+#ifdef NODE_10_7
   napi_threadsafe_function threadsafe_event_handler;
+#endif
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
   int loop_thread;
@@ -39,6 +46,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       return dcn_context->is_offline;
 
     default:
+#ifdef NODE_10_7
       if (dcn_context->threadsafe_event_handler) {
         dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
         dcn_event->event = event;
@@ -47,12 +55,16 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
         dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
         napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
       }
+#else
+      // TODO: push event to c queue
+#endif
       break;
   }
 
   return 0;
 }
 
+#ifdef NODE_10_7
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
 {
   dcn_event_t* dcn_event = (dcn_event_t*)data;
@@ -106,13 +118,16 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
     napi_throw_error(env, NULL, "Unable to call event_handler callback");
   }
 }
+#endif
 
 static void imap_thread_func(void* arg)
 {
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
+#ifdef NODE_10_7
   napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
+#endif
 
   while (dcn_context->loop_thread) {
     dc_perform_imap_jobs(dc_context);
@@ -120,7 +135,9 @@ static void imap_thread_func(void* arg)
     dc_perform_imap_idle(dc_context);
   }
 
+#ifdef NODE_10_7
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
+#endif
 }
 
 static void smtp_thread_func(void* arg)
@@ -128,14 +145,18 @@ static void smtp_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
+#ifdef NODE_10_7
   napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
+#endif
 
   while (dcn_context->loop_thread) {
     dc_perform_smtp_jobs(dc_context);
     dc_perform_smtp_idle(dc_context);
   }
 
+#ifdef NODE_10_7
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
+#endif
 }
 
 /**
@@ -227,7 +248,9 @@ NAPI_METHOD(dcn_context_new) {
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
+#ifdef NODE_10_7
   dcn_context->threadsafe_event_handler = NULL;
+#endif
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
@@ -1173,6 +1196,8 @@ NAPI_METHOD(dcn_set_config_int) {
 NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
   NAPI_DCN_CONTEXT();
+
+#ifdef NODE_10_7
   napi_value callback = argv[1];
 
   napi_value async_resource_name;
@@ -1190,6 +1215,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     dcn_context,
     call_js_event_handler,
     &dcn_context->threadsafe_event_handler));
+#endif
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -1274,11 +1300,14 @@ NAPI_METHOD(dcn_stop_ongoing_process) {
   NAPI_RETURN_UNDEFINED();
 }
 
+
 NAPI_METHOD(dcn_unset_event_handler) {
   NAPI_ARGV(1); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
   NAPI_DCN_CONTEXT();
 
+#ifdef NODE_10_7
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
+#endif
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -1610,9 +1639,13 @@ NAPI_METHOD(dcn_msg_get_filebytes) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
 
+#ifdef NODE_10_7
   uint64_t filebytes = dc_msg_get_filebytes(dc_msg);
 
   NAPI_RETURN_UINT64(filebytes);
+#else
+  NAPI_RETURN_INT32(0);
+#endif
 }
 
 NAPI_METHOD(dcn_msg_get_filemime) {
