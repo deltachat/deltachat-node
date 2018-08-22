@@ -380,6 +380,7 @@ class DeltaChat extends EventEmitter {
     super()
 
     this.opts = xtend({ cwd: process.cwd() }, opts)
+    this._pollInterval = null
 
     if (typeof this.opts.addr !== 'string') {
       throw new Error('Missing .addr')
@@ -389,7 +390,8 @@ class DeltaChat extends EventEmitter {
     }
 
     this.dcn_context = binding.dcn_context_new()
-    this._setEventHandler(this._eventHandler.bind(this))
+    // TODO comment back in once polling is gone
+    // this._setEventHandler(this._eventHandler.bind(this))
   }
 
   addAddressBook (addressBook) {
@@ -442,7 +444,15 @@ class DeltaChat extends EventEmitter {
     // even more
     // this._stopOngoingProcess()
     // this._close()
-    this._unsetEventHandler()
+
+    // TODO temporary polling interval
+    if (this._pollInterval) {
+      clearInterval(this._pollInterval)
+      this._pollInterval = null
+    }
+
+    // TODO comment back in once polling is gone
+    // this._unsetEventHandler()
     this._stopThreads()
   }
 
@@ -788,21 +798,19 @@ class DeltaChat extends EventEmitter {
         cb && cb(null)
       }
 
+      // TODO temporary timer for polling events
+      this._pollInterval = setInterval(() => {
+        const event = this._pollEvent()
+        if (event) {
+          this._eventHandler(event.event, event.data1, event.data2)
+        }
+      }, 50)
+
       if (!this._isConfigured()) {
-        // TODO this event should work even when we're polling
-        // but the polling should be made for all events
-        // this.once('_configured', ready)
+        this.once('_configured', ready)
         this.setConfig('addr', opts.addr)
         this.setConfig('mail_pw', opts.mail_pw)
         this._configure()
-        // TODO this polling should instead be replaced with
-        // a generic polling mechanism for _all_ events
-        const interval = setInterval(() => {
-          if (this._isConfigured()) {
-            clearInterval(interval)
-            ready()
-          }
-        }, 100)
       } else {
         ready()
       }
@@ -811,6 +819,10 @@ class DeltaChat extends EventEmitter {
 
   _open (dbFile, blobDir, cb) {
     return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
+  }
+
+  _pollEvent () {
+    return binding.dcn_poll_event(this.dcn_context)
   }
 
   removeContactFromChat (chatId, contactId) {

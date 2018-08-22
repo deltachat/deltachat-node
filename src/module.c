@@ -12,6 +12,7 @@
 #include <uv.h>
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
+#include "eventqueue.h"
 
 /**
  * Custom context
@@ -20,6 +21,8 @@ typedef struct dcn_context_t {
   dc_context_t* dc_context;
 #ifdef NODE_10_7
   napi_threadsafe_function threadsafe_event_handler;
+#else
+  eventqueue_t* event_queue;
 #endif
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
@@ -56,7 +59,9 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
         napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
       }
 #else
-      // TODO: push event to c queue
+      if (dcn_context->event_queue) {
+        eventqueue_push(dcn_context->event_queue, event, data1, data2);
+      }
 #endif
       break;
   }
@@ -186,6 +191,11 @@ static void finalize_context(napi_env env, void* data, void* hint) {
   if (data) {
     dcn_context_t* dcn_context = (dcn_context_t*)data;
     dc_context_unref(dcn_context->dc_context);
+    dcn_context->dc_context = NULL;
+    if (dcn_context->event_queue) {
+      eventqueue_unref(dcn_context->event_queue);
+      dcn_context->event_queue = NULL;
+    }
     free(dcn_context);
   }
 }
@@ -250,6 +260,8 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
 #ifdef NODE_10_7
   dcn_context->threadsafe_event_handler = NULL;
+#else
+  dcn_context->event_queue = eventqueue_new();
 #endif
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
@@ -954,6 +966,45 @@ NAPI_METHOD(dcn_open) {
 
   free(dbfile);
   free(blobdir);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_poll_event) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+#ifndef NODE_10_7
+  eventqueue_t* queue = dcn_context->event_queue;
+  if (queue) {
+    eventqueue_item_t* item = eventqueue_pop(queue);
+    if (item) {
+      napi_value obj;
+      NAPI_STATUS_THROWS(napi_create_object(env, &obj));
+
+      napi_value event;
+      NAPI_STATUS_THROWS(napi_create_int32(env, item->event, &event));
+      NAPI_STATUS_THROWS(napi_set_named_property(env, obj, "event", event));
+
+      napi_value data1;
+      NAPI_STATUS_THROWS(napi_create_int32(env, item->data1, &data1));
+      NAPI_STATUS_THROWS(napi_set_named_property(env, obj, "data1", data1));
+
+      napi_value data2;
+      if (DC_EVENT_DATA2_IS_STRING(item->event) && item->data2) {
+        NAPI_STATUS_THROWS(napi_create_string_utf8(env, (char*)item->data2,
+                                                   NAPI_AUTO_LENGTH, &data2));
+      } else {
+        NAPI_STATUS_THROWS(napi_create_int32(env, item->data2, &data2));
+      }
+      NAPI_STATUS_THROWS(napi_set_named_property(env, obj, "data2", data2));
+
+      eventqueue_item_unref(item);
+
+      return obj;
+    }
+  }
+#endif
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -1996,6 +2047,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
   NAPI_EXPORT_FUNCTION(dcn_open);
+  NAPI_EXPORT_FUNCTION(dcn_poll_event);
   NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   NAPI_EXPORT_FUNCTION(dcn_send_audio_msg);

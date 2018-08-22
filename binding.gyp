@@ -3,7 +3,8 @@
     {
       "target_name": "deltachat",
       "sources": [
-        "./src/module.c"
+        "./src/module.c",
+        "./src/eventqueue.c"
       ],
       "libraries": [
         "../deltachat-core/builddir/src/libdeltachat.a",
