@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2018-08-22
+
+### Changed
+* Implement a temporary polling mechanism for events to relax the requirements for `node` and `electron` (@ralphtheninja)
+
 ## [0.5.1] - 2018-08-20
 
 ### Changed
@@ -92,7 +97,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...v0.4.1
