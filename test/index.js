@@ -122,7 +122,6 @@ test('new message and Message methods', t => {
   t.is(msg.getType(), 0, 'no message type set')
   t.is(msg.getWidth(), 0, 'no message width')
   t.is(msg.isForwarded(), false, 'not forwarded')
-  // TODO check this, shouldn't this be true for a new message?
   t.is(msg.isIncreation(), false, 'not in creation')
   t.is(msg.isInfo(), false, 'not an info message')
   t.is(msg.isSent(), false, 'messge is not sent')

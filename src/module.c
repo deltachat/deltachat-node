@@ -1,8 +1,5 @@
 #define NAPI_EXPERIMENTAL
 
-// TODO uncomment this line once electron is based on node v10.7.0
-// (we can get away with v10.6.0 if file size doesn't need 64 bits
-// big integers)
 //#define NODE_10_7
 
 #include <stdlib.h>
@@ -1245,7 +1242,7 @@ NAPI_METHOD(dcn_set_config_int) {
 }
 
 NAPI_METHOD(dcn_set_event_handler) {
-  NAPI_ARGV(2); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
+  NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
 
 #ifdef NODE_10_7
@@ -1262,7 +1259,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     100,
     1,
     0,
-    NULL, // TODO: file an issue that the finalize parameter should be optional
+    NULL,
     dcn_context,
     call_js_event_handler,
     &dcn_context->threadsafe_event_handler));
@@ -1353,7 +1350,7 @@ NAPI_METHOD(dcn_stop_ongoing_process) {
 
 
 NAPI_METHOD(dcn_unset_event_handler) {
-  NAPI_ARGV(1); //TODO: Make sure we throw a helpful error if we don't get the correct count of arguments
+  NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
 #ifdef NODE_10_7

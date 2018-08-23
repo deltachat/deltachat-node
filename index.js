@@ -536,7 +536,6 @@ class DeltaChat extends EventEmitter {
         this.emit(eventStr, data2)
         break
       case 'DC_EVENT_ERROR':
-        // TODO data1 should be translated into a string
         this.emit(eventStr, data1, data2)
         break
       case 'DC_EVENT_MSGS_CHANGED':
@@ -652,12 +651,9 @@ class DeltaChat extends EventEmitter {
   }
 
   getChatList (listFlags, queryStr, queryContactId) {
-    // TODO figure out how to do flags correctly, compare with the docs for
-    // https://deltachat.github.io/api/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef
     listFlags = listFlags || 0
     queryStr = queryStr || ''
     queryContactId = queryContactId || 0
-
     return new ChatList(
       binding.dcn_get_chatlist(
         this.dcn_context,
