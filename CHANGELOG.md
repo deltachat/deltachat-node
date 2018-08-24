@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.6.1] - 2018-08-24
+
+### Fixed
+* Add `mkdirp.sync()` in `dc.open()` (@ralphtheninja)
+
 ## [0.6.0] - 2018-08-22
 
 ### Changed
@@ -97,7 +102,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...v0.5.0
