@@ -6,6 +6,7 @@ const EventEmitter = require('events').EventEmitter
 const xtend = require('xtend')
 const path = require('path')
 const debug = require('debug')('deltachat')
+const mkdirp = require('mkdirp')
 
 /**
  *
@@ -781,6 +782,7 @@ class DeltaChat extends EventEmitter {
 
   open (cb) {
     const opts = this.opts
+    mkdirp.sync(opts.cwd)
     this._open(path.join(opts.cwd, 'db.sqlite'), '', err => {
       if (err) {
         cb && cb(err)
