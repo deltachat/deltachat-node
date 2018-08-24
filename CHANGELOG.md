@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.6.2] - 2018-08-24
+
+### Changed
+* Prefer async `mkdirp` (@karissa)
+
 ## [0.6.1] - 2018-08-24
 
 ### Fixed
@@ -102,7 +107,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...v0.5.1
