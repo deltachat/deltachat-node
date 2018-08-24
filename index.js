@@ -4,9 +4,9 @@ const constants = require('./constants')
 const events = require('./events')
 const EventEmitter = require('events').EventEmitter
 const xtend = require('xtend')
+const mkdirp = require('mkdirp')
 const path = require('path')
 const debug = require('debug')('deltachat')
-const mkdirp = require('mkdirp')
 
 /**
  *
@@ -782,36 +782,42 @@ class DeltaChat extends EventEmitter {
 
   open (cb) {
     const opts = this.opts
-    mkdirp.sync(opts.cwd)
-    this._open(path.join(opts.cwd, 'db.sqlite'), '', err => {
+    mkdirp(opts.cwd, err => {
       if (err) {
         cb && cb(err)
         return
       }
-
-      this._startThreads()
-
-      const ready = () => {
-        this.emit('ready')
-        cb && cb(null)
-      }
-
-      // TODO temporary timer for polling events
-      this._pollInterval = setInterval(() => {
-        const event = this._pollEvent()
-        if (event) {
-          this._eventHandler(event.event, event.data1, event.data2)
+      const db = path.join(opts.cwd, 'db.sqlite')
+      this._open(db, '', err => {
+        if (err) {
+          cb && cb(err)
+          return
         }
-      }, 50)
 
-      if (!this._isConfigured()) {
-        this.once('_configured', ready)
-        this.setConfig('addr', opts.addr)
-        this.setConfig('mail_pw', opts.mail_pw)
-        this._configure()
-      } else {
-        ready()
-      }
+        this._startThreads()
+
+        const ready = () => {
+          this.emit('ready')
+          cb && cb(null)
+        }
+
+        // TODO temporary timer for polling events
+        this._pollInterval = setInterval(() => {
+          const event = this._pollEvent()
+          if (event) {
+            this._eventHandler(event.event, event.data1, event.data2)
+          }
+        }, 50)
+
+        if (!this._isConfigured()) {
+          this.once('_configured', ready)
+          this.setConfig('addr', opts.addr)
+          this.setConfig('mail_pw', opts.mail_pw)
+          this._configure()
+        } else {
+          ready()
+        }
+      })
     })
   }
 
