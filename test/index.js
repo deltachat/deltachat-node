@@ -15,15 +15,15 @@ if (!env.DC_ADDR || !env.DC_MAIL_PW) {
 let dc = null
 
 test('setUp dc context', t => {
+  t.plan(3)
   dc = new DeltaChat({
     addr: env.DC_ADDR,
     mail_pw: env.DC_MAIL_PW,
     cwd: tempy.directory()
   })
-  dc.open(err => {
-    t.error(err, 'no error during open')
-    t.end()
-  })
+  dc.once('ready', () => t.pass('ready event fired'))
+  dc.once('ALL', () => t.pass('ALL event fired at least once'))
+  dc.open(err => t.error(err, 'no error during open'))
 })
 
 test('create chat from contact and Chat methods', t => {
