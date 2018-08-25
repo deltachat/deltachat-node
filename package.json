@@ -8,8 +8,9 @@
     "submodule": "git submodule update --recursive --init",
     "install": "./scripts/rebuild-all",
     "generate-constants": "./scripts/generate-constants.js",
-    "test": "standard && nyc node test/index.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "test": "standard && npm run dependency-check && nyc node test/index.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "dependency-check": "dependency-check package.json --missing --unused -i dependency-check -i nyc -i standard -i napi-macros -i coveralls --entry index.js --entry test/index.js --entry scripts/generate-constants.js"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
+    "dependency-check": "^3.2.0",
     "nyc": "^12.0.2",
     "split2": "^2.2.0",
     "standard": "^11.0.1",
