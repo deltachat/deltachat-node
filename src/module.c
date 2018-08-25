@@ -1,6 +1,6 @@
 #define NAPI_EXPERIMENTAL
 
-//#define NODE_10_7
+//#define NODE_10_6
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,7 +16,7 @@
  */
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_threadsafe_function threadsafe_event_handler;
 #else
   eventqueue_t* event_queue;
@@ -46,7 +46,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       return dcn_context->is_offline;
 
     default:
-#ifdef NODE_10_7
+#ifdef NODE_10_6
       if (dcn_context->threadsafe_event_handler) {
         dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
         dcn_event->event = event;
@@ -66,7 +66,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   return 0;
 }
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
 {
   dcn_event_t* dcn_event = (dcn_event_t*)data;
@@ -127,7 +127,7 @@ static void imap_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
 #endif
 
@@ -137,7 +137,7 @@ static void imap_thread_func(void* arg)
     dc_perform_imap_idle(dc_context);
   }
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 #endif
 }
@@ -147,7 +147,7 @@ static void smtp_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
 #endif
 
@@ -156,7 +156,7 @@ static void smtp_thread_func(void* arg)
     dc_perform_smtp_idle(dc_context);
   }
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 #endif
 }
@@ -255,7 +255,7 @@ NAPI_METHOD(dcn_context_new) {
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   dcn_context->threadsafe_event_handler = NULL;
 #else
   dcn_context->event_queue = eventqueue_new();
@@ -971,7 +971,7 @@ NAPI_METHOD(dcn_poll_event) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-#ifndef NODE_10_7
+#ifndef NODE_10_6
   eventqueue_t* queue = dcn_context->event_queue;
   if (queue) {
     eventqueue_item_t* item = eventqueue_pop(queue);
@@ -1245,7 +1245,7 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_value callback = argv[1];
 
   napi_value async_resource_name;
@@ -1353,7 +1353,7 @@ NAPI_METHOD(dcn_unset_event_handler) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-#ifdef NODE_10_7
+#ifdef NODE_10_6
   napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 #endif
 
