@@ -1687,13 +1687,9 @@ NAPI_METHOD(dcn_msg_get_filebytes) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
 
-#ifdef NODE_10_7
-  uint64_t filebytes = dc_msg_get_filebytes(dc_msg);
+  uint32_t filebytes = dc_msg_get_filebytes(dc_msg);
 
-  NAPI_RETURN_UINT64(filebytes);
-#else
-  NAPI_RETURN_INT32(0);
-#endif
+  NAPI_RETURN_INT32(filebytes);
 }
 
 NAPI_METHOD(dcn_msg_get_filemime) {

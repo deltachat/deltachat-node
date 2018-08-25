@@ -231,7 +231,6 @@ class Message {
   }
 
   getFilebytes () {
-    // TODO this is broken and always returns 0 for now
     return binding.dcn_msg_get_filebytes(this.dc_msg)
   }
 

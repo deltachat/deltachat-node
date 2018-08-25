@@ -1,6 +1,8 @@
 const DeltaChat = require('../')
 const test = require('tape')
 const tempy = require('tempy')
+const path = require('path')
+const fs = require('fs')
 const c = require('../constants')
 const events = require('../events')
 
@@ -90,8 +92,7 @@ test('new message and Message methods', t => {
   t.is(msg.getDuration(), 0, 'duration 0 before sent')
   t.is(msg.getFile(), '', 'no file set by default')
   t.is(msg.getFilename(), '', 'no filename set by default')
-  // TODO standard can't parse 0 bigint
-  // t.is(msg.getFilebytes(), 0n, 'and file bytes is 0n')
+  t.is(msg.getFilebytes(), 0, 'and file bytes is 0')
   t.is(msg.getFilemime(), '', 'no filemime by default')
   t.is(msg.getFromId(), 0, 'no contact id set by default')
   t.is(msg.getHeight(), 0, 'plain text message have height 0')
@@ -140,9 +141,12 @@ test('new message and Message methods', t => {
   msg.setDuration(314)
   t.is(msg.getDuration(), 314, 'message duration set correctly')
 
-  msg.setFile('notexisting.jpeg', 'image/jpeg')
-  t.is(msg.getFile(), 'notexisting.jpeg', 'file set correctly')
-  t.is(msg.getFilemime(), 'image/jpeg', 'mime set correctly')
+  const logo = path.join(__dirname, 'logo.png')
+  const stat = fs.statSync(logo)
+  msg.setFile(logo, 'image/png')
+  t.is(msg.getFilebytes(), stat.size, 'correct file size')
+  t.is(msg.getFile(), logo, 'correct file name')
+  t.is(msg.getFilemime(), 'image/png', 'mime set correctly')
 
   msg.setMediainfo('deltaX', 'rules')
 
