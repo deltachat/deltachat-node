@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const binding = require('./binding')
-const constants = require('./constants')
+const C = require('./constants')
 const events = require('./events')
 const EventEmitter = require('events').EventEmitter
 const xtend = require('xtend')
@@ -9,9 +9,8 @@ const path = require('path')
 const debug = require('debug')('deltachat')
 
 /**
- *
+ * Wrapper around dc_chat_t*
  */
-
 class Chat {
   constructor (dc_chat) {
     this.dc_chat = dc_chat
@@ -63,7 +62,7 @@ class Chat {
 }
 
 /**
- *
+ * Wrapper around dc_chatlist_t*
  */
 class ChatList {
   constructor (dc_chatlist) {
@@ -95,7 +94,7 @@ class ChatList {
 }
 
 /**
- *
+ * Wrapper around dc_contact_t*
  */
 class Contact {
   constructor (dc_contact) {
@@ -136,7 +135,7 @@ class Contact {
 }
 
 /**
- *
+ * Wrapper around dc_lot_t*
  */
 class Lot {
   constructor (dc_lot) {
@@ -169,49 +168,95 @@ class Lot {
 }
 
 /**
+ * Helper class for message states so you can do e.g.
+ *
+ * if (msg.getState().isPending()) { .. }
  *
  */
-
 class MessageState {
   constructor (state) {
     this.state = state
   }
 
   isUndefined () {
-    return this.state === constants.DC_STATE_UNDEFINED
+    return this.state === C.DC_STATE_UNDEFINED
   }
 
   isFresh () {
-    return this.state === constants.DC_STATE_IN_FRESH
+    return this.state === C.DC_STATE_IN_FRESH
   }
 
   isNoticed () {
-    return this.state === constants.DC_STATE_IN_NOTICED
+    return this.state === C.DC_STATE_IN_NOTICED
   }
 
   isSeen () {
-    return this.state === constants.DC_STATE_IN_SEEN
+    return this.state === C.DC_STATE_IN_SEEN
   }
 
   isPending () {
-    return this.state === constants.DC_STATE_OUT_PENDING
+    return this.state === C.DC_STATE_OUT_PENDING
   }
 
   isFailed () {
-    return this.state === constants.DC_STATE_OUT_FAILED
+    return this.state === C.DC_STATE_OUT_FAILED
   }
 
   isDelivered () {
-    return this.state === constants.DC_STATE_OUT_DELIVERED
+    return this.state === C.DC_STATE_OUT_DELIVERED
   }
 
   isReceived () {
-    return this.state === constants.DC_STATE_OUT_MDN_RCVD
+    return this.state === C.DC_STATE_OUT_MDN_RCVD
   }
 }
 
 /**
+ * Helper class for message types so you can do e.g.
  *
+ * if (msg.getType().isVideo()) { .. }
+ *
+ */
+class MessageType {
+  constructor (type) {
+    this.type = type
+  }
+
+  isUndefined () {
+    return this.type === C.DC_MSG_UNDEFINED
+  }
+
+  isText () {
+    return this.type === C.DC_MSG_TEXT
+  }
+
+  isImage () {
+    return (this.type & C.DC_MSG_IMAGE) === C.DC_MSG_IMAGE
+  }
+
+  isGif () {
+    return this.type === C.DC_MSG_GIF
+  }
+
+  isAudio () {
+    return (this.type & C.DC_MSG_AUDIO) === C.DC_MSG_AUDIO
+  }
+
+  isVoice () {
+    return this.type === C.DC_MSG_VOICE
+  }
+
+  isVideo () {
+    return (this.type & C.DC_MSG_VIDEO) === C.DC_MSG_VIDEO
+  }
+
+  isFile () {
+    return this.type === C.DC_MSG_FILE
+  }
+}
+
+/**
+ * Wrapper around dc_msg_t*
  */
 class Message {
   constructor (dc_msg) {
@@ -289,19 +334,7 @@ class Message {
   }
 
   getType () {
-    // TODO this returns an integer, we might want to do some
-    // similar things as to message state, e.g.
-
-    // msg.getType().text
-    // msg.getType().image
-    // msg.getType().gif
-    // msg.getType().audio
-    // msg.getType().voice
-    // msg.getType().video
-    // msg.getType().file
-    // msg.getType().undefined
-
-    return binding.dcn_msg_get_type(this.dc_msg)
+    return new MessageType(binding.dcn_msg_get_type(this.dc_msg))
   }
 
   getWidth () {
@@ -309,7 +342,7 @@ class Message {
   }
 
   isDeadDrop () {
-    return this.getChatId() === constants.DC_CHAT_ID_DEADDROP
+    return this.getChatId() === C.DC_CHAT_ID_DEADDROP
   }
 
   isForwarded () {
@@ -373,7 +406,7 @@ class Message {
 }
 
 /**
- *
+ * Wrapper around dcn_context_t*
  */
 class DeltaChat extends EventEmitter {
   constructor (opts) {
@@ -628,7 +661,7 @@ class DeltaChat extends EventEmitter {
   }
 
   getStarredMessages () {
-    return this.getChatMessages(constants.DC_CHAT_ID_STARRED, 0, 0)
+    return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
   }
 
   getChatMessages (chatId, flags, marker1before) {

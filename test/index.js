@@ -120,7 +120,7 @@ test('new message and Message methods', t => {
 
   t.is(msg.getSummarytext(), text, 'summary text is text')
   t.is(msg.getText(), text, 'msg text set correctly')
-  t.is(msg.getType(), 0, 'no message type set')
+  t.is(msg.getType().isUndefined(), true, 'no message type set')
   t.is(msg.getWidth(), 0, 'no message width')
   t.is(msg.isForwarded(), false, 'not forwarded')
   t.is(msg.isIncreation(), false, 'not in creation')
@@ -154,8 +154,8 @@ test('new message and Message methods', t => {
   t.is(mi.getText1(), 'deltaX', 'text1 set')
   t.is(mi.getText2(), 'rules', 'text2 set')
 
-  msg.setType(40)
-  t.is(msg.getType(), 40, 'type set correctly')
+  msg.setType(c.DC_MSG_AUDIO)
+  t.is(msg.getType().isAudio(), true, 'type set correctly')
 
   t.end()
 })

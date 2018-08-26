@@ -61,6 +61,7 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class Lot</b></code>](#class_lot)
 * [<code><b>class Message</b></code>](#class_message)
 * [<code><b>class MessageState</b></code>](#class_message_state)
+* [<code><b>class MessageType</b></code>](#class_message_type)
 
 <a name="deltachat_ctor"></a>
 ### `dc = DeltaChat(options)`
@@ -579,7 +580,7 @@ Get message sending time. Corresponds to [`dc_msg_get_timestamp()`](https://delt
 
 #### `message.getType()`
 
-Get the type of the message. Corresponds to [`dc_msg_get_type()`](https://deltachat.github.io/api/classdc__msg__t.html#aa1b0e553c44a8df5e9f725087a5186f2).
+Get the type of the message. Returns a [`MessageType`](#class_message_type) object. Corresponds to [`dc_msg_get_type()`](https://deltachat.github.io/api/classdc__msg__t.html#aa1b0e553c44a8df5e9f725087a5186f2).
 
 #### `message.getWidth()`
 
@@ -683,6 +684,49 @@ Message state is `DC_STATE_OUT_MDN_RCVD`.
 #### `state.state`
 
 Internal `state` property.
+
+------------------------------------
+
+<a name="class_message_type"></a>
+### `class MessageType`
+
+An object representing a [`Message`](#class_message) type.
+
+#### `type.isUndefined()`
+
+Message type is `DC_MSG_UNDEFINED`.
+
+#### `type.isText()`
+
+Message type is `DC_MSG_TEXT`.
+
+#### `type.isImage()`
+
+Message type has `DC_MSG_IMAGE` bits set.
+
+#### `type.isGif()`
+
+Message type is `DC_MSG_GIF`.
+
+#### `type.isAudio()`
+
+Message type has `DC_MSG_AUDIO` bits set.
+
+#### `type.isVoice()`
+
+Message type is `DC_MSG_VOICE`.
+
+#### `type.isVideo()`
+
+Message type has `DC_MSG_VIDEO` bits set.
+
+#### `type.isFile()`
+
+Message type is `DC_MSG_FILE`.
+
+#### `type.type`
+
+Internal `type` property.
 
 ## Events
 
