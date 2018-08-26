@@ -497,6 +497,10 @@ class DeltaChat extends EventEmitter {
             this.setConfig('displayname', opts.displayname)
           }
 
+          if (typeof opts.selfstatus === 'string') {
+            this.setConfig('selfstatus', opts.selfstatus)
+          }
+
           if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
             this.setConfigInt('e2ee_enabled', opts.e2ee_enabled ? 1 : 0)
           }
