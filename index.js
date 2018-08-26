@@ -231,7 +231,7 @@ class MessageType {
   }
 
   isImage () {
-    return (this.type & C.DC_MSG_IMAGE) === C.DC_MSG_IMAGE
+    return this.type === C.DC_MSG_IMAGE || this.type === C.DC_MSG_GIF
   }
 
   isGif () {
@@ -239,7 +239,7 @@ class MessageType {
   }
 
   isAudio () {
-    return (this.type & C.DC_MSG_AUDIO) === C.DC_MSG_AUDIO
+    return this.type === C.DC_MSG_AUDIO || this.type === C.DC_MSG_VOICE
   }
 
   isVoice () {
@@ -247,7 +247,7 @@ class MessageType {
   }
 
   isVideo () {
-    return (this.type & C.DC_MSG_VIDEO) === C.DC_MSG_VIDEO
+    return this.type === C.DC_MSG_VIDEO
   }
 
   isFile () {
