@@ -2,3 +2,4 @@
 build/
 scripts/travis-before-install.sh
 .nyc_output/
+coverage/
