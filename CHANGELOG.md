@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [0.8.0] - 2018-08-26
+
+### Changed
+* Refactor classes into separate files (@ralphtheninja)
+* Rename `dev` script to `rebuild` (@ralphtheninja)
+
+### Added
+* Add support for all configuration parameters (@ralphtheninja)
+* Add `coverage-html-report` script (@ralphtheninja)
+
+### Removed
+* Remove `start` script (@ralphtheninja)
+
+### Fixed
+* Don't check for bits in the message type (@r10s)
+
 ## [0.7.0] - 2018-08-26
 
 ### Changed
@@ -120,7 +136,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/deltachat/deltachat-node/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...v0.6.1
