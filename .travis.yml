@@ -2,6 +2,9 @@ sudo: required
 
 language: node_js
 
+services:
+  - docker
+
 addons:
   apt:
     sources:
@@ -14,13 +17,16 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
-  - ./scripts/travis-before-install.sh
+  - npm run travis-before-install
 
 node_js:
   - 10
 
 install:
   - npm install
+
+before_script:
+  - npm run start-test-server
 
 script:
   - npm test
