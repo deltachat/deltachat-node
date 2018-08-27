@@ -6,22 +6,27 @@ const fs = require('fs')
 const c = require('../constants')
 const events = require('../events')
 
-const env = process.env
-
-if (!env.DC_ADDR || !env.DC_MAIL_PW) {
-  throw new Error('No credentials. Please specify $DC_ADDR and $DC_MAIL_PW !')
-}
-
 let dc = null
 
 test('setUp dc context', t => {
   t.plan(3)
   dc = new DeltaChat({
-    addr: env.DC_ADDR,
-    mail_pw: env.DC_MAIL_PW,
+    addr: 'delta1@delta.localhost',
+    mail_server: '127.0.0.1',
+    mail_port: 3143,
+    mail_user: 'delta1',
+    mail_pw: 'delta1',
+    send_server: '127.0.0.1',
+    send_port: 3025,
+    send_user: 'delta1',
+    send_pw: 'delta1',
+    server_flags: 0x400 | 0x40000,
     cwd: tempy.directory()
   })
   dc.once('ready', () => t.pass('ready event fired'))
+  dc.on('DC_EVENT_ERROR', (data1, data2) => {
+    throw new Error(data1 || data2)
+  })
   dc.once('ALL', () => t.pass('ALL event fired at least once'))
   dc.open(err => t.error(err, 'no error during open'))
 })
