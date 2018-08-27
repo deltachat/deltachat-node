@@ -1,3 +1,5 @@
+/* eslint-disable no-new */
+
 const DeltaChat = require('../')
 const test = require('tape')
 const tempy = require('tempy')
@@ -7,6 +9,20 @@ const c = require('../constants')
 const events = require('../events')
 
 let dc = null
+
+test('missing addr and/or mail_pw throws', t => {
+  t.throws(function () {
+    new DeltaChat({
+      addr: 'delta1@delta.localhost'
+    })
+  }, /Missing \.mail_pw/)
+  t.throws(function () {
+    new DeltaChat({
+      mail_pw: 'delta1'
+    })
+  }, /Missing \.addr/)
+  t.end()
+})
 
 test('setUp dc context', t => {
   t.plan(3)
@@ -96,9 +112,9 @@ test('new message and Message methods', t => {
   t.is(msg.getChatId(), 0, 'chat id 0 before sent')
   t.is(msg.getDuration(), 0, 'duration 0 before sent')
   t.is(msg.getFile(), '', 'no file set by default')
-  t.is(msg.getFilename(), '', 'no filename set by default')
   t.is(msg.getFilebytes(), 0, 'and file bytes is 0')
   t.is(msg.getFilemime(), '', 'no filemime by default')
+  t.is(msg.getFilename(), '', 'no filename set by default')
   t.is(msg.getFromId(), 0, 'no contact id set by default')
   t.is(msg.getHeight(), 0, 'plain text message have height 0')
   t.is(msg.getId(), 0, 'id 0 before sent')
@@ -125,8 +141,10 @@ test('new message and Message methods', t => {
 
   t.is(msg.getSummarytext(), text, 'summary text is text')
   t.is(msg.getText(), text, 'msg text set correctly')
+  t.is(msg.getTimestamp(), 0, 'no timestamp')
   t.is(msg.getType().isUndefined(), true, 'no message type set')
   t.is(msg.getWidth(), 0, 'no message width')
+  t.is(msg.isDeadDrop(), false, 'not deaddrop')
   t.is(msg.isForwarded(), false, 'not forwarded')
   t.is(msg.isIncreation(), false, 'not in creation')
   t.is(msg.isInfo(), false, 'not an info message')
@@ -146,11 +164,22 @@ test('new message and Message methods', t => {
   msg.setDuration(314)
   t.is(msg.getDuration(), 314, 'message duration set correctly')
 
+  t.throws(function () { msg.setFile() }, /Missing filename/)
+
+  msg.setMediainfo()
+  mi = msg.getMediainfo()
+  t.is(mi.getText1(), null, 'text1 not set')
+  t.is(mi.getText2(), null, 'text2 not set')
+
   const logo = path.join(__dirname, 'logo.png')
   const stat = fs.statSync(logo)
-  msg.setFile(logo, 'image/png')
+  msg.setFile(logo)
   t.is(msg.getFilebytes(), stat.size, 'correct file size')
   t.is(msg.getFile(), logo, 'correct file name')
+  t.is(msg.getFilemime(), 'image/png', 'mime set implicitly')
+  msg.setFile(logo, 'image/gif')
+  t.is(msg.getFilemime(), 'image/gif', 'mime set (in)correctly')
+  msg.setFile(logo, 'image/png')
   t.is(msg.getFilemime(), 'image/png', 'mime set correctly')
 
   msg.setMediainfo('deltaX', 'rules')

@@ -219,25 +219,19 @@ class Message {
   }
 
   latefilingMediasize (width, height, duration) {
-    width = width || 0
-    height = height || 0
-    duration = duration || 0
     binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
   }
 
   setDimension (width, height) {
-    width = width || 0
-    height = height || 0
     binding.dcn_msg_set_dimension(this.dc_msg, width, height)
   }
 
   setDuration (duration) {
-    duration = duration || 0
     binding.dcn_msg_set_duration(this.dc_msg, duration)
   }
 
   setFile (file, mime) {
-    if (typeof file !== 'string' && !mime) throw new Error('Missing filename')
+    if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
   }
 

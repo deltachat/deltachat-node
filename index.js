@@ -37,9 +37,6 @@ class DeltaChat extends EventEmitter {
   }
 
   addAddressBook (addressBook) {
-    if (typeof addressBook !== 'string') {
-      throw new Error('address book must be a string')
-    }
     return binding.dcn_add_address_book(this.dcn_context, addressBook)
   }
 
