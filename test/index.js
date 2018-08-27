@@ -25,7 +25,7 @@ test('missing addr and/or mail_pw throws', t => {
 })
 
 test('setUp dc context', t => {
-  t.plan(3)
+  t.plan(15)
   dc = new DeltaChat({
     addr: 'delta1@delta.localhost',
     mail_server: '127.0.0.1',
@@ -39,7 +39,21 @@ test('setUp dc context', t => {
     server_flags: 0x400 | 0x40000,
     cwd: tempy.directory()
   })
-  dc.once('ready', () => t.pass('ready event fired'))
+  dc.once('ready', () => {
+    t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
+    t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mail_server correct')
+    t.is(dc.getConfig('mail_port'), '3143', 'mail_port correct')
+    t.is(dc.getConfigInt('mail_port'), 3143, 'mail_port correct')
+    t.is(dc.getConfig('mail_user'), 'delta1', 'mail_user correct')
+    t.is(dc.getConfig('mail_pw'), 'delta1', 'mail_pw correct')
+    t.is(dc.getConfig('send_server'), '127.0.0.1', 'send_server correct')
+    t.is(dc.getConfig('send_port'), '3025', 'send_port correct')
+    t.is(dc.getConfigInt('send_port'), 3025, 'send_port correct')
+    t.is(dc.getConfig('send_user'), 'delta1', 'send_user correct')
+    t.is(dc.getConfig('send_pw'), 'delta1', 'send_pw correct')
+    t.is(dc.getConfigInt('server_flags'), 0x400 | 0x40000, 'server_flags correct')
+    t.is(typeof dc.getInfo(), 'string', 'info is a string')
+  })
   dc.on('DC_EVENT_ERROR', (data1, data2) => {
     throw new Error(data1 || data2)
   })

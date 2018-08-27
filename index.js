@@ -304,11 +304,11 @@ class DeltaChat extends EventEmitter {
   }
 
   getConfig (key, def) {
-    return binding.dcn_get_config(this.dcn_context, key, def)
+    return binding.dcn_get_config(this.dcn_context, key, def || '')
   }
 
   getConfigInt (key, def) {
-    return binding.dcn_get_config_int(this.dcn_context, key, def)
+    return binding.dcn_get_config_int(this.dcn_context, key, def || 0)
   }
 
   getContact (contactId) {
