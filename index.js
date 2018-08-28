@@ -633,9 +633,9 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
-  _setEventHandler (cb) {
-    binding.dcn_set_event_handler(this.dcn_context, cb)
-  }
+  // _setEventHandler (cb) {
+  //   binding.dcn_set_event_handler(this.dcn_context, cb)
+  // }
 
   setOffline (offline) {
     binding.dcn_set_offline(this.dcn_context, offline ? 1 : 0)
@@ -665,9 +665,9 @@ class DeltaChat extends EventEmitter {
     binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 
-  _unsetEventHandler () {
-    binding.dcn_unset_event_handler(this.dcn_context)
-  }
+  // _unsetEventHandler () {
+  //   binding.dcn_unset_event_handler(this.dcn_context)
+  // }
 }
 
 module.exports = DeltaChat
