@@ -10,6 +10,17 @@ class Lot {
     this.dc_lot = dc_lot
   }
 
+  toJson () {
+    return {
+      id: this.getId(),
+      state: this.getState(),
+      text1: this.getText1(),
+      text1Meaning: this.getText1Meaning(),
+      text2: this.getText2(),
+      timestamp: this.getTimestamp()
+    }
+  }
+
   getId () {
     return binding.dcn_lot_get_id(this.dc_lot)
   }

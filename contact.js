@@ -10,6 +10,19 @@ class Contact {
     this.dc_contact = dc_contact
   }
 
+  toJson () {
+    return {
+      address: this.getAddress(),
+      displayName: this.getDisplayName(),
+      firstName: this.getFirstName(),
+      id: this.getId(),
+      name: this.getName(),
+      nameAndAddr: this.getNameAndAddress(),
+      isBlocked: this.isBlocked(),
+      isVerified: this.isVerified()
+    }
+  }
+
   getAddress () {
     return binding.dcn_contact_get_addr(this.dc_contact)
   }

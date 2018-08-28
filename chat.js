@@ -9,6 +9,21 @@ class Chat {
   constructor (dc_chat) {
     this.dc_chat = dc_chat
   }
+  toJson () {
+    return {
+      archived: this.getArchived(),
+      draftTimestamp: this.getDraftTimestamp(),
+      id: this.getId(),
+      name: this.getName(),
+      profileImage: this.getProfileImage(),
+      subtitle: this.getSubtitle(),
+      textDraft: this.getTextDraft(),
+      isVerified: this.isVerified(),
+      type: this.getType(),
+      isUnpromoted: this.isUnpromoted(),
+      isSelfTalk: this.isSelfTalk()
+    }
+  }
 
   getArchived () {
     return binding.dcn_chat_get_archived(this.dc_chat)
