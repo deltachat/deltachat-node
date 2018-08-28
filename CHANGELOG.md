@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2018-08-28
+
+### Changed
+* Upgrade `split2` from `^2.2.0` to `^3.0.0` (@ralphtheninja)
+* Run tests using `greenmail` server (@ralphtheninja)
+* Test `dc.getInfo()`, `dc.getConfig()` and `dc.getConfigInt()` (@ralphtheninja)
+
+### Added
+* Add dependency badge (@ralphtheninja)
+* Add `toJson()` methods (@karissa)
+
 ## [0.8.0] - 2018-08-26
 
 ### Changed
@@ -136,7 +147,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/deltachat/deltachat-node/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...v0.6.2
