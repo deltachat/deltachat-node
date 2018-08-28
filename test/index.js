@@ -25,7 +25,8 @@ test('missing addr and/or mail_pw throws', t => {
 })
 
 test('setUp dc context', t => {
-  t.plan(15)
+  t.plan(16)
+  const cwd = tempy.directory()
   dc = new DeltaChat({
     addr: 'delta1@delta.localhost',
     mail_server: '127.0.0.1',
@@ -37,7 +38,7 @@ test('setUp dc context', t => {
     send_user: 'delta1',
     send_pw: 'delta1',
     server_flags: 0x400 | 0x40000,
-    cwd: tempy.directory()
+    cwd
   })
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
@@ -53,6 +54,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('send_pw'), 'delta1', 'send_pw correct')
     t.is(dc.getConfigInt('server_flags'), 0x400 | 0x40000, 'server_flags correct')
     t.is(typeof dc.getInfo(), 'string', 'info is a string')
+    t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
   })
   dc.on('DC_EVENT_ERROR', (data1, data2) => {
     throw new Error(data1 || data2)
