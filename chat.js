@@ -9,6 +9,7 @@ class Chat {
   constructor (dc_chat) {
     this.dc_chat = dc_chat
   }
+
   toJson () {
     return {
       archived: this.getArchived(),
