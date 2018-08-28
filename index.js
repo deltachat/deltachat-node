@@ -456,10 +456,8 @@ class DeltaChat extends EventEmitter {
             this.setConfig('mail_server', opts.mail_server)
           }
 
-          if (typeof opts.mail_port === 'string') {
-            this.setConfig('mail_port', opts.mail_port)
-          } else if (typeof opts.mail_port === 'number') {
-            this.setConfigInt('mail_port', opts.mail_port)
+          if (opts.mail_port) {
+            this.setConfig('mail_port', String(opts.mail_port))
           }
 
           if (typeof opts.mail_user === 'string') {
@@ -472,10 +470,8 @@ class DeltaChat extends EventEmitter {
             this.setConfig('send_server', opts.send_server)
           }
 
-          if (typeof opts.send_port === 'string') {
-            this.setConfig('send_port', opts.send_port)
-          } else if (typeof opts.send_port === 'number') {
-            this.setConfigInt('send_port', opts.send_port)
+          if (opts.send_port) {
+            this.setConfig('send_port', String(opts.send_port))
           }
 
           if (typeof opts.send_user === 'string') {
