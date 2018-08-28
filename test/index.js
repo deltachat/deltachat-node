@@ -24,8 +24,14 @@ test('missing addr and/or mail_pw throws', t => {
   t.end()
 })
 
+// TODO 1. to 4. below would cover dc.open() completely
+// 1. test dc.open() where mkdirp fails (e.g. with no permissions)
+// 2. test failing dc._open() (what would make it fail in core?)
+// 3. test setting up context with e2ee_enabled set to false + close
+// 4. test opening an already configured account (re-open above)
+
 test('setUp dc context', t => {
-  t.plan(16)
+  t.plan(19)
   const cwd = tempy.directory()
   dc = new DeltaChat({
     addr: 'delta1@delta.localhost',
@@ -38,6 +44,9 @@ test('setUp dc context', t => {
     send_user: 'delta1',
     send_pw: 'delta1',
     server_flags: 0x400 | 0x40000,
+    displayname: 'Delta One',
+    selfstatus: 'From Delta One with <3',
+    e2ee_enabled: true,
     cwd
   })
   dc.once('ready', () => {
@@ -53,6 +62,9 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('send_user'), 'delta1', 'send_user correct')
     t.is(dc.getConfig('send_pw'), 'delta1', 'send_pw correct')
     t.is(dc.getConfigInt('server_flags'), 0x400 | 0x40000, 'server_flags correct')
+    t.is(dc.getConfig('displayname'), 'Delta One', 'displayname correct')
+    t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfstatus correct')
+    t.is(dc.getConfigInt('e2ee_enabled'), 1, 'e2ee enabled')
     t.is(typeof dc.getInfo(), 'string', 'info is a string')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
   })
