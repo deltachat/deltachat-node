@@ -34,6 +34,7 @@ typedef struct dcn_event_t {
   int event;
   uintptr_t data1_int;
   uintptr_t data2_int;
+  char* data1_str;
   char* data2_str;
 } dcn_event_t;
 
@@ -52,6 +53,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
         dcn_event->event = event;
         dcn_event->data1_int = data1;
         dcn_event->data2_int = data2;
+        dcn_event->data1_str = (DC_EVENT_DATA1_IS_STRING(event) && data1) ? strdup((char*)data1) : NULL;
         dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
         napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
       }
@@ -86,9 +88,17 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
   }
 
-  status = napi_create_int32(env, dcn_event->data1_int, &argv[1]);
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
+  if (dcn_event->data1_str) {
+    status = napi_create_string_utf8(env, dcn_event->data1_str, NAPI_AUTO_LENGTH, &argv[1]);
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
+    }
+    free(dcn_event->data1_str);
+  } else {
+    status = napi_create_int32(env, dcn_event->data1_int, &argv[1]);
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
+    }
   }
 
   if (dcn_event->data2_str) {
@@ -984,7 +994,12 @@ NAPI_METHOD(dcn_poll_event) {
       NAPI_STATUS_THROWS(napi_set_named_property(env, obj, "event", event));
 
       napi_value data1;
-      NAPI_STATUS_THROWS(napi_create_int32(env, item->data1, &data1));
+      if (DC_EVENT_DATA1_IS_STRING(item->event) && item->data1) {
+        NAPI_STATUS_THROWS(napi_create_string_utf8(env, (char*)item->data1,
+                                                   NAPI_AUTO_LENGTH, &data1));
+      } else {
+        NAPI_STATUS_THROWS(napi_create_int32(env, item->data1, &data1));
+      }
       NAPI_STATUS_THROWS(napi_set_named_property(env, obj, "data1", data1));
 
       napi_value data2;
