@@ -100,6 +100,18 @@ class Message {
     this.dc_msg = dc_msg
   }
 
+  toJson () {
+    return {
+      chatId: this.getChatId(),
+      duration: this.getDuration(),
+      fromId: this.getFromId(),
+      text: this.getText(),
+      timestamp: this.getTimestamp(),
+      type: binding.dcn_msg_get_type(this.dc_msg),
+      summary: this.getSummary().toJson()
+    }
+  }
+
   getChatId () {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
