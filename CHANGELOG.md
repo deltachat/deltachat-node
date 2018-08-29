@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.9.1] - 2018-08-29
+
+### Changed
+* Upgrade `deltachat-core` (@ralphtheninja)
+* Forward strings from `data1` in the same way as for `data2` (@r10s)
+* Upgrade `standard` devDependency to `^12.0.0` (@greenkeeper)
+* Full coverage of `message.js` (@ralphtheninja)
+
+### Added
+* Test `dc.getBlobdir()` (@ralphtheninja)
+* Test `displayname`, `selfstatus` and `e2ee_enabled` config (@ralphtheninja)
+* Add `.file` to `Message#toJson()` (@karissa)
+
 ## [0.9.0] - 2018-08-28
 
 ### Changed
@@ -147,7 +160,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/deltachat/deltachat-node/compare/v0.6.2...v0.7.0
