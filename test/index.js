@@ -157,7 +157,16 @@ test('new message and Message methods', t => {
 
   t.is(msg.getSetupcodebegin(), '', 'no setupcode begin')
   t.is(msg.getShowpadlock(), false, 'no padlock by default')
-  t.is(msg.getState().isUndefined(), true, 'no state by default')
+
+  const state = msg.getState()
+  t.is(state.isUndefined(), true, 'no state by default')
+  t.is(state.isFresh(), false, 'no state by default')
+  t.is(state.isNoticed(), false, 'no state by default')
+  t.is(state.isSeen(), false, 'no state by default')
+  t.is(state.isPending(), false, 'no state by default')
+  t.is(state.isFailed(), false, 'no state by default')
+  t.is(state.isDelivered(), false, 'no state by default')
+  t.is(state.isReceived(), false, 'no state by default')
 
   let summary = msg.getSummary()
   t.is(summary.getId(), 0, 'no summary id')
@@ -170,7 +179,17 @@ test('new message and Message methods', t => {
   t.is(msg.getSummarytext(), text, 'summary text is text')
   t.is(msg.getText(), text, 'msg text set correctly')
   t.is(msg.getTimestamp(), 0, 'no timestamp')
-  t.is(msg.getType().isUndefined(), true, 'no message type set')
+
+  let type = msg.getType()
+  t.is(type.isUndefined(), true, 'no message type set')
+  t.is(type.isText(), false, 'no message type set')
+  t.is(type.isImage(), false, 'no message type set')
+  t.is(type.isGif(), false, 'no message type set')
+  t.is(type.isAudio(), false, 'no message type set')
+  t.is(type.isVoice(), false, 'no message type set')
+  t.is(type.isVideo(), false, 'no message type set')
+  t.is(type.isFile(), false, 'no message type set')
+
   t.is(msg.getWidth(), 0, 'no message width')
   t.is(msg.isDeadDrop(), false, 'not deaddrop')
   t.is(msg.isForwarded(), false, 'not forwarded')
@@ -218,6 +237,10 @@ test('new message and Message methods', t => {
 
   msg.setType(c.DC_MSG_AUDIO)
   t.is(msg.getType().isAudio(), true, 'type set correctly')
+
+  const json = msg.toJson()
+  t.notEqual(json, null, 'not null')
+  t.is(typeof json, 'object', 'json object')
 
   t.end()
 })
