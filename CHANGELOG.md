@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [0.9.3] - 2018-08-29
+
+### Fixed
+* Fixed typo (@karissa)
+
+## [0.9.2] - 2018-08-29
+
+### Added
+* Add `.state` and `.mediaInfo` to `Message#toJson()` (@karissa)
+
 ## [0.9.1] - 2018-08-29
 
 ### Changed
@@ -160,7 +170,9 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...HEAD
+[0.9.3]: https://github.com/deltachat/deltachat-node/compare/v0.9.2...v0.9.3
+[0.9.2]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...v0.8.0
