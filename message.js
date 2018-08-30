@@ -108,7 +108,9 @@ class Message {
       text: this.getText(),
       timestamp: this.getTimestamp(),
       type: binding.dcn_msg_get_type(this.dc_msg),
+      state: binding.dcn_msg_get_state(this.dc_msg),
       summary: this.getSummary().toJson(),
+      mediaInfo: this.getMediaInfo().toJson(),
       file: this.getFile()
     }
   }
