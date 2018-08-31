@@ -12,7 +12,6 @@ class Lot {
 
   toJson () {
     return {
-      id: this.getId(),
       state: this.getState(),
       text1: this.getText1(),
       text1Meaning: this.getText1Meaning(),

@@ -102,6 +102,7 @@ class Message {
 
   toJson () {
     return {
+      id: this.getId(),
       chatId: this.getChatId(),
       duration: this.getDuration(),
       fromId: this.getFromId(),
@@ -110,6 +111,7 @@ class Message {
       type: binding.dcn_msg_get_type(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
       summary: this.getSummary().toJson(),
+      isSetupmessage: this.isSetupmessage(),
       mediaInfo: this.getMediainfo().toJson(),
       file: this.getFile()
     }
