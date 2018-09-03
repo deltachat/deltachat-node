@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2018-09-03
+
+### Changed
+* Sort keys in `constants.js` alphabetically (@ralphtheninja)
+* Upgrade `deltachat-core` for new `DC_EVENT_FILE_COPIED` (@ralphtheninja)
+
+### Added
+* Test `DC_EVENT_FILE_COPIED` (@ralphtheninja)
+
+### Fixed
+* Fix profile image tests (image moved to blob dir) (@ralphtheninja)
+
 ## [0.9.4] - 2018-08-30
 
 ### Added
@@ -13,7 +25,7 @@
 ## [0.9.3] - 2018-08-29
 
 ### Fixed
-* Fixed typo (@karissa)
+* Fix typo (@karissa)
 
 ## [0.9.2] - 2018-08-29
 
@@ -178,7 +190,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...v0.10.0
 [0.9.4]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/deltachat/deltachat-node/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...v0.9.2
