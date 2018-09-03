@@ -208,6 +208,9 @@ class DeltaChat extends EventEmitter {
       case 'DC_EVENT_IMEX_FILE_WRITTEN':
         this.emit(eventStr, data1)
         break
+      case 'DC_EVENT_FILE_COPIED':
+        this.emit(eventStr, data1)
+        break
       case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
         this.emit(eventStr, data1, data2)
         break
