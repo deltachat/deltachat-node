@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.9.4] - 2018-08-30
+
+### Added
+* Add `.id` and `.isSetupmessage` to `Message#toJson()` (@karissa)
+
+### Removed
+* Remove `.id` from `Lot#toJson()` (@karissa)
+
 ## [0.9.3] - 2018-08-29
 
 ### Fixed
@@ -170,7 +178,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...HEAD
+[0.9.4]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/deltachat/deltachat-node/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...v0.9.1
