@@ -18,7 +18,11 @@ fs.createReadStream(header)
   })
   .on('end', () => {
     const file = path.resolve(__dirname, '../constants.js')
-    const data = rows.map(row => {
+    const data = rows.sort((lhs, rhs) => {
+      if (lhs.key < rhs.key) return -1
+      else if (lhs.key > rhs.key) return 1
+      return 0
+    }).map(row => {
       return `  ${row.key}: ${row.value}`
     }).join(',\n')
     fs.writeFileSync(file, `// Generated!\n\nmodule.exports = {\n${data}\n}\n`)

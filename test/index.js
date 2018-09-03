@@ -370,8 +370,8 @@ test('reverse lookup of events', t => {
 })
 
 test('event constants are consistent', t => {
-  const eventKeys = Object.keys(c).filter(k => k.startsWith('DC_EVENT_'))
-  const eventValues = Object.values(events)
+  const eventKeys = Object.keys(c).filter(k => k.startsWith('DC_EVENT_')).sort()
+  const eventValues = Object.values(events).sort()
   t.same(eventKeys, eventValues, 'identical')
   t.end()
 })
