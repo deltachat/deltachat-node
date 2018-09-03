@@ -111,12 +111,6 @@ test('create chat from contact and Chat methods', t => {
   dc.setChatName(chatId, 'NEW NAME')
   t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
 
-  const image = 'image.jpeg'
-  const imagePath = path.join(__dirname, image)
-  dc.setChatProfileImage(chatId, imagePath)
-  const blobs = dc.getBlobdir()
-  t.is(dc.getChat(chatId).getProfileImage(), `${blobs}/${image}`, 'image in blobdir')
-
   dc.setTextDraft(chatId, 'NEW DRAFT')
   t.is(dc.getChat(chatId).getTextDraft(), 'NEW DRAFT', 'draft updated')
 
@@ -126,6 +120,25 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.getType(), c.DC_CHAT_TYPE_VERIFIED_GROUP, 'verified group chat')
 
   t.end()
+})
+
+test('test setting profile image and DC_EVENT_FILE_COPIED', t => {
+  const chatId = dc.createUnverifiedGroupChat('testing profile image group')
+  const image = 'image.jpeg'
+  const imagePath = path.join(__dirname, image)
+  const blobs = dc.getBlobdir()
+
+  dc.once('DC_EVENT_FILE_COPIED', fileName => {
+    t.is(fileName, imagePath, `${fileName} was copied`)
+    t.is(
+      dc.getChat(chatId).getProfileImage(),
+      `${blobs}/${image}`,
+      'image in blobdir'
+    )
+    t.end()
+  })
+
+  dc.setChatProfileImage(chatId, imagePath)
 })
 
 test('create and delete chat', t => {
