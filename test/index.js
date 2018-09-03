@@ -110,8 +110,13 @@ test('create chat from contact and Chat methods', t => {
 
   dc.setChatName(chatId, 'NEW NAME')
   t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
-  dc.setChatProfileImage(chatId, 'image.jpeg')
-  t.is(dc.getChat(chatId).getProfileImage(), 'image.jpeg', 'image updated')
+
+  const image = 'image.jpeg'
+  const imagePath = path.join(__dirname, image)
+  dc.setChatProfileImage(chatId, imagePath)
+  const blobs = dc.getBlobdir()
+  t.is(dc.getChat(chatId).getProfileImage(), `${blobs}/${image}`, 'image in blobdir')
+
   dc.setTextDraft(chatId, 'NEW DRAFT')
   t.is(dc.getChat(chatId).getTextDraft(), 'NEW DRAFT', 'draft updated')
 
