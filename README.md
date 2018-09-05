@@ -37,16 +37,23 @@ npm install deltachat-node
 
 ```js
 const DeltaChat = require('deltachat-node')
-
-const dc = new DeltaChat({
-  addr: 'user@site.org',
-  mail_pw: 'password'
-})
+const dc = new DeltaChat()
 
 dc.open(() => {
-  const contactId = dc.createContact('homie', 'friend@site.org')
-  const chatId = dc.createChatByContactId(contactId)
-  dc.sendTextMessage(chatId, 'Hi!')
+  const onReady = () => {
+    const contactId = dc.createContact('homie', 'friend@site.org')
+    const chatId = dc.createChatByContactId(contactId)
+    dc.sendTextMessage(chatId, 'Hi!')
+  }
+  if (!dc.isConfigured()) {
+    dc.once('ready', onReady)
+    dc.configure({
+      addr: 'user@site.org',
+      mail_pw: 'password'
+    })
+  } else {
+    onReady()
+  }
 })
 ```
 
@@ -65,28 +72,11 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class MessageType</b></code>](#class_message_type)
 
 <a name="deltachat_ctor"></a>
-### `dc = DeltaChat(options)`
+### `dc = DeltaChat()`
 
 Creates a new `DeltaChat` instance.
 
-The `options` object takes the following properties:
-
-* `options.cwd` *(string, optional)*: Path to working directory, defaults to current working directory.
-* `options.addr` *(string, required)*: Email address of the chat user.
-* `options.mail_server` *(string, optional)*: IMAP-server, guessed if left out.
-* `options.mail_port` *(string | number, optional)*: IMAP-port, guessed if left out.
-* `options.mail_user` *(string, optional)*: IMAP-username, guessed if left out.
-* `options.mail_pw` *(string, required)*: IMAP-password of the chat user.
-* `options.send_server` *(string, optional)*: SMTP-server, guessed if left out.
-* `options.send_port` *(string | number, optional)*: SMTP-port, guessed if left out.
-* `options.send_user` *(string, optional)*: SMTP-user, guessed if left out.
-* `options.send_pw` *(string, optional)*: SMTP-password, guessed if left out.
-* `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
-* `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
-* `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
-* `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
-
-Initializes the main context and sets up event handling. Call `dc.open(cb)` to start.
+Initializes the main context and sets up event handling. Call `dc.open(cwd, cb)` to start and `dc.configure(opts, cb)` if needed.
 
 ------------------------------------
 
@@ -122,6 +112,26 @@ Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://deltachat.gith
 #### `dc.close()`
 
 Stops the threads and closes down the `DeltaChat` instance.
+
+#### `dc.configure(options[, cb])`
+
+Configure and connect a context. Corresponds to [`dc_configure()`](https://deltachat.github.io/api/classdc__context__t.html#adfe52669a5bed893df78a620566dd698).
+
+The `options` object takes the following properties:
+
+* `options.addr` *(string, required)*: Email address of the chat user.
+* `options.mail_server` *(string, optional)*: IMAP-server, guessed if left out.
+* `options.mail_port` *(string | number, optional)*: IMAP-port, guessed if left out.
+* `options.mail_user` *(string, optional)*: IMAP-username, guessed if left out.
+* `options.mail_pw` *(string, required)*: IMAP-password of the chat user.
+* `options.send_server` *(string, optional)*: SMTP-server, guessed if left out.
+* `options.send_port` *(string | number, optional)*: SMTP-port, guessed if left out.
+* `options.send_user` *(string, optional)*: SMTP-user, guessed if left out.
+* `options.send_pw` *(string, optional)*: SMTP-password, guessed if left out.
+* `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
+* `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
+* `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
+* `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
 
 #### `dc.continueKeyTransfer(messageId, setupCode)`
 
@@ -275,6 +285,10 @@ Check if there is a backup file. Corresponds to [`dc_imex_has_backup()`](https:/
 
 Initiate Autocrypt setup transfer. Corresponds to [`dc_initiate_key_transfer()`](https://deltachat.github.io/api/classdc__context__t.html#af327aa51e2e18ce3f5948545a637eac9).
 
+#### `dc.isConfigured()`
+
+Check if the context is already configured. Corresponds to [`dc_is_configured()`](https://deltachat.github.io/api/classdc__context__t.html#a7b2e6b5e8b970209596d8218eea9e62c).
+
 #### `dc.isContactInChat(chatId, contactId)`
 
 Check if a given contact id is a member of a group chat. Corresponds to [`dc_is_contact_in_chat()`](https://deltachat.github.io/api/classdc__context__t.html#aec6e3c1cecd0e4e4ea99c4fdfbd177cd).
@@ -299,9 +313,12 @@ Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to 
 
 Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://deltachat.github.io/api/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
 
-#### `dc.open([callback])`
+#### `dc.open([cwd], [callback])`
 
-Opens the underlying database and configures the application. The callback is called when ready or with an error if the database could not be opened. Also emits `'ready'` when done.
+Opens the underlying database.
+
+* `cwd` *(string, optional)* Path to working directory, defaults to current working directory.
+* `callback` *(function, optional)* Called with an error if the database could not be opened.
 
 #### `dc.removeContactFromChat(chatId, contactId)`
 

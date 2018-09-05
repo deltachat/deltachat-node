@@ -11,17 +11,20 @@ const events = require('../events')
 let dc = null
 
 test('missing addr and/or mail_pw throws', t => {
-  t.throws(function () {
-    new DeltaChat({
-      addr: 'delta1@delta.localhost'
-    })
-  }, /Missing \.mail_pw/)
-  t.throws(function () {
-    new DeltaChat({
-      mail_pw: 'delta1'
-    })
-  }, /Missing \.addr/)
-  t.end()
+  const dc = new DeltaChat()
+  const cwd = tempy.directory()
+  dc.open(cwd, err => {
+    t.error(err, 'no error during open')
+    t.is(dc.isConfigured(), false, 'should not be configured')
+    t.throws(function () {
+      dc.configure({ addr: 'delta1@delta.localhost' })
+    }, /Missing \.mail_pw/)
+    t.throws(function () {
+      dc.configure({ mail_pw: 'delta1' })
+    }, /Missing \.addr/)
+    dc.close()
+    t.end()
+  })
 })
 
 // TODO 1. to 4. below would cover dc.open() completely
@@ -31,24 +34,9 @@ test('missing addr and/or mail_pw throws', t => {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(19)
+  t.plan(20)
   const cwd = tempy.directory()
-  dc = new DeltaChat({
-    addr: 'delta1@delta.localhost',
-    mail_server: '127.0.0.1',
-    mail_port: 3143,
-    mail_user: 'delta1',
-    mail_pw: 'delta1',
-    send_server: '127.0.0.1',
-    send_port: 3025,
-    send_user: 'delta1',
-    send_pw: 'delta1',
-    server_flags: 0x400 | 0x40000,
-    displayname: 'Delta One',
-    selfstatus: 'From Delta One with <3',
-    e2ee_enabled: true,
-    cwd
-  })
+  dc = new DeltaChat()
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
     t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mail_server correct')
@@ -72,7 +60,25 @@ test('setUp dc context', t => {
     throw new Error(data1 || data2)
   })
   dc.once('ALL', () => t.pass('ALL event fired at least once'))
-  dc.open(err => t.error(err, 'no error during open'))
+  dc.open(cwd, err => {
+    t.error(err, 'no error during open')
+    t.is(dc.isConfigured(), false, 'should not be configured')
+    dc.configure({
+      addr: 'delta1@delta.localhost',
+      mail_server: '127.0.0.1',
+      mail_port: 3143,
+      mail_user: 'delta1',
+      mail_pw: 'delta1',
+      send_server: '127.0.0.1',
+      send_port: 3025,
+      send_user: 'delta1',
+      send_pw: 'delta1',
+      server_flags: 0x400 | 0x40000,
+      displayname: 'Delta One',
+      selfstatus: 'From Delta One with <3',
+      e2ee_enabled: true
+    })
+  })
 })
 
 test('create chat from contact and Chat methods', t => {
