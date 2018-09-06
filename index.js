@@ -9,7 +9,6 @@ const Contact = require('./contact')
 const Message = require('./message')
 const Lot = require('./lot')
 const EventEmitter = require('events').EventEmitter
-const xtend = require('xtend')
 const mkdirp = require('mkdirp')
 const path = require('path')
 const debug = require('debug')('deltachat')
@@ -18,19 +17,10 @@ const debug = require('debug')('deltachat')
  * Wrapper around dcn_context_t*
  */
 class DeltaChat extends EventEmitter {
-  constructor (opts) {
+  constructor () {
     super()
 
-    this.opts = xtend({ cwd: process.cwd() }, opts)
     this._pollInterval = null
-
-    if (typeof this.opts.addr !== 'string') {
-      throw new Error('Missing .addr')
-    }
-    if (typeof this.opts.mail_pw !== 'string') {
-      throw new Error('Missing .mail_pw')
-    }
-
     this.dcn_context = binding.dcn_context_new()
     // TODO comment back in once polling is gone
     // this._setEventHandler(this._eventHandler.bind(this))
@@ -99,7 +89,73 @@ class DeltaChat extends EventEmitter {
     binding.dcn_close(this.dcn_context)
   }
 
-  _configure () {
+  configure (opts, cb) {
+    const ready = () => {
+      this.emit('ready')
+      cb && cb()
+    }
+
+    if (this.isConfigured()) {
+      return process.nextTick(ready)
+    }
+
+    if (typeof opts.addr !== 'string') {
+      throw new Error('Missing .addr')
+    }
+
+    if (typeof opts.mail_pw !== 'string') {
+      throw new Error('Missing .mail_pw')
+    }
+
+    this.once('_configured', ready)
+
+    this.setConfig('addr', opts.addr)
+    this.setConfig('mail_pw', opts.mail_pw)
+
+    if (typeof opts.mail_server === 'string') {
+      this.setConfig('mail_server', opts.mail_server)
+    }
+
+    if (opts.mail_port) {
+      this.setConfig('mail_port', String(opts.mail_port))
+    }
+
+    if (typeof opts.mail_user === 'string') {
+      this.setConfig('mail_user', opts.mail_user)
+    }
+
+    if (typeof opts.send_server === 'string') {
+      this.setConfig('send_server', opts.send_server)
+    }
+
+    if (opts.send_port) {
+      this.setConfig('send_port', String(opts.send_port))
+    }
+
+    if (typeof opts.send_user === 'string') {
+      this.setConfig('send_user', opts.send_user)
+    }
+
+    if (typeof opts.send_pw === 'string') {
+      this.setConfig('send_pw', opts.send_pw)
+    }
+
+    if (typeof opts.server_flags === 'number') {
+      this.setConfigInt('server_flags', opts.server_flags)
+    }
+
+    if (typeof opts.displayname === 'string') {
+      this.setConfig('displayname', opts.displayname)
+    }
+
+    if (typeof opts.selfstatus === 'string') {
+      this.setConfig('selfstatus', opts.selfstatus)
+    }
+
+    if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
+      this.setConfigInt('e2ee_enabled', opts.e2ee_enabled ? 1 : 0)
+    }
+
     binding.dcn_configure(this.dcn_context)
   }
 
@@ -381,7 +437,7 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_initiate_key_transfer(this.dcn_context)
   }
 
-  _isConfigured () {
+  isConfigured () {
     return Boolean(binding.dcn_is_configured(this.dcn_context))
   }
 
@@ -421,26 +477,21 @@ class DeltaChat extends EventEmitter {
     return new Message(binding.dcn_msg_new(this.dcn_context))
   }
 
-  open (cb) {
-    const opts = this.opts
-    mkdirp(opts.cwd, err => {
-      if (err) {
-        cb && cb(err)
-        return
-      }
-      const db = path.join(opts.cwd, 'db.sqlite')
+  open (cwd, cb) {
+    if (typeof cwd === 'function') {
+      cb = cwd
+      cwd = process.cwd()
+    }
+    if (typeof cb !== 'function') {
+      throw new Error('open callback required')
+    }
+    mkdirp(cwd, err => {
+      if (err) return cb(err)
+      const db = path.join(cwd, 'db.sqlite')
       this._open(db, '', err => {
-        if (err) {
-          cb && cb(err)
-          return
-        }
+        if (err) return cb(err)
 
         this._startThreads()
-
-        const ready = () => {
-          this.emit('ready')
-          cb && cb(null)
-        }
 
         // TODO temporary timer for polling events
         this._pollInterval = setInterval(() => {
@@ -450,61 +501,7 @@ class DeltaChat extends EventEmitter {
           }
         }, 50)
 
-        if (!this._isConfigured()) {
-          this.once('_configured', ready)
-
-          this.setConfig('addr', opts.addr)
-
-          if (typeof opts.mail_server === 'string') {
-            this.setConfig('mail_server', opts.mail_server)
-          }
-
-          if (opts.mail_port) {
-            this.setConfig('mail_port', String(opts.mail_port))
-          }
-
-          if (typeof opts.mail_user === 'string') {
-            this.setConfig('mail_user', opts.mail_user)
-          }
-
-          this.setConfig('mail_pw', opts.mail_pw)
-
-          if (typeof opts.send_server === 'string') {
-            this.setConfig('send_server', opts.send_server)
-          }
-
-          if (opts.send_port) {
-            this.setConfig('send_port', String(opts.send_port))
-          }
-
-          if (typeof opts.send_user === 'string') {
-            this.setConfig('send_user', opts.send_user)
-          }
-
-          if (typeof opts.send_pw === 'string') {
-            this.setConfig('send_pw', opts.send_pw)
-          }
-
-          if (typeof opts.server_flags === 'number') {
-            this.setConfigInt('server_flags', opts.server_flags)
-          }
-
-          if (typeof opts.displayname === 'string') {
-            this.setConfig('displayname', opts.displayname)
-          }
-
-          if (typeof opts.selfstatus === 'string') {
-            this.setConfig('selfstatus', opts.selfstatus)
-          }
-
-          if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
-            this.setConfigInt('e2ee_enabled', opts.e2ee_enabled ? 1 : 0)
-          }
-
-          this._configure()
-        } else {
-          ready()
-        }
+        cb()
       })
     })
   }
