@@ -26,6 +26,7 @@
 * [Events](#events)
 * [Developing](#developing)
 * [Tests and Coverage](#tests-and-coverage)
+* [Scripts](#scripts)
 * [License](#license)
 
 ## Install
@@ -809,6 +810,22 @@ Running `npm test` ends with showing a code coverage report, which is produced b
 The coverage report from `nyc` in the console is rather limited. To get a more detailed coverage report you can run `npm run coverage-html-report`. This will produce a html report from the `nyc` data and display it in a browser on your local machine.
 
 On `Travis` the coverage report is also passed to [`coveralls`](https://coveralls.io/github/deltachat/deltachat-node).
+
+## Scripts
+
+We have the following scripts for building, testing and coverage:
+
+* `npm test` Runs `dependency-check`, `standard` and then the tests in `test/index.js`.
+* `npm install` After dependencies are installed, runs the `script/rebuild-all` script which recompiles _all_ the native code from scratch.
+* `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
+* `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
+* `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
+* `npm run generate-constants` Generates `constants.js` based on the `deltachat-core/deltachat.h` header file.
+* `npm run start-test-server` Starts the `Greenmail` test server.
+* `npm run stop-test-server` Stops the `Greenmail` test server.
+* `npm run submodule` Updates the git submodule in `deltachat-core/`.
+* `npm run travis-before-install` Installs and builds dependencies needed to compile `deltachat-core`. Only done by `Travis`.
+* `npm run rebuild` Recompiles the native code in `src/` and builds a new `build/Debug/deltachat.node` addon. Also called from the previous script.
 
 ## License
 
