@@ -25,7 +25,7 @@
 * [API](#api)
 * [Events](#events)
 * [Developing](#developing)
-* [Tests](#tests)
+* [Tests and Coverage](#tests-and-coverage)
 * [License](#license)
 
 ## Install
