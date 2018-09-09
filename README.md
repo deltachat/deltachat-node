@@ -25,6 +25,7 @@
 * [API](#api)
 * [Events](#events)
 * [Developing](#developing)
+* [Tests](#tests)
 * [License](#license)
 
 ## Install
@@ -796,6 +797,18 @@ npm install
 ```
 
 **Note** that `deltachat-core` in turn has external dependencies. Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for more information.
+
+## Tests and Coverage
+
+To run the tests you need `docker` installed. To start the [`Greenmail`](http://www.icegreen.com/greenmail/) test server run `npm run start-test-server`. Once the server is running you can run the tests with `npm test`. To stop the server run `npm run stop-test-server`.
+
+Running `npm test` ends with showing a code coverage report, which is produced by [`nyc`](https://github.com/istanbuljs/nyc#readme).
+
+![test output](images/tests.png)
+
+The coverage report from `nyc` in the console is rather limited. To get a more detailed coverage report you can run `npm run coverage-html-report`. This will produce a html report from the `nyc` data and display it in a browser on your local machine.
+
+On `Travis` the coverage report is also passed to [`coveralls`](https://coveralls.io/github/deltachat/deltachat-node).
 
 ## License
 
