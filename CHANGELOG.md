@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.11.0] - 2018-09-10
+
+### Changed
+* Upgrade `deltachat-core` (@ralphtheninja)
+* Rewrite open and configure workflow (@ralphtheninja)
+* Document tests, coverage and npm scripts (@ralphtheninja)
+
 ## [0.10.0] - 2018-09-03
 
 ### Changed
@@ -190,7 +197,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...v0.10.0
 [0.9.4]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/deltachat/deltachat-node/compare/v0.9.2...v0.9.3
