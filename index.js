@@ -470,6 +470,10 @@ class DeltaChat extends EventEmitter {
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
 
+  markNoticedAllChats () {
+    binding.dcn_marknoticed_all_chats(this.dcn_context)
+  }
+
   markNoticedContact (contactId) {
     binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
   }

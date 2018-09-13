@@ -863,6 +863,15 @@ NAPI_METHOD(dcn_marknoticed_chat) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_marknoticed_all_chats) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_marknoticed_all_chats(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_marknoticed_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2051,6 +2060,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
+  NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);

@@ -303,6 +303,10 @@ Join an out-of-band-verification initiated on another device with `dc.getSecurej
 
 Mark all messages in a chat as _noticed_. Corresponds to [`dc_marknoticed_chat()`](https://deltachat.github.io/api/classdc__context__t.html#a7286128d6c3ae3f274f72241fbc4353c).
 
+#### `dc.markNoticedAllChats()`
+
+Same as `dc.markNoticedChat()` but for _all_ chats. Corresponds to [`dc_marknoticed_all_chats()`](https://deltachat.github.io/api/classdc__context__t.html#a61a0fe8ab386687fcf5061debfe710ab).
+
 #### `dc.markNoticedContact(contactId)`
 
 Mark all messages sent by the given contact as _noticed_. Corresponds to [`dc_marknoticed_contact()`](https://deltachat.github.io/api/classdc__context__t.html#a7cc233792a13ec0f893f6299c12ca061).
