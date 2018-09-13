@@ -227,6 +227,15 @@ class DeltaChat extends EventEmitter {
       case 'DC_EVENT_INFO':
         this.emit(eventStr, data2)
         break
+      case 'DC_EVENT_SMTP_CONNECTED':
+        this.emit(eventStr, data2)
+        break
+      case 'DC_EVENT_IMAP_CONNECTED':
+        this.emit(eventStr, data2)
+        break
+      case 'DC_EVENT_SMTP_MESSAGE_SENT':
+        this.emit(eventStr, data2)
+        break
       case 'DC_EVENT_WARNING':
         this.emit(eventStr, data2)
         break

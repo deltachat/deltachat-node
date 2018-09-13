@@ -767,6 +767,9 @@ Internal `type` property.
 |:----------|:----------------------------|:---------------------|
 | `ready`  | `DeltaChat` is ready    | -  |
 | [`DC_EVENT_INFO`](https://deltachat.github.io/api/group__DC__EVENT.html#ga0f492424e22941431e2562731a5f21ba)  | Info string    | `(info)`  |
+| [`DC_EVENT_SMTP_CONNECTED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga68af4630b2e79d8a387c8a9b83c9a088)  | Info string    | `(info)`  |
+| [`DC_EVENT_IMAP_CONNECTED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga867b454250458393e4f405a064c02928)  | Info string    | `(info)`  |
+| [`DC_EVENT_SMTP_MESSAGE_SENT`](https://deltachat.github.io/api/group__DC__EVENT.html#gace252b291eaa12fd593ea8384b2205e4)  | Info string    | `(info)`  |
 | [`DC_EVENT_WARNING`](https://deltachat.github.io/api/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)  | Warning string    | `(warning)`  |
 | [`DC_EVENT_ERROR`](https://deltachat.github.io/api/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)  | Error string    | `(code, error)`  |
 | [`DC_EVENT_MSGS_CHANGED`](https://deltachat.github.io/api/group__DC__EVENT.html#ga0f52cdaad70dd24f7540abda6193cc2d)  | Messages or chats changed    | `(chatId, msgId)`  |
