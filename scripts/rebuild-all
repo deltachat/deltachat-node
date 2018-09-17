@@ -9,7 +9,7 @@ echo ">> Moving into deltachat-core/builddir"
 pushd deltachat-core/builddir
 
 echo ">> meson"
-meson --default-library=static
+meson --default-library=static --wrap-mode=forcefallback
 echo ">> ninja"
 ninja -v
 
