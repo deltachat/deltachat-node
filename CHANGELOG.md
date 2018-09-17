@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.13.0] - 2018-09-17
+
+### Changed
+* Use `deltachat-core#flub-openssl` so we can build on mac (@ralphtheninja)
+
 ## [0.12.0] - 2018-09-17
 
 ### Changed
@@ -208,7 +213,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...v0.10.0
