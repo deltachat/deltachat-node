@@ -20,4 +20,7 @@ elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 
     # Install meson
     sudo -H pip3 install meson
+
+    # Install ninja
+    brew install ninja
 fi
