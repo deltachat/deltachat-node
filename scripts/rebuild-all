@@ -17,4 +17,4 @@ echo ">> Moving back to deltachat-node"
 popd
 
 echo ">> Cleaning build/ and rebuilding bindings"
-rm build/ -rf && npm run rebuild
+rm -rf build/ && npm run rebuild
