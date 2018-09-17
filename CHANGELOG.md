@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.12.0] - 2018-09-17
+
+### Changed
+* Upgrade `debug` devDependency from `^3.1.0` to `^4.0.0` (@greenkeeper)
+* Upgrade `deltachat-core` for `dc_marknoticed_all_chats()`, new constants and new events (@ralphtheninja)
+
+### Added
+* Add `dc.markNoticedAllChats()` (@ralphtheninja)
+* Add events `DC_EVENT_SMTP_CONNECTED`, `DC_EVENT_IMAP_CONNECTED` and `DC_EVENT_SMTP_MESSAGE_SENT` (@ralphtheninja)
+* Add constants `DC_CHAT_ID_ALLDONE_HINT`, `DC_EVENT_IMAP_CONNECTED`, `DC_EVENT_SMTP_CONNECTED`, `DC_EVENT_SMTP_MESSAGE_SENT` and `DC_GCL_ADD_ALLDONE_HINT` (@ralphtheninja)
+
 ## [0.11.0] - 2018-09-10
 
 ### Changed
@@ -197,7 +208,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...v0.10.0
 [0.9.4]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...v0.9.4
