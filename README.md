@@ -831,7 +831,6 @@ We have the following scripts for building, testing and coverage:
 * `npm run start-test-server` Starts the `Greenmail` test server.
 * `npm run stop-test-server` Stops the `Greenmail` test server.
 * `npm run submodule` Updates the git submodule in `deltachat-core/`.
-* `npm run travis-before-install` Installs and builds dependencies needed to compile `deltachat-core`. Only done by `Travis`.
 * `npm run rebuild` Recompiles the native code in `src/` and builds a new `build/Debug/deltachat.node` addon. Also called from the previous script.
 
 ## License

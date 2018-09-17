@@ -3,7 +3,7 @@
 set -e
 
 echo ">> Recreating deltachat-core/builddir/"
-rm deltachat-core/builddir -rf && mkdir -p deltachat-core/builddir
+rm -rf deltachat-core/builddir && mkdir -p deltachat-core/builddir
 
 echo ">> Moving into deltachat-core/builddir"
 pushd deltachat-core/builddir
