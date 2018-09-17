@@ -3,13 +3,13 @@
 set -e
 
 echo ">> Recreating deltachat-core/builddir/"
-rm deltachat-core/builddir -rf && mkdir -p deltachat-core/builddir
+rm -rf deltachat-core/builddir && mkdir -p deltachat-core/builddir
 
 echo ">> Moving into deltachat-core/builddir"
 pushd deltachat-core/builddir
 
 echo ">> meson"
-meson --default-library=static
+meson --default-library=static --wrap-mode=forcefallback
 echo ">> ninja"
 ninja -v
 
@@ -17,4 +17,4 @@ echo ">> Moving back to deltachat-node"
 popd
 
 echo ">> Cleaning build/ and rebuilding bindings"
-rm build/ -rf && npm run rebuild
+rm -rf build/ && npm run rebuild

@@ -5,6 +5,10 @@ language: node_js
 services:
   - docker
 
+os:
+  - osx
+  - linux
+
 addons:
   apt:
     sources:
@@ -17,7 +21,7 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
-  - npm run travis-before-install
+  - ./scripts/travis-before-install
 
 node_js:
   - 10
@@ -26,13 +30,13 @@ install:
   - npm install
 
 before_script:
-  - npm run start-test-server
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run start-test-server; else true; fi
 
 script:
-  - npm test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm test; else npm run test-simple; fi
 
 after_success:
-  - npm run coverage
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
 
 notifications:
   email: false
