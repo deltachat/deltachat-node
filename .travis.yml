@@ -30,13 +30,13 @@ install:
   - npm install
 
 before_script:
-  - npm run start-test-server
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run start-test-server; else true; fi
 
 script:
-  - npm test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm test; else true; fi
 
 after_success:
-  - npm run coverage
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
 
 notifications:
   email: false
