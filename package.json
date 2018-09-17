@@ -10,6 +10,7 @@
     "stop-test-server": "./scripts/stop-test-server",
     "generate-constants": "./scripts/generate-constants.js",
     "test": "standard && npm run dependency-check && nyc node test/index.js",
+    "test-simple": "node test/simple.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "dependency-check": "dependency-check package.json --missing --unused -i dependency-check -i nyc -i opn-cli -i standard -i napi-macros -i coveralls --entry index.js --entry test/index.js --entry scripts/generate-constants.js"
