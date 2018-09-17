@@ -362,8 +362,8 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_imex_has_backup(this.dcn_context, dirName)
   }
 
-  initiateKeyTransfer () {
-    return binding.dcn_initiate_key_transfer(this.dcn_context)
+  initiateKeyTransfer (cb) {
+    return binding.dcn_initiate_key_transfer(this.dcn_context, cb)
   }
 
   isConfigured () {

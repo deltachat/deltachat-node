@@ -843,13 +843,67 @@ NAPI_METHOD(dcn_imex_has_backup) {
   NAPI_RETURN_AND_FREE_STRING(file);
 }
 
+typedef struct dcn_initiate_key_transfer_carrier_t {
+  napi_ref callback_ref;
+  napi_async_work async_work;
+  dcn_context_t* dcn_context;
+  char* result;
+} dcn_initiate_key_transfer_carrier_t;
+
+static void dcn_initiate_key_transfer_execute(napi_env env, void* data) {
+  dcn_initiate_key_transfer_carrier_t* carrier = (dcn_initiate_key_transfer_carrier_t*)data;
+
+  carrier->result = dc_initiate_key_transfer(carrier->dcn_context->dc_context);
+}
+
+static void dcn_initiate_key_transfer_complete(napi_env env, napi_status status, void* data) {
+  dcn_initiate_key_transfer_carrier_t* carrier = (dcn_initiate_key_transfer_carrier_t*)data;
+
+  if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+  const int argc = 1;
+  napi_value argv[argc];
+
+  if (carrier->result) {
+    NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
+  } else {
+    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+  }
+
+  napi_value global;
+  NAPI_STATUS_THROWS(napi_get_global(env, &global));
+  napi_value callback;
+  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
+  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
+
+  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
+
+  free(carrier);
+}
+
 NAPI_METHOD(dcn_initiate_key_transfer) {
-  NAPI_ARGV(1);
+  NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
+  napi_value callback = argv[1];
 
-  char* code = dc_initiate_key_transfer(dcn_context->dc_context);
+  dcn_initiate_key_transfer_carrier_t* carrier = calloc(1, sizeof(dcn_initiate_key_transfer_carrier_t));
+  carrier->dcn_context = dcn_context;
 
-  NAPI_RETURN_AND_FREE_STRING(code);
+  napi_value async_resource_name;
+  NAPI_STATUS_THROWS(napi_create_reference(env, callback, 1, &carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_initiate_key_transfer_callback",
+                                             NAPI_AUTO_LENGTH,
+                                             &async_resource_name));
+  NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name,
+                                            dcn_initiate_key_transfer_execute, dcn_initiate_key_transfer_complete,
+                                            carrier, &carrier->async_work));
+  NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work));
+
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_is_configured) {
