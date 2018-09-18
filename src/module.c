@@ -25,6 +25,10 @@ typedef struct dcn_context_t {
   uv_thread_t imap_thread;
   int loop_thread;
   int is_offline;
+  pthread_mutex_t dc_event_http_mutex;
+  pthread_cond_t  dc_event_http_cond;
+  int             dc_event_http_done;
+  char*           dc_event_http_response;
 } dcn_context_t;
 
 /**
@@ -45,6 +49,24 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   switch (event) {
     case DC_EVENT_IS_OFFLINE:
       return dcn_context->is_offline;
+
+    case DC_EVENT_HTTP_GET: {
+      uintptr_t http_ret = 0;
+      if (dcn_context->event_queue) {
+        eventqueue_push(dcn_context->event_queue, event, data1, data2);
+
+        pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
+          // while() is to protect against spuriously wakeups
+          while (!dcn_context->dc_event_http_done) {
+            // unlock -> wait -> lock
+            pthread_cond_wait(&dcn_context->dc_event_http_cond, &dcn_context->dc_event_http_mutex);
+          }
+          http_ret = (uintptr_t)dcn_context->dc_event_http_response;
+          dcn_context->dc_event_http_response = NULL;
+        pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
+      }
+      return http_ret;
+    }
 
     default:
 #ifdef NODE_10_6
@@ -203,6 +225,10 @@ static void finalize_context(napi_env env, void* data, void* hint) {
       eventqueue_unref(dcn_context->event_queue);
       dcn_context->event_queue = NULL;
     }
+
+    pthread_cond_destroy(&dcn_context->dc_event_http_cond);
+    pthread_mutex_destroy(&dcn_context->dc_event_http_mutex);
+
     free(dcn_context);
   }
 }
@@ -274,6 +300,11 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
   dcn_context->is_offline = 0;
+
+  dcn_context->dc_event_http_done = 0;
+  dcn_context->dc_event_http_response = NULL;
+  pthread_mutex_init(&dcn_context->dc_event_http_mutex, NULL);
+  pthread_cond_init(&dcn_context->dc_event_http_cond, NULL);
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
@@ -1292,6 +1323,25 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_set_http_get_response) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(response, 1);
+
+  if (response==NULL || response[0]==0) {
+    free(response);
+    response = NULL;
+  }
+
+  pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
+    dcn_context->dc_event_http_done = 1;
+    dcn_context->dc_event_http_response = response;
+    pthread_cond_signal(&dcn_context->dc_event_http_cond);
+  pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_set_offline) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2081,6 +2131,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_config_int);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
+  NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_offline);
   NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);

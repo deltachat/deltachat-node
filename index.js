@@ -11,6 +11,7 @@ const Lot = require('./lot')
 const EventEmitter = require('events').EventEmitter
 const mkdirp = require('mkdirp')
 const path = require('path')
+const got = require('got')
 const debug = require('debug')('deltachat')
 
 /**
@@ -222,6 +223,19 @@ class DeltaChat extends EventEmitter {
     this.emit('ALL', event, data1, data2)
 
     const eventStr = events[event]
+    const self = this
+
+    async function handleHttpGetEvent (url) {
+      try {
+        debug('handleHttpGetEvent url', url)
+        const response = await got(url, {})
+        debug('handleHttpGetEvent response.body', response.body)
+        binding.dcn_set_http_get_response(self.dcn_context, response.body)
+      } catch (err) {
+        debug('handleHttpGetEvent err', err)
+        binding.dcn_set_http_get_response(self.dcn_context, '')
+      }
+    }
 
     switch (eventStr) {
       case 'DC_EVENT_INFO':
@@ -282,11 +296,12 @@ class DeltaChat extends EventEmitter {
       case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS':
         this.emit(eventStr, data1, data2)
         break
+      case 'DC_EVENT_HTTP_GET':
+        handleHttpGetEvent(data1)
+        break
       case 'DC_EVENT_IS_OFFLINE':
       case 'DC_EVENT_GET_STRING':
       case 'DC_EVENT_GET_QUANTITY_STRING':
-      case 'DC_EVENT_HTTP_GET':
-        break
       default:
         debug('Unknown event')
     }
