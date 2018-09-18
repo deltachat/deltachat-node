@@ -50,20 +50,23 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
     case DC_EVENT_IS_OFFLINE:
       return dcn_context->is_offline;
 
-    case DC_EVENT_HTTP_GET:
+    case DC_EVENT_HTTP_GET: {
       uintptr_t http_ret = 0;
       if (dcn_context->event_queue) {
         eventqueue_push(dcn_context->event_queue, event, data1, data2);
 
         pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
-          while (!dcn_context->dc_event_http_done) { // while() is to protect against spuriously wakeups
-            pthread_cond_wait(&context->dc_event_http_cond, &context->dc_event_http_mutex); // unlock -> wait -> lock
+          // while() is to protect against spuriously wakeups
+          while (!dcn_context->dc_event_http_done) {
+            // unlock -> wait -> lock
+            pthread_cond_wait(&dcn_context->dc_event_http_cond, &dcn_context->dc_event_http_mutex);
           }
           http_ret = (uintptr_t)dcn_context->dc_event_http_response;
           dcn_context->dc_event_http_response = NULL;
         pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
       }
       return http_ret;
+    }
 
     default:
 #ifdef NODE_10_6
@@ -300,8 +303,8 @@ NAPI_METHOD(dcn_context_new) {
 
   dcn_context->dc_event_http_done = 0;
   dcn_context->dc_event_http_response = NULL;
-  pthread_mutex_init(&dcn_context->dc_event_http_mutex);
-  pthread_cond_init(&dcn_context->dc_event_http_cond);
+  pthread_mutex_init(&dcn_context->dc_event_http_mutex, NULL);
+  pthread_cond_init(&dcn_context->dc_event_http_cond, NULL);
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
@@ -1333,7 +1336,7 @@ NAPI_METHOD(dcn_set_http_get_response) {
   pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
     dcn_context->dc_event_http_done = 1;
     dcn_context->dc_event_http_response = response;
-    pthread_cond_signal(&context->dc_event_http_cond);
+    pthread_cond_signal(&dcn_context->dc_event_http_cond);
   pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
 
   NAPI_RETURN_UNDEFINED();
