@@ -25,6 +25,9 @@ typedef struct dcn_context_t {
   uv_thread_t imap_thread;
   int loop_thread;
   int is_offline;
+  // TODO_HTTP_GET
+  // something_ something;
+  char* dc_event_http_response;
 } dcn_context_t;
 
 /**
@@ -45,6 +48,15 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   switch (event) {
     case DC_EVENT_IS_OFFLINE:
       return dcn_context->is_offline;
+
+    case DC_EVENT_HTTP_GET:
+      if (dcn_context->event_queue) {
+        eventqueue_push(dcn_context->event_queue, event, data1, data2);
+      }
+      // TODO_HTTP_GET
+      // wait_for_something(&dcn_context->something);
+      // return (uintptr_t)dcn_context->dc_event_http_response;
+      return 0;
 
     default:
 #ifdef NODE_10_6
@@ -274,6 +286,7 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
   dcn_context->is_offline = 0;
+  dcn_context->dc_event_http_response = NULL;
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
@@ -1292,6 +1305,18 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_set_http_get_response) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(response, 1);
+
+  dcn_context->dc_event_http_response = response;
+  // TODO_HTTP_GET
+  // signal_something(&dcn_context->something);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_set_offline) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2081,6 +2106,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_config_int);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
+  NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_offline);
   NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
