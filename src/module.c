@@ -57,7 +57,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
 
         pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
           while (!dcn_context->dc_event_http_done) { // while() is to protect against spuriously wakeups
-            pthread_cond_timedwait(&context->smtpidle_cond, &context->smtpidle_condmutex); // unlock -> wait -> lock
+            pthread_cond_wait(&context->dc_event_http_cond, &context->dc_event_http_mutex); // unlock -> wait -> lock
           }
           http_ret = (uintptr_t)dcn_context->dc_event_http_response;
           dcn_context->dc_event_http_response = NULL;
