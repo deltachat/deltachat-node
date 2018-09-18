@@ -1333,7 +1333,7 @@ NAPI_METHOD(dcn_set_http_get_response) {
   pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
     dcn_context->dc_event_http_done = 1;
     dcn_context->dc_event_http_response = response;
-    pthread_cond_signal(&context->dc_event_http_cond);
+    pthread_cond_signal(&dcn_context->dc_event_http_cond);
   pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
 
   NAPI_RETURN_UNDEFINED();
