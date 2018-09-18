@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.14.0] - 2018-09-19
+
+### Changed
+* Upgrade `deltachat-core` to latest master (@ralphtheninja)
+
+### Added
+* Add support for `DC_EVENT_HTTP_GET` (@ralphtheninja, @r10s)
+
+### Fixed
+* Fix incorrect link order causing missing `RSA_check_key` symbol (@ralphtheninja)
+
 ## [0.13.1] - 2018-09-18
 
 ### Fixed
@@ -218,7 +229,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...v0.12.0
