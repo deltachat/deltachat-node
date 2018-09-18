@@ -20,6 +20,7 @@ typedef struct dcn_context_t {
   napi_threadsafe_function threadsafe_event_handler;
 #else
   eventqueue_t* event_queue;
+  eventqueue_t* event_queue_js2c;
 #endif
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
@@ -61,6 +62,9 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       if (dcn_context->event_queue) {
         eventqueue_push(dcn_context->event_queue, event, data1, data2);
       }
+    if (event == DC_EVENT_HTTP_GET) {
+        return eventqueue_poll(dcn_context->eventqueue_js2c);
+    }
 #endif
       break;
   }
