@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.13.1] - 2018-09-18
+
+### Fixed
+* Fix symlink problems in `deltachat-core` (@ralphtheninja)
+
 ## [0.13.0] - 2018-09-17
 
 ### Changed
@@ -213,7 +218,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...HEAD
+[0.13.1]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...v0.11.0
