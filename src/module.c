@@ -63,6 +63,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
           }
           http_ret = (uintptr_t)dcn_context->dc_event_http_response;
           dcn_context->dc_event_http_response = NULL;
+          dcn_context->dc_event_http_done = 0;
         pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
       }
       return http_ret;
@@ -1327,11 +1328,6 @@ NAPI_METHOD(dcn_set_http_get_response) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UTF8_MALLOC(response, 1);
-
-  if (response==NULL || response[0]==0) {
-    free(response);
-    response = NULL;
-  }
 
   pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
     dcn_context->dc_event_http_done = 1;
