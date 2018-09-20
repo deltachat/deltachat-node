@@ -8,24 +8,9 @@ const fs = require('fs')
 const c = require('../constants')
 const events = require('../events')
 
-let dc = null
+require('./open')
 
-test('missing addr and/or mail_pw throws', t => {
-  const dc = new DeltaChat()
-  const cwd = tempy.directory()
-  dc.open(cwd, err => {
-    t.error(err, 'no error during open')
-    t.is(dc.isConfigured(), false, 'should not be configured')
-    t.throws(function () {
-      dc.configure({ addr: 'delta1@delta.localhost' })
-    }, /Missing \.mail_pw/, 'missing mail_pw throws')
-    t.throws(function () {
-      dc.configure({ mail_pw: 'delta1' })
-    }, /Missing \.addr/, 'missing addr throws')
-    dc.close()
-    t.end()
-  })
-})
+let dc = null
 
 // TODO 1. to 4. below would cover dc.open() completely
 // 1. test dc.open() where mkdirp fails (e.g. with no permissions)
