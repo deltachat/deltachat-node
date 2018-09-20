@@ -18,6 +18,22 @@ test('open', t => {
       t.end()
     })
 
+    t.test('> autoconfigure', t => {
+      t.plan(2)
+      dc.on('DC_EVENT_INFO', info => {
+        if (info.startsWith('Got autoconfig:')) {
+          t.pass('Got autoconfig!')
+        }
+      })
+      dc.once('DC_EVENT_ERROR', (code, error) => {
+        t.pass('Got _some_ error (either can\'t connect or can\'t login)')
+      })
+      dc.configure({
+        addr: 'hpk2@hq5.merlinux.eu',
+        mail_pw: 'whatever'
+      })
+    })
+
     t.test('> close', t => {
       dc.close()
       t.end()
