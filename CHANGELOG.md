@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.15.0] - 2018-09-20
+
+### Changed
+* Upgrade `deltachat-core` for `DC_EVENT_HTTP_GET` empty string fix (@ralphtheninja)
+* Change official support to node 8 (and electron 2) (@ralphtheninja)
+* Refactor tests (@ralphtheninja)
+
+### Added
+* Test autoconfig on merlinux server (@ralphtheninja)
+
+### Fixed
+* Reset `dc_event_http_done` to 0 after lock is released (@ralphtheninja)
+
 ## [0.14.0] - 2018-09-19
 
 ### Changed
@@ -229,7 +242,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...v0.13.0
