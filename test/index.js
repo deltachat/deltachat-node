@@ -18,10 +18,10 @@ test('missing addr and/or mail_pw throws', t => {
     t.is(dc.isConfigured(), false, 'should not be configured')
     t.throws(function () {
       dc.configure({ addr: 'delta1@delta.localhost' })
-    }, /Missing \.mail_pw/)
+    }, /Missing \.mail_pw/, 'missing mail_pw throws')
     t.throws(function () {
       dc.configure({ mail_pw: 'delta1' })
-    }, /Missing \.addr/)
+    }, /Missing \.addr/, 'missing addr throws')
     dc.close()
     t.end()
   })
