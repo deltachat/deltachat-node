@@ -111,7 +111,7 @@ test('create chat from contact and Chat methods', t => {
 test('test setting profile image and DC_EVENT_FILE_COPIED', t => {
   const chatId = dc.createUnverifiedGroupChat('testing profile image group')
   const image = 'image.jpeg'
-  const imagePath = path.join(__dirname, image)
+  const imagePath = path.join(__dirname, 'fixtures', image)
   const blobs = dc.getBlobdir()
 
   dc.once('DC_EVENT_FILE_COPIED', fileName => {
@@ -222,7 +222,7 @@ test('new message and Message methods', t => {
   t.is(mi.getText1(), null, 'text1 not set')
   t.is(mi.getText2(), null, 'text2 not set')
 
-  const logo = path.join(__dirname, 'logo.png')
+  const logo = path.join(__dirname, 'fixtures', 'logo.png')
   const stat = fs.statSync(logo)
   msg.setFile(logo)
   t.is(msg.getFilebytes(), stat.size, 'correct file size')
