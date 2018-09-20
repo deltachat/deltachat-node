@@ -24,7 +24,7 @@ before_install:
   - ./scripts/travis-before-install
 
 node_js:
-  - 10
+  - 8
 
 install:
   - npm install
