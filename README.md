@@ -445,6 +445,10 @@ Check if a chat is still unpromoted. Corresponds to [`dc_chat_is_unpromoted()`](
 
 Check if a chat is verified. Corresponds to [`dc_chat_is_verified()`](https://deltachat.github.io/api/classdc__chat__t.html#a8149813f4e6aea8f30592bea1be9f3c4).
 
+#### `chat.toJson()`
+
+Returns the object state as a JavaScript serializable object.
+
 ------------------------------------
 
 <a name="class_chatlist"></a>
@@ -507,6 +511,10 @@ Check if a contact is blocked. Corresponds to [`dc_contact_is_blocked()`](https:
 
 Check if a contact is verified. Corresponds to [`dc_contact_is_verified()`](https://deltachat.github.io/api/classdc__contact__t.html#a287ad50725bd26f8a8a7df36ce56b91f).
 
+#### `contact.toJson()`
+
+Returns the object state as a JavaScript serializable object.
+
 ------------------------------------
 
 <a name="class_lot"></a>
@@ -537,6 +545,10 @@ Get the second string. Corresponds to [`dc_lot_get_text2()`](https://deltachat.g
 #### `lot.getTimestamp()`
 
 Get the associated timestamp. Corresponds to [`dc_lot_get_timestamp()`](https://deltachat.github.io/api/classdc__lot__t.html#af4c1b738ae5340c3ea3e7cb0cc5d0c73).
+
+#### `lot.toJson()`
+
+Returns the object state as a JavaScript serializable object.
 
 ------------------------------------
 
@@ -676,6 +688,10 @@ Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://d
 #### `message.setType(type)`
 
 Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://deltachat.github.io/api/classdc__msg__t.html#a5d5568d88453a31a1379299d9c155c4f).
+
+#### `message.toJson()`
+
+Returns the object state as a JavaScript serializable object.
 
 ------------------------------------
 
