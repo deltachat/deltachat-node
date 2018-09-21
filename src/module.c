@@ -1314,7 +1314,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     async_resource_name,
     100,
     1,
-    0,
+    NULL,
     NULL,
     dcn_context,
     call_js_event_handler,
