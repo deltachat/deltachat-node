@@ -24,7 +24,7 @@ class DeltaChat extends EventEmitter {
     this._pollInterval = null
     this.dcn_context = binding.dcn_context_new()
     // TODO comment back in once polling is gone
-    // this._setEventHandler((event, data1, data2) => {
+    // binding.dcn_set_event_handler(this.dcn_context, (event, data1, data2) => {
     //   handleEvent(this, event, data1, data2)
     // })
   }
@@ -72,10 +72,7 @@ class DeltaChat extends EventEmitter {
   close () {
     // TODO close() doesn't always work, figure out a way to be
     // sure we can stop and callback when done
-    // _stopOngoingProcess() and _close() seems to mess it up
-    // even more
-    // this._stopOngoingProcess()
-    // this._close()
+    // binding.dcn_close(this.dcn_context)
 
     // TODO temporary polling interval
     if (this._pollInterval) {
@@ -85,11 +82,7 @@ class DeltaChat extends EventEmitter {
 
     // TODO comment back in once polling is gone
     // binding.dcn_unset_event_handler(this.dcn_context)
-    this._stopThreads()
-  }
-
-  _close () {
-    binding.dcn_close(this.dcn_context)
+    binding.dcn_stop_threads(this.dcn_context)
   }
 
   configure (opts, cb) {
@@ -428,14 +421,14 @@ class DeltaChat extends EventEmitter {
     mkdirp(cwd, err => {
       if (err) return cb(err)
       const db = path.join(cwd, 'db.sqlite')
-      this._open(db, '', err => {
+      binding.dcn_open(this.dcn_context, db, '', err => {
         if (err) return cb(err)
 
-        this._startThreads()
+        binding.dcn_start_threads(this.dcn_context)
 
         // TODO temporary timer for polling events
         this._pollInterval = setInterval(() => {
-          const event = this._pollEvent()
+          const event = binding.dcn_poll_event(this.dcn_context)
           if (event) {
             handleEvent(this, event.event, event.data1, event.data2)
           }
@@ -444,14 +437,6 @@ class DeltaChat extends EventEmitter {
         cb()
       })
     })
-  }
-
-  _open (dbFile, blobDir, cb) {
-    return binding.dcn_open(this.dcn_context, dbFile, blobDir, cb)
-  }
-
-  _pollEvent () {
-    return binding.dcn_poll_event(this.dcn_context)
   }
 
   removeContactFromChat (chatId, contactId) {
@@ -569,10 +554,6 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
-  // _setEventHandler (cb) {
-  //   binding.dcn_set_event_handler(this.dcn_context, cb)
-  // }
-
   setOffline (offline) {
     binding.dcn_set_offline(this.dcn_context, offline ? 1 : 0)
   }
@@ -587,18 +568,6 @@ class DeltaChat extends EventEmitter {
     }
     messageIds = messageIds.map(id => Number(id))
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
-  }
-
-  _startThreads () {
-    binding.dcn_start_threads(this.dcn_context)
-  }
-
-  _stopThreads () {
-    binding.dcn_stop_threads(this.dcn_context)
-  }
-
-  _stopOngoingProcess () {
-    binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 }
 
