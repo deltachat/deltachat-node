@@ -24,7 +24,9 @@ class DeltaChat extends EventEmitter {
     this._pollInterval = null
     this.dcn_context = binding.dcn_context_new()
     // TODO comment back in once polling is gone
-    // this._setEventHandler(this._eventHandler.bind(this))
+    // this._setEventHandler((event, data1, data2) => {
+    //   handleEvent(this, event, data1, data2)
+    // })
   }
 
   addAddressBook (addressBook) {
@@ -82,7 +84,7 @@ class DeltaChat extends EventEmitter {
     }
 
     // TODO comment back in once polling is gone
-    // this._unsetEventHandler()
+    // binding.dcn_unset_event_handler(this.dcn_context)
     this._stopThreads()
   }
 
@@ -215,96 +217,6 @@ class DeltaChat extends EventEmitter {
     }
     messageIds = messageIds.map(id => Number(id))
     binding.dcn_delete_msgs(this.dcn_context, messageIds)
-  }
-
-  _eventHandler (event, data1, data2) {
-    debug('event', event, 'data1', data1, 'data2', data2)
-
-    this.emit('ALL', event, data1, data2)
-
-    const eventStr = events[event]
-    const self = this
-
-    async function handleHttpGetEvent (url) {
-      try {
-        debug('handleHttpGetEvent url', url)
-        const response = await got(url, {})
-        debug('handleHttpGetEvent response.body', response.body)
-        binding.dcn_set_http_get_response(self.dcn_context, response.body)
-      } catch (err) {
-        debug('handleHttpGetEvent err', err)
-        binding.dcn_set_http_get_response(self.dcn_context, '')
-      }
-    }
-
-    switch (eventStr) {
-      case 'DC_EVENT_INFO':
-        this.emit(eventStr, data2)
-        break
-      case 'DC_EVENT_SMTP_CONNECTED':
-        this.emit(eventStr, data2)
-        break
-      case 'DC_EVENT_IMAP_CONNECTED':
-        this.emit(eventStr, data2)
-        break
-      case 'DC_EVENT_SMTP_MESSAGE_SENT':
-        this.emit(eventStr, data2)
-        break
-      case 'DC_EVENT_WARNING':
-        this.emit(eventStr, data2)
-        break
-      case 'DC_EVENT_ERROR':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_MSGS_CHANGED':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_INCOMING_MSG':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_MSG_DELIVERED':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_MSG_FAILED':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_MSG_READ':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_CHAT_MODIFIED':
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_CONTACTS_CHANGED':
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_CONFIGURE_PROGRESS':
-        if (data1 === 1000) this.emit('_configured')
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_IMEX_PROGRESS':
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_IMEX_FILE_WRITTEN':
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_FILE_COPIED':
-        this.emit(eventStr, data1)
-        break
-      case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS':
-        this.emit(eventStr, data1, data2)
-        break
-      case 'DC_EVENT_HTTP_GET':
-        handleHttpGetEvent(data1)
-        break
-      case 'DC_EVENT_IS_OFFLINE':
-      case 'DC_EVENT_GET_STRING':
-      case 'DC_EVENT_GET_QUANTITY_STRING':
-      default:
-        debug('Unknown event')
-    }
   }
 
   forwardMessages (messageIds, chatId) {
@@ -525,7 +437,7 @@ class DeltaChat extends EventEmitter {
         this._pollInterval = setInterval(() => {
           const event = this._pollEvent()
           if (event) {
-            this._eventHandler(event.event, event.data1, event.data2)
+            handleEvent(this, event.event, event.data1, event.data2)
           }
         }, 50)
 
@@ -688,10 +600,95 @@ class DeltaChat extends EventEmitter {
   _stopOngoingProcess () {
     binding.dcn_stop_ongoing_process(this.dcn_context)
   }
+}
 
-  // _unsetEventHandler () {
-  //   binding.dcn_unset_event_handler(this.dcn_context)
-  // }
+function handleEvent (self, event, data1, data2) {
+  debug('event', event, 'data1', data1, 'data2', data2)
+
+  self.emit('ALL', event, data1, data2)
+
+  const eventStr = events[event]
+
+  async function handleHttpGetEvent (url) {
+    try {
+      debug('handleHttpGetEvent url', url)
+      const response = await got(url, {})
+      debug('handleHttpGetEvent response.body', response.body)
+      binding.dcn_set_http_get_response(self.dcn_context, response.body)
+    } catch (err) {
+      debug('handleHttpGetEvent err', err)
+      binding.dcn_set_http_get_response(self.dcn_context, '')
+    }
+  }
+
+  switch (eventStr) {
+    case 'DC_EVENT_INFO':
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_SMTP_CONNECTED':
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_IMAP_CONNECTED':
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_SMTP_MESSAGE_SENT':
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_WARNING':
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_ERROR':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_MSGS_CHANGED':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_INCOMING_MSG':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_MSG_DELIVERED':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_MSG_FAILED':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_MSG_READ':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_CHAT_MODIFIED':
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_CONTACTS_CHANGED':
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_CONFIGURE_PROGRESS':
+      if (data1 === 1000) self.emit('_configured')
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_IMEX_PROGRESS':
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_IMEX_FILE_WRITTEN':
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_FILE_COPIED':
+      self.emit(eventStr, data1)
+      break
+    case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS':
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_HTTP_GET':
+      handleHttpGetEvent(data1)
+      break
+    case 'DC_EVENT_IS_OFFLINE':
+    case 'DC_EVENT_GET_STRING':
+    case 'DC_EVENT_GET_QUANTITY_STRING':
+    default:
+      debug('Unknown event')
+  }
 }
 
 module.exports = DeltaChat
