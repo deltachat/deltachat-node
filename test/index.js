@@ -386,10 +386,9 @@ test('ChatList methods', t => {
 })
 
 test('key transfer methods', t => {
-  t.comment('test234')
-  dc.initiateKeyTransfer(setupCode => {
+  dc.initiateKeyTransfer((err, setupCode) => {
+    t.ok(err == null, 'err is not null')
     t.ok(setupCode != null, 'setupCode is null')
-
     t.end()
   })
 })

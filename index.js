@@ -363,7 +363,12 @@ class DeltaChat extends EventEmitter {
   }
 
   initiateKeyTransfer (cb) {
-    return binding.dcn_initiate_key_transfer(this.dcn_context, cb)
+    return binding.dcn_initiate_key_transfer(this.dcn_context, statusCode => {
+      if (typeof statusCode === 'string') {
+        return cb(null, statusCode)
+      }
+      cb(new Error('could not initiate key transfer'))
+    })
   }
 
   isConfigured () {

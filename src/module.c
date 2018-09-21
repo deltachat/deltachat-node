@@ -869,6 +869,7 @@ static void dcn_initiate_key_transfer_complete(napi_env env, napi_status status,
 
   if (carrier->result) {
     NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
+    free(carrier->result);
   } else {
     NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
   }
@@ -994,11 +995,11 @@ NAPI_METHOD(dcn_msg_new) {
 }
 
 typedef struct dcn_open_carrier_t {
+  napi_ref callback_ref;
+  napi_async_work async_work;
   dcn_context_t* dcn_context;
   char* dbfile;
   char* blobdir;
-  napi_ref callback_ref;
-  napi_async_work async_work;
   int result;
 } dcn_open_carrier_t;
 
