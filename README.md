@@ -839,7 +839,7 @@ On `Travis` the coverage report is also passed to [`coveralls`](https://coverall
 We have the following scripts for building, testing and coverage:
 
 * `npm test` Runs `dependency-check`, `standard` and then the tests in `test/index.js`.
-* `npm install` After dependencies are installed, runs the `script/rebuild-all` script which recompiles _all_ the native code from scratch.
+* `npm install` After dependencies are installed, runs `script/rebuild-all.js` which recompiles _all_ the native code from scratch.
 * `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
 * `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 * `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
@@ -847,7 +847,13 @@ We have the following scripts for building, testing and coverage:
 * `npm run start-test-server` Starts the `Greenmail` test server.
 * `npm run stop-test-server` Stops the `Greenmail` test server.
 * `npm run submodule` Updates the git submodule in `deltachat-core/`.
-* `npm run rebuild` Recompiles the native code in `src/` and builds a new `build/Debug/deltachat.node` addon. Also called from the previous script.
+* `npm run rebuild` Recompiles the native code in `src/` and builds a new `deltachat.node` addon.
+
+By default `npm install` will build in `Release` mode and will be as silent as possible. Use `--debug` flag to build in `Debug` mode and `--verbose` for more verbose output, e.g. to build in `Debug` mode with full verbosity, do:
+
+```
+npm install --debug --verbose
+```
 
 ## License
 
