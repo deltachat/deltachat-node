@@ -3,7 +3,7 @@
   "version": "0.15.0",
   "description": "node.js bindings for deltachat-core",
   "scripts": {
-    "rebuild": "node-gyp rebuild --debug --verbose",
+    "rebuild": "node-gyp rebuild",
     "submodule": "git submodule update --recursive --init",
     "install": "node scripts/rebuild-all.js",
     "start-test-server": "./scripts/start-test-server",

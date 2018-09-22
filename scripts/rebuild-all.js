@@ -3,34 +3,43 @@ const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 const spawnSync = require('child_process').spawnSync
 
+const verbose = process.env.npm_config_loglevel === 'verbose'
+const debug = process.env.npm_config_debug === 'true'
+
 const coreBuildDir = path.resolve(__dirname, '../deltachat-core/builddir')
-console.log(`>> Removing ${coreBuildDir}`)
+log(`>> Removing ${coreBuildDir}`)
 rimraf.sync(coreBuildDir)
 
-console.log(`>> Creating ${coreBuildDir}`)
+log(`>> Creating ${coreBuildDir}`)
 mkdirp.sync(coreBuildDir)
 
-console.log('>> meson')
+log('>> meson')
+const mesonOpts = { cwd: coreBuildDir }
+if (verbose) mesonOpts.stdio = 'inherit'
 spawnSync('meson', [
   '--default-library=static',
   '--wrap-mode=forcefallback'
-], {
-  cwd: coreBuildDir,
-  stdio: 'inherit'
-})
+], mesonOpts)
 
-console.log('>> ninja')
-spawnSync('ninja', [ '-v' ], {
+log('>> ninja')
+spawnSync('ninja', verbose ? [ '-v' ] : [], {
   cwd: coreBuildDir,
   stdio: 'inherit'
 })
 
 const buildDir = path.resolve(__dirname, '../build')
-console.log(`>> Removing ${buildDir}`)
+log(`>> Removing ${buildDir}`)
 rimraf.sync(buildDir)
 
-console.log('>> Rebuilding bindings')
-spawnSync('npm', [ 'run', 'rebuild' ], {
+log('>> Rebuilding bindings')
+const gypArgs = [ 'rebuild' ]
+if (debug) gypArgs.push('--debug')
+if (verbose) gypArgs.push('--verbose')
+spawnSync('node-gyp', gypArgs, {
   cwd: path.resolve(__dirname, '..'),
   stdio: 'inherit'
 })
+
+function log (...args) {
+  if (verbose) console.log(...args)
+}
