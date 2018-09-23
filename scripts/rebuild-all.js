@@ -13,7 +13,6 @@ rimraf.sync(coreBuildDir)
 log(`>> Creating ${coreBuildDir}`)
 mkdirp.sync(coreBuildDir)
 
-log('>> meson')
 const mesonOpts = { cwd: coreBuildDir }
 if (verbose) mesonOpts.stdio = 'inherit'
 spawn('meson', [
@@ -21,7 +20,6 @@ spawn('meson', [
   '--wrap-mode=forcefallback'
 ], mesonOpts)
 
-log('>> ninja')
 spawn('ninja', verbose ? [ '-v' ] : [], {
   cwd: coreBuildDir,
   stdio: 'inherit'
@@ -31,7 +29,6 @@ const buildDir = path.resolve(__dirname, '../build')
 log(`>> Removing ${buildDir}`)
 rimraf.sync(buildDir)
 
-log('>> Rebuilding bindings')
 const gypArgs = [ 'rebuild' ]
 if (debug) gypArgs.push('--debug')
 if (verbose) gypArgs.push('--verbose')
@@ -41,6 +38,7 @@ spawn('node-gyp', gypArgs, {
 })
 
 function spawn (cmd, args, opts) {
+  log(`>> ${cmd}`)
   const result = spawnSync(cmd, args, opts)
   if (result.status === null) {
     console.error(`Could not find ${cmd}`)
