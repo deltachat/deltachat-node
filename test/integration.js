@@ -373,7 +373,6 @@ test.skip('key transfer', t => {
   t.timeoutAfter(900)
 
   // Spawn a second dc instance with same account
-  const cwd2 = tempy.directory()
   let dc2 = new DeltaChat()
 
   dc2.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
@@ -388,7 +387,7 @@ test.skip('key transfer', t => {
     })
   })
 
-  dc2.open(cwd2, err => {
+  dc2.open(tempy.directory(), err => {
     t.error(err, 'no err')
     configureDefaultDC(dc2)
   })

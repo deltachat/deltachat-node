@@ -453,7 +453,8 @@ NAPI_METHOD(dcn_continue_key_transfer) {
   carrier->msg_id = msg_id;
   carrier->setup_code = setup_code;
 
-  NAPI_ASYNC_QUEUE_ASYNC_WORK_AND_RETURN(dcn_continue_key_transfer, argv[3]);
+  NAPI_ASYNC_QUEUE_WORK(dcn_continue_key_transfer, argv[3]);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_create_chat_by_contact_id) {
@@ -905,7 +906,8 @@ NAPI_METHOD(dcn_initiate_key_transfer) {
 
   NAPI_ASYNC_NEW_CARRIER(dcn_initiate_key_transfer);
 
-  NAPI_ASYNC_QUEUE_ASYNC_WORK_AND_RETURN(dcn_initiate_key_transfer, argv[1]);
+  NAPI_ASYNC_QUEUE_WORK(dcn_initiate_key_transfer, argv[1]);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_is_configured) {

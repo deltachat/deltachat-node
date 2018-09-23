@@ -73,15 +73,14 @@
   name##_carrier_t* carrier = calloc(1, sizeof(name##_carrier_t)); \
   carrier->dcn_context = dcn_context; \
 
-#define NAPI_ASYNC_QUEUE_ASYNC_WORK_AND_RETURN(name, cb) \
+#define NAPI_ASYNC_QUEUE_WORK(name, cb) \
   napi_value callback = cb; \
   napi_value async_resource_name; \
   NAPI_STATUS_THROWS(napi_create_reference(env, callback, 1, &carrier->callback_ref)); \
-  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "name##_callback", \
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, #name "_callback", \
                                              NAPI_AUTO_LENGTH, \
                                              &async_resource_name)); \
   NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name, \
                                             name##_execute, name##_complete, \
                                             carrier, &carrier->async_work)); \
   NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work)); \
-  NAPI_RETURN_UNDEFINED(); \

@@ -158,7 +158,7 @@ class DeltaChat extends EventEmitter {
   continueKeyTransfer (messageId, setupCode, cb) {
     binding.dcn_continue_key_transfer(this.dcn_context, Number(messageId), setupCode, result => {
       if (result === 0) {
-        return cb(new Error('Key transfer failed due bad setup code'))
+        return cb(new Error('Key transfer failed due to bad setup code'))
       }
       cb(null)
     })
@@ -366,7 +366,7 @@ class DeltaChat extends EventEmitter {
       if (typeof statusCode === 'string') {
         return cb(null, statusCode)
       }
-      cb(new Error('could not initiate key transfer'))
+      cb(new Error('Could not initiate key transfer'))
     })
   }
 
