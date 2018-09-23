@@ -365,6 +365,14 @@ test('ChatList methods', t => {
   t.end()
 })
 
+test('key transfer methods', t => {
+  dc.initiateKeyTransfer((err, setupCode) => {
+    t.same(err, null, 'err is null')
+    t.is(typeof setupCode, 'string', 'setupCode is string')
+    t.end()
+  })
+})
+
 test('tearDown dc context', t => {
   // TODO dc.close() should callback
   dc.close()
