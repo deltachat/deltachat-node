@@ -383,20 +383,20 @@ test.skip('key transfer', t => {
 
   dc2.once('ready', () => {
     dc.initiateKeyTransfer((err, setupCode) => {
-      t.same(err, null, 'err is null')
+      t.error(err, 'no err')
       t.is(typeof setupCode, 'string', 'setupCode is string')
     })
   })
 
   dc2.open(cwd2, err => {
-    t.ok(err == null, 'err is not null')
+    t.error(err, 'no err')
     configureDefaultDC(dc2)
   })
 })
 
 test('initiate key transfer', t => {
   dc.initiateKeyTransfer((err, setupCode) => {
-    t.same(err, null, 'err is null')
+    t.error(err, 'no err')
     t.is(typeof setupCode, 'string', 'setupCode is string')
     t.end()
   })
