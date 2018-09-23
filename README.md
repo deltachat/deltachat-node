@@ -139,8 +139,8 @@ The `options` object takes the following properties:
 
 Continue the AutoCrypt key transfer on another device. Corresponds to [`dc_continue_key_transfer()`](https://deltachat.github.io/api/classdc__context__t.html#a5af2cdd80c7286b2a495d56fa6c0832f).
 
-* `messageId` *(int)* See deltachat api documentation
-* `setupCode` *(string)* See deltachat api documentation
+* `messageId` *(int, required)* See deltachat api documentation
+* `setupCode` *(string, required)* See deltachat api documentation
 * `callback` *(function, optional)* Called with an error if setup code is bad
 
 #### `dc.createChatByContactId(contactId)`
