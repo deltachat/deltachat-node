@@ -7,6 +7,24 @@ const c = require('../constants')
 
 let dc = null
 
+function configureDefaultDC (dcInstance) {
+  dcInstance.configure({
+    addr: 'delta1@delta.localhost',
+    mail_server: '127.0.0.1',
+    mail_port: 3143,
+    mail_user: 'delta1',
+    mail_pw: 'delta1',
+    send_server: '127.0.0.1',
+    send_port: 3025,
+    send_user: 'delta1',
+    send_pw: 'delta1',
+    server_flags: 0x400 | 0x40000,
+    displayname: 'Delta One',
+    selfstatus: 'From Delta One with <3',
+    e2ee_enabled: true
+  })
+}
+
 // TODO 1. to 4. below would cover dc.open() completely
 // 1. test dc.open() where mkdirp fails (e.g. with no permissions)
 // 2. test failing dc._open() (what would make it fail in core?)
@@ -43,21 +61,7 @@ test('setUp dc context', t => {
   dc.open(cwd, err => {
     t.error(err, 'no error during open')
     t.is(dc.isConfigured(), false, 'should not be configured')
-    dc.configure({
-      addr: 'delta1@delta.localhost',
-      mail_server: '127.0.0.1',
-      mail_port: 3143,
-      mail_user: 'delta1',
-      mail_pw: 'delta1',
-      send_server: '127.0.0.1',
-      send_port: 3025,
-      send_user: 'delta1',
-      send_pw: 'delta1',
-      server_flags: 0x400 | 0x40000,
-      displayname: 'Delta One',
-      selfstatus: 'From Delta One with <3',
-      e2ee_enabled: true
-    })
+    configureDefaultDC(dc)
   })
 })
 
@@ -365,7 +369,32 @@ test('ChatList methods', t => {
   t.end()
 })
 
-test('key transfer methods', t => {
+test.skip('key transfer', t => {
+  t.timeoutAfter(900)
+
+  // Spawn a second dc instance with same account
+  const cwd2 = tempy.directory()
+  let dc2 = new DeltaChat()
+
+  dc2.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+    t.comment('incoming msg')
+    t.end()
+  })
+
+  dc2.once('ready', () => {
+    dc.initiateKeyTransfer((err, setupCode) => {
+      t.same(err, null, 'err is null')
+      t.is(typeof setupCode, 'string', 'setupCode is string')
+    })
+  })
+
+  dc2.open(cwd2, err => {
+    t.ok(err == null, 'err is not null')
+    configureDefaultDC(dc2)
+  })
+})
+
+test('initiate key transfer', t => {
   dc.initiateKeyTransfer((err, setupCode) => {
     t.same(err, null, 'err is null')
     t.is(typeof setupCode, 'string', 'setupCode is string')
