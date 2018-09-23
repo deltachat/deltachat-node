@@ -16,13 +16,13 @@ mkdirp.sync(coreBuildDir)
 log('>> meson')
 const mesonOpts = { cwd: coreBuildDir }
 if (verbose) mesonOpts.stdio = 'inherit'
-spawnSync('meson', [
+spawn('meson', [
   '--default-library=static',
   '--wrap-mode=forcefallback'
 ], mesonOpts)
 
 log('>> ninja')
-spawnSync('ninja', verbose ? [ '-v' ] : [], {
+spawn('ninja', verbose ? [ '-v' ] : [], {
   cwd: coreBuildDir,
   stdio: 'inherit'
 })
@@ -35,10 +35,21 @@ log('>> Rebuilding bindings')
 const gypArgs = [ 'rebuild' ]
 if (debug) gypArgs.push('--debug')
 if (verbose) gypArgs.push('--verbose')
-spawnSync('node-gyp', gypArgs, {
+spawn('node-gyp', gypArgs, {
   cwd: path.resolve(__dirname, '..'),
   stdio: 'inherit'
 })
+
+function spawn (cmd, args, opts) {
+  const result = spawnSync(cmd, args, opts)
+  if (result.status === null) {
+    console.error(`Could not find ${cmd}`)
+    process.exit(1)
+  } else if (result.status !== 0) {
+    console.error(`${cmd} failed with code ${result.status}`)
+    process.exit(1)
+  }
+}
 
 function log (...args) {
   if (verbose) console.log(...args)
