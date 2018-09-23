@@ -155,14 +155,13 @@ class DeltaChat extends EventEmitter {
     binding.dcn_configure(this.dcn_context)
   }
 
-  continueKeyTransfer (messageId, setupCode) {
-    return Boolean(
-      binding.dcn_continue_key_transfer(
-        this.dcn_context,
-        Number(messageId),
-        setupCode
-      )
-    )
+  continueKeyTransfer (messageId, setupCode, cb) {
+    binding.dcn_continue_key_transfer(this.dcn_context, Number(messageId), setupCode, result => {
+      if (result === 0) {
+        return cb(new Error('Key transfer failed due to bad setup code'))
+      }
+      cb(null)
+    })
   }
 
   createChatByContactId (contactId) {
@@ -362,8 +361,13 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_imex_has_backup(this.dcn_context, dirName)
   }
 
-  initiateKeyTransfer () {
-    return binding.dcn_initiate_key_transfer(this.dcn_context)
+  initiateKeyTransfer (cb) {
+    return binding.dcn_initiate_key_transfer(this.dcn_context, statusCode => {
+      if (typeof statusCode === 'string') {
+        return cb(null, statusCode)
+      }
+      cb(new Error('Could not initiate key transfer'))
+    })
   }
 
   isConfigured () {

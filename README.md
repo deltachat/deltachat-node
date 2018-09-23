@@ -135,9 +135,13 @@ The `options` object takes the following properties:
 * `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
 * `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
 
-#### `dc.continueKeyTransfer(messageId, setupCode)`
+#### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 
 Continue the AutoCrypt key transfer on another device. Corresponds to [`dc_continue_key_transfer()`](https://deltachat.github.io/api/classdc__context__t.html#a5af2cdd80c7286b2a495d56fa6c0832f).
+
+* `messageId` *(string|integer, required)* See deltachat api documentation
+* `setupCode` *(string, required)* See deltachat api documentation
+* `callback` *(function, required)* Called with an error if setup code is bad
 
 #### `dc.createChatByContactId(contactId)`
 
@@ -283,9 +287,11 @@ Import/export things. Corresponds to [`dc_imex()`](https://deltachat.github.io/a
 
 Check if there is a backup file. Corresponds to [`dc_imex_has_backup()`](https://deltachat.github.io/api/classdc__context__t.html#a052b3b20666162d35b57b34cecf74888).
 
-#### `dc.initiateKeyTransfer()`
+#### `dc.initiateKeyTransfer(callback)`
 
 Initiate Autocrypt setup transfer. Corresponds to [`dc_initiate_key_transfer()`](https://deltachat.github.io/api/classdc__context__t.html#af327aa51e2e18ce3f5948545a637eac9).
+
+* `callback` *(function, required)* Called with an error as first argument (or null) and the setup code as second argument if no error occured.
 
 #### `dc.isConfigured()`
 

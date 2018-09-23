@@ -415,18 +415,46 @@ NAPI_METHOD(dcn_configure) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_ASYNC_CARRIER_BEGIN(dcn_continue_key_transfer)
+  int msg_id;
+  char* setup_code;
+  int result;
+NAPI_ASYNC_CARRIER_END(dcn_continue_key_transfer)
+
+
+NAPI_ASYNC_EXECUTE(dcn_continue_key_transfer) {
+  NAPI_ASYNC_GET_CARRIER(dcn_continue_key_transfer)
+  carrier->result = dc_continue_key_transfer(carrier->dcn_context->dc_context,
+                                        carrier->msg_id, carrier->setup_code);
+}
+
+NAPI_ASYNC_COMPLETE(dcn_continue_key_transfer) {
+  NAPI_ASYNC_GET_CARRIER(dcn_continue_key_transfer)
+  if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+  const int argc = 1;
+  napi_value argv[argc];
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
+
+  NAPI_ASYNC_CALL_AND_DELETE_CB()
+  free(carrier->setup_code);
+  free(carrier);
+}
+
 NAPI_METHOD(dcn_continue_key_transfer) {
-  NAPI_ARGV(3);
+  NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UINT32(msg_id, 1);
   NAPI_ARGV_UTF8_MALLOC(setup_code, 2);
+  NAPI_ASYNC_NEW_CARRIER(dcn_continue_key_transfer)
+  carrier->msg_id = msg_id;
+  carrier->setup_code = setup_code;
 
-  int result = dc_continue_key_transfer(dcn_context->dc_context,
-                                        msg_id, setup_code);
-
-  free(setup_code);
-
-  NAPI_RETURN_INT32(result);
+  NAPI_ASYNC_QUEUE_WORK(dcn_continue_key_transfer, argv[3]);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_create_chat_by_contact_id) {
@@ -843,13 +871,43 @@ NAPI_METHOD(dcn_imex_has_backup) {
   NAPI_RETURN_AND_FREE_STRING(file);
 }
 
+NAPI_ASYNC_CARRIER_BEGIN(dcn_initiate_key_transfer)
+  char* result;
+NAPI_ASYNC_CARRIER_END(dcn_initiate_key_transfer)
+
+NAPI_ASYNC_EXECUTE(dcn_initiate_key_transfer) {
+  NAPI_ASYNC_GET_CARRIER(dcn_initiate_key_transfer);
+  carrier->result = dc_initiate_key_transfer(carrier->dcn_context->dc_context);
+}
+
+NAPI_ASYNC_COMPLETE(dcn_initiate_key_transfer) {
+  NAPI_ASYNC_GET_CARRIER(dcn_initiate_key_transfer);
+   if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+  const int argc = 1;
+  napi_value argv[argc];
+   if (carrier->result) {
+    NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
+  } else {
+    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+  }
+
+  NAPI_ASYNC_CALL_AND_DELETE_CB();
+  free(carrier->result);
+  free(carrier);
+}
+
 NAPI_METHOD(dcn_initiate_key_transfer) {
-  NAPI_ARGV(1);
+  NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
 
-  char* code = dc_initiate_key_transfer(dcn_context->dc_context);
+  NAPI_ASYNC_NEW_CARRIER(dcn_initiate_key_transfer);
 
-  NAPI_RETURN_AND_FREE_STRING(code);
+  NAPI_ASYNC_QUEUE_WORK(dcn_initiate_key_transfer, argv[1]);
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_is_configured) {
