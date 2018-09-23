@@ -123,11 +123,11 @@ The `options` object takes the following properties:
 
 * `options.addr` *(string, required)*: Email address of the chat user.
 * `options.mail_server` *(string, optional)*: IMAP-server, guessed if left out.
-* `options.mail_port` *(string | number, optional)*: IMAP-port, guessed if left out.
+* `options.mail_port` *(string | integer, optional)*: IMAP-port, guessed if left out.
 * `options.mail_user` *(string, optional)*: IMAP-username, guessed if left out.
 * `options.mail_pw` *(string, required)*: IMAP-password of the chat user.
 * `options.send_server` *(string, optional)*: SMTP-server, guessed if left out.
-* `options.send_port` *(string | number, optional)*: SMTP-port, guessed if left out.
+* `options.send_port` *(string | integer, optional)*: SMTP-port, guessed if left out.
 * `options.send_user` *(string, optional)*: SMTP-user, guessed if left out.
 * `options.send_pw` *(string, optional)*: SMTP-password, guessed if left out.
 * `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
@@ -325,12 +325,12 @@ Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to 
 
 Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://deltachat.github.io/api/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
 
-#### `dc.open([cwd], [callback])`
+#### `dc.open([cwd], callback)`
 
 Opens the underlying database.
 
 * `cwd` *(string, optional)* Path to working directory, defaults to current working directory.
-* `callback` *(function, optional)* Called with an error if the database could not be opened.
+* `callback` *(function, required)* Called with an error if the database could not be opened.
 
 #### `dc.removeContactFromChat(chatId, contactId)`
 
