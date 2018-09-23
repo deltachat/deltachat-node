@@ -287,7 +287,7 @@ Import/export things. Corresponds to [`dc_imex()`](https://deltachat.github.io/a
 
 Check if there is a backup file. Corresponds to [`dc_imex_has_backup()`](https://deltachat.github.io/api/classdc__context__t.html#a052b3b20666162d35b57b34cecf74888).
 
-#### `dc.initiateKeyTransfer([callback])`
+#### `dc.initiateKeyTransfer(callback)`
 
 Initiate Autocrypt setup transfer. Corresponds to [`dc_initiate_key_transfer()`](https://deltachat.github.io/api/classdc__context__t.html#af327aa51e2e18ce3f5948545a637eac9).
 
