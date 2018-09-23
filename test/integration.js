@@ -7,8 +7,8 @@ const c = require('../constants')
 
 let dc = null
 
-function configureDefaultDC (dcInstance) {
-  dcInstance.configure({
+function configureDefaultDC (dc) {
+  dc.configure({
     addr: 'delta1@delta.localhost',
     mail_server: '127.0.0.1',
     mail_port: 3143,
