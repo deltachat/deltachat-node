@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.16.0] - 2018-09-24
+
+### Changed
+* Make `dc.initiateKeyTransfer()` and `dc.continueKeyTransfer()` async (@jikstra)
+* Rewrite rebuild script in JavaScript (@ralphtheninja)
+* Make JavaScript event handler private (@ralphtheninja)
+* Document `toJson()` methods (@ralphtheninja)
+* Use `NULL` instead of `0` (@ralphtheninja)
+* `npm install` is silent and builds in `Release` mode by default (@ralphtheninja)
+* Upgrade `deltachat-core` for message changed event fixes (@ralphtheninja)
+* Callback is not optional in `dc.open()` (@ralphtheninja)
+
 ## [0.15.0] - 2018-09-20
 
 ### Changed
@@ -242,7 +254,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...v0.13.1
