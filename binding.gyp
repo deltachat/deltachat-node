@@ -18,7 +18,6 @@
       ],
       "include_dirs": [
         "deltachat-core/src",
-        "deltachat-core/libs/libetpan/include/",
         "<!(node -e \"require('napi-macros')\")"
       ]
     }
