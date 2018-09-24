@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.17.0] - 2018-09-25
+
+### Changed
+* Tweak `binding.gyp` to prepare for windows (@ralphtheninja)
+
+### Added
+* Implement `dc.isOpen()` to check for open context database (@ralphtheninja)
+
+### Removed
+* Remove redundant include path for `libetpan` (@ralphtheninja)
+
 ## [0.16.0] - 2018-09-24
 
 ### Changed
@@ -254,7 +265,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...v0.14.0
