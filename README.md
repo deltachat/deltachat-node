@@ -301,6 +301,10 @@ Check if the context is already configured. Corresponds to [`dc_is_configured()`
 
 Check if a given contact id is a member of a group chat. Corresponds to [`dc_is_contact_in_chat()`](https://deltachat.github.io/api/classdc__context__t.html#aec6e3c1cecd0e4e4ea99c4fdfbd177cd).
 
+#### `dc.isOpen()`
+
+Check if the context database is open. Corresponds to [`dc_is_open()`](https://deltachat.github.io/api/classdc__context__t.html#ab413e1de38b45d8f0653bf851857b737). Returns `true` if open, otherwise `false`.
+
 #### `dc.joinSecurejoin(qrCode)`
 
 Join an out-of-band-verification initiated on another device with `dc.getSecurejoinQrCode()`. Corresponds to [`dc_join_securejoin()`](https://deltachat.github.io/api/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7).

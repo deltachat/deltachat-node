@@ -931,6 +931,15 @@ NAPI_METHOD(dcn_is_contact_in_chat) {
   NAPI_RETURN_INT32(result);
 }
 
+NAPI_METHOD(dcn_is_open) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  int result = dc_is_open(dcn_context->dc_context);
+
+  NAPI_RETURN_INT32(result);
+}
+
 NAPI_METHOD(dcn_join_securejoin) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2162,6 +2171,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
+  NAPI_EXPORT_FUNCTION(dcn_is_open);
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);

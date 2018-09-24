@@ -4,8 +4,10 @@ const tempy = require('tempy')
 
 test('open', t => {
   const dc = new DeltaChat()
+  t.is(dc.isOpen(), false, 'context database is not open')
   dc.open(tempy.directory(), err => {
     t.error(err, 'no error during open')
+    t.is(dc.isOpen(), true, 'context database is open')
     t.is(dc.isConfigured(), false, 'should not be configured')
 
     t.test('> missing addr or mail_pw throws', t => {

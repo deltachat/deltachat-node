@@ -384,6 +384,10 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  isOpen () {
+    return Boolean(binding.dcn_is_open(this.dcn_context))
+  }
+
   // TODO this should most likely be async, see
   // https://deltachat.github.io/api/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7
   joinSecurejoin (qrCode) {
