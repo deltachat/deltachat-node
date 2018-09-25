@@ -68,11 +68,8 @@ class DeltaChat extends EventEmitter {
     return dc_lot ? new Lot(dc_lot) : null
   }
 
-  // TODO close should take a cb
   close () {
-    // TODO close() doesn't always work, figure out a way to be
-    // sure we can stop and callback when done
-    // binding.dcn_close(this.dcn_context)
+    binding.dcn_close(this.dcn_context)
 
     // TODO temporary polling interval
     if (this._pollInterval) {
