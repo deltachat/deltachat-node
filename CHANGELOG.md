@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.17.1] - 2018-09-25
+
+### Changed
+* Close context database in `dc.close()` (@ralphtheninja)
+
 ## [0.17.0] - 2018-09-25
 
 ### Changed
@@ -265,7 +270,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...v0.15.0
