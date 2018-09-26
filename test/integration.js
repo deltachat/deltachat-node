@@ -32,7 +32,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(20)
+  t.plan(21)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -53,6 +53,9 @@ test('setUp dc context', t => {
     t.is(dc.getConfigInt('e2ee_enabled'), 1, 'e2ee enabled')
     t.is(typeof dc.getInfo(), 'string', 'info is a string')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
+  })
+  dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
+    t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
   })
   dc.on('DC_EVENT_ERROR', (data1, data2) => {
     throw new Error(data1 || data2)
