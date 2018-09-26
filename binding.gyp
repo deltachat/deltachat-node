@@ -9,10 +9,9 @@
             "../deltachat-core/builddir/src/libdeltachat.a",
             "../deltachat-core/builddir/libs/libetpan/libetpan.a",
             "../deltachat-core/builddir/libs/cyrussasl/libsals2.a",
-            "../deltachat-core/builddir/libs/zlib-1.2.11/libz.a",
             "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
-            "../deltachat-core/builddir/libs/openssl/libcrypto.a",
-            "../deltachat-core/builddir/libs/sqlite/libsqlite.a",
+            "-lssl",
+            "-lsqlite3",
             "-lpthread"
           ]
         }]
