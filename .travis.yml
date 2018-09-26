@@ -21,6 +21,8 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
+  - env
+  - openssl version
   - ./scripts/travis-before-install
 
 node_js:
