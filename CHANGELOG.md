@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.18.0] - 2018-09-27
+
+### Changed
+* Build against system version of openssl (@ralphtheninja)
+* Update links to c documentation (@r10s)
+* Upgrade `deltachat-core` for hex-literals fix (@ralphtheninja)
+* Print out env and openssl version on Travis (@ralphtheninja)
+
+### Added
+* Test `DC_EVENT_CONFIGURE_PROGRESS` (@ralphtheninja)
+
 ## [0.17.1] - 2018-09-25
 
 ### Changed
@@ -270,7 +281,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.17.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/deltachat/deltachat-node/compare/v0.17.1...v0.18.0
 [0.17.1]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...v0.16.0
