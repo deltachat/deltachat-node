@@ -18,9 +18,8 @@
 
 **Note** We've changed the underlying event mechanism to polling. This is a temporary solution to allow for compatibility with earlier node versions and current versions of `electron` at time of writing. Once `electron` has support for node `v10.7.0` this will be removed and we will go back to using a push mechanism.
 
-**Note** Only node 8 (and electron 2) are supported at the momement. This is because `deltachat-core` comes bundled with `openssl@1.0.1t` which is incompatible with node 10.
-
 * [Install](#install)
+* [Troubleshooting](#troubleshooting)
 * [Usage](#usage)
 * [API](#api)
 * [Events](#events)
@@ -34,6 +33,24 @@
 ```
 npm install deltachat-node
 ```
+
+## Troubleshooting
+
+This modules builds on top of `deltachat-core`, which in turn has external dependencies.
+
+If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` and `libsasl2-dev` can't be installed globally.
+
+On Linux (e.g. Debian Stretch):
+
+```
+sudo apt-get install python3-pip ninja-build libssl1.0-dev
+sudo pip3 install meson
+sudo apt-get remove libetpan-dev libsasl2-dev
+```
+
+Then try running `npm install` again.
+
+Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for additional information.
 
 ## Usage
 
@@ -829,8 +846,6 @@ cd deltachat-node
 npm run submodule
 npm install
 ```
-
-**Note** that `deltachat-core` in turn has external dependencies. Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for more information.
 
 ## Tests and Coverage
 

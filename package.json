@@ -21,7 +21,7 @@
     "url": "https://github.com/deltachat/deltachat-node.git"
   },
   "engines": {
-    "node": "8"
+    "node": ">=8"
   },
   "license": "GPL-3.0",
   "dependencies": {
