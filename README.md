@@ -50,7 +50,7 @@ sudo apt-get remove libetpan-dev libsasl2-dev
 
 Then try running `npm install` again.
 
-Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for additional information.
+Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
 ## Usage
 
