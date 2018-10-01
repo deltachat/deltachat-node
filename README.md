@@ -132,7 +132,7 @@ Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://c.delta.chat/c
 
 Stops the threads and closes down the `DeltaChat` instance.
 
-#### `dc.configure(options[, cb])`
+#### `dc.configure(options[, callback])`
 
 Configure and connect a context. Corresponds to [`dc_configure()`](https://c.delta.chat/classdc__context__t.html#adfe52669a5bed893df78a620566dd698).
 
@@ -151,6 +151,8 @@ The `options` object takes the following properties:
 * `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
 * `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
 * `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
+
+The optional `callback` is called with `null` if configure was successful, otherwise with an error.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 

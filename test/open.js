@@ -10,13 +10,13 @@ test('open', t => {
     t.is(dc.isOpen(), true, 'context database is open')
     t.is(dc.isConfigured(), false, 'should not be configured')
 
-    t.test('> missing addr or mail_pw throws', t => {
-      t.throws(function () {
-        dc.configure({ addr: 'delta1@delta.localhost' })
-      }, /Missing \.mail_pw/, 'missing mail_pw throws')
-      t.throws(function () {
-        dc.configure({ mail_pw: 'delta1' })
-      }, /Missing \.addr/, 'missing addr throws')
+    t.test('> missing addr or mail_pw errors', t => {
+      dc.configure({ addr: 'delta1@delta.localhost' }, err => {
+        t.is(err.message, 'Missing .mail_pw')
+      })
+      dc.configure({ mail_pw: 'delta1' }, err => {
+        t.is(err.message, 'Missing .addr')
+      })
       t.end()
     })
 
@@ -27,12 +27,11 @@ test('open', t => {
           t.pass('Got autoconfig!')
         }
       })
-      dc.once('DC_EVENT_ERROR', (code, error) => {
-        t.pass('Got _some_ error (either can\'t connect or can\'t login)')
-      })
       dc.configure({
         addr: 'hpk2@hq5.merlinux.eu',
         mail_pw: 'whatever'
+      }, err => {
+        t.is(typeof err.message, 'string', 'Configure failed!')
       })
     })
 

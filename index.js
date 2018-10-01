@@ -83,9 +83,17 @@ class DeltaChat extends EventEmitter {
   }
 
   configure (opts, cb) {
+    if (typeof cb !== 'function') {
+      cb = function () {}
+    }
+
+    const onError = (code, error) => {
+      cb(new Error(`Configure failed with code ${code}`))
+    }
     const ready = () => {
+      this.removeListener('DC_EVENT_ERROR', onError)
       this.emit('ready')
-      cb && cb()
+      cb(null)
     }
 
     if (this.isConfigured()) {
@@ -93,13 +101,14 @@ class DeltaChat extends EventEmitter {
     }
 
     if (typeof opts.addr !== 'string') {
-      throw new Error('Missing .addr')
+      return process.nextTick(cb, new Error('Missing .addr'))
     }
 
     if (typeof opts.mail_pw !== 'string') {
-      throw new Error('Missing .mail_pw')
+      return process.nextTick(cb, new Error('Missing .mail_pw'))
     }
 
+    this.once('DC_EVENT_ERROR', onError)
     this.once('_configured', ready)
 
     this.setConfig('addr', opts.addr)
