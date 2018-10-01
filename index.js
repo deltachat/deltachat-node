@@ -87,7 +87,11 @@ class DeltaChat extends EventEmitter {
       cb = function () {}
     }
 
+    const onError = (code, error) => {
+      cb(new Error(`Configure failed with code ${code}`))
+    }
     const ready = () => {
+      this.removeListener('DC_EVENT_ERROR', onError)
       this.emit('ready')
       cb(null)
     }
@@ -104,11 +108,8 @@ class DeltaChat extends EventEmitter {
       return process.nextTick(cb, new Error('Missing .mail_pw'))
     }
 
+    this.once('DC_EVENT_ERROR', onError)
     this.once('_configured', ready)
-
-    this.once('DC_EVENT_ERROR', (code, error) => {
-      cb(new Error(`Configure failed with code ${code}`))
-    })
 
     this.setConfig('addr', opts.addr)
     this.setConfig('mail_pw', opts.mail_pw)
