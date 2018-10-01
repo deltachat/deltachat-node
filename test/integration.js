@@ -7,7 +7,7 @@ const c = require('../constants')
 
 let dc = null
 
-function configureDefaultDC (dc) {
+function configureDefaultDC (dc, cb) {
   dc.configure({
     addr: 'delta1@delta.localhost',
     mail_server: '127.0.0.1',
@@ -22,7 +22,7 @@ function configureDefaultDC (dc) {
     displayname: 'Delta One',
     selfstatus: 'From Delta One with <3',
     e2ee_enabled: true
-  })
+  }, cb)
 }
 
 // TODO 1. to 4. below would cover dc.open() completely
@@ -32,7 +32,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(21)
+  t.plan(22)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -57,14 +57,16 @@ test('setUp dc context', t => {
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
     t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
   })
-  dc.on('DC_EVENT_ERROR', (data1, data2) => {
+  dc.once('DC_EVENT_ERROR', (data1, data2) => {
     throw new Error(data1 || data2)
   })
   dc.once('ALL', () => t.pass('ALL event fired at least once'))
   dc.open(cwd, err => {
     t.error(err, 'no error during open')
     t.is(dc.isConfigured(), false, 'should not be configured')
-    configureDefaultDC(dc)
+    configureDefaultDC(dc, err => {
+      t.error(err, 'no error in configure')
+    })
   })
 })
 
