@@ -14,7 +14,10 @@ log(`>> Creating ${coreBuildDir}`)
 mkdirp.sync(coreBuildDir)
 
 const mesonOpts = { cwd: coreBuildDir }
-const mesonArgs = [ '--default-library=static' ]
+const mesonArgs = [
+  '--default-library=static',
+  '--wrap-mode=forcefallback'
+]
 if (verbose) mesonOpts.stdio = 'inherit'
 spawn('meson', mesonArgs, mesonOpts)
 
