@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.18.1] - 2018-10-05
+
+### Changed
+* Fix broken link to core build instructions (@ralphtheninja)
+* Print ut error message in test autoconfig test (@ralphtheninja)
+
+### Fixed
+* Link against global `-lsasl2` instead and fallback to bundled version (@ralphtheninja)
+
 ## [0.18.0] - 2018-09-27
 
 ### Changed
