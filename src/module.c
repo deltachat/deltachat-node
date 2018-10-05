@@ -50,6 +50,10 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
     case DC_EVENT_IS_OFFLINE:
       return dcn_context->is_offline;
 
+    case DC_EVENT_GET_STRING:
+    case DC_EVENT_GET_QUANTITY_STRING:
+      return 0;
+
     case DC_EVENT_HTTP_GET: {
       uintptr_t http_ret = 0;
       if (dcn_context->event_queue) {

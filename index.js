@@ -657,11 +657,8 @@ function handleEvent (self, event, data1, data2) {
     case 'DC_EVENT_HTTP_GET':
       handleHttpGetEvent(data1)
       break
-    case 'DC_EVENT_IS_OFFLINE':
-    case 'DC_EVENT_GET_STRING':
-    case 'DC_EVENT_GET_QUANTITY_STRING':
     default:
-      debug('Unknown event')
+      debug(`Unknown event ${eventStr}`)
   }
 }
 
