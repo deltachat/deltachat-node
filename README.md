@@ -244,10 +244,6 @@ Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds
 
 Get a configuration option. Corresponds to [`dc_get_config()`](https://c.delta.chat/classdc__context__t.html#ada7a19d3c814ed5f776a24006259395d).
 
-#### `dc.getConfigInt(key, def)`
-
-Get a configuration option. Corresponds to [`dc_get_config_int()`](https://c.delta.chat/classdc__context__t.html#aeac1bda75c3d1c0845bc81d986607567).
-
 #### `dc.getContact(contactId)`
 
 Get a single [`Contact`](#class_contact) object. Corresponds to [`dc_get_contact()`](https://c.delta.chat/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
@@ -404,10 +400,6 @@ Set group profile image. Corresponds to [`dc_set_chat_profile_image()`](https://
 #### `dc.setConfig(key, value)`
 
 Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/classdc__context__t.html#aff3b894f6cfca46cab5248fdffdf083d).
-
-#### `dc.setConfigInt(key, value)`
-
-Configure the context. Corresponds to [`dc_set_config_int()`](https://c.delta.chat/classdc__context__t.html#af7259da69bebbff86c7ee776559263cd).
 
 #### `dc.setOffline(offline)`
 

@@ -133,8 +133,8 @@ class DeltaChat extends EventEmitter {
       this.setConfig('send_pw', opts.send_pw)
     }
 
-    if (typeof opts.server_flags === 'number') {
-      this.setConfigInt('server_flags', opts.server_flags)
+    if (opts.server_flags) {
+      this.setConfig('server_flags', String(opts.server_flags))
     }
 
     if (typeof opts.displayname === 'string') {
@@ -146,7 +146,7 @@ class DeltaChat extends EventEmitter {
     }
 
     if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
-      this.setConfigInt('e2ee_enabled', opts.e2ee_enabled ? 1 : 0)
+      this.setConfig('e2ee_enabled', String(opts.e2ee_enabled ? 1 : 0))
     }
 
     binding.dcn_configure(this.dcn_context)
@@ -289,10 +289,6 @@ class DeltaChat extends EventEmitter {
 
   getConfig (key, def) {
     return binding.dcn_get_config(this.dcn_context, key, def || '')
-  }
-
-  getConfigInt (key, def) {
-    return binding.dcn_get_config_int(this.dcn_context, key, def || 0)
   }
 
   getContact (contactId) {
@@ -553,10 +549,6 @@ class DeltaChat extends EventEmitter {
 
   setConfig (key, value) {
     return binding.dcn_set_config(this.dcn_context, key, value)
-  }
-
-  setConfigInt (key, value) {
-    return binding.dcn_set_config_int(this.dcn_context, key, value)
   }
 
   setOffline (offline) {
