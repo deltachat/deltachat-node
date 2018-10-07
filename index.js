@@ -436,8 +436,8 @@ class DeltaChat extends EventEmitter {
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
   }
 
-  messageNew () {
-    return new Message(binding.dcn_msg_new(this.dcn_context))
+  messageNew (type = C.DC_MSG_TEXT) {
+    return new Message(binding.dcn_msg_new(this.dcn_context, type))
   }
 
   open (cwd, cb) {

@@ -234,8 +234,7 @@ test('new message and Message methods', t => {
   t.is(msg.getTimestamp(), 0, 'no timestamp')
 
   let type = msg.getType()
-  t.is(type.isUndefined(), true, 'no message type set')
-  t.is(type.isText(), false, 'no message type set')
+  t.is(type.isText(), true, 'text type is default')
   t.is(type.isImage(), false, 'no message type set')
   t.is(type.isGif(), false, 'no message type set')
   t.is(type.isAudio(), false, 'no message type set')

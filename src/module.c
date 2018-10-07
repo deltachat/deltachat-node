@@ -988,9 +988,10 @@ NAPI_METHOD(dcn_markseen_msgs) {
 NAPI_METHOD(dcn_msg_new) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
+  NAPI_ARGV_INT32(viewtype, 1);
 
   napi_value result;
-  dc_msg_t* msg = dc_msg_new(dcn_context->dc_context);
+  dc_msg_t* msg = dc_msg_new(dcn_context->dc_context, viewtype);
 
   NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
                                           NULL, &result));
