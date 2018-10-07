@@ -737,10 +737,6 @@ Set the media information assocated with the message object. Corresponds to [`dc
 
 Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c.delta.chat/classdc__msg__t.html#a352d9e2cc2fcacac43bb540550a578a1).
 
-#### `message.setType(type)`
-
-Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://c.delta.chat/classdc__msg__t.html#a5d5568d88453a31a1379299d9c155c4f).
-
 #### `message.toJson()`
 
 Returns the object state as a JavaScript serializable object.

@@ -247,10 +247,6 @@ class Message {
   setText (text) {
     binding.dcn_msg_set_text(this.dc_msg, text)
   }
-
-  setType (type) {
-    binding.dcn_msg_set_type(this.dc_msg, type)
-  }
 }
 
 module.exports = Message

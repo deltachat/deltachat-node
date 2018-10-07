@@ -2084,16 +2084,6 @@ NAPI_METHOD(dcn_msg_set_text) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_msg_set_type) {
-  NAPI_ARGV(2);
-  NAPI_DC_MSG();
-  NAPI_ARGV_INT32(type, 1);
-
-  dc_msg_set_type(dc_msg, type);
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_INIT() {
   /**
    * Main context
@@ -2264,5 +2254,4 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
-  NAPI_EXPORT_FUNCTION(dcn_msg_set_type);
 }

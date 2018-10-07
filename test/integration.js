@@ -288,9 +288,6 @@ test('new message and Message methods', t => {
   t.is(mi.getText1(), 'deltaX', 'text1 set')
   t.is(mi.getText2(), 'rules', 'text2 set')
 
-  msg.setType(c.DC_MSG_AUDIO)
-  t.is(msg.getType().isAudio(), true, 'type set correctly')
-
   const json = msg.toJson()
   t.notEqual(json, null, 'not null')
   t.is(typeof json, 'object', 'json object')
