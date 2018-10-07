@@ -108,7 +108,7 @@ class Message {
       fromId: this.getFromId(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
-      type: binding.dcn_msg_get_type(this.dc_msg),
+      type: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
       summary: this.getSummary().toJson(),
       isSetupmessage: this.isSetupmessage(),
@@ -188,7 +188,7 @@ class Message {
   }
 
   getType () {
-    return new MessageType(binding.dcn_msg_get_type(this.dc_msg))
+    return new MessageType(binding.dcn_msg_get_viewtype(this.dc_msg))
   }
 
   getWidth () {

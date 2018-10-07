@@ -1936,11 +1936,11 @@ NAPI_METHOD(dcn_msg_get_timestamp) {
   NAPI_RETURN_INT32(timestamp);
 }
 
-NAPI_METHOD(dcn_msg_get_type) {
+NAPI_METHOD(dcn_msg_get_viewtype) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
 
-  int type = dc_msg_get_type(dc_msg);
+  int type = dc_msg_get_viewtype(dc_msg);
 
   NAPI_RETURN_INT32(type);
 }
@@ -2250,7 +2250,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_summarytext);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
-  NAPI_EXPORT_FUNCTION(dcn_msg_get_type);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
