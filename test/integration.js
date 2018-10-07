@@ -32,7 +32,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(19)
+  t.plan(18)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -49,7 +49,6 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayname correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfstatus correct')
     t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee enabled')
-    t.is(typeof dc.getInfo(), 'string', 'info is a string')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
   })
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
@@ -64,6 +63,41 @@ test('setUp dc context', t => {
     t.is(dc.isConfigured(), false, 'should not be configured')
     configureDefaultDC(dc)
   })
+})
+
+test('dc.getInfo()', t => {
+  const info = dc.getInfo()
+  t.same(Object.keys(info).sort(), [
+    'arch',
+    'blobdir',
+    'compile_date',
+    'database_dir',
+    'database_version',
+    'deltachat_core_version',
+    'display_name',
+    'e2ee_default_enabled',
+    'e2ee_enabled',
+    'entered_account_settings',
+    'fingerprint',
+    'is_configured',
+    'libetpan_version',
+    'mdns_enabled',
+    'messages_in_contact_requests',
+    'number_of_chat_messages',
+    'number_of_chats',
+    'number_of_contacts',
+    'openssl_version',
+    'private_key_count',
+    'public_key_count',
+    'sqlite_thread_safe',
+    'sqlite_version',
+    'used_account_settings'
+  ])
+  t.is(Object.values(info).every(v => {
+    return typeof v === 'string'
+  }), true, 'all values are strings')
+  t.is(info.fingerprint.length, 40, 'fingerprint length')
+  t.end()
 })
 
 test('create chat from contact and Chat methods', t => {
