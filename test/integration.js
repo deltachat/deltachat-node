@@ -100,6 +100,16 @@ test('dc.getInfo()', t => {
   t.end()
 })
 
+test('static getConfig()', t => {
+  const info = dc.getInfo()
+  const dir = info.database_dir
+  DeltaChat.getConfig(dir, (err, config) => {
+    t.error(err, 'no error')
+    t.is(config.addr, 'delta1@delta.localhost')
+    t.end()
+  })
+})
+
 test('create chat from contact and Chat methods', t => {
   const contactId = dc.createContact('aaa', 'aaa@site.org')
 

@@ -240,6 +240,12 @@ Like `dc.getChatList()` but returns a JavaScript array of ids.
 
 Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds to [`dc_get_chatlist()`](https://c.delta.chat/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
 
+#### `DeltaChat.getConfig(path, callback)`
+
+Get configuration from a path. Calls back with `(err, config)`. A static method which does a minimal open and if the path has a configured state the `config` parameter contains the following properties:
+
+* `addr` *(string)*: Email address used to configure the account.
+
 #### `dc.getConfig(key, def)`
 
 Get a configuration option. Corresponds to [`dc_get_config()`](https://c.delta.chat/classdc__context__t.html#ada7a19d3c814ed5f776a24006259395d).

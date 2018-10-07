@@ -287,6 +287,22 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  static getConfig (dir, cb) {
+    let dc = new DeltaChat()
+    function done (err, config) {
+      dc = null
+      cb(err, config)
+    }
+    binding.dcn_open(dc.dcn_context, dir, '', err => {
+      if (err) return done(err)
+      if (dc.isConfigured()) {
+        const addr = dc.getConfig('addr')
+        return done(null, { addr })
+      }
+      done(null, {})
+    })
+  }
+
   getConfig (key, def) {
     return binding.dcn_get_config(this.dcn_context, key, def || '')
   }
