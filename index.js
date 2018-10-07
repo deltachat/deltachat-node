@@ -318,7 +318,20 @@ class DeltaChat extends EventEmitter {
   }
 
   getInfo () {
-    return binding.dcn_get_info(this.dcn_context)
+    const result = {}
+
+    const regex = /^(\w+)=(.*)$/i
+    binding.dcn_get_info(this.dcn_context)
+      .split('\n')
+      .filter(Boolean)
+      .forEach(line => {
+        const match = regex.exec(line)
+        if (match) {
+          result[match[1]] = match[2]
+        }
+      })
+
+    return result
   }
 
   getMessage (messageId) {

@@ -266,7 +266,34 @@ Returns the message ids of all _fresh_ messages of any chat. Corresponds to [`dc
 
 #### `dc.getInfo()`
 
-Get info about the context. Corresponds to [`dc_get_info()`](https://c.delta.chat/classdc__context__t.html#a2cb5251125fa02a0f997753f2fe905b1).
+Get info about the context. Corresponds to [`dc_get_info()`](https://c.delta.chat/classdc__context__t.html#a2cb5251125fa02a0f997753f2fe905b1) but without the log information.
+
+Returns an object with the following properties:
+
+* `arch`
+* `blobdir`
+* `compile_date`
+* `database_dir`
+* `database_version`
+* `deltachat_core_version`
+* `display_name`
+* `e2ee_default_enabled`
+* `e2ee_enabled`
+* `entered_account_settings`
+* `fingerprint`
+* `is_configured`
+* `libetpan_version`
+* `mdns_enabled`
+* `messages_in_contact_requests`
+* `number_of_chat_messages`
+* `number_of_chats`
+* `number_of_contacts`
+* `openssl_version`
+* `private_key_count`
+* `public_key_count`
+* `sqlite_thread_safe`
+* `sqlite_version`
+* `used_account_settings`
 
 #### `dc.getMessage(messageId)`
 
