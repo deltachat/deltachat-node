@@ -233,15 +233,14 @@ test('new message and Message methods', t => {
   t.is(msg.getText(), text, 'msg text set correctly')
   t.is(msg.getTimestamp(), 0, 'no timestamp')
 
-  let type = msg.getType()
-  t.is(type.isUndefined(), true, 'no message type set')
-  t.is(type.isText(), false, 'no message type set')
-  t.is(type.isImage(), false, 'no message type set')
-  t.is(type.isGif(), false, 'no message type set')
-  t.is(type.isAudio(), false, 'no message type set')
-  t.is(type.isVoice(), false, 'no message type set')
-  t.is(type.isVideo(), false, 'no message type set')
-  t.is(type.isFile(), false, 'no message type set')
+  const viewType = msg.getViewType()
+  t.is(viewType.isText(), true)
+  t.is(viewType.isImage(), false)
+  t.is(viewType.isGif(), false)
+  t.is(viewType.isAudio(), false)
+  t.is(viewType.isVoice(), false)
+  t.is(viewType.isVideo(), false)
+  t.is(viewType.isFile(), false)
 
   t.is(msg.getWidth(), 0, 'no message width')
   t.is(msg.isDeadDrop(), false, 'not deaddrop')
@@ -287,9 +286,6 @@ test('new message and Message methods', t => {
   mi = msg.getMediainfo()
   t.is(mi.getText1(), 'deltaX', 'text1 set')
   t.is(mi.getText2(), 'rules', 'text2 set')
-
-  msg.setType(c.DC_MSG_AUDIO)
-  t.is(msg.getType().isAudio(), true, 'type set correctly')
 
   const json = msg.toJson()
   t.notEqual(json, null, 'not null')

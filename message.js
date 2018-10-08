@@ -51,44 +51,44 @@ class MessageState {
 /**
  * Helper class for message types so you can do e.g.
  *
- * if (msg.getType().isVideo()) { .. }
+ * if (msg.getViewType().isVideo()) { .. }
  *
  */
-class MessageType {
-  constructor (type) {
-    this.type = type
+class MessageViewType {
+  constructor (viewType) {
+    this.viewType = viewType
   }
 
   isUndefined () {
-    return this.type === C.DC_MSG_UNDEFINED
+    return this.viewType === C.DC_MSG_UNDEFINED
   }
 
   isText () {
-    return this.type === C.DC_MSG_TEXT
+    return this.viewType === C.DC_MSG_TEXT
   }
 
   isImage () {
-    return this.type === C.DC_MSG_IMAGE || this.type === C.DC_MSG_GIF
+    return this.viewType === C.DC_MSG_IMAGE || this.viewType === C.DC_MSG_GIF
   }
 
   isGif () {
-    return this.type === C.DC_MSG_GIF
+    return this.viewType === C.DC_MSG_GIF
   }
 
   isAudio () {
-    return this.type === C.DC_MSG_AUDIO || this.type === C.DC_MSG_VOICE
+    return this.viewType === C.DC_MSG_AUDIO || this.viewType === C.DC_MSG_VOICE
   }
 
   isVoice () {
-    return this.type === C.DC_MSG_VOICE
+    return this.viewType === C.DC_MSG_VOICE
   }
 
   isVideo () {
-    return this.type === C.DC_MSG_VIDEO
+    return this.viewType === C.DC_MSG_VIDEO
   }
 
   isFile () {
-    return this.type === C.DC_MSG_FILE
+    return this.viewType === C.DC_MSG_FILE
   }
 }
 
@@ -108,7 +108,7 @@ class Message {
       fromId: this.getFromId(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
-      type: binding.dcn_msg_get_type(this.dc_msg),
+      viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
       summary: this.getSummary().toJson(),
       isSetupmessage: this.isSetupmessage(),
@@ -187,8 +187,8 @@ class Message {
     return binding.dcn_msg_get_timestamp(this.dc_msg)
   }
 
-  getType () {
-    return new MessageType(binding.dcn_msg_get_type(this.dc_msg))
+  getViewType () {
+    return new MessageViewType(binding.dcn_msg_get_viewtype(this.dc_msg))
   }
 
   getWidth () {
@@ -246,10 +246,6 @@ class Message {
 
   setText (text) {
     binding.dcn_msg_set_text(this.dc_msg, text)
-  }
-
-  setType (type) {
-    binding.dcn_msg_set_type(this.dc_msg, type)
   }
 }
 

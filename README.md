@@ -88,7 +88,7 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class Lot</b></code>](#class_lot)
 * [<code><b>class Message</b></code>](#class_message)
 * [<code><b>class MessageState</b></code>](#class_message_state)
-* [<code><b>class MessageType</b></code>](#class_message_type)
+* [<code><b>class MessageViewType</b></code>](#class_message_view_type)
 
 <a name="deltachat_ctor"></a>
 ### `dc = DeltaChat()`
@@ -371,9 +371,17 @@ Mark all messages sent by the given contact as _noticed_. Corresponds to [`dc_ma
 
 Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to [`dc_markseen_msgs()`](https://c.delta.chat/classdc__context__t.html#ae5305a90c09380dffe54e68c2a709128).
 
-#### `dc.messageNew()`
+#### `dc.messageNew([viewType])`
 
-Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
+Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
+
+* `DC_MSG_TEXT`
+* `DC_MSG_AUDIO`
+* `DC_MSG_FILE`
+* `DC_MSG_GIF`
+* `DC_MSG_IMAGE`
+* `DC_MSG_VIDEO`
+* `DC_MSG_VOICE`
 
 #### `dc.open([cwd], callback)`
 
@@ -677,9 +685,9 @@ Get the text of the message. Corresponds to [`dc_msg_get_text()`](https://c.delt
 
 Get message sending time. Corresponds to [`dc_msg_get_timestamp()`](https://c.delta.chat/classdc__msg__t.html#af667c538fd07771eb94d6c5d1879b906).
 
-#### `message.getType()`
+#### `message.getViewType()`
 
-Get the type of the message. Returns a [`MessageType`](#class_message_type) object. Corresponds to [`dc_msg_get_type()`](https://c.delta.chat/classdc__msg__t.html#aa1b0e553c44a8df5e9f725087a5186f2).
+Get the view type of the message. Returns a [`MessageViewType`](#class_message_view_type) object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
 
 #### `message.getWidth()`
 
@@ -737,10 +745,6 @@ Set the media information assocated with the message object. Corresponds to [`dc
 
 Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c.delta.chat/classdc__msg__t.html#a352d9e2cc2fcacac43bb540550a578a1).
 
-#### `message.setType(type)`
-
-Set the type of a message object. Corresponds to [`dc_msg_set_type()`](https://c.delta.chat/classdc__msg__t.html#a5d5568d88453a31a1379299d9c155c4f).
-
 #### `message.toJson()`
 
 Returns the object state as a JavaScript serializable object.
@@ -790,46 +794,46 @@ Internal `state` property.
 
 ------------------------------------
 
-<a name="class_message_type"></a>
-### `class MessageType`
+<a name="class_message_view_type"></a>
+### `class MessageViewType`
 
-An object representing a [`Message`](#class_message) type.
+An object representing a [`Message`](#class_message) view type.
 
-#### `type.isUndefined()`
+#### `viewType.isUndefined()`
 
 Message type is `DC_MSG_UNDEFINED`.
 
-#### `type.isText()`
+#### `viewType.isText()`
 
 Message type is `DC_MSG_TEXT`.
 
-#### `type.isImage()`
+#### `viewType.isImage()`
 
 Message type has `DC_MSG_IMAGE` bits set.
 
-#### `type.isGif()`
+#### `viewType.isGif()`
 
 Message type is `DC_MSG_GIF`.
 
-#### `type.isAudio()`
+#### `viewType.isAudio()`
 
 Message type has `DC_MSG_AUDIO` bits set.
 
-#### `type.isVoice()`
+#### `viewType.isVoice()`
 
 Message type is `DC_MSG_VOICE`.
 
-#### `type.isVideo()`
+#### `viewType.isVideo()`
 
 Message type has `DC_MSG_VIDEO` bits set.
 
-#### `type.isFile()`
+#### `viewType.isFile()`
 
 Message type is `DC_MSG_FILE`.
 
-#### `type.type`
+#### `viewType.viewType`
 
-Internal `type` property.
+Internal `viewType` property.
 
 ## Events
 
