@@ -371,9 +371,17 @@ Mark all messages sent by the given contact as _noticed_. Corresponds to [`dc_ma
 
 Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to [`dc_markseen_msgs()`](https://c.delta.chat/classdc__context__t.html#ae5305a90c09380dffe54e68c2a709128).
 
-#### `dc.messageNew()`
+#### `dc.messageNew([type])`
 
-Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87).
+Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#a3d5e65374c014990c35a0cee9b0ddf87). The `type` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
+
+* `DC_MSG_TEXT`
+* `DC_MSG_AUDIO`
+* `DC_MSG_FILE`
+* `DC_MSG_GIF`
+* `DC_MSG_IMAGE`
+* `DC_MSG_VIDEO`
+* `DC_MSG_VOICE`
 
 #### `dc.open([cwd], callback)`
 
