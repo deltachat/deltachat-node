@@ -59,10 +59,6 @@ class MessageViewType {
     this.viewType = viewType
   }
 
-  isUndefined () {
-    return this.viewType === C.DC_MSG_UNDEFINED
-  }
-
   isText () {
     return this.viewType === C.DC_MSG_TEXT
   }

@@ -799,10 +799,6 @@ Internal `state` property.
 
 An object representing a [`Message`](#class_message) view type.
 
-#### `viewType.isUndefined()`
-
-Message type is `DC_MSG_UNDEFINED`.
-
 #### `viewType.isText()`
 
 Message type is `DC_MSG_TEXT`.
