@@ -69,7 +69,7 @@ class DeltaChat extends EventEmitter {
   }
 
   close () {
-    binding.dcn_close(this.dcn_context)
+    this.removeAllListeners()
 
     // TODO temporary polling interval
     if (this._pollInterval) {
