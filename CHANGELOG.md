@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [0.19.0] - 2018-10-08
+
+### Changed
+* `DeltaChat#getInfo()` returns an object based on parsed data from `dc_get_info()` (@ralphtheninja)
+* Rename `Message#getType()` to `Message#getViewType()` (@ralphtheninja)
+* Rename `MessageType` to `MessageViewType` (@ralphtheninja)
+* `DeltaChat#messageNew()` accepts an optional `viewType` parameter (defaults to `DC_MSG_TEXT`) (@ralphtheninja)
+
+### Added
+* Add static method `DeltaChat#getConfig(path, cb)` for retriving configuration given a folder (@ralphtheninja)
+* Add `UPGRADING.md` (@ralphtheninja)
+
+### Removed
+* Remove `DeltaChat#setConfigInt()` and `DeltaChat#getConfigInt()` (@ralphtheninja)
+* Remove `Message#setType()` (@ralphtheninja)
+* Remove `DC_MSG_UNDEFINED` view type (@ralphtheninja)
+
 ## [0.18.2] - 2018-10-06
 
 ### Removed
@@ -295,7 +312,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.18.2...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/deltachat/deltachat-node/compare/v0.18.2...v0.19.0
 [0.18.2]: https://github.com/deltachat/deltachat-node/compare/v0.18.1...v0.18.2
 [0.18.1]: https://github.com/deltachat/deltachat-node/compare/v0.18.0...v0.18.1
 [0.17.1]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...v0.17.1
