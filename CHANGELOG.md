@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.19.2] - 2018-10-08
+
+### Fixed
+* Use path to db file in `DeltaChat#getConfig(path, cb)` (@ralphtheninja)
+
 ## [0.19.1] - 2018-10-08
 
 ### Fixed
@@ -317,7 +322,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...HEAD
+[0.19.2]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...v0.19.2
 [0.19.1]: https://github.com/deltachat/deltachat-node/compare/v0.19.0...v0.19.1
 [0.19.0]: https://github.com/deltachat/deltachat-node/compare/v0.18.2...v0.19.0
 [0.18.2]: https://github.com/deltachat/deltachat-node/compare/v0.18.1...v0.18.2
