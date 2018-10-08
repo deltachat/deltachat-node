@@ -11,7 +11,7 @@
 * `DeltaChat#messageNew()` accepts an optional `viewType` parameter (defaults to `DC_MSG_TEXT`) (@ralphtheninja)
 
 ### Added
-* Add static method `DeltaChat#getConfig(path, cb)` for retriving configuration given a folder (@ralphtheninja)
+* Add static method `DeltaChat#getConfig(path, cb)` for retrieving configuration given a folder (@ralphtheninja)
 * Add `UPGRADING.md` (@ralphtheninja)
 
 ### Removed
