@@ -293,7 +293,8 @@ class DeltaChat extends EventEmitter {
       dc = null
       cb(err, config)
     }
-    binding.dcn_open(dc.dcn_context, dir, '', err => {
+    const db = dir.endsWith('db.sqlite') ? dir : path.join(dir, 'db.sqlite')
+    binding.dcn_open(dc.dcn_context, db, '', err => {
       if (err) return done(err)
       if (dc.isConfigured()) {
         const addr = dc.getConfig('addr')
