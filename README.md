@@ -11,6 +11,8 @@
 
 **WORK IN PROGRESS** The API can change at any time and will not follow semver versioning until `v1.0.0` has been released.
 
+**If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
+
 `deltachat-node` primarily aims to offer two things:
 
 * A high level JavaScript api with syntactic sugar
