@@ -1148,74 +1148,6 @@ NAPI_METHOD(dcn_search_msgs) {
   return js_array;
 }
 
-NAPI_METHOD(dcn_send_audio_msg) {
-  NAPI_ARGV(7);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(file, 2);
-  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
-  NAPI_ARGV_INT32(duration, 4);
-  NAPI_ARGV_UTF8_MALLOC(author, 5);
-  NAPI_ARGV_UTF8_MALLOC(track_name, 6);
-
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  char* author_null = strlen(author) > 0 ? author : NULL;
-  char* track_name_null = strlen(track_name) > 0 ? track_name : NULL;
-  uint32_t msg_id = dc_send_audio_msg(dcn_context->dc_context,
-                                      chat_id,
-                                      file,
-                                      filemime_null,
-                                      duration,
-                                      author_null,
-                                      track_name_null);
-  free(file);
-  free(filemime);
-  free(author);
-  free(track_name);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_file_msg) {
-  NAPI_ARGV(4);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(file, 2);
-  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
-
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  uint32_t msg_id = dc_send_file_msg(dcn_context->dc_context,
-                                     chat_id,
-                                     file,
-                                     filemime_null);
-  free(file);
-  free(filemime);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_image_msg) {
-  NAPI_ARGV(6);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(file, 2);
-  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
-  NAPI_ARGV_INT32(width, 4);
-  NAPI_ARGV_INT32(height, 5);
-
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  uint32_t msg_id = dc_send_image_msg(dcn_context->dc_context,
-                                      chat_id,
-                                      file,
-                                      filemime_null,
-                                      width,
-                                      height);
-  free(file);
-  free(filemime);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
 NAPI_METHOD(dcn_send_msg) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1225,76 +1157,6 @@ NAPI_METHOD(dcn_send_msg) {
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
 
   uint32_t msg_id = dc_send_msg(dcn_context->dc_context, chat_id, dc_msg);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_text_msg) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_INT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(text, 2);
-
-  uint32_t msg_id = dc_send_text_msg(dcn_context->dc_context, chat_id, text);
-
-  free(text);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_vcard_msg) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UINT32(contact_id, 2);
-
-  uint32_t msg_id = dc_send_vcard_msg(dcn_context->dc_context,
-                                      chat_id,
-                                      contact_id);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_video_msg) {
-  NAPI_ARGV(7);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(file, 2);
-  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
-  NAPI_ARGV_INT32(width, 4);
-  NAPI_ARGV_INT32(height, 5);
-  NAPI_ARGV_INT32(duration, 6);
-
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  uint32_t msg_id = dc_send_video_msg(dcn_context->dc_context,
-                                      chat_id,
-                                      file,
-                                      filemime_null,
-                                      width,
-                                      height,
-                                      duration);
-  free(file);
-  free(filemime);
-
-  NAPI_RETURN_UINT32(msg_id);
-}
-
-NAPI_METHOD(dcn_send_voice_msg) {
-  NAPI_ARGV(5);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(file, 2);
-  NAPI_ARGV_UTF8_MALLOC(filemime, 3);
-  NAPI_ARGV_INT32(duration, 4);
-
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  uint32_t msg_id = dc_send_voice_msg(dcn_context->dc_context,
-                                      chat_id,
-                                      file,
-                                      filemime_null,
-                                      duration);
-  free(file);
-  free(filemime);
 
   NAPI_RETURN_UINT32(msg_id);
 }
@@ -2150,14 +2012,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_poll_event);
   NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   NAPI_EXPORT_FUNCTION(dcn_search_msgs);
-  NAPI_EXPORT_FUNCTION(dcn_send_audio_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_file_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_image_msg);
   NAPI_EXPORT_FUNCTION(dcn_send_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_text_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_vcard_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_video_msg);
-  NAPI_EXPORT_FUNCTION(dcn_send_voice_msg);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_config);

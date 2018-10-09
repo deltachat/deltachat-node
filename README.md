@@ -400,37 +400,9 @@ Remove a member from a group. Corresponds to [`dc_remove_contact_from_chat()`](h
 
 Search messages containing the given query string. Corresponds to [`dc_search_msgs()`](https://c.delta.chat/classdc__context__t.html#a777bb1e11d7ea0288984ad23c2d8663b).
 
-#### `dc.sendAudioMessage(chatId, file, fileMime, duration, author, trackName)`
-
-Send an audio file to a chat. Corresponds to [`dc_send_audio_msg()`](https://c.delta.chat/classdc__context__t.html#a2a4feaab2957937232765de9f8c6e28e).
-
-#### `dc.sendFileMessage(chatId, file, fileMime)`
-
-Send a document to a chat. Corresponds to [`dc_send_file_msg()`](https://c.delta.chat/classdc__context__t.html#a72a1daeec8c19ed39ed8789495432fda).
-
-#### `dc.sendImageMessage(chatId, file, fileMime, width, height)`
-
-Send an image to a chat. Corresponds to [`dc_send_image_msg()`](https://c.delta.chat/classdc__context__t.html#acd4f00685674326ab34aeecb71e0a1f1).
-
 #### `dc.sendMessage(chatId, msg)`
 
 Send a message of any type to a chat. Corresponds to [`dc_send_msg()`](https://c.delta.chat/classdc__context__t.html#aaba70910f9c3b3819bba1d04e4d54e02).
-
-#### `dc.sendTextMessage(chatId, text)`
-
-Send a text message to a chat. Corresponds to [`dc_send_text_msg()`](https://c.delta.chat/classdc__context__t.html#a2e30845e0c4676e1b0f7c5b4a15fb2b6).
-
-#### `dc.sendVcardMessage(chatId, contactId)`
-
-Send foreign contact data to a chat. Corresponds to [`dc_send_vcard_msg()`](https://c.delta.chat/classdc__context__t.html#af97841e2540de020847da4cd1c4ccc71).
-
-#### `dc.sendVideoMessage(chatId, file, fileMime, width, height, duration)`
-
-Send a video to a chat. Corresponds to [`dc_send_video_msg()`](https://c.delta.chat/classdc__context__t.html#acc880b4691a35791ce832dced698a4a4).
-
-#### `dc.sendVoiceMessage(chatId, file, fileMime, duration)`
-
-Send a voice message to a chat. Corresponds to [`dc_send_voice_msg()`](https://c.delta.chat/classdc__context__t.html#a3ddd69eb4955a5f7ec10f40fb00a4384).
 
 #### `dc.setChatName(chatId, name)`
 
