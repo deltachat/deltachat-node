@@ -484,77 +484,11 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_search_msgs(this.dcn_context, Number(chatId), query)
   }
 
-  sendAudioMessage (chatId, file, fileMime, duration, author, trackName) {
-    return binding.dcn_send_audio_msg(
-      this.dcn_context,
-      Number(chatId),
-      file,
-      fileMime,
-      duration,
-      author,
-      trackName
-    )
-  }
-
-  sendFileMessage (chatId, file, fileMime) {
-    return binding.dcn_send_file_msg(
-      this.dcn_context,
-      Number(chatId),
-      file,
-      fileMime
-    )
-  }
-
-  sendImageMessage (chatId, file, fileMime, width, height) {
-    return binding.dcn_send_image_msg(
-      this.dcn_context,
-      Number(chatId),
-      file,
-      fileMime,
-      width,
-      height
-    )
-  }
-
   sendMessage (chatId, msg) {
     if (!msg || !msg.dc_msg) {
       throw new Error('msg parameter is not a valid Message object')
     }
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
-  }
-
-  sendTextMessage (chatId, text) {
-    return binding.dcn_send_text_msg(this.dcn_context, Number(chatId), text)
-  }
-
-  sendVcardMessage (chatId, contactId) {
-    return binding.dcn_send_vcard_msg(
-      this.dcn_context,
-      Number(chatId),
-      Number(contactId)
-    )
-  }
-
-  sendVideoMessage (chatId, file, fileMime, width, height, duration) {
-    return binding.dcn_send_video_msg(
-      this.dcn_context,
-      Number(chatId),
-      file,
-      fileMime,
-      width,
-      height,
-      duration
-    )
-  }
-
-  sendVoiceMessage (chatId, file, fileMime, duration) {
-    return binding.dcn_send_voice_msg(
-      this.dcn_context,
-      Number(chatId),
-      file,
-      fileMime,
-      duration
-    )
   }
 
   setChatName (chatId, name) {
