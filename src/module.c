@@ -685,15 +685,13 @@ NAPI_METHOD(dcn_get_chatlist) {
 }
 
 NAPI_METHOD(dcn_get_config) {
-  NAPI_ARGV(3);
+  NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UTF8_MALLOC(key, 1);
-  NAPI_ARGV_UTF8_MALLOC(def, 2);
 
-  char *value = dc_get_config(dcn_context->dc_context, key, def);
+  char *value = dc_get_config(dcn_context->dc_context, key);
 
   free(key);
-  free(def);
 
   NAPI_RETURN_AND_FREE_STRING(value);
 }

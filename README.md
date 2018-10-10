@@ -248,7 +248,7 @@ Get configuration from a path. Calls back with `(err, config)`. A static method 
 
 * `addr` *(string)*: Email address used to configure the account.
 
-#### `dc.getConfig(key, def)`
+#### `dc.getConfig(key)`
 
 Get a configuration option. Corresponds to [`dc_get_config()`](https://c.delta.chat/classdc__context__t.html#ada7a19d3c814ed5f776a24006259395d).
 
