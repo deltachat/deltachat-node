@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [0.20.0] - 2018-10-11
+
+### Changed
+* Upgrade `deltachat-core` for improved speed when sending messages (@ralphtheninja)
+
+### Removed
+* Remove default value parameter from `DeltaChat#getConfig()` (@ralphtheninja)
+* Remove `DeltaChat#sendAudioMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendFileMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendImageMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendTextMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendVcardMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendVideoMessage()` (@ralphtheninja)
+* Remove `DeltaChat#sendVoiceMessage()` (@ralphtheninja)
+
 ## [0.19.2] - 2018-10-08
 
 ### Fixed
@@ -322,7 +337,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...v0.20.0
 [0.19.2]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...v0.19.2
 [0.19.1]: https://github.com/deltachat/deltachat-node/compare/v0.19.0...v0.19.1
 [0.19.0]: https://github.com/deltachat/deltachat-node/compare/v0.18.2...v0.19.0
