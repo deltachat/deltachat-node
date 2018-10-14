@@ -157,23 +157,19 @@ test('create chat from contact and Chat methods', t => {
   t.end()
 })
 
-test('test setting profile image and DC_EVENT_FILE_COPIED', t => {
+test('test setting profile image', t => {
   const chatId = dc.createUnverifiedGroupChat('testing profile image group')
   const image = 'image.jpeg'
   const imagePath = path.join(__dirname, 'fixtures', image)
   const blobs = dc.getBlobdir()
 
-  dc.once('DC_EVENT_FILE_COPIED', fileName => {
-    t.is(fileName, imagePath, `${fileName} was copied`)
-    t.is(
-      dc.getChat(chatId).getProfileImage(),
-      `${blobs}/${image}`,
-      'image in blobdir'
-    )
-    t.end()
-  })
-
   dc.setChatProfileImage(chatId, imagePath)
+  t.is(
+    dc.getChat(chatId).getProfileImage(),
+    `${blobs}/${image}`,
+    'image in blobdir'
+  )
+  t.end()
 })
 
 test('create and delete chat', t => {

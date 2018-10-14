@@ -601,9 +601,6 @@ function handleEvent (self, event, data1, data2) {
     case 'DC_EVENT_IMEX_FILE_WRITTEN':
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_FILE_COPIED':
-      self.emit(eventStr, data1)
-      break
     case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
       self.emit(eventStr, data1, data2)
       break
