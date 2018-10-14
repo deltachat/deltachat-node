@@ -827,7 +827,6 @@ Internal `viewType` property.
 | [`DC_EVENT_CONTACTS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga658b9fc4315badab7afe265b7fa8c2af)  | Contact changed    | `(contactId)`  |
 | [`DC_EVENT_CONFIGURE_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae047f9361d57c42d82a794324f5b9fd6)  | Configuration progress    | `(progress)`  |
 | [`DC_EVENT_IMEX_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#ga006ea41d9c1a76ffc672752484c61e6c)  | Import/export progress    | `(progress)`  |
-| [`DC_EVENT_FILE_COPIED`](https://c.delta.chat/group__DC__EVENT.html#ga89c075d9f7d74b0561b18132ee33ab3d)  | A file has been copied    | `(fileName)`  |
 | [`DC_EVENT_IMEX_FILE_WRITTEN`](https://c.delta.chat/group__DC__EVENT.html#ga7ffbea55be6a5e6da7ac7e35ba6bf985)  | A file has been exported    | `(fileName)`  |
 | [`DC_EVENT_SECUREJOIN_INVITER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae1b19779138b8ea63d1b6a5b450c181a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
 | [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
