@@ -1763,6 +1763,16 @@ NAPI_METHOD(dcn_msg_get_mediainfo) {
   return result;
 }
 
+NAPI_METHOD(dcn_msg_get_received_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int timestamp = dc_msg_get_received_timestamp(dc_msg);
+
+  NAPI_RETURN_INT32(timestamp);
+}
+
+
 NAPI_METHOD(dcn_msg_get_setupcodebegin) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2132,6 +2142,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_mediainfo);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_state);

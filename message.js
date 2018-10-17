@@ -98,18 +98,19 @@ class Message {
 
   toJson () {
     return {
-      id: this.getId(),
       chatId: this.getChatId(),
       duration: this.getDuration(),
+      file: this.getFile(),
       fromId: this.getFromId(),
+      id: this.getId(),
+      mediaInfo: this.getMediainfo().toJson(),
+      receivedTimestamp: this.getReceivedTimestamp(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
       viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
       summary: this.getSummary().toJson(),
-      isSetupmessage: this.isSetupmessage(),
-      mediaInfo: this.getMediainfo().toJson(),
-      file: this.getFile()
+      isSetupmessage: this.isSetupmessage()
     }
   }
 
@@ -151,6 +152,10 @@ class Message {
 
   getMediainfo () {
     return new Lot(binding.dcn_msg_get_mediainfo(this.dc_msg))
+  }
+
+  getReceivedTimestamp () {
+    return binding.dcn_msg_get_received_timestamp(this.dc_msg)
   }
 
   getSetupcodebegin () {

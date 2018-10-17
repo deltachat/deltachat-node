@@ -645,6 +645,10 @@ Get the id of the message. Corresponds to [`dc_msg_get_id()`](https://c.delta.ch
 
 Get real author and title. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_mediainfo()`](https://c.delta.chat/classdc__msg__t.html#a4e963387430c148a588cb268c18827d3).
 
+#### `message.getReceivedTimestamp()`
+
+Get message receive time. Corresponds to [`dc_msg_get_received_timestamp()`](https://c.delta.chat/classdc__msg__t.html#abc26107674c04684492e7d96fdf6a69a).
+
 #### `message.getSetupcodebegin()`
 
 Get first characters of the setup code. Corresponds to [`dc_msg_get_setupcodebegin()`](https://c.delta.chat/classdc__msg__t.html#a677bca5655a8cc9f7a838fa588562d12).
