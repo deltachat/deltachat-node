@@ -319,6 +319,21 @@ NAPI_METHOD(dcn_context_new) {
 }
 
 /**
+ * Static functions
+ */
+
+NAPI_METHOD(dcn_maybe_valid_addr) {
+  NAPI_ARGV(1);
+  NAPI_ARGV_UTF8_MALLOC(addr, 0);
+
+  int result = dc_may_be_valid_addr(addr);
+
+  free(addr);
+
+  NAPI_RETURN_INT32(result);
+}
+
+/**
  * dcn_context_t
  */
 
@@ -1951,6 +1966,12 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_context_new);
+
+  /**
+   * Static functions
+   */
+
+  NAPI_EXPORT_FUNCTION(dcn_maybe_valid_addr);
 
   /**
    * dcn_context_t

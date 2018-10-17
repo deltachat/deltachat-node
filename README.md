@@ -373,6 +373,10 @@ Mark all messages sent by the given contact as _noticed_. Corresponds to [`dc_ma
 
 Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to [`dc_markseen_msgs()`](https://c.delta.chat/classdc__context__t.html#ae5305a90c09380dffe54e68c2a709128).
 
+#### `DeltaChat.maybeValidAddr(addr)`
+
+Static method. Returns `true` if `addr` maybe is a valid e-mail address, otherwise `false`. Corresponds to [`dc_may_be_valid_addr()`](https://c.delta.chat/classdc__context__t.html#a78f5a96398b3763bde51b1a057c84903).
+
 #### `dc.messageNew([viewType])`
 
 Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:

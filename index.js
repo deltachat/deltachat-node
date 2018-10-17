@@ -437,6 +437,11 @@ class DeltaChat extends EventEmitter {
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
   }
 
+  static maybeValidAddr (addr) {
+    if (addr === null) return false
+    return Boolean(binding.dcn_maybe_valid_addr(addr))
+  }
+
   messageNew (viewType = C.DC_MSG_TEXT) {
     return new Message(binding.dcn_msg_new(this.dcn_context, viewType))
   }
