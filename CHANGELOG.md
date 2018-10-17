@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [0.21.0] - 2018-10-17
+
+### Changed
+* Upgrade `deltachat-core` to `v0.23.0` (@ralphtheninja)
+
+### Added
+* Add static method `DeltaChat#maybeValidAddr()` (@ralphtheninja)
+* Add `dc.lookupContactIdByAddr()` (@ralphtheninja)
+* Add `dc.getMimeHeaders()` (@ralphtheninja)
+* Add `message.getReceivedTimestamp()` (@ralphtheninja)
+* Add `selfavatar` option (@ralphtheninja)
+* Add `mdns_enabled` option (@ralphtheninja)
+
+### Removed
+* Remove `DC_EVENT_FILE_COPIED` event (@ralphtheninja)
+
 ## [0.20.0] - 2018-10-11
 
 ### Changed
@@ -337,7 +353,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...HEAD
+[0.21.0]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...v0.20.0
 [0.19.2]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...v0.19.2
 [0.19.1]: https://github.com/deltachat/deltachat-node/compare/v0.19.0...v0.19.1
