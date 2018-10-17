@@ -142,17 +142,18 @@ The `options` object takes the following properties:
 
 * `options.addr` *(string, required)*: Email address of the chat user.
 * `options.mail_server` *(string, optional)*: IMAP-server, guessed if left out.
-* `options.mail_port` *(string | integer, optional)*: IMAP-port, guessed if left out.
 * `options.mail_user` *(string, optional)*: IMAP-username, guessed if left out.
 * `options.mail_pw` *(string, required)*: IMAP-password of the chat user.
+* `options.mail_port` *(string | integer, optional)*: IMAP-port, guessed if left out.
 * `options.send_server` *(string, optional)*: SMTP-server, guessed if left out.
-* `options.send_port` *(string | integer, optional)*: SMTP-port, guessed if left out.
 * `options.send_user` *(string, optional)*: SMTP-user, guessed if left out.
 * `options.send_pw` *(string, optional)*: SMTP-password, guessed if left out.
+* `options.send_port` *(string | integer, optional)*: SMTP-port, guessed if left out.
 * `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
 * `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
 * `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
 * `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
+* `options.save_mime_headers` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 
@@ -225,6 +226,11 @@ Check, if there is a normal chat with a given contact. Corresponds to [`dc_get_c
 #### `dc.getChatMedia(chatId, msgType, orMsgType)`
 
 Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://c.delta.chat/classdc__context__t.html#a8ca56905333780d5989e11692118f7a9).
+
+<a name="getmimeheaders"></a>
+#### `dc.getMimeHeaders(messageId)`
+
+Get the raw mime-headers of the given message. Corresponds to [`dc_get_mime_headers()`](https://c.delta.chat/classdc__context__t.html#ad0f0df9128a6881af5114561c54ef53e).
 
 #### `dc.getStarredMessages()`
 

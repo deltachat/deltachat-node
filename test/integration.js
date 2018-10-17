@@ -11,17 +11,18 @@ function configureDefaultDC (dc) {
   dc.configure({
     addr: 'delta1@delta.localhost',
     mail_server: '127.0.0.1',
-    mail_port: 3143,
     mail_user: 'delta1',
     mail_pw: 'delta1',
+    mail_port: 3143,
     send_server: '127.0.0.1',
-    send_port: 3025,
     send_user: 'delta1',
     send_pw: 'delta1',
+    send_port: 3025,
     server_flags: 0x400 | 0x40000,
     displayname: 'Delta One',
     selfstatus: 'From Delta One with <3',
-    e2ee_enabled: true
+    e2ee_enabled: true,
+    save_mime_headers: true
   })
 }
 
@@ -32,7 +33,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(18)
+  t.plan(19)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -49,6 +50,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayname correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfstatus correct')
     t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee enabled')
+    t.is(dc.getConfig('save_mime_headers'), '1', 'saving mime headers enabled')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
   })
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {

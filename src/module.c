@@ -657,6 +657,16 @@ NAPI_METHOD(dcn_get_chat_media) {
   return js_array;
 }
 
+NAPI_METHOD(dcn_get_mime_headers) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+
+  char* headers = dc_get_mime_headers(dcn_context->dc_context, msg_id);
+
+  NAPI_RETURN_AND_FREE_STRING(headers);
+}
+
 NAPI_METHOD(dcn_get_chat_msgs) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
@@ -2013,6 +2023,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_chat_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_id_by_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
+  NAPI_EXPORT_FUNCTION(dcn_get_mime_headers);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_chatlist);
   NAPI_EXPORT_FUNCTION(dcn_get_config);

@@ -149,6 +149,10 @@ class DeltaChat extends EventEmitter {
       this.setConfig('e2ee_enabled', String(opts.e2ee_enabled ? 1 : 0))
     }
 
+    if (opts.save_mime_headers === true) {
+      this.setConfig('save_mime_headers', '1')
+    }
+
     binding.dcn_configure(this.dcn_context)
   }
 
@@ -248,6 +252,10 @@ class DeltaChat extends EventEmitter {
       msgType,
       orMsgType
     )
+  }
+
+  getMimeHeaders (messageId) {
+    return binding.dcn_get_mime_headers(this.dcn_context, Number(messageId))
   }
 
   getStarredMessages () {
