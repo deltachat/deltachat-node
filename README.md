@@ -152,6 +152,7 @@ The `options` object takes the following properties:
 * `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
 * `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
 * `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
+* `options.selfavatar` *(string, optional)*: File containing avatar.
 * `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
 * `options.save_mime_headers` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
 

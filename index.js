@@ -103,26 +103,23 @@ class DeltaChat extends EventEmitter {
     this.once('_configured', ready)
 
     this.setConfig('addr', opts.addr)
-    this.setConfig('mail_pw', opts.mail_pw)
 
     if (typeof opts.mail_server === 'string') {
       this.setConfig('mail_server', opts.mail_server)
-    }
-
-    if (opts.mail_port) {
-      this.setConfig('mail_port', String(opts.mail_port))
     }
 
     if (typeof opts.mail_user === 'string') {
       this.setConfig('mail_user', opts.mail_user)
     }
 
-    if (typeof opts.send_server === 'string') {
-      this.setConfig('send_server', opts.send_server)
+    if (opts.mail_port) {
+      this.setConfig('mail_port', String(opts.mail_port))
     }
 
-    if (opts.send_port) {
-      this.setConfig('send_port', String(opts.send_port))
+    this.setConfig('mail_pw', opts.mail_pw)
+
+    if (typeof opts.send_server === 'string') {
+      this.setConfig('send_server', opts.send_server)
     }
 
     if (typeof opts.send_user === 'string') {
@@ -131,6 +128,10 @@ class DeltaChat extends EventEmitter {
 
     if (typeof opts.send_pw === 'string') {
       this.setConfig('send_pw', opts.send_pw)
+    }
+
+    if (opts.send_port) {
+      this.setConfig('send_port', String(opts.send_port))
     }
 
     if (opts.server_flags) {
@@ -143,6 +144,10 @@ class DeltaChat extends EventEmitter {
 
     if (typeof opts.selfstatus === 'string') {
       this.setConfig('selfstatus', opts.selfstatus)
+    }
+
+    if (typeof opts.selfavatar === 'string') {
+      this.setConfig('selfavatar', opts.selfavatar)
     }
 
     if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
