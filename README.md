@@ -154,6 +154,7 @@ The `options` object takes the following properties:
 * `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
 * `options.selfavatar` *(string, optional)*: File containing avatar.
 * `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
+* `options.mdns_enabled` *(boolean, optional)*: Send and request read receipts. Defaults to `true`.
 * `options.save_mime_headers` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`

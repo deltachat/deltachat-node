@@ -150,8 +150,12 @@ class DeltaChat extends EventEmitter {
       this.setConfig('selfavatar', opts.selfavatar)
     }
 
-    if (opts.e2ee_enabled === false || opts.e2ee_enabled === true) {
+    if (typeof opts.e2ee_enabled === 'boolean') {
       this.setConfig('e2ee_enabled', String(opts.e2ee_enabled ? 1 : 0))
+    }
+
+    if (typeof opts.mdns_enabled === 'boolean') {
+      this.setConfig('mdns_enabled', String(opts.mdns_enabled ? 1 : 0))
     }
 
     if (opts.save_mime_headers === true) {
