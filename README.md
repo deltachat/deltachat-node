@@ -365,6 +365,10 @@ Mark all messages in a chat as _noticed_. Corresponds to [`dc_marknoticed_chat()
 
 Same as `dc.markNoticedChat()` but for _all_ chats. Corresponds to [`dc_marknoticed_all_chats()`](https://c.delta.chat/classdc__context__t.html#a61a0fe8ab386687fcf5061debfe710ab).
 
+#### `dc.lookupContactIdByAddr(addr)`
+
+Returns `true` if an e-mail address belongs to a known and unblocked contact, otherwise `false`. Corresponds to [`dc_lookup_contact_id_by_addr()`](https://c.delta.chat/classdc__context__t.html#a2b5248d480d763bdee55f15e64d02109).
+
 #### `dc.markNoticedContact(contactId)`
 
 Mark all messages sent by the given contact as _noticed_. Corresponds to [`dc_marknoticed_contact()`](https://c.delta.chat/classdc__context__t.html#a7cc233792a13ec0f893f6299c12ca061).

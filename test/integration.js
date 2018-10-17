@@ -113,6 +113,9 @@ test('static getConfig()', t => {
 test('create chat from contact and Chat methods', t => {
   const contactId = dc.createContact('aaa', 'aaa@site.org')
 
+  t.is(dc.lookupContactIdByAddr('aaa@site.org'), true)
+  t.is(dc.lookupContactIdByAddr('nope@site.net'), false)
+
   let chatId = dc.createChatByContactId(contactId)
   let chat = dc.getChat(chatId)
 

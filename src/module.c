@@ -956,6 +956,18 @@ NAPI_METHOD(dcn_join_securejoin) {
   NAPI_RETURN_UINT32(chat_id);
 }
 
+NAPI_METHOD(dcn_lookup_contact_id_by_addr) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(addr, 1);
+
+  uint32_t res = dc_lookup_contact_id_by_addr(dcn_context->dc_context, addr);
+
+  free(addr);
+
+  NAPI_RETURN_UINT32(res);
+}
+
 NAPI_METHOD(dcn_marknoticed_chat) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2022,6 +2034,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
   NAPI_EXPORT_FUNCTION(dcn_is_open);
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
+  NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);

@@ -417,6 +417,12 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_join_securejoin(this.dcn_context, qrCode)
   }
 
+  lookupContactIdByAddr (addr) {
+    return Boolean(
+      binding.dcn_lookup_contact_id_by_addr(this.dcn_context, addr)
+    )
+  }
+
   markNoticedChat (chatId) {
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
