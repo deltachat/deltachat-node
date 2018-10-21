@@ -282,7 +282,7 @@ Returns the message ids of all _fresh_ messages of any chat. Corresponds to [`dc
 
 #### `dc.getInfo()`
 
-Get info about the context. Corresponds to [`dc_get_info()`](https://c.delta.chat/classdc__context__t.html#a2cb5251125fa02a0f997753f2fe905b1) but without the log information.
+Get info about the context. Corresponds to [`dc_get_info()`](https://c.delta.chat/classdc__context__t.html#a2cb5251125fa02a0f997753f2fe905b1).
 
 Returns an object with the following properties:
 
