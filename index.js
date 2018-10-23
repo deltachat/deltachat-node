@@ -12,6 +12,7 @@ const EventEmitter = require('events').EventEmitter
 const mkdirp = require('mkdirp')
 const path = require('path')
 const got = require('got')
+const pick = require('lodash.pick')
 const debug = require('debug')('deltachat')
 
 /**
@@ -391,6 +392,21 @@ class DeltaChat extends EventEmitter {
 
   getSecurejoinQrCode (groupChatId) {
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(groupChatId))
+  }
+
+  static getSystemInfo () {
+    let dc = new DeltaChat()
+    const result = pick(dc.getInfo(), [
+      'deltachat_core_version',
+      'sqlite_version',
+      'sqlite_thread_safe',
+      'libetpan_version',
+      'openssl_version',
+      'compile_date',
+      'arch'
+    ])
+    dc = null
+    return result
   }
 
   importExport (what, param1, param2) {

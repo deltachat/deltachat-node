@@ -335,6 +335,10 @@ Get previous message of the same type. Corresponds to [`dc_get_next_media()`](ht
 
 Get QR code text that will offer a secure-join verification. Corresponds to [`dc_get_securejoin_qr()`](https://c.delta.chat/classdc__context__t.html#aeec58fc8a478229925ec8b7d48cf18bf).
 
+#### `DeltaChat.getSystemInfo()`
+
+Static method. Returns a stripped version of `dc.getInfo()` which only contains stats of the software and the system and no user related data. Useful when you want to grab version numbers. It should be fast, since no opening of database or configuring is required.
+
 #### `dc.importExport(what, param1, param2)`
 
 Import/export things. Corresponds to [`dc_imex()`](https://c.delta.chat/classdc__context__t.html#ab04a07bb49363824f6fe3b03e6aaaca7).

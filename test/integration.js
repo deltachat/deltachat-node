@@ -102,6 +102,23 @@ test('dc.getInfo()', t => {
   t.end()
 })
 
+test('static getSystemInfo()', t => {
+  const info = DeltaChat.getSystemInfo()
+  t.same(Object.keys(info).sort(), [
+    'arch',
+    'compile_date',
+    'deltachat_core_version',
+    'libetpan_version',
+    'openssl_version',
+    'sqlite_thread_safe',
+    'sqlite_version'
+  ])
+  t.is(Object.values(info).every(v => {
+    return typeof v === 'string'
+  }), true, 'all values are strings')
+  t.end()
+})
+
 test('static getConfig()', t => {
   const info = dc.getInfo()
   const dir = info.database_dir
