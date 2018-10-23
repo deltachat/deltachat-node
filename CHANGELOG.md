@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.22.0] - 2018-10-23
+
+### Added
+* Add static method `DeltaChat#getSystemInfo()` (@ralphtheninja)
+
+### Changed
+* README: Update docs on `dc.getInfo()` (@ralphtheninja)
+
 ## [0.21.0] - 2018-10-17
 
 ### Changed
@@ -353,7 +361,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...HEAD
+[0.22.0]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...v0.20.0
 [0.19.2]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...v0.19.2
