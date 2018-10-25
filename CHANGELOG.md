@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.22.1] - 2018-10-25
+
+### Added
+* Add `.showPadlock` to `Message#toJson()` (@ralphtheninja)
+
 ## [0.22.0] - 2018-10-23
 
 ### Added
@@ -361,7 +366,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...HEAD
+[0.22.1]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...v0.22.1
 [0.22.0]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...v0.20.0
