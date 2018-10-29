@@ -10,6 +10,7 @@
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
 #include "eventqueue.h"
+#include "strtable.h"
 
 /**
  * Custom context
@@ -21,6 +22,7 @@ typedef struct dcn_context_t {
 #else
   eventqueue_t* event_queue;
 #endif
+  strtable_t* strtable;
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
   int loop_thread;
@@ -52,7 +54,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
 
     case DC_EVENT_GET_STRING:
     case DC_EVENT_GET_QUANTITY_STRING:
-      return 0;
+      return strtable_get_str(dcn_context->strtable, (int)data1);
 
     case DC_EVENT_HTTP_GET: {
       uintptr_t http_ret = 0;
@@ -231,6 +233,9 @@ static void finalize_context(napi_env env, void* data, void* hint) {
       dcn_context->event_queue = NULL;
     }
 
+    strtable_unref(dcn_context->strtable);
+    dcn_context->strtable = NULL;
+
     pthread_cond_destroy(&dcn_context->dc_event_http_cond);
     pthread_mutex_destroy(&dcn_context->dc_event_http_mutex);
 
@@ -301,6 +306,7 @@ NAPI_METHOD(dcn_context_new) {
 #else
   dcn_context->event_queue = eventqueue_new();
 #endif
+  dcn_context->strtable = strtable_new();
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
@@ -1155,6 +1161,8 @@ NAPI_METHOD(dcn_poll_event) {
 
   NAPI_RETURN_UNDEFINED();
 }
+
+// TODO: add a js wrapper for strtable_set_str()
 
 NAPI_METHOD(dcn_remove_contact_from_chat) {
   NAPI_ARGV(3);
