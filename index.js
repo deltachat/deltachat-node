@@ -84,6 +84,7 @@ class DeltaChat extends EventEmitter {
   }
 
   configure (opts, cb) {
+    if (!opts) opts = {}
     const ready = () => {
       this.emit('ready')
       cb && cb()
@@ -103,65 +104,26 @@ class DeltaChat extends EventEmitter {
 
     this.once('_configured', ready)
 
+    if (!opts.e2ee_enabled) opts.e2ee_enabled = 1
+
     this.setConfig('addr', opts.addr)
 
-    if (typeof opts.mail_server === 'string') {
-      this.setConfig('mail_server', opts.mail_server)
-    }
-
-    if (typeof opts.mail_user === 'string') {
-      this.setConfig('mail_user', opts.mail_user)
-    }
-
-    if (opts.mail_port) {
-      this.setConfig('mail_port', String(opts.mail_port))
-    }
+    this.setConfig('mail_server', opts.mail_server)
+    this.setConfig('mail_user', opts.mail_user)
+    this.setConfig('mail_port', String(opts.mail_port))
 
     this.setConfig('mail_pw', opts.mail_pw)
-
-    if (typeof opts.send_server === 'string') {
-      this.setConfig('send_server', opts.send_server)
-    }
-
-    if (typeof opts.send_user === 'string') {
-      this.setConfig('send_user', opts.send_user)
-    }
-
-    if (typeof opts.send_pw === 'string') {
-      this.setConfig('send_pw', opts.send_pw)
-    }
-
-    if (opts.send_port) {
-      this.setConfig('send_port', String(opts.send_port))
-    }
-
-    if (opts.server_flags) {
-      this.setConfig('server_flags', String(opts.server_flags))
-    }
-
-    if (typeof opts.displayname === 'string') {
-      this.setConfig('displayname', opts.displayname)
-    }
-
-    if (typeof opts.selfstatus === 'string') {
-      this.setConfig('selfstatus', opts.selfstatus)
-    }
-
-    if (typeof opts.selfavatar === 'string') {
-      this.setConfig('selfavatar', opts.selfavatar)
-    }
-
-    if (typeof opts.e2ee_enabled === 'boolean') {
-      this.setConfig('e2ee_enabled', String(opts.e2ee_enabled ? 1 : 0))
-    }
-
-    if (typeof opts.mdns_enabled === 'boolean') {
-      this.setConfig('mdns_enabled', String(opts.mdns_enabled ? 1 : 0))
-    }
-
-    if (opts.save_mime_headers === true) {
-      this.setConfig('save_mime_headers', '1')
-    }
+    this.setConfig('send_server', opts.send_server)
+    this.setConfig('send_user', opts.send_user)
+    this.setConfig('send_pw', opts.send_pw)
+    this.setConfig('send_port', String(opts.send_port))
+    this.setConfig('server_flags', String(opts.server_flags))
+    this.setConfig('displayname', opts.displayname)
+    this.setConfig('selfstatus', opts.selfstatus)
+    this.setConfig('selfavatar', opts.selfavatar)
+    this.setConfig('e2ee_enabled', String(opts.e2ee_enabled ? 1 : 0))
+    this.setConfig('mdns_enabled', String(opts.mdns_enabled ? 1 : 0))
+    this.setConfig('save_mime_headers', String(opts.save_mime_headers ? 1 : 0))
 
     binding.dcn_configure(this.dcn_context)
   }
@@ -556,7 +518,7 @@ class DeltaChat extends EventEmitter {
   }
 
   setConfig (key, value) {
-    return binding.dcn_set_config(this.dcn_context, key, value)
+    return binding.dcn_set_config(this.dcn_context, key, value || null)
   }
 
   setOffline (offline) {
