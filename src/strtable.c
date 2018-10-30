@@ -24,6 +24,7 @@
 #include <string.h>
 #include <pthread.h>
 #include "strtable.h"
+#include <deltachat.h>
 
 
 typedef struct strtable_t {
