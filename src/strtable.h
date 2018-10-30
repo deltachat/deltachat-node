@@ -34,6 +34,7 @@ void                strtable_unref      (strtable_t*);
 
 void                strtable_set_str    (strtable_t*, int, const char*);
 char*               strtable_get_str    (strtable_t*, int);
+void                strtable_clear      (strtable_t*);
 
 
 #ifdef __cplusplus

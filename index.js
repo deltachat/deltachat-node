@@ -69,6 +69,10 @@ class DeltaChat extends EventEmitter {
     return dc_lot ? new Lot(dc_lot) : null
   }
 
+  clearStringTable () {
+    binding.dcn_clear_string_table(this.dcn_context)
+  }
+
   close () {
     this.removeAllListeners()
 
@@ -561,6 +565,10 @@ class DeltaChat extends EventEmitter {
 
   setOffline (offline) {
     binding.dcn_set_offline(this.dcn_context, offline ? 1 : 0)
+  }
+
+  setStringTable (index, str) {
+    binding.dcn_set_string_table(this.dcn_context, Number(index), str)
   }
 
   setTextDraft (chatId, text) {

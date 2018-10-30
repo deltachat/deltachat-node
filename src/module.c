@@ -421,6 +421,15 @@ NAPI_METHOD(dcn_check_qr) {
   return result;
 }
 
+NAPI_METHOD(dcn_clear_string_table) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  strtable_clear(dcn_context->strtable);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_close) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
@@ -1161,8 +1170,6 @@ NAPI_METHOD(dcn_poll_event) {
   NAPI_RETURN_UNDEFINED();
 }
 
-// TODO: add a js wrapper for strtable_set_str()
-
 NAPI_METHOD(dcn_remove_contact_from_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1297,6 +1304,19 @@ NAPI_METHOD(dcn_set_offline) {
   if (!is_offline) {
     dc_interrupt_smtp_idle(dcn_context->dc_context);
   }
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_set_string_table) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(index, 1);
+  NAPI_ARGV_UTF8_MALLOC(str, 2);
+
+  strtable_set_str(dcn_context->strtable, index, str);
+
+  free(str);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -1993,6 +2013,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_password);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
+  NAPI_EXPORT_FUNCTION(dcn_clear_string_table);
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
@@ -2050,6 +2071,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_offline);
+  NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);

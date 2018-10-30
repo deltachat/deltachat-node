@@ -91,3 +91,12 @@ char* strtable_get_str(strtable_t* strtable, int i)
 }
 
 
+void strtable_clear(strtable_t* strtable)
+{
+	pthread_mutex_lock(&strtable->mutex);
+		for (int i=0; i<DC_STR_COUNT; i++) {
+			free(strtable->str[i]);
+			strtable->str[i] = NULL;
+		}
+	pthread_mutex_unlock(&strtable->mutex);
+}
