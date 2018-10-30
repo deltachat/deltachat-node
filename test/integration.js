@@ -397,9 +397,22 @@ test('ChatList methods', t => {
   t.is(lot.getId(), 0, 'lot has no id')
   t.is(lot.getState(), 0, 'lot has no state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
-  t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT)
-  t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
+  t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT, 'text1 meaning')
+  t.ok(
+    lot.getText2().startsWith('Hello, I\'ve just created'),
+    'new group draft message'
+  )
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
+
+  const text = 'Custom new group message, yo!'
+  dc.setStringTable(c.DC_STR_NEWGROUPDRAFT, text)
+  dc.createUnverifiedGroupChat('groupchat1111')
+  chatList = dc.getChatList(0, 'groupchat1111')
+  t.is(
+    chatList.getSummary(0).getText2(), text,
+    'custom new group message'
+  )
+  dc.clearStringTable()
 
   dc.archiveChat(ids[0], true)
   chatList = dc.getChatList(c.DC_GCL_ARCHIVED_ONLY, 'groupchat1')
