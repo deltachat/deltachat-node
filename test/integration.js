@@ -217,15 +217,6 @@ test('new message and Message methods', t => {
   t.is(msg.getFromId(), 0, 'no contact id set by default')
   t.is(msg.getHeight(), 0, 'plain text message have height 0')
   t.is(msg.getId(), 0, 'id 0 before sent')
-
-  let mi = msg.getMediainfo()
-  t.is(mi.getId(), 0, 'no mediainfo id')
-  t.is(mi.getState(), 0, 'no mediainfo state')
-  t.is(mi.getText1(), null, 'no mediainfo text1')
-  t.is(mi.getText1Meaning(), 0, 'no mediainfo text1 meaning')
-  t.is(mi.getText2(), null, 'no mediainfo text2')
-  t.is(mi.getTimestamp(), 0, 'no mediainfo timestamp')
-
   t.is(msg.getSetupcodebegin(), '', 'no setupcode begin')
   t.is(msg.getShowpadlock(), false, 'no padlock by default')
 
@@ -283,11 +274,6 @@ test('new message and Message methods', t => {
 
   t.throws(function () { msg.setFile() }, /Missing filename/)
 
-  msg.setMediainfo()
-  mi = msg.getMediainfo()
-  t.is(mi.getText1(), null, 'text1 not set')
-  t.is(mi.getText2(), null, 'text2 not set')
-
   const logo = path.join(__dirname, 'fixtures', 'logo.png')
   const stat = fs.statSync(logo)
   msg.setFile(logo)
@@ -298,12 +284,6 @@ test('new message and Message methods', t => {
   t.is(msg.getFilemime(), 'image/gif', 'mime set (in)correctly')
   msg.setFile(logo, 'image/png')
   t.is(msg.getFilemime(), 'image/png', 'mime set correctly')
-
-  msg.setMediainfo('deltaX', 'rules')
-
-  mi = msg.getMediainfo()
-  t.is(mi.getText1(), 'deltaX', 'text1 set')
-  t.is(mi.getText2(), 'rules', 'text2 set')
 
   const json = msg.toJson()
   t.notEqual(json, null, 'not null')
@@ -417,9 +397,22 @@ test('ChatList methods', t => {
   t.is(lot.getId(), 0, 'lot has no id')
   t.is(lot.getState(), 0, 'lot has no state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
-  t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT)
-  t.ok(lot.getText2().startsWith('Hello, I\'ve just created'))
+  t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT, 'text1 meaning')
+  t.ok(
+    lot.getText2().startsWith('Hello, I\'ve just created'),
+    'new group draft message'
+  )
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
+
+  const text = 'Custom new group message, yo!'
+  dc.setStringTable(c.DC_STR_NEWGROUPDRAFT, text)
+  dc.createUnverifiedGroupChat('groupchat1111')
+  chatList = dc.getChatList(0, 'groupchat1111')
+  t.is(
+    chatList.getSummary(0).getText2(), text,
+    'custom new group message'
+  )
+  dc.clearStringTable()
 
   dc.archiveChat(ids[0], true)
   chatList = dc.getChatList(c.DC_GCL_ARCHIVED_ONLY, 'groupchat1')

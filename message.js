@@ -103,7 +103,6 @@ class Message {
       file: this.getFile(),
       fromId: this.getFromId(),
       id: this.getId(),
-      mediaInfo: this.getMediainfo().toJson(),
       receivedTimestamp: this.getReceivedTimestamp(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
@@ -149,10 +148,6 @@ class Message {
 
   getId () {
     return binding.dcn_msg_get_id(this.dc_msg)
-  }
-
-  getMediainfo () {
-    return new Lot(binding.dcn_msg_get_mediainfo(this.dc_msg))
   }
 
   getReceivedTimestamp () {
@@ -240,10 +235,6 @@ class Message {
   setFile (file, mime) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
-  }
-
-  setMediainfo (author, trackName) {
-    binding.dcn_msg_set_mediainfo(this.dc_msg, author || '', trackName || '')
   }
 
   setText (text) {

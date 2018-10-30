@@ -130,6 +130,10 @@ Check if the user is authorized by the given password in some way. Corresponds t
 
 Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c).
 
+#### `dc.clearStringTable()`
+
+Clears the string table for handling `DC_EVENT_GET_STR` events from core.
+
 #### `dc.close()`
 
 Stops the threads and closes down the `DeltaChat` instance.
@@ -440,6 +444,10 @@ Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/c
 
 Let the `DeltaChat` instance know that the application is offline/online.
 
+#### `dc.setStringTable(index, str)`
+
+Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.
+
 #### `dc.setTextDraft(chatId, text)`
 
 Save a draft for a chat in the database. Corresponds to [`dc_set_text_draft()`](https://c.delta.chat/classdc__context__t.html#a2dcb54d63d73b547077ad4f980509ac0).
@@ -647,10 +655,6 @@ Get height of image or video. Corresponds to [`dc_msg_get_height()`](https://c.d
 
 Get the id of the message. Corresponds to [`dc_msg_get_id()`](https://c.delta.chat/classdc__msg__t.html#ab007f6ccf670907af9ac6788c74a0641).
 
-#### `message.getMediainfo()`
-
-Get real author and title. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_mediainfo()`](https://c.delta.chat/classdc__msg__t.html#a4e963387430c148a588cb268c18827d3).
-
 #### `message.getReceivedTimestamp()`
 
 Get message receive time. Corresponds to [`dc_msg_get_received_timestamp()`](https://c.delta.chat/classdc__msg__t.html#abc26107674c04684492e7d96fdf6a69a).
@@ -734,10 +738,6 @@ Set the duration assocated with the message object. Corresponds to [`dc_msg_set_
 #### `message.setFile(file, mime)`
 
 Set the file assocated with the message object. Corresponds to [`dc_msg_set_file()`](https://c.delta.chat/classdc__msg__t.html#ae3d4b2a4ed4b10dbe13396ff7739160e).
-
-#### `message.setMediainfo(author, trackName)`
-
-Set the media information assocated with the message object. Corresponds to [`dc_msg_set_mediainfo()`](https://c.delta.chat/classdc__msg__t.html#af55fa139fe745ed0388ab3cea7403a31).
 
 #### `message.setText(text)`
 

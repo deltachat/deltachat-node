@@ -10,6 +10,7 @@
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
 #include "eventqueue.h"
+#include "strtable.h"
 
 /**
  * Custom context
@@ -21,6 +22,7 @@ typedef struct dcn_context_t {
 #else
   eventqueue_t* event_queue;
 #endif
+  strtable_t* strtable;
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
   int loop_thread;
@@ -51,8 +53,7 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       return dcn_context->is_offline;
 
     case DC_EVENT_GET_STRING:
-    case DC_EVENT_GET_QUANTITY_STRING:
-      return 0;
+      return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
 
     case DC_EVENT_HTTP_GET: {
       uintptr_t http_ret = 0;
@@ -231,6 +232,9 @@ static void finalize_context(napi_env env, void* data, void* hint) {
       dcn_context->event_queue = NULL;
     }
 
+    strtable_unref(dcn_context->strtable);
+    dcn_context->strtable = NULL;
+
     pthread_cond_destroy(&dcn_context->dc_event_http_cond);
     pthread_mutex_destroy(&dcn_context->dc_event_http_mutex);
 
@@ -301,6 +305,7 @@ NAPI_METHOD(dcn_context_new) {
 #else
   dcn_context->event_queue = eventqueue_new();
 #endif
+  dcn_context->strtable = strtable_new();
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
@@ -414,6 +419,15 @@ NAPI_METHOD(dcn_check_qr) {
                                           finalize_lot,
                                           NULL, &result));
   return result;
+}
+
+NAPI_METHOD(dcn_clear_string_table) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  strtable_clear(dcn_context->strtable);
+
+  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_close) {
@@ -1294,6 +1308,19 @@ NAPI_METHOD(dcn_set_offline) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_set_string_table) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(index, 1);
+  NAPI_ARGV_UTF8_MALLOC(str, 2);
+
+  strtable_set_str(dcn_context->strtable, index, str);
+
+  free(str);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_set_text_draft) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1750,19 +1777,6 @@ NAPI_METHOD(dcn_msg_get_id) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
-NAPI_METHOD(dcn_msg_get_mediainfo) {
-  NAPI_ARGV(1);
-  NAPI_DC_MSG();
-
-  dc_lot_t* mediainfo = dc_msg_get_mediainfo(dc_msg);
-
-  napi_value result;
-  NAPI_STATUS_THROWS(napi_create_external(env, mediainfo,
-                                          finalize_lot,
-                                          NULL, &result));
-  return result;
-}
-
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -1964,22 +1978,6 @@ NAPI_METHOD(dcn_msg_set_file) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_msg_set_mediainfo) {
-  NAPI_ARGV(3);
-  NAPI_DC_MSG();
-  NAPI_ARGV_UTF8_MALLOC(author, 1);
-  NAPI_ARGV_UTF8_MALLOC(trackname, 2);
-
-  char* author_null = strlen(author) > 0 ? author : NULL;
-  char* trackname_null = strlen(trackname) > 0 ? trackname : NULL;
-  dc_msg_set_mediainfo(dc_msg, author_null, trackname_null);
-
-  free(author);
-  free(trackname);
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_msg_set_text) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
@@ -2015,6 +2013,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_password);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
+  NAPI_EXPORT_FUNCTION(dcn_clear_string_table);
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
@@ -2072,6 +2071,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_offline);
+  NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
@@ -2141,7 +2141,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
-  NAPI_EXPORT_FUNCTION(dcn_msg_get_mediainfo);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
@@ -2162,6 +2161,5 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
-  NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
 }

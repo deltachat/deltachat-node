@@ -18,7 +18,8 @@
       ],
       "sources": [
         "./src/module.c",
-        "./src/eventqueue.c"
+        "./src/eventqueue.c",
+        "./src/strtable.c"
       ],
       "include_dirs": [
         "deltachat-core/src",
