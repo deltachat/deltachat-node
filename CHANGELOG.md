@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.23.0] - 2018-10-30
+
+### Changed
+* Allow users to remove config options with `dc.configure()` (@karissa)
+* Upgrade `deltachat-core` to `v0.24.0` (@ralphtheninja)
+
+### Added
+* Add `DeltaChat#setStringTable()` and `DeltaChat#clearStringTable()` (@r10s, @ralphtheninja)
+
+### Removed
+* Remove `Message#getMediainfo()` and `Message#setMediainfo()` (@ralphtheninja)
+
 ## [0.22.1] - 2018-10-25
 
 ### Added
@@ -366,7 +378,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...HEAD
+[0.23.0]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...v0.23.0
 [0.22.1]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...v0.22.1
 [0.22.0]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...v0.21.0

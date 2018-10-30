@@ -2,6 +2,10 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
+## v0.23.0
+
+`Message#getMediainfo()` and `Message#setMediainfo()` was removed.
+
 ## v0.19.0
 
 `DeltaChat#getInfo()` returns an object with parsed data from `dc_get_info()`, which can be used to display detailed information about software versions and the current configured state.
