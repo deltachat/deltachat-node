@@ -28,7 +28,7 @@
 
 typedef struct strtable_t {
 	pthread_mutex_t mutex;
-	char*           str[MR_STR_COUNT];
+	char*           str[DC_STR_COUNT];
 } strtable_t;
 
 
@@ -51,7 +51,7 @@ void strtable_unref(strtable_t* strtable)
 		return;
 	}
 
-	for (int i=0; i<MR_STR_COUNT; i++) {
+	for (int i=0; i<DC_STR_COUNT; i++) {
 		free(strtable->str[i]);
 	}
 
@@ -63,7 +63,7 @@ void strtable_unref(strtable_t* strtable)
 
 void strtable_set_str(strtable_t* strtable, int i, const char* str)
 {
-	if (strtable==NULL || i<0 || i>=MR_STR_COUNT) {
+	if (strtable==NULL || i<0 || i>=DC_STR_COUNT) {
 		return;
 	}
 
@@ -78,7 +78,7 @@ char* strtable_get_str(strtable_t* strtable, int i)
 {
 	char* str = NULL;
 
-	if (strtable==NULL || i<0 || i>=MR_STR_COUNT) {
+	if (strtable==NULL || i<0 || i>=DC_STR_COUNT) {
 		return NULL;
 	}
 
