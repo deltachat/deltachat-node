@@ -1246,7 +1246,8 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV_UTF8_MALLOC(key, 1);
   NAPI_ARGV_UTF8_MALLOC(value, 2);
 
-  int status = dc_set_config(dcn_context->dc_context, key, value);
+  char* value_null = strlen(value) > 0 ? value : NULL;
+  int status = dc_set_config(dcn_context->dc_context, key, value_null);
 
   free(key);
   free(value);
