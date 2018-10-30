@@ -130,6 +130,10 @@ Check if the user is authorized by the given password in some way. Corresponds t
 
 Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c).
 
+#### `dc.clearStringTable()`
+
+Clears the string table for handling `DC_EVENT_GET_STR` events from core.
+
 #### `dc.close()`
 
 Stops the threads and closes down the `DeltaChat` instance.
@@ -439,6 +443,10 @@ Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/c
 #### `dc.setOffline(offline)`
 
 Let the `DeltaChat` instance know that the application is offline/online.
+
+#### `dc.setStringTable(index, str)`
+
+Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.
 
 #### `dc.setTextDraft(chatId, text)`
 
