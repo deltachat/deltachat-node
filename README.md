@@ -647,10 +647,6 @@ Get height of image or video. Corresponds to [`dc_msg_get_height()`](https://c.d
 
 Get the id of the message. Corresponds to [`dc_msg_get_id()`](https://c.delta.chat/classdc__msg__t.html#ab007f6ccf670907af9ac6788c74a0641).
 
-#### `message.getMediainfo()`
-
-Get real author and title. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_mediainfo()`](https://c.delta.chat/classdc__msg__t.html#a4e963387430c148a588cb268c18827d3).
-
 #### `message.getReceivedTimestamp()`
 
 Get message receive time. Corresponds to [`dc_msg_get_received_timestamp()`](https://c.delta.chat/classdc__msg__t.html#abc26107674c04684492e7d96fdf6a69a).
@@ -734,10 +730,6 @@ Set the duration assocated with the message object. Corresponds to [`dc_msg_set_
 #### `message.setFile(file, mime)`
 
 Set the file assocated with the message object. Corresponds to [`dc_msg_set_file()`](https://c.delta.chat/classdc__msg__t.html#ae3d4b2a4ed4b10dbe13396ff7739160e).
-
-#### `message.setMediainfo(author, trackName)`
-
-Set the media information assocated with the message object. Corresponds to [`dc_msg_set_mediainfo()`](https://c.delta.chat/classdc__msg__t.html#af55fa139fe745ed0388ab3cea7403a31).
 
 #### `message.setText(text)`
 

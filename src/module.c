@@ -1757,19 +1757,6 @@ NAPI_METHOD(dcn_msg_get_id) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
-NAPI_METHOD(dcn_msg_get_mediainfo) {
-  NAPI_ARGV(1);
-  NAPI_DC_MSG();
-
-  dc_lot_t* mediainfo = dc_msg_get_mediainfo(dc_msg);
-
-  napi_value result;
-  NAPI_STATUS_THROWS(napi_create_external(env, mediainfo,
-                                          finalize_lot,
-                                          NULL, &result));
-  return result;
-}
-
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -1971,22 +1958,6 @@ NAPI_METHOD(dcn_msg_set_file) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_msg_set_mediainfo) {
-  NAPI_ARGV(3);
-  NAPI_DC_MSG();
-  NAPI_ARGV_UTF8_MALLOC(author, 1);
-  NAPI_ARGV_UTF8_MALLOC(trackname, 2);
-
-  char* author_null = strlen(author) > 0 ? author : NULL;
-  char* trackname_null = strlen(trackname) > 0 ? trackname : NULL;
-  dc_msg_set_mediainfo(dc_msg, author_null, trackname_null);
-
-  free(author);
-  free(trackname);
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_msg_set_text) {
   NAPI_ARGV(2);
   NAPI_DC_MSG();
@@ -2148,7 +2119,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
-  NAPI_EXPORT_FUNCTION(dcn_msg_get_mediainfo);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
@@ -2169,6 +2139,5 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
-  NAPI_EXPORT_FUNCTION(dcn_msg_set_mediainfo);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
 }
