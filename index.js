@@ -104,7 +104,7 @@ class DeltaChat extends EventEmitter {
 
     this.once('_configured', ready)
 
-    if (!opts.e2ee_enabled) opts.e2ee_enabled = 1
+    if (typeof opts.e2ee_enabled === 'undefined') opts.e2ee_enabled = 1
 
     this.setConfig('addr', opts.addr)
 
@@ -518,7 +518,7 @@ class DeltaChat extends EventEmitter {
   }
 
   setConfig (key, value) {
-    return binding.dcn_set_config(this.dcn_context, key, value || null)
+    return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
   setOffline (offline) {
