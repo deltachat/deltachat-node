@@ -53,7 +53,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
       return dcn_context->is_offline;
 
     case DC_EVENT_GET_STRING:
-    case DC_EVENT_GET_QUANTITY_STRING:
       return strtable_get_str(dcn_context->strtable, (int)data1);
 
     case DC_EVENT_HTTP_GET: {
