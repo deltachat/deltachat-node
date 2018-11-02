@@ -1233,7 +1233,7 @@ NAPI_METHOD(dcn_set_chat_profile_image) {
 
   int result = dc_set_chat_profile_image(dcn_context->dc_context,
                                          chat_id,
-                                         image);
+                                         image && image[0] ? image : NULL);
 
   free(image);
 
