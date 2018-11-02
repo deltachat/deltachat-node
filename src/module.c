@@ -702,17 +702,15 @@ NAPI_METHOD(dcn_get_chatlist) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_INT32(listflags, 1);
-  NAPI_ARGV_UTF8_MALLOC(query_str, 2);
+  NAPI_ARGV_UTF8_MALLOC(query, 2);
   NAPI_ARGV_UINT32(query_contact_id, 3);
 
-  // query_str HAS to be a string, if empty pass NULL
-  char* query_str_null = strlen(query_str) > 0 ? query_str : NULL;
   dc_chatlist_t* chatlist = dc_get_chatlist(dcn_context->dc_context,
                                             listflags,
-                                            query_str_null,
+                                            query && query[0] ? query : NULL,
                                             query_contact_id);
 
-  free(query_str);
+  free(query);
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env,
@@ -771,9 +769,8 @@ NAPI_METHOD(dcn_get_contacts) {
   NAPI_ARGV_UINT32(listflags, 1);
   NAPI_ARGV_UTF8_MALLOC(query, 2);
 
-  char* query_null = strlen(query) > 0 ? query : NULL;
-  dc_array_t* contacts = dc_get_contacts(dcn_context->dc_context,
-                                         listflags, query_null);
+  dc_array_t* contacts = dc_get_contacts(dcn_context->dc_context, listflags,
+                                         query && query[0] ? query : NULL);
   napi_value js_array = dc_array_to_js_array(env, contacts);
   free(query);
   dc_array_unref(contacts);
@@ -1246,8 +1243,8 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV_UTF8_MALLOC(key, 1);
   NAPI_ARGV_UTF8_MALLOC(value, 2);
 
-  char* value_null = strlen(value) > 0 ? value : NULL;
-  int status = dc_set_config(dcn_context->dc_context, key, value_null);
+  int status = dc_set_config(dcn_context->dc_context, key,
+                             value && value[0] ? value : NULL);
 
   free(key);
   free(value);
@@ -1970,8 +1967,7 @@ NAPI_METHOD(dcn_msg_set_file) {
   NAPI_ARGV_UTF8_MALLOC(file, 1);
   NAPI_ARGV_UTF8_MALLOC(filemime, 2);
 
-  char* filemime_null = strlen(filemime) > 0 ? filemime : NULL;
-  dc_msg_set_file(dc_msg, file, filemime_null);
+  dc_msg_set_file(dc_msg, file, filemime && filemime[0] ? filemime : NULL);
 
   free(file);
   free(filemime);
