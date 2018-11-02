@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.23.1] - 2018-11-02
+
+### Changed
+* Allow passing `NULL` to `dc_set_chat_profile_image()` (@ralphtheninja)
+
 ## [0.23.0] - 2018-10-30
 
 ### Changed
@@ -378,7 +383,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.23.1...HEAD
+[0.23.1]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...v0.23.0
 [0.22.1]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...v0.22.1
 [0.22.0]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...v0.22.0
