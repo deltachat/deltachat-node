@@ -57,18 +57,16 @@ sudo apt-get install ninja-build
 
 You might also need the following system dependencies:
 
+* `libetpan-dev`
 * `libssl-dev`
 * `libsasl2-dev`
 * `libsqlite3-dev`
 * `zlib1g-dev`
 
-Also, `libetpan-dev` at the moment can't be installed globally.
-
 To fix these issues do:
 
 ```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
-sudo apt-get remove libetpan-dev
+sudo apt-get install libetpan-dev libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
 ```
 
 Then try running `npm install` again.

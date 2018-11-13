@@ -7,8 +7,8 @@
         [ "OS != 'win'", {
           "libraries": [
             "../deltachat-core/builddir/src/libdeltachat.a",
-            "../deltachat-core/builddir/libs/libetpan/libetpan.a",
             "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
+            "-letpan",
             "-lsasl2",
             "-lssl",
             "-lsqlite3",
