@@ -38,15 +38,35 @@ npm install deltachat-node
 
 ## Troubleshooting
 
-This modules builds on top of `deltachat-core`, which in turn has external dependencies.
+This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
-If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` can't be installed globally.
+If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
 
-On Linux (e.g. Debian Stretch):
+If `meson` is missing:
 
 ```
-sudo apt-get install python3-pip ninja-build libssl1.0-dev
+sudo apt-get install python3-pip
 sudo pip3 install meson
+```
+
+If `ninja` is missing:
+
+```
+sudo apt-get install ninja-build
+```
+
+You might also need the following system dependencies:
+
+* `libssl-dev`
+* `libsasl2-dev`
+* `libsqlite3-dev`
+
+Also, `libetpan-dev` at the moment can't be installed globally.
+
+To fix these issues do:
+
+```
+sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev
 sudo apt-get remove libetpan-dev
 ```
 
