@@ -17,6 +17,7 @@ addons:
     - python3-pip
     - python3.5
     - g++-7
+    - libetpan-dev
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
