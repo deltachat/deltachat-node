@@ -13,9 +13,9 @@ test('open', t => {
     t.test('> missing addr or mail_pw throws', t => {
       t.throws(function () {
         dc.configure({ addr: 'delta1@delta.localhost' })
-      }, /Missing \.mail_pw/, 'missing mail_pw throws')
+      }, /Missing \.mailPw/, 'missing mailPw throws')
       t.throws(function () {
-        dc.configure({ mail_pw: 'delta1' })
+        dc.configure({ mailPw: 'delta1' })
       }, /Missing \.addr/, 'missing addr throws')
       t.end()
     })
@@ -32,7 +32,7 @@ test('open', t => {
       })
       dc.configure({
         addr: 'hpk2@hq5.merlinux.eu',
-        mail_pw: 'whatever'
+        mailPw: 'whatever'
       })
     })
 
