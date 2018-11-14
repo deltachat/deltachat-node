@@ -91,7 +91,7 @@ dc.open(() => {
     dc.once('ready', onReady)
     dc.configure({
       addr: 'user@site.org',
-      mail_pw: 'password'
+      mailPw: 'password'
     })
   } else {
     onReady()
@@ -166,21 +166,21 @@ Configure and connect a context. Corresponds to [`dc_configure()`](https://c.del
 The `options` object takes the following properties:
 
 * `options.addr` *(string, required)*: Email address of the chat user.
-* `options.mail_server` *(string, optional)*: IMAP-server, guessed if left out.
-* `options.mail_user` *(string, optional)*: IMAP-username, guessed if left out.
-* `options.mail_pw` *(string, required)*: IMAP-password of the chat user.
-* `options.mail_port` *(string | integer, optional)*: IMAP-port, guessed if left out.
-* `options.send_server` *(string, optional)*: SMTP-server, guessed if left out.
-* `options.send_user` *(string, optional)*: SMTP-user, guessed if left out.
-* `options.send_pw` *(string, optional)*: SMTP-password, guessed if left out.
-* `options.send_port` *(string | integer, optional)*: SMTP-port, guessed if left out.
-* `options.server_flags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
-* `options.displayname` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
-* `options.selfstatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
-* `options.selfavatar` *(string, optional)*: File containing avatar.
-* `options.e2ee_enabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
-* `options.mdns_enabled` *(boolean, optional)*: Send and request read receipts. Defaults to `true`.
-* `options.save_mime_headers` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
+* `options.mailServer` *(string, optional)*: IMAP-server, guessed if left out.
+* `options.mailUser` *(string, optional)*: IMAP-username, guessed if left out.
+* `options.mailPw` *(string, required)*: IMAP-password of the chat user.
+* `options.mailPort` *(string | integer, optional)*: IMAP-port, guessed if left out.
+* `options.sendServer` *(string, optional)*: SMTP-server, guessed if left out.
+* `options.sendUser` *(string, optional)*: SMTP-user, guessed if left out.
+* `options.sendPw` *(string, optional)*: SMTP-password, guessed if left out.
+* `options.sendPort` *(string | integer, optional)*: SMTP-port, guessed if left out.
+* `options.serverFlags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
+* `options.displayName` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
+* `options.selfStatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
+* `options.selfAvatar` *(string, optional)*: File containing avatar.
+* `options.e2eeEnabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
+* `options.mdnsEnabled` *(boolean, optional)*: Send and request read receipts. Defaults to `true`.
+* `options.saveMimeHeaders` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 

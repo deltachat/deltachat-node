@@ -10,19 +10,24 @@ let dc = null
 function configureDefaultDC (dc) {
   dc.configure({
     addr: 'delta1@delta.localhost',
-    mail_server: '127.0.0.1',
-    mail_user: 'delta1',
-    mail_pw: 'delta1',
-    mail_port: 3143,
-    send_server: '127.0.0.1',
-    send_user: 'delta1',
-    send_pw: 'delta1',
-    send_port: 3025,
-    server_flags: 0x400 | 0x40000,
-    displayname: 'Delta One',
-    selfstatus: 'From Delta One with <3',
-    e2ee_enabled: true,
-    save_mime_headers: true
+
+    mailServer: '127.0.0.1',
+    mailUser: 'delta1',
+    mailPw: 'delta1',
+    mailPort: 3143,
+
+    sendServer: '127.0.0.1',
+    sendUser: 'delta1',
+    sendPw: 'delta1',
+    sendPort: 3025,
+
+    serverFlags: 0x400 | 0x40000,
+
+    displayName: 'Delta One',
+    selfStatus: 'From Delta One with <3',
+
+    e2eeEnabled: true,
+    saveMimeHeaders: true
   })
 }
 
@@ -38,19 +43,19 @@ test('setUp dc context', t => {
   dc = new DeltaChat()
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
-    t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mail_server correct')
-    t.is(dc.getConfig('mail_port'), '3143', 'mail_port correct')
-    t.is(dc.getConfig('mail_user'), 'delta1', 'mail_user correct')
-    t.is(dc.getConfig('mail_pw'), 'delta1', 'mail_pw correct')
-    t.is(dc.getConfig('send_server'), '127.0.0.1', 'send_server correct')
-    t.is(dc.getConfig('send_port'), '3025', 'send_port correct')
-    t.is(dc.getConfig('send_user'), 'delta1', 'send_user correct')
-    t.is(dc.getConfig('send_pw'), 'delta1', 'send_pw correct')
-    t.is(dc.getConfig('server_flags'), String(0x400 | 0x40000), 'server_flags correct')
-    t.is(dc.getConfig('displayname'), 'Delta One', 'displayname correct')
-    t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfstatus correct')
-    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee enabled')
-    t.is(dc.getConfig('save_mime_headers'), '1', 'saving mime headers enabled')
+    t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mailServer correct')
+    t.is(dc.getConfig('mail_port'), '3143', 'mailPort correct')
+    t.is(dc.getConfig('mail_user'), 'delta1', 'mailUser correct')
+    t.is(dc.getConfig('mail_pw'), 'delta1', 'mailPw correct')
+    t.is(dc.getConfig('send_server'), '127.0.0.1', 'sendServer correct')
+    t.is(dc.getConfig('send_port'), '3025', 'sendPort correct')
+    t.is(dc.getConfig('send_user'), 'delta1', 'sendUser correct')
+    t.is(dc.getConfig('send_pw'), 'delta1', 'sendPw correct')
+    t.is(dc.getConfig('server_flags'), String(0x400 | 0x40000), 'serverFlags correct')
+    t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
+    t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
+    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
+    t.is(dc.getConfig('save_mime_headers'), '1', 'saveMimeHeaders correct')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
   })
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
