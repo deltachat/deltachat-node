@@ -175,6 +175,7 @@ The `options` object takes the following properties:
 * `options.sendPw` *(string, optional)*: SMTP-password, guessed if left out.
 * `options.sendPort` *(string | integer, optional)*: SMTP-port, guessed if left out.
 * `options.serverFlags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
+* `options.imapFolder` *(string, optional)*: IMAP folder to use, defaults to `'INBOX'`.
 * `options.displayName` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
 * `options.selfStatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
 * `options.selfAvatar` *(string, optional)*: File containing avatar.

@@ -23,6 +23,7 @@ function configureDefaultDC (dc) {
 
     serverFlags: 0x400 | 0x40000,
 
+    imapFolder: 'YOYOWHATSUP',
     displayName: 'Delta One',
     selfStatus: 'From Delta One with <3',
     selfAvatar: path.join(__dirname, 'fixtures', 'avatar.png'),
@@ -39,9 +40,10 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(20)
+  t.plan(22)
   const cwd = tempy.directory()
   dc = new DeltaChat()
+  t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
     t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mailServer correct')
@@ -53,6 +55,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('send_user'), 'delta1', 'sendUser correct')
     t.is(dc.getConfig('send_pw'), 'delta1', 'sendPw correct')
     t.is(dc.getConfig('server_flags'), String(0x400 | 0x40000), 'serverFlags correct')
+    t.is(dc.getConfig('imap_folder'), 'YOYOWHATSUP', 'custom imap folder')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
     t.is(dc.getConfig('selfavatar'), `${cwd}/db.sqlite-blobs/avatar.png`, 'selfAvatar correct')

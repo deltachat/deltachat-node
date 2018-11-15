@@ -123,6 +123,7 @@ class DeltaChat extends EventEmitter {
     this.setConfig('send_port', String(opts.sendPort))
 
     this.setConfig('server_flags', String(opts.serverFlags))
+    this.setConfig('imap_folder', opts.imapFolder)
     this.setConfig('displayname', opts.displayName)
     this.setConfig('selfstatus', opts.selfStatus)
     this.setConfig('selfavatar', opts.selfAvatar)
