@@ -4,7 +4,18 @@
       "target_name": "deltachat",
       "conditions": [
         [ "OS == 'win'", {}],
-        [ "OS != 'win'", {
+        [ "OS == 'linux'", {
+          "libraries": [
+            "../deltachat-core/builddir/src/libdeltachat.a",
+            "../deltachat-core/builddir/libs/libetpan/libetpan.a",
+            "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
+            "-lsasl2",
+            "-lssl",
+            "-lsqlite3",
+            "-lpthread"
+          ]
+        }],
+        [ "OS == 'mac'", {
           "libraries": [
             "../deltachat-core/builddir/src/libdeltachat.a",
             "../deltachat-core/builddir/libs/libetpan/libetpan.a",
