@@ -419,6 +419,10 @@ Mark a message as _seen_, updates the IMAP state and sends MDNs. Corresponds to 
 
 Static method. Returns `true` if `addr` maybe is a valid e-mail address, otherwise `false`. Corresponds to [`dc_may_be_valid_addr()`](https://c.delta.chat/classdc__context__t.html#a78f5a96398b3763bde51b1a057c84903).
 
+#### `dc.maybeNetwork()`
+
+Called as a hint to `deltachat-core` that the network is available again, to trigger pending messages to be sent. Corresponds to [`dc_maybe_network()`](https://c.delta.chat/classdc__context__t.html#a2f61e875270dbb7e7a2533461baa659b).
+
 #### `dc.messageNew([viewType])`
 
 Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
