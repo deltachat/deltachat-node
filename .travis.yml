@@ -36,7 +36,7 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run start-test-server; else true; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm test; else npm run test-open; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm test; else true; fi
 
 after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
