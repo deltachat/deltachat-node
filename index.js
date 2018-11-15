@@ -527,10 +527,6 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
-  setOffline (offline) {
-    binding.dcn_set_offline(this.dcn_context, offline ? 1 : 0)
-  }
-
   setStringTable (index, str) {
     binding.dcn_set_string_table(this.dcn_context, Number(index), str)
   }

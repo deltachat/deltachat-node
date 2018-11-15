@@ -26,7 +26,6 @@ typedef struct dcn_context_t {
   uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
   int loop_thread;
-  int is_offline;
   pthread_mutex_t dc_event_http_mutex;
   pthread_cond_t  dc_event_http_cond;
   int             dc_event_http_done;
@@ -49,9 +48,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
 
   switch (event) {
-    case DC_EVENT_IS_OFFLINE:
-      return dcn_context->is_offline;
-
     case DC_EVENT_GET_STRING:
       return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
 
@@ -309,7 +305,6 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
   dcn_context->loop_thread = 0;
-  dcn_context->is_offline = 0;
 
   dcn_context->dc_event_http_done = 0;
   dcn_context->dc_event_http_response = NULL;
@@ -1293,19 +1288,6 @@ NAPI_METHOD(dcn_set_http_get_response) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_set_offline) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_INT32(is_offline, 1); // param2: 1=we're offline, 0=we're online again
-
-  dcn_context->is_offline = is_offline;
-  if (!is_offline) {
-    dc_interrupt_smtp_idle(dcn_context->dc_context);
-  }
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_set_string_table) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -2067,7 +2049,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
-  NAPI_EXPORT_FUNCTION(dcn_set_offline);
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
