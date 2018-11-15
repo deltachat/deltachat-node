@@ -25,6 +25,7 @@ function configureDefaultDC (dc) {
 
     displayName: 'Delta One',
     selfStatus: 'From Delta One with <3',
+    selfAvatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
     e2eeEnabled: true,
     saveMimeHeaders: true
@@ -38,7 +39,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(19)
+  t.plan(20)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -54,6 +55,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('server_flags'), String(0x400 | 0x40000), 'serverFlags correct')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
+    t.is(dc.getConfig('selfavatar'), `${cwd}/db.sqlite-blobs/avatar.png`, 'selfAvatar correct')
     t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
     t.is(dc.getConfig('save_mime_headers'), '1', 'saveMimeHeaders correct')
     t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
