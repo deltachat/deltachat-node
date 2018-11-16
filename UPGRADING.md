@@ -2,6 +2,12 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
+## v0.24.0
+
+Options passed to `dc.configure()` no longer are in `snake_case` and must be updated to `snakeCase`.
+
+`deltachat-core` was updated to `v0.25.1` which contains the single folder approach. Use `options.imapFolder` if you need to change the name of this folder, which defaults to `'INBOX'`.
+
 ## v0.23.0
 
 `Message#getMediainfo()` and `Message#setMediainfo()` was removed.
