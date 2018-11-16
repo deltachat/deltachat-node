@@ -1026,6 +1026,15 @@ NAPI_METHOD(dcn_markseen_msgs) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_maybe_network) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_maybe_network(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_msg_new) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2038,6 +2047,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_maybe_network);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
   NAPI_EXPORT_FUNCTION(dcn_open);
   NAPI_EXPORT_FUNCTION(dcn_poll_event);

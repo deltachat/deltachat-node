@@ -449,6 +449,10 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_maybe_valid_addr(addr))
   }
 
+  maybeNetwork () {
+    binding.dcn_maybe_network(this.dcn_context)
+  }
+
   messageNew (viewType = C.DC_MSG_TEXT) {
     return new Message(binding.dcn_msg_new(this.dcn_context, viewType))
   }
