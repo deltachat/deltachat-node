@@ -879,7 +879,7 @@ Internal `viewType` property.
 
 ## Developing
 
-If you're cloning this repository in order to hack on it, you need to setup `deltachat-core` dependencies correctly, before doing `npm install`.
+If you're cloning this repository in order to hack on it, you need to setup the `deltachat-core` submodule, before doing `npm install`.
 
 The following commands should be enough to get started.
 
