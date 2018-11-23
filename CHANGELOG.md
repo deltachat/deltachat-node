@@ -15,6 +15,9 @@
 ### Removed
 * Remove `DC_ERROR_NO_NETWORK` and `DC_STR_NONETWORK` constants (@ralphtheninja)
 
+### Fixed
+* `dc.setChatProfileImage()` accepts `null` image (@ralphtheninja)
+
 ## [0.24.0] - 2018-11-16
 
 ### Changed
