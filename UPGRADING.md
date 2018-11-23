@@ -2,6 +2,10 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
+## v0.25.0
+
+The error code parameter in the `DC_EVENT_ERROR` event is no longer emitted.
+
 ## v0.24.0
 
 Options passed to `dc.configure()` no longer are in `snake_case` and must be updated to `camelCase`.

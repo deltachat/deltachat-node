@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.25.0] - 2018-11-23
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.26.1` (@ralphtheninja)
+* README: `libetpan-dev` _can_ be installed on the system without breaking compile (@ralphtheninja)
+* `events.js` is now automatically generated based on `deltachat-core/src/deltachat.h` (@ralphtheninja)
+
+### Added
+* Add `DC_EVENT_ERROR_NETWORK` and `DC_EVENT_ERROR_SELF_NOT_IN_GROUP` events (@ralphtheninja)
+
+### Removed
+* Remove `DC_ERROR_NO_NETWORK` and `DC_STR_NONETWORK` constants (@ralphtheninja)
+
 ## [0.24.0] - 2018-11-16
 
 ### Changed
@@ -403,7 +416,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...HEAD
+[0.25.0]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/deltachat/deltachat-node/compare/v0.23.1...v0.24.0
 [0.23.1]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...v0.23.0
