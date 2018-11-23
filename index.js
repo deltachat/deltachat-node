@@ -584,7 +584,7 @@ function handleEvent (self, event, data1, data2) {
       self.emit(eventStr, data2)
       break
     case 'DC_EVENT_ERROR': // 400
-      self.emit(eventStr, data1, data2)
+      self.emit(eventStr, data2)
       break
     case 'DC_EVENT_ERROR_NETWORK': // 401
       self.emit(eventStr, data1, data2)
