@@ -201,6 +201,13 @@ test('test setting profile image', t => {
     `${blobs}/${image}`,
     'image in blobdir'
   )
+  dc.setChatProfileImage(chatId)
+  t.same(
+    dc.getChat(chatId).getProfileImage(),
+    null,
+    'image is null'
+  )
+
   t.end()
 })
 
