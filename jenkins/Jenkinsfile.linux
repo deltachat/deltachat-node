@@ -1,0 +1,26 @@
+pipeline {
+  agent {
+    docker {
+      image 'deltachat/debian-stretch-node-11'
+      args '-v "$HOME":/home/jenkins:rw,z'
+      alwaysPull true
+    }
+  }
+  stages {
+    stage('Install') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    stage('Tests') {
+      steps {
+        sh 'npm test'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'rm -rf node_modules/'
+    }
+  }
+}
