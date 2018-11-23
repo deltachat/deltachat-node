@@ -568,62 +568,68 @@ function handleEvent (self, event, data1, data2) {
   }
 
   switch (eventStr) {
-    case 'DC_EVENT_INFO':
+    case 'DC_EVENT_INFO': // 100
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_CONNECTED':
+    case 'DC_EVENT_SMTP_CONNECTED': // 101
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_CONNECTED':
+    case 'DC_EVENT_IMAP_CONNECTED': // 102
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_MESSAGE_SENT':
+    case 'DC_EVENT_SMTP_MESSAGE_SENT': // 103
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_WARNING':
+    case 'DC_EVENT_WARNING': // 300
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_ERROR':
+    case 'DC_EVENT_ERROR': // 400
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_MSGS_CHANGED':
+    case 'DC_EVENT_ERROR_NETWORK': // 401
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_INCOMING_MSG':
+    case 'DC_EVENT_ERROR_SELF_NOT_IN_GROUP': // 410
+      self.emit(eventStr, data2)
+      break
+    case 'DC_EVENT_MSGS_CHANGED': // 2000
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_MSG_DELIVERED':
+    case 'DC_EVENT_INCOMING_MSG': // 2005
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_MSG_FAILED':
+    case 'DC_EVENT_MSG_DELIVERED': // 2010
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_MSG_READ':
+    case 'DC_EVENT_MSG_FAILED': // 2012
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_CHAT_MODIFIED':
+    case 'DC_EVENT_MSG_READ': // 2015
+      self.emit(eventStr, data1, data2)
+      break
+    case 'DC_EVENT_CHAT_MODIFIED': // 2020
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONTACTS_CHANGED':
+    case 'DC_EVENT_CONTACTS_CHANGED': // 2030
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONFIGURE_PROGRESS':
+    case 'DC_EVENT_CONFIGURE_PROGRESS': // 2041
       if (data1 === 1000) self.emit('_configured')
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_PROGRESS':
+    case 'DC_EVENT_IMEX_PROGRESS': // 2051
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_FILE_WRITTEN':
+    case 'DC_EVENT_IMEX_FILE_WRITTEN': // 2052
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS':
+    case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS': // 2060
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS':
+    case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS': // 2061
       self.emit(eventStr, data1, data2)
       break
-    case 'DC_EVENT_HTTP_GET':
+    case 'DC_EVENT_HTTP_GET': // 2100
       handleHttpGetEvent(data1)
       break
     default:

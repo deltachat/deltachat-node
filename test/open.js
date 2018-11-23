@@ -27,8 +27,8 @@ test('open', t => {
           t.pass('Got autoconfig!')
         }
       })
-      dc.once('DC_EVENT_ERROR', (code, error) => {
-        t.pass(`Got _some_ error: ${code}, ${error}`)
+      dc.once('DC_EVENT_ERROR_NETWORK', (first, error) => {
+        t.pass(`Got _some_ error: ${first}, ${error}`)
       })
       dc.configure({
         addr: 'hpk2@hq5.merlinux.eu',

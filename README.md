@@ -861,6 +861,8 @@ Internal `viewType` property.
 | [`DC_EVENT_SMTP_MESSAGE_SENT`](https://c.delta.chat/group__DC__EVENT.html#gace252b291eaa12fd593ea8384b2205e4)  | Info string    | `(info)`  |
 | [`DC_EVENT_WARNING`](https://c.delta.chat/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)  | Warning string    | `(warning)`  |
 | [`DC_EVENT_ERROR`](https://c.delta.chat/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)  | Error string    | `(code, error)`  |
+| [`DC_EVENT_ERROR_NETWORK`](https://c.delta.chat/group__DC__EVENT.html#ga055e6bfcba292678fc5f0d687f6230a1)  | Network error    | `(first, error)`  |
+| [`DC_EVENT_ERROR_SELF_NOT_IN_GROUP`](https://c.delta.chat/group__DC__EVENT.html#gab55bc1fec869d92d722618c05bd74604)  | Info string    | `(info)`  |
 | [`DC_EVENT_MSGS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga0f52cdaad70dd24f7540abda6193cc2d)  | Messages or chats changed    | `(chatId, msgId)`  |
 | [`DC_EVENT_INCOMING_MSG`](https://c.delta.chat/group__DC__EVENT.html#ga3f0831ca83189879a2f224b424d8b58f)  | There is a fresh message    | `(chatId, msgId)`  |
 | [`DC_EVENT_MSG_DELIVERED`](https://c.delta.chat/group__DC__EVENT.html#ga4438030310448a61af0a4bc72c6765dc)  | Message was sent successfully    | `(chatId, msgId)`  |
