@@ -7,23 +7,21 @@ const c = require('../constants')
 
 let dc = null
 
+const ADDR = process.env.DC_ADDR
+const SERVER = ADDR.split('@')[1]
+
 function configureDefaultDC (dc) {
   dc.configure({
-    addr: 'delta1@delta.localhost',
+    addr: ADDR,
 
-    mailServer: '127.0.0.1',
-    mailUser: 'delta1',
-    mailPw: 'delta1',
-    mailPort: 3143,
+    mailServer: SERVER,
+    mailUser: ADDR,
+    mailPw: process.env.DC_MAIL_PW,
 
-    sendServer: '127.0.0.1',
-    sendUser: 'delta1',
-    sendPw: 'delta1',
-    sendPort: 3025,
+    sendServer: SERVER,
+    sendUser: ADDR,
+    sendPw: process.env.DC_MAIL_PW,
 
-    serverFlags: 0x400 | 0x40000,
-
-    imapFolder: 'YOYOWHATSUP',
     displayName: 'Delta One',
     selfStatus: 'From Delta One with <3',
     selfAvatar: path.join(__dirname, 'fixtures', 'avatar.png'),
@@ -40,22 +38,17 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(22)
+  t.plan(17)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   dc.once('ready', () => {
-    t.is(dc.getConfig('addr'), 'delta1@delta.localhost', 'addr correct')
-    t.is(dc.getConfig('mail_server'), '127.0.0.1', 'mailServer correct')
-    t.is(dc.getConfig('mail_port'), '3143', 'mailPort correct')
-    t.is(dc.getConfig('mail_user'), 'delta1', 'mailUser correct')
-    t.is(dc.getConfig('mail_pw'), 'delta1', 'mailPw correct')
-    t.is(dc.getConfig('send_server'), '127.0.0.1', 'sendServer correct')
-    t.is(dc.getConfig('send_port'), '3025', 'sendPort correct')
-    t.is(dc.getConfig('send_user'), 'delta1', 'sendUser correct')
-    t.is(dc.getConfig('send_pw'), 'delta1', 'sendPw correct')
-    t.is(dc.getConfig('server_flags'), String(0x400 | 0x40000), 'serverFlags correct')
-    t.is(dc.getConfig('imap_folder'), 'YOYOWHATSUP', 'custom imap folder')
+    t.is(dc.getConfig('addr'), ADDR, 'addr correct')
+    t.is(dc.getConfig('mail_server'), SERVER, 'mailServer correct')
+    t.is(dc.getConfig('mail_user'), ADDR, 'mailUser correct')
+    t.is(dc.getConfig('send_server'), SERVER, 'sendServer correct')
+    t.is(dc.getConfig('send_user'), ADDR, 'sendUser correct')
+    t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
     t.is(dc.getConfig('selfavatar'), `${cwd}/db.sqlite-blobs/avatar.png`, 'selfAvatar correct')
@@ -66,8 +59,11 @@ test('setUp dc context', t => {
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
     t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
   })
-  dc.on('DC_EVENT_ERROR', (data1, data2) => {
-    throw new Error(data1 || data2)
+  dc.on('DC_EVENT_ERROR', err => {
+    throw new Error(err)
+  })
+  dc.on('DC_EVENT_ERROR_NETWORK', (first, err) => {
+    throw new Error(err)
   })
   dc.once('ALL', () => t.pass('ALL event fired at least once'))
   dc.open(cwd, err => {
@@ -134,7 +130,7 @@ test('static getConfig()', t => {
   const dir = info.database_dir
   DeltaChat.getConfig(dir, (err, config) => {
     t.error(err, 'no error')
-    t.is(config.addr, 'delta1@delta.localhost')
+    t.is(config.addr, ADDR)
     t.end()
   })
 })

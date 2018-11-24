@@ -892,7 +892,13 @@ npm install
 
 ## Tests and Coverage
 
-To run the tests you need `docker` installed. To start the [`Greenmail`](http://www.icegreen.com/greenmail/) test server run `npm run start-test-server`. Once the server is running you can run the tests with `npm test`. To stop the server run `npm run stop-test-server`.
+To run the tests you need to set the `DC_ADDR` and `DC_MAIL_PW` environment variables. E.g.:
+
+```
+$ export DC_ADDR=user@site.org
+$ export DC_MAIL_PW=myp4ssw0rD
+$ npm test
+```
 
 Running `npm test` ends with showing a code coverage report, which is produced by [`nyc`](https://github.com/istanbuljs/nyc#readme).
 
@@ -912,8 +918,6 @@ We have the following scripts for building, testing and coverage:
 * `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 * `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
 * `npm run generate-constants` Generates `constants.js` based on the `deltachat-core/deltachat.h` header file.
-* `npm run start-test-server` Starts the `Greenmail` test server.
-* `npm run stop-test-server` Stops the `Greenmail` test server.
 * `npm run submodule` Updates the git submodule in `deltachat-core/`.
 * `npm run rebuild` Recompiles the native code in `src/` and builds a new `deltachat.node` addon.
 
