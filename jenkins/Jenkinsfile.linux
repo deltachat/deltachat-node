@@ -1,0 +1,31 @@
+pipeline {
+  agent {
+    docker {
+      image 'deltachat/debian-stretch-node-11'
+      args '-v "$HOME":/home/jenkins:rw,z'
+      alwaysPull true
+    }
+  }
+  stages {
+    stage('Install') {
+      steps {
+        sh 'rm -rf deltachat-core && npm run submodule'
+        sh 'npm install'
+      }
+    }
+    stage('Tests') {
+      environment {
+        DC_ADDR = credentials('dc-addr')
+        DC_MAIL_PW = credentials('dc-mail-pw')
+      }
+      steps {
+        sh 'npm test'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'rm -rf node_modules'
+    }
+  }
+}
