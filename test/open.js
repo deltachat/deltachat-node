@@ -21,14 +21,19 @@ test('open', t => {
     })
 
     t.test('> autoconfigure (using invalid password)', t => {
-      t.plan(2)
+      t.plan(3)
       dc.on('DC_EVENT_INFO', info => {
         if (info.startsWith('Got autoconfig:')) {
           t.pass('Got autoconfig!')
         }
       })
       dc.once('DC_EVENT_ERROR_NETWORK', (first, error) => {
-        t.pass(`Got _some_ error: ${first}, ${error}`)
+        t.is(first, 1, 'first network error')
+        if (error.startsWith('Cannot login as')) {
+          t.pass('Got correct login error')
+        } else {
+          t.pass('Got incorrect login error: ' + error)
+        }
       })
       dc.configure({
         addr: 'hpk2@hq5.merlinux.eu',
