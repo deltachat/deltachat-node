@@ -62,6 +62,9 @@ test('setUp dc context', t => {
   dc.on('DC_EVENT_ERROR', err => {
     throw new Error(err)
   })
+  dc.on('DC_EVENT_ERROR_NETWORK', (first, err) => {
+    throw new Error(err)
+  })
   dc.once('ALL', () => t.pass('ALL event fired at least once'))
   dc.open(cwd, err => {
     t.error(err, 'no error during open')
