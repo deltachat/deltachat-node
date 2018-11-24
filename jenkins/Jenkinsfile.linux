@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'npm run submodule'
+        sh 'rm -rf deltachat-core && npm run submodule'
         sh 'npm install'
       }
     }
@@ -25,7 +25,7 @@ pipeline {
   }
   post {
     always {
-      sh 'rm -rf node_modules/ deltachat-core/builddir'
+      sh 'rm -rf node_modules'
     }
   }
 }
