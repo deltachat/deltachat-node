@@ -22,8 +22,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig; fi
-  - env
-  - openssl version
   - ./scripts/travis-before-install
 
 node_js:
@@ -32,14 +30,8 @@ node_js:
 install:
   - npm install --verbose
 
-before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run start-test-server; else true; fi
-
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm test; else npm run test-open; fi
-
-after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
+  - npm test
 
 notifications:
   email: false
