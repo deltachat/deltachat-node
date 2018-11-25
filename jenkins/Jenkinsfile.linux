@@ -23,6 +23,9 @@ pipeline {
       }
     }
     stage('Prebuild') {
+      environment {
+        GH_TOKEN = credentials('github-token')
+      }
       steps {
         sh 'npm run prebuild'
       }
