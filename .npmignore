@@ -1,5 +1,16 @@
 .travis.yml
 build/
-scripts/travis-before-install.sh
 .nyc_output/
 coverage/
+images/
+scripts/generate-constants.js
+scripts/travis-before-install
+test/
+jenkins/
+deltachat-core/python/
+deltachat-core/docs/
+deltachat-core/.git
+deltachat-core/.gitattributes
+deltachat-core/.github
+deltachat-core/.gitignore
+*.tar.gz

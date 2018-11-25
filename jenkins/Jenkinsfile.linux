@@ -22,10 +22,18 @@ pipeline {
         sh 'npm test'
       }
     }
+    stage('Prebuild') {
+      environment {
+        GH_TOKEN = credentials('github-token')
+      }
+      steps {
+        sh 'npm run prebuild'
+      }
+    }
   }
   post {
     always {
-      sh 'rm -rf node_modules'
+      sh 'rm -rf node_modules/ build/ prebuilds/'
     }
   }
 }
