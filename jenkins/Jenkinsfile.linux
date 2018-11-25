@@ -24,7 +24,6 @@ pipeline {
     }
     stage('Prebuild') {
       steps {
-        sh 'printenv'
         sh 'npm run prebuild'
       }
     }
