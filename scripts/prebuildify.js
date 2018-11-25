@@ -48,10 +48,10 @@ function build () {
 
 function bundle () {
   const prebuilds = `${process.platform}-${process.arch}`
-  const file = `v${pkg.version}-${process.platform}-${process.arch}.tar`
+  const file = `v${pkg.version}-${process.platform}-${process.arch}.tar.gz`
   const cwd = path.join(process.cwd(), 'prebuilds')
   // TODO fix so prebuildify-ci handles tar.gz!
-  tar.c({ file, cwd }, [ prebuilds ], err => {
+  tar.c({ file, cwd, gzip: true }, [ prebuilds ], err => {
     if (err) exit(err)
     uploadToRelease(path.resolve(__dirname, '..', file))
   })
