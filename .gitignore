@@ -7,3 +7,4 @@ db.sqlite-journal
 .nyc_output/
 coverage/
 prebuilds/
+*.tar.gz

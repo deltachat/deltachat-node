@@ -13,3 +13,4 @@ deltachat-core/.git
 deltachat-core/.gitattributes
 deltachat-core/.github
 deltachat-core/.gitignore
+*.tar.gz
