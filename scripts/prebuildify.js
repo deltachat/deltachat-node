@@ -10,6 +10,10 @@ const pkg = require('../package.json')
 function main () {
   versionChanged((err, changed) => {
     if (err) exit(err)
+    if (!changed) {
+      console.log('Version hasn\'t changed. Skipping!')
+      process.exit(0)
+    }
     build()
   })
 }
