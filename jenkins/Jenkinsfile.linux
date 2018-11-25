@@ -22,6 +22,12 @@ pipeline {
         sh 'npm test'
       }
     }
+    stage('Prebuild') {
+      steps {
+        sh 'printenv'
+        sh 'npm run prebuild'
+      }
+    }
   }
   post {
     always {
