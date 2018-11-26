@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.26.0] - 2018-11-27
+
+### Changed
+* Rewrite tests to be completely based on environment variables (@ralphtheninja)
+
+### Added
+* Add `isInfo` and `isForwarded` to `message.toJson()` (@karissa)
+* Add `prebuildify` for making prebuilt binaries (@ralphtheninja)
+* Add Jenkins (@ralphtheninja)
+
+**Historical Note** From this version and onward we deliver prebuilt binaries, starting with linux x64.
+
 ## [0.25.0] - 2018-11-23
 
 ### Changed
@@ -419,7 +431,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...HEAD
+[0.26.0]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/deltachat/deltachat-node/compare/v0.23.1...v0.24.0
 [0.23.1]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...v0.23.1
