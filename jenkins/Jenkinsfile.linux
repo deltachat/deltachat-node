@@ -9,8 +9,9 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'rm -rf deltachat-core/ build/ prebuilds/ && npm run submodule'
-        sh 'npm install'
+        sh 'npm run reset'
+        sh 'npm run submodule'
+        sh 'npm install --verbose'
       }
     }
     stage('Tests') {
@@ -29,11 +30,6 @@ pipeline {
       steps {
         sh 'npm run prebuild'
       }
-    }
-  }
-  post {
-    always {
-      sh 'rm -rf node_modules/ build/ prebuilds/'
     }
   }
 }
