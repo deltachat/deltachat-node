@@ -1,4 +1,3 @@
-const versionChanged = require('version-changed')
 const prebuildify = require('prebuildify')
 const path = require('path')
 const tar = require('tar')
@@ -6,17 +5,6 @@ const abi = require('node-abi')
 const gh = require('ghreleases')
 
 const pkg = require('../package.json')
-
-function main () {
-  versionChanged((err, changed) => {
-    if (err) exit(err)
-    if (!changed) {
-      console.log('Version hasn\'t changed. Skipping!')
-      process.exit(0)
-    }
-    build()
-  })
-}
 
 function build () {
   function onlyNode (t) {
@@ -90,4 +78,4 @@ function exit (err) {
   }
 }
 
-main()
+build()
