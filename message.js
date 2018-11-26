@@ -110,7 +110,9 @@ class Message {
       state: binding.dcn_msg_get_state(this.dc_msg),
       showPadlock: this.getShowpadlock(),
       summary: this.getSummary().toJson(),
-      isSetupmessage: this.isSetupmessage()
+      isSetupmessage: this.isSetupmessage(),
+      isInfo: this.isInfo(),
+      isForwarded: this.isForwarded()
     }
   }
 
