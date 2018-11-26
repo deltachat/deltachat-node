@@ -10,7 +10,8 @@
     "install": "node-gyp-build scripts/rebuild-core.js",
     "prebuild": "version-unchanged || node scripts/prebuildify.js",
     "submodule": "git submodule update --recursive --init",
-    "test": "standard && npm run dependency-check && nyc node test/index.js"
+    "test": "standard && npm run dependency-check && nyc node test/index.js",
+    "reset": "rm -rf node_modules/ build/ prebuilds/ deltachat-core/"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {
@@ -43,6 +44,6 @@
     "tape": "^4.9.1",
     "tar": "^4.4.8",
     "tempy": "^0.2.1",
-    "version-changed": "^1.0.0"
+    "version-changed": "^1.1.0"
   }
 }
