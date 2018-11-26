@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'rm -rf deltachat-core && npm run submodule'
+        sh 'rm -rf deltachat-core/ build/ prebuilds/ && npm run submodule'
         sh 'npm install'
       }
     }
