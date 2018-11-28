@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.26.1] - 2018-11-28
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.27.0` (chat profile image bug fix) (@ralphtheninja)
+
 ## [0.26.0] - 2018-11-27
 
 ### Changed
@@ -431,7 +436,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...HEAD
+[0.26.1]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/deltachat/deltachat-node/compare/v0.23.1...v0.24.0
