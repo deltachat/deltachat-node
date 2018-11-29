@@ -1256,6 +1256,19 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_RETURN_INT32(status);
 }
 
+NAPI_METHOD(dcn_set_draft) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+
+  dc_msg_t* dc_msg;
+  napi_get_value_external(env, argv[2], (void**)&dc_msg);
+
+  dc_set_draft(dcn_context->dc_context, chat_id, dc_msg);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_set_event_handler) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2026,6 +2039,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
+  NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);

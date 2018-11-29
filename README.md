@@ -464,6 +464,10 @@ Set group profile image. Corresponds to [`dc_set_chat_profile_image()`](https://
 
 Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/classdc__context__t.html#aff3b894f6cfca46cab5248fdffdf083d).
 
+#### `dc.setDraft(chatId, message)`
+
+Save a draft for a chat in the database. Corresponds to [`dc_set_draft()`](https://c.delta.chat/classdc__context__t.html#a131ee8d251dc1ab2d115822f6a2f7a66).
+
 #### `dc.setStringTable(index, str)`
 
 Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.

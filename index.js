@@ -531,6 +531,14 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
+  setDraft (chatId, msg) {
+    binding.dcn_set_draft(
+      this.dcn_context,
+      Number(chatId),
+      msg ? msg.dc_msg : null
+    )
+  }
+
   setStringTable (index, str) {
     binding.dcn_set_string_table(this.dcn_context, Number(index), str)
   }
