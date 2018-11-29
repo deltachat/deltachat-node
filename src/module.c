@@ -1310,19 +1310,6 @@ NAPI_METHOD(dcn_set_string_table) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_set_text_draft) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_UTF8_MALLOC(text, 2);
-
-  dc_set_text_draft(dcn_context->dc_context, chat_id, text);
-
-  free(text);
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_star_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -2042,7 +2029,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);
-  NAPI_EXPORT_FUNCTION(dcn_set_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
   NAPI_EXPORT_FUNCTION(dcn_stop_threads);

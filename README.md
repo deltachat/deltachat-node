@@ -468,10 +468,6 @@ Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/c
 
 Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.
 
-#### `dc.setTextDraft(chatId, text)`
-
-Save a draft for a chat in the database. Corresponds to [`dc_set_text_draft()`](https://c.delta.chat/classdc__context__t.html#a2dcb54d63d73b547077ad4f980509ac0).
-
 #### `dc.starMessages(messageIds, star)`
 
 Star/unstar messages. Corresponds to [`dc_star_msgs()`](https://c.delta.chat/classdc__context__t.html#a211ab66e424092c2b617af637d1e1d35).

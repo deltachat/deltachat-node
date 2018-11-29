@@ -535,10 +535,6 @@ class DeltaChat extends EventEmitter {
     binding.dcn_set_string_table(this.dcn_context, Number(index), str)
   }
 
-  setTextDraft (chatId, text) {
-    binding.dcn_set_text_draft(this.dcn_context, Number(chatId), text)
-  }
-
   starMessages (messageIds, star) {
     if (!Array.isArray(messageIds)) {
       messageIds = [ messageIds ]
