@@ -13,7 +13,6 @@ class Chat {
   toJson () {
     return {
       archived: this.getArchived(),
-      draftTimestamp: this.getDraftTimestamp(),
       id: this.getId(),
       name: this.getName(),
       profileImage: this.getProfileImage(),
@@ -27,10 +26,6 @@ class Chat {
 
   getArchived () {
     return binding.dcn_chat_get_archived(this.dc_chat)
-  }
-
-  getDraftTimestamp () {
-    return binding.dcn_chat_get_draft_timestamp(this.dc_chat)
   }
 
   getId () {

@@ -145,7 +145,6 @@ test('create chat from contact and Chat methods', t => {
   let chat = dc.getChat(chatId)
 
   t.is(chat.getArchived(), 0, 'not archived')
-  t.is(chat.getDraftTimestamp(), 0, 'no timestamp')
   t.is(chat.getId(), chatId, 'chat id matches')
   t.is(chat.getName(), 'aaa', 'chat name matches')
   t.is(chat.getProfileImage(), null, 'no profile image')

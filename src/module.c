@@ -1402,15 +1402,6 @@ NAPI_METHOD(dcn_chat_get_archived) {
   NAPI_RETURN_INT32(archived);
 }
 
-NAPI_METHOD(dcn_chat_get_draft_timestamp) {
-  NAPI_ARGV(1);
-  NAPI_DC_CHAT();
-
-  int draft_timestamp = dc_chat_get_draft_timestamp(dc_chat);
-
-  NAPI_RETURN_INT32(draft_timestamp);
-}
-
 NAPI_METHOD(dcn_chat_get_id) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -2063,7 +2054,6 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_chat_get_archived);
-  NAPI_EXPORT_FUNCTION(dcn_chat_get_draft_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_id);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
