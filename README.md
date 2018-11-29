@@ -25,6 +25,7 @@
 * [Usage](#usage)
 * [API](#api)
 * [Developing](#developing)
+* [Prebuilt Binaries](#prebuilt-binaries)
 * [Tests and Coverage](#tests-and-coverage)
 * [Scripts](#scripts)
 * [License](#license)
@@ -889,6 +890,19 @@ cd deltachat-node
 npm run submodule
 npm install
 ```
+
+## Prebuilt Binaries
+
+At time of writing we use `Jenkins` to generate prebuilt binaries, which currently only covers the Linux platform. The workflow for building and releasing them is as follows:
+
+* Version `vX.Y.Z` is created (via `npm version`)
+* Code is pushed to Github (`git push && git push --tags`)
+* The new version will cause `Jenkins` to run `npm run prebuild` (see `Scripts` section below), which
+  * Builds the binaries using [`prebuildify`](https://github.com/mafintosh/prebuildify)
+  * Creates a release on GitHub
+  * Uploads the binaries to the GitHub release
+* When `Jenkins` has finished `prebuildify-ci download` is run, which downloads the binaries from GitHub to a local `./prebuilds` folder
+* `npm publish` finishes off by publishing to `npm` with the bundled binaries
 
 ## Tests and Coverage
 
