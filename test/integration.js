@@ -150,7 +150,6 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.getName(), 'aaa', 'chat name matches')
   t.is(chat.getProfileImage(), null, 'no profile image')
   t.is(chat.getSubtitle(), 'aaa@site.org', 'correct subtitle')
-  t.is(chat.getTextDraft(), null, 'no text draft')
   t.is(chat.getType(), c.DC_CHAT_TYPE_SINGLE, 'single chat')
   t.is(chat.isSelfTalk(), false, 'no self talk')
   // TODO make sure this is really the case!
@@ -173,9 +172,6 @@ test('create chat from contact and Chat methods', t => {
 
   dc.setChatName(chatId, 'NEW NAME')
   t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
-
-  dc.setTextDraft(chatId, 'NEW DRAFT')
-  t.is(dc.getChat(chatId).getTextDraft(), 'NEW DRAFT', 'draft updated')
 
   chatId = dc.createVerifiedGroupChat('a verified group')
   chat = dc.getChat(chatId)

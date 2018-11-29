@@ -1447,15 +1447,6 @@ NAPI_METHOD(dcn_chat_get_subtitle) {
   NAPI_RETURN_AND_FREE_STRING(subtitle);
 }
 
-NAPI_METHOD(dcn_chat_get_text_draft) {
-  NAPI_ARGV(1);
-  NAPI_DC_CHAT();
-
-  char* text_draft = dc_chat_get_text_draft(dc_chat);
-
-  NAPI_RETURN_AND_FREE_STRING(text_draft);
-}
-
 NAPI_METHOD(dcn_chat_get_type) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -2077,7 +2068,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_subtitle);
-  NAPI_EXPORT_FUNCTION(dcn_chat_get_text_draft);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);

@@ -507,10 +507,6 @@ Get the chat's profile image. Corresponds to [`dc_chat_get_profile_image()`](htt
 
 Get a subtitle for a chat. Corresponds to [`dc_chat_get_subtitle()`](https://c.delta.chat/classdc__chat__t.html#a1508279f522decd5e404e4c4fa42adf4).
 
-#### `chat.getTextDraft()`
-
-Get draft for a chat, if any. Corresponds to [`dc_chat_get_text_draft()`](https://c.delta.chat/classdc__chat__t.html#a08e4bc816bdf6f7ce9aa61dd0a5bc924).
-
 #### `chat.getType()`
 
 Get chat type. Corresponds to [`dc_chat_get_type()`](https://c.delta.chat/classdc__chat__t.html#a2841f242370f06639a33940e7da17e8d).

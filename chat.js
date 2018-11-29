@@ -18,7 +18,6 @@ class Chat {
       name: this.getName(),
       profileImage: this.getProfileImage(),
       subtitle: this.getSubtitle(),
-      textDraft: this.getTextDraft(),
       isVerified: this.isVerified(),
       type: this.getType(),
       isUnpromoted: this.isUnpromoted(),
@@ -48,10 +47,6 @@ class Chat {
 
   getSubtitle () {
     return binding.dcn_chat_get_subtitle(this.dc_chat)
-  }
-
-  getTextDraft () {
-    return binding.dcn_chat_get_text_draft(this.dc_chat)
   }
 
   getType () {
