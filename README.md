@@ -296,6 +296,10 @@ Get encryption info for a contact. Corresponds to [`dc_get_contact_encrinfo()`](
 
 Return known and unblocked contacts. Corresponds to [`dc_get_contacts()`](https://c.delta.chat/classdc__context__t.html#a32f1458afcacf034148952305bf60abe).
 
+#### `dc.getDraft(chatId)`
+
+Get draft for a chat, if any. Corresponds to [`dc_get_draft()`](TODO, this url is in the wrong section!).
+
 #### `dc.getFreshMessageCount(chatId)`
 
 Get the number of _fresh_ messages in a chat. Corresponds to [`dc_get_fresh_msg_cnt()`](https://c.delta.chat/classdc__context__t.html#a6d47f15d87049f2afa60e059f705c1c5).
