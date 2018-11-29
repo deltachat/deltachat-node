@@ -24,7 +24,6 @@
 * [Troubleshooting](#troubleshooting)
 * [Usage](#usage)
 * [API](#api)
-* [Events](#events)
 * [Developing](#developing)
 * [Tests and Coverage](#tests-and-coverage)
 * [Scripts](#scripts)
@@ -109,6 +108,7 @@ The high level JavaScript API is a collection of classes wrapping most context t
 * [<code><b>class Message</b></code>](#class_message)
 * [<code><b>class MessageState</b></code>](#class_message_state)
 * [<code><b>class MessageViewType</b></code>](#class_message_view_type)
+* [<code><b>Events</b></code>](#events)
 
 <a name="deltachat_ctor"></a>
 ### `dc = DeltaChat()`
@@ -848,7 +848,7 @@ Message type is `DC_MSG_FILE`.
 
 Internal `viewType` property.
 
-## Events
+### Events
 
 `DeltaChat` is an [`EventEmitter`](https://nodejs.org/api/events.html) and emits the following events.
 
