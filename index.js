@@ -313,7 +313,8 @@ class DeltaChat extends EventEmitter {
   }
 
   getDraft (chatId) {
-    return binding.dcn_get_draft(this.dcn_context, Number(chatId))
+    const dc_msg = binding.dcn_get_draft(this.dcn_context, Number(chatId))
+    return dc_msg ? new Message(dc_msg) : null
   }
 
   getFreshMessageCount (chatId) {
