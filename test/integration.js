@@ -155,6 +155,15 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.isUnpromoted(), false, 'not unpromoted')
   t.is(chat.isVerified(), false, 'not verified')
 
+  t.is(dc.getDraft(chatId), null, 'no draft message')
+  const newMsg = dc.messageNew()
+  newMsg.setText('w00t!')
+  dc.setDraft(chatId, newMsg)
+  const draft1 = dc.getDraft(chatId)
+  t.is(draft1.toJson().text, 'w00t!', 'draft text correct')
+  dc.setDraft(chatId, null)
+  t.is(dc.getDraft(chatId), null, 'draft removed')
+
   t.is(dc.getChatIdByContactId(contactId), chatId)
   t.same(dc.getChatContacts(chatId), [ contactId ])
 
@@ -168,6 +177,16 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.isVerified(), false, 'is not verified')
   t.is(chat.getType(), c.DC_CHAT_TYPE_GROUP, 'group chat')
   t.same(dc.getChatContacts(chatId), [ c.DC_CONTACT_ID_SELF ])
+
+  const draft2 = dc.getDraft(chatId)
+  t.ok(draft2, 'unverified group has a draft by default')
+  const draftJson = draft2.toJson()
+  t.ok(
+    draftJson.text.startsWith(
+      'Hello, I\'ve just created the group'
+    ),
+    'default text'
+  )
 
   dc.setChatName(chatId, 'NEW NAME')
   t.is(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')

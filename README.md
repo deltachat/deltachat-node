@@ -296,6 +296,10 @@ Get encryption info for a contact. Corresponds to [`dc_get_contact_encrinfo()`](
 
 Return known and unblocked contacts. Corresponds to [`dc_get_contacts()`](https://c.delta.chat/classdc__context__t.html#a32f1458afcacf034148952305bf60abe).
 
+#### `dc.getDraft(chatId)`
+
+Get draft for a chat, if any. Corresponds to [`dc_get_draft()`](https://c.delta.chat/classdc__context__t.html#a3c76757cbdaab9f1ce27f0fd1d86ea27).
+
 #### `dc.getFreshMessageCount(chatId)`
 
 Get the number of _fresh_ messages in a chat. Corresponds to [`dc_get_fresh_msg_cnt()`](https://c.delta.chat/classdc__context__t.html#a6d47f15d87049f2afa60e059f705c1c5).
@@ -464,13 +468,13 @@ Set group profile image. Corresponds to [`dc_set_chat_profile_image()`](https://
 
 Configure the context. Corresponds to [`dc_set_config()`](https://c.delta.chat/classdc__context__t.html#aff3b894f6cfca46cab5248fdffdf083d).
 
+#### `dc.setDraft(chatId, message)`
+
+Save a draft for a chat in the database. Corresponds to [`dc_set_draft()`](https://c.delta.chat/classdc__context__t.html#a131ee8d251dc1ab2d115822f6a2f7a66).
+
 #### `dc.setStringTable(index, str)`
 
 Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.
-
-#### `dc.setTextDraft(chatId, text)`
-
-Save a draft for a chat in the database. Corresponds to [`dc_set_text_draft()`](https://c.delta.chat/classdc__context__t.html#a2dcb54d63d73b547077ad4f980509ac0).
 
 #### `dc.starMessages(messageIds, star)`
 

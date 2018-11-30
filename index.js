@@ -312,6 +312,11 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_contacts(this.dcn_context, listFlags, query)
   }
 
+  getDraft (chatId) {
+    const dc_msg = binding.dcn_get_draft(this.dcn_context, Number(chatId))
+    return dc_msg ? new Message(dc_msg) : null
+  }
+
   getFreshMessageCount (chatId) {
     return binding.dcn_get_fresh_msg_cnt(this.dcn_context, Number(chatId))
   }
@@ -531,12 +536,16 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
-  setStringTable (index, str) {
-    binding.dcn_set_string_table(this.dcn_context, Number(index), str)
+  setDraft (chatId, msg) {
+    binding.dcn_set_draft(
+      this.dcn_context,
+      Number(chatId),
+      msg ? msg.dc_msg : null
+    )
   }
 
-  setTextDraft (chatId, text) {
-    binding.dcn_set_text_draft(this.dcn_context, Number(chatId), text)
+  setStringTable (index, str) {
+    binding.dcn_set_string_table(this.dcn_context, Number(index), str)
   }
 
   starMessages (messageIds, star) {
