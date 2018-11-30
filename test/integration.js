@@ -330,6 +330,7 @@ test('Contact methods', t => {
   t.is(contact.getId(), contactId, 'contact id matches')
   t.is(contact.getName(), 'First Last', 'correct name')
   t.is(contact.getNameAndAddress(), 'First Last (first.last@site.org)')
+  t.is(contact.getProfileImage(), null, 'no contact image')
   t.is(contact.isBlocked(), false, 'not blocked')
   t.is(contact.isVerified(), false, 'unverified status')
 

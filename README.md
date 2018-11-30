@@ -581,6 +581,10 @@ Get the name of the contact. Corresponds to [`dc_contact_get_name()`](https://c.
 
 Get a summary of name and address. Corresponds to [`dc_contact_get_name_n_addr()`](https://c.delta.chat/classdc__contact__t.html#a16056431c6926d327f5728ad3ddd4fdf).
 
+#### `contact.getProfileImage()`
+
+Get the profile image of a contact. Corresponds to [`dc_contact_get_profile_image()`](https://c.delta.chat/classdc__contact__t.html#a2ebee8ac3729e4db85041eaf35bfce73).
+
 #### `contact.isBlocked()`
 
 Check if a contact is blocked. Corresponds to [`dc_contact_is_blocked()`](https://c.delta.chat/classdc__contact__t.html#ac1cce8a12bb9f1c64c644682fdc8d9cc).

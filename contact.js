@@ -47,6 +47,10 @@ class Contact {
     return binding.dcn_contact_get_name_n_addr(this.dc_contact)
   }
 
+  getProfileImage () {
+    return binding.dcn_contact_get_profile_image(this.dc_contact)
+  }
+
   isBlocked () {
     return Boolean(binding.dcn_contact_is_blocked(this.dc_contact))
   }

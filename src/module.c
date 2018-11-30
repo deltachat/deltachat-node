@@ -1605,6 +1605,15 @@ NAPI_METHOD(dcn_contact_get_name_n_addr) {
   NAPI_RETURN_AND_FREE_STRING(name_n_addr);
 }
 
+NAPI_METHOD(dcn_contact_get_profile_image) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  char* profile_image = dc_contact_get_profile_image(dc_contact);
+
+  NAPI_RETURN_AND_FREE_STRING(profile_image);
+}
+
 NAPI_METHOD(dcn_contact_is_blocked) {
   NAPI_ARGV(1);
   NAPI_DC_CONTACT();
@@ -2101,6 +2110,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_contact_get_id);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name_n_addr);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_contact_is_blocked);
   NAPI_EXPORT_FUNCTION(dcn_contact_is_verified);
 
