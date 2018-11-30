@@ -156,11 +156,8 @@ test('create chat from contact and Chat methods', t => {
   t.is(chat.isVerified(), false, 'not verified')
 
   t.is(dc.getDraft(chatId), null, 'no draft message')
-  const newMsg = dc.messageNew()
-  newMsg.setText('w00t!')
-  dc.setDraft(chatId, newMsg)
-  const draft1 = dc.getDraft(chatId)
-  t.is(draft1.toJson().text, 'w00t!', 'draft text correct')
+  dc.setDraft(chatId, dc.messageNew().setText('w00t!'))
+  t.is(dc.getDraft(chatId).toJson().text, 'w00t!', 'draft text correct')
   dc.setDraft(chatId, null)
   t.is(dc.getDraft(chatId), null, 'draft removed')
 
@@ -232,8 +229,7 @@ test('create and delete chat', t => {
 
 test('new message and Message methods', t => {
   const text = 'w00t!'
-  let msg = dc.messageNew()
-  msg.setText(text)
+  let msg = dc.messageNew().setText(text)
 
   t.is(msg.getChatId(), 0, 'chat id 0 before sent')
   t.is(msg.getDuration(), 0, 'duration 0 before sent')

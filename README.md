@@ -745,19 +745,19 @@ Late filing information to a message. Corresponds to [`dc_msg_latefiling_mediasi
 
 #### `message.setDimension(width, height)`
 
-Set the dimensions associated with a message. Corresponds to [`dc_msg_set_dimension()`](https://c.delta.chat/classdc__msg__t.html#a6bc82bec36d7bc4218f9a26ebc3c24ae).
+Set the dimensions associated with a message. Corresponds to [`dc_msg_set_dimension()`](https://c.delta.chat/classdc__msg__t.html#a6bc82bec36d7bc4218f9a26ebc3c24ae). Returns `this` so you can do chained commands.
 
 #### `message.setDuration(duration)`
 
-Set the duration assocated with the message object. Corresponds to [`dc_msg_set_duration()`](https://c.delta.chat/classdc__msg__t.html#a32bd05a4c5113b098004c16c2b4a14ec).
+Set the duration assocated with the message object. Corresponds to [`dc_msg_set_duration()`](https://c.delta.chat/classdc__msg__t.html#a32bd05a4c5113b098004c16c2b4a14ec). Returns `this` so you can do chained commands.
 
 #### `message.setFile(file, mime)`
 
-Set the file assocated with the message object. Corresponds to [`dc_msg_set_file()`](https://c.delta.chat/classdc__msg__t.html#ae3d4b2a4ed4b10dbe13396ff7739160e).
+Set the file assocated with the message object. Corresponds to [`dc_msg_set_file()`](https://c.delta.chat/classdc__msg__t.html#ae3d4b2a4ed4b10dbe13396ff7739160e). Returns `this` so you can do chained commands.
 
 #### `message.setText(text)`
 
-Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c.delta.chat/classdc__msg__t.html#a352d9e2cc2fcacac43bb540550a578a1).
+Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c.delta.chat/classdc__msg__t.html#a352d9e2cc2fcacac43bb540550a578a1). Returns `this` so you can do chained commands.
 
 #### `message.toJson()`
 

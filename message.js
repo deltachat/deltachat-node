@@ -228,19 +228,23 @@ class Message {
 
   setDimension (width, height) {
     binding.dcn_msg_set_dimension(this.dc_msg, width, height)
+    return this
   }
 
   setDuration (duration) {
     binding.dcn_msg_set_duration(this.dc_msg, duration)
+    return this
   }
 
   setFile (file, mime) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
+    return this
   }
 
   setText (text) {
     binding.dcn_msg_set_text(this.dc_msg, text)
+    return this
   }
 }
 
