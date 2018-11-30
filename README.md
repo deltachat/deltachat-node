@@ -298,7 +298,7 @@ Return known and unblocked contacts. Corresponds to [`dc_get_contacts()`](https:
 
 #### `dc.getDraft(chatId)`
 
-Get draft for a chat, if any. Corresponds to [`dc_get_draft()`](TODO, this url is in the wrong section!).
+Get draft for a chat, if any. Corresponds to [`dc_get_draft()`](https://c.delta.chat/classdc__context__t.html#a3c76757cbdaab9f1ce27f0fd1d86ea27).
 
 #### `dc.getFreshMessageCount(chatId)`
 
