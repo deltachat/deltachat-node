@@ -292,8 +292,6 @@ static napi_value dc_array_to_js_array(napi_env env, dc_array_t* array) {
  */
 
 NAPI_METHOD(dcn_context_new) {
-  // dc_openssl_init_not_required(); // TODO: if node.js inits OpenSSL on its own, this line should be uncommented
-
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
 #ifdef NODE_10_6
