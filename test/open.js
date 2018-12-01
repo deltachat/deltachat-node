@@ -20,6 +20,7 @@ test('open', t => {
       t.end()
     })
 
+    // TODO move to integration tests
     t.test('> autoconfigure (using invalid password)', t => {
       t.plan(3)
       dc.on('DC_EVENT_INFO', info => {

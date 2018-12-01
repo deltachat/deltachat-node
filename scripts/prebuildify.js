@@ -2,6 +2,7 @@ const prebuildify = require('prebuildify')
 const path = require('path')
 const tar = require('tar')
 const abi = require('node-abi')
+const versionChanged = require('version-changed')
 const gh = require('ghreleases')
 
 const pkg = require('../package.json')
@@ -30,7 +31,14 @@ function build () {
 
   prebuildify(opts, err => {
     if (err) exit(err)
-    bundle()
+    versionChanged((err, changed) => {
+      if (err) exit(err)
+      if (changed) {
+        bundle()
+      } else {
+        console.log('Version didn\'t change. Skipping bundle and upload!')
+      }
+    })
   })
 }
 
@@ -38,7 +46,6 @@ function bundle () {
   const prebuilds = `${process.platform}-${process.arch}`
   const file = `v${pkg.version}-${process.platform}-${process.arch}.tar.gz`
   const cwd = path.join(process.cwd(), 'prebuilds')
-  // TODO fix so prebuildify-ci handles tar.gz!
   tar.c({ file, cwd, gzip: true }, [ prebuilds ], err => {
     if (err) exit(err)
     uploadToRelease(path.resolve(__dirname, '..', file))
