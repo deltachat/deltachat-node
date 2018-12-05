@@ -17,6 +17,7 @@ class Contact {
       firstName: this.getFirstName(),
       id: this.getId(),
       name: this.getName(),
+      profileImage: this.getProfileImage(),
       nameAndAddr: this.getNameAndAddress(),
       isBlocked: this.isBlocked(),
       isVerified: this.isVerified()
