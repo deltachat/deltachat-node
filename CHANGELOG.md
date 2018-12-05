@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+## [0.27.0] - 2018-12-05
+
+### Changed
+* Rewrite tests to be pure unit tests (@ralphtheninja)
+* Enable chaining in `Message` class for all .set methods (@ralphtheninja)
+* Document workflow for prebuilt binaries (@ralphtheninja)
+
+### Added
+* Add `contact.getProfileImage()` (@ralphtheninja)
+* Add `docker.bash` script (@ralphtheninja)
+* Add `dc.getDraft()` (@ralphtheninja)
+* Add `dc.setDraft()` (@ralphtheninja)
+
+### Removed
+* Remove `dc.setTextDraft()` (@ralphtheninja)
+* Remove `chat.getDraftTimestamp()` (@ralphtheninja)
+* Remove `chat.getTextDraft()` (@ralphtheninja)
+
 ## [0.26.1] - 2018-11-28
 
 ### Changed
@@ -436,7 +454,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...HEAD
+[0.27.0]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...v0.25.0
