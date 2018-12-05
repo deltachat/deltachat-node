@@ -379,7 +379,7 @@ test('ChatList methods', (t, dc) => {
 
   let lot = chatList.getSummary(0)
   t.is(lot.getId(), 0, 'lot has no id')
-  t.is(lot.getState(), 0, 'lot has no state')
+  t.is(lot.getState(), c.DC_STATE_OUT_DRAFT, 'correct state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
   t.is(lot.getText1Meaning(), c.DC_TEXT1_DRAFT, 'text1 meaning')
   t.ok(
