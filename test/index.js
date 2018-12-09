@@ -127,6 +127,7 @@ test('create chat from contact and Chat methods', (t, dc) => {
   // TODO make sure this is really the case!
   t.is(chat.isUnpromoted(), false, 'not unpromoted')
   t.is(chat.isVerified(), false, 'not verified')
+  t.is(typeof chat.getColor(), 'number', 'color is a number')
 
   t.is(dc.getDraft(chatId), null, 'no draft message')
   dc.setDraft(chatId, dc.messageNew().setText('w00t!'))
@@ -293,6 +294,7 @@ test('Contact methods', (t, dc) => {
   let contact = dc.getContact(contactId)
 
   t.is(contact.getAddress(), 'first.last@site.org', 'correct address')
+  t.is(typeof contact.getColor(), 'number', 'color is a number')
   t.is(contact.getDisplayName(), 'First Last', 'correct display name')
   t.is(contact.getFirstName(), 'First', 'correct first name')
   t.is(contact.getId(), contactId, 'contact id matches')

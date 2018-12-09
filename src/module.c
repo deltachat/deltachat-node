@@ -1418,6 +1418,15 @@ NAPI_METHOD(dcn_chat_get_archived) {
   NAPI_RETURN_INT32(archived);
 }
 
+NAPI_METHOD(dcn_chat_get_color) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  uint32_t color = dc_chat_get_color(dc_chat);
+
+  NAPI_RETURN_UINT32(color);
+}
+
 NAPI_METHOD(dcn_chat_get_id) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -1556,6 +1565,15 @@ NAPI_METHOD(dcn_contact_get_addr) {
   char* addr = dc_contact_get_addr(dc_contact);
 
   NAPI_RETURN_AND_FREE_STRING(addr);
+}
+
+NAPI_METHOD(dcn_contact_get_color) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  uint32_t color = dc_contact_get_color(dc_contact);
+
+  NAPI_RETURN_UINT32(color);
 }
 
 NAPI_METHOD(dcn_contact_get_display_name) {
@@ -2080,6 +2098,7 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_chat_get_archived);
+  NAPI_EXPORT_FUNCTION(dcn_chat_get_color);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_id);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
@@ -2103,6 +2122,7 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_contact_get_addr);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_color);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_first_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_id);

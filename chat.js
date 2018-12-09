@@ -13,6 +13,7 @@ class Chat {
   toJson () {
     return {
       archived: this.getArchived(),
+      color: this.getColor(),
       id: this.getId(),
       name: this.getName(),
       profileImage: this.getProfileImage(),
@@ -26,6 +27,10 @@ class Chat {
 
   getArchived () {
     return binding.dcn_chat_get_archived(this.dc_chat)
+  }
+
+  getColor () {
+    return binding.dcn_chat_get_color(this.dc_chat)
   }
 
   getId () {

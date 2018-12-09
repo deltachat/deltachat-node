@@ -491,7 +491,11 @@ An object representing a single chat in memory.
 
 Get archived state. Corresponds to [`dc_chat_get_archived()`](https://c.delta.chat/classdc__chat__t.html#af8b59ed08edfa2a5c4b7a3787613230d).
 
-#### `chat.getId()`
+#### `chat.getColor()`
+
+Get a color for the chat. Corresponds to [`dc_chat_get_color()`](https://c.delta.chat/classdc__chat__t.html#ac575ba5901ca24187f0f31492beefe3a).
+
+### `chat.getId()`
 
 Get chat id. Corresponds to [`dc_chat_get_id()`](https://c.delta.chat/classdc__chat__t.html#a4e647c69a9f61fc4497f6293371e0017).
 
@@ -560,6 +564,10 @@ An object representing a single contact in memory.
 #### `contact.getAddress()`
 
 Get email address. Corresponds to [`dc_contact_()`](https://c.delta.chat/classdc__contact__t.html#a017fc5f3c27f52547c515fadc5658e01).
+
+### `contact.getId()`
+
+Get a color for the contact. Corresponds to [`dc_chat_get_color()`](https://c.delta.chat/classdc__contact__t.html#ad6b75bcf0a7011aacbcc1a963b3f2d32).
 
 #### `contact.getDisplayName()`
 

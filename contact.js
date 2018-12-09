@@ -13,6 +13,7 @@ class Contact {
   toJson () {
     return {
       address: this.getAddress(),
+      color: this.getColor(),
       displayName: this.getDisplayName(),
       firstName: this.getFirstName(),
       id: this.getId(),
@@ -26,6 +27,10 @@ class Contact {
 
   getAddress () {
     return binding.dcn_contact_get_addr(this.dc_contact)
+  }
+
+  getColor () {
+    return binding.dcn_contact_get_color(this.dc_contact)
   }
 
   getDisplayName () {
