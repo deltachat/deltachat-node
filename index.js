@@ -522,12 +522,12 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  setChatProfileImage (chatId, image = '') {
+  setChatProfileImage (chatId, image) {
     return Boolean(
       binding.dcn_set_chat_profile_image(
         this.dcn_context,
         Number(chatId),
-        image
+        image || ''
       )
     )
   }
