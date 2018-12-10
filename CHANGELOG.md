@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.28.0] - 2018-12-10
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.29.0` (colors for chat and contact) (@ralphtheninja)
+
+### Added
+* Add `chat.getColor()` (@ralphtheninja)
+* Add `contact.getColor()` (@ralphtheninja)
+
 ## [0.27.0] - 2018-12-05
 
 ### Changed
@@ -454,7 +463,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...HEAD
+[0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...v0.26.0
