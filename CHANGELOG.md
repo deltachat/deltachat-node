@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.28.1] - 2018-12-10
+
+### Fixed
+* Pass in empty string instead of `null` in `dc.setChatProfileImage()` (@ralphtheninja)
+
 ## [0.28.0] - 2018-12-10
 
 ### Changed
@@ -463,7 +468,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...HEAD
+[0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
 [0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...v0.26.1
