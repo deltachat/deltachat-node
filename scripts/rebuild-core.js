@@ -16,7 +16,7 @@ mkdirp.sync(coreBuildDir)
 const mesonOpts = { cwd: coreBuildDir }
 const mesonArgs = [
   '--default-library=static',
-  '-Dforce-etpan-fallback=true'
+  '--wrap-mode=nofallback'
 ]
 if (verbose) mesonOpts.stdio = 'inherit'
 spawn('meson', mesonArgs, mesonOpts)
