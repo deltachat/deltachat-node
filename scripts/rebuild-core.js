@@ -23,7 +23,7 @@ if (process.platform === 'darwin') {
 } else {
   mesonArgs = [
     '--default-library=static',
-    '-Dforce-etpan-fallback=true'
+    '--wrap-mode=nofallback'
   ]
 }
 
