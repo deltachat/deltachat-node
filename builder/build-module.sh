@@ -10,7 +10,6 @@ npm run submodule
 
 # Compile
 npm install --verbose
-npm run install --verbose
 
 # Test
 # npm run test
