@@ -107,7 +107,7 @@ ENV SQLITE_SHA256 5daa6a3fb7d1e8c767cd59c4ded8da6e4b00c61d3b466d0685e35c4dd6d7bf
 RUN curl -L -O https://sqlite.org/2018/sqlite-autoconf-3260000.tar.gz
 RUN echo "${SQLITE_SHA256}  sqlite-autoconf-${SQLITE_VERSION}.tar.gz" | sha256sum -c -
 RUN tar xzf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
-RUN cd sqlite-autoconf-${SQLITE_VERSION} && ./configure
+RUN cd sqlite-autoconf-${SQLITE_VERSION} && ./configure --with-pic
 RUN cd sqlite-autoconf-${SQLITE_VERSION} && make
 RUN cd sqlite-autoconf-${SQLITE_VERSION} && make install
 RUN ldconfig -v
