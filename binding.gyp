@@ -13,7 +13,7 @@
             "/usr/local/lib/libssl.a",
             "/usr/local/lib/libcrypto.a",
             "/usr/local/lib/libz.a",
-            "/usr/local/lib/libsqlite3",
+            "/usr/local/lib/libsqlite3.a",
             "-lpthread"
           ]
         }],
