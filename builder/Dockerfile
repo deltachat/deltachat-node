@@ -23,7 +23,10 @@ RUN git clone https://github.com/nodejs/node /usr/local/src/node
 RUN cd /usr/local/src/node && git checkout $(node --version)
 
 # Zlib from NodeJS
-RUN cd /usr/local/src/node/deps/zlib && ./configure
+# Set CFLAGS to ensure the static library is build with
+# position-independent code since we will link it into a
+# dynamicly-loaded extension module.
+RUN cd /usr/local/src/node/deps/zlib && CFLAGS=-fPIC ./configure
 RUN cd /usr/local/src/node/deps/zlib && make
 RUN cd /usr/local/src/node/deps/zlib && make install
 RUN ldconfig -v
@@ -34,9 +37,9 @@ RUN ldconfig -v
 RUN sed -i -e '/ rsa_complex /s/rsa_complex//' \
            -e '/\[rsa_complex\]=/d' \
            /usr/local/src/node/deps/openssl/openssl/test/build.info
-RUN cd /usr/local/src/node/deps/openssl/openssl && ./config
+RUN cd /usr/local/src/node/deps/openssl/openssl && ./config -fPIC
 RUN cd /usr/local/src/node/deps/openssl/openssl && make
-RUN cd /usr/local/src/node/deps/openssl/openssl && make install
+RUN cd /usr/local/src/node/deps/openssl/openssl && make install_sw install_ssldirs
 RUN ldconfig -v
 
 # Install cyrus-sasl
@@ -90,10 +93,21 @@ RUN echo "${ETPAN_SHA256}  libetpan-${ETPAN_VERSION}.tar.gz" | sha256sum -c -
 RUN tar xzf libetpan-${ETPAN_VERSION}.tar.gz
 RUN cd libetpan-${ETPAN_VERSION} && \
     ./autogen.sh && \
-    ./configure --enable-ipv6 \
+    ./configure --disable-silent-rules --with-pic \
+                --enable-ipv6 \
                 --disable-iconv --disable-db \
                 --with-openssl --with-sasl --with-zlib \
                 --without-curl --without-expat
 RUN cd libetpan-${ETPAN_VERSION} && make
 RUN cd libetpan-${ETPAN_VERSION} && make install
+RUN ldconfig -v
+
+ENV SQLITE_VERSION 3260000
+ENV SQLITE_SHA256 5daa6a3fb7d1e8c767cd59c4ded8da6e4b00c61d3b466d0685e35c4dd6d7bf5d
+RUN curl -L -O https://sqlite.org/2018/sqlite-autoconf-3260000.tar.gz
+RUN echo "${SQLITE_SHA256}  sqlite-autoconf-${SQLITE_VERSION}.tar.gz" | sha256sum -c -
+RUN tar xzf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
+RUN cd sqlite-autoconf-${SQLITE_VERSION} && ./configure
+RUN cd sqlite-autoconf-${SQLITE_VERSION} && make
+RUN cd sqlite-autoconf-${SQLITE_VERSION} && make install
 RUN ldconfig -v
