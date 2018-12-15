@@ -12,8 +12,8 @@
             "/usr/local/lib/libsasl2.a",
             "/usr/local/lib/libssl.a",
             "/usr/local/lib/libcrypto.a",
-            "-lz",
-            "-lsqlite3",
+            "/usr/local/lib/libz.a",
+            "/usr/local/lib/libsqlite3",
             "-lpthread"
           ]
         }],
