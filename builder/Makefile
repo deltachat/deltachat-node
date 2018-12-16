@@ -10,5 +10,8 @@ push:
 bindings:
 	docker run --rm -it -u $(EUID):$(EUID) -v $(CURDIR)/..:/bindings -w /bindings deltachat/node-builder /bindings/builder/build-module.sh
 
+run:
+	docker run --rm -it -u $(EUID):$(EUID) -v $(CURDIR)/..:/bindings -w /bindings deltachat/node-builder /bin/bash
+
 
 .PHONY: image push bindings
