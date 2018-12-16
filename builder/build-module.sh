@@ -11,8 +11,5 @@ npm run submodule
 # Compile
 npm install --verbose
 
-# Make prebuilt binaries
-npm run prebuild
-
 # Test
 # npm run test
