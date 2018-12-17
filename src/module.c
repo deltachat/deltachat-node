@@ -887,7 +887,10 @@ NAPI_METHOD(dcn_imex) {
   NAPI_ARGV_UTF8_MALLOC(param1, 2);
   NAPI_ARGV_UTF8_MALLOC(param2, 3);
 
-  dc_imex(dcn_context->dc_context, what, param1, param2);
+  dc_imex(dcn_context->dc_context,
+          what,
+          param1,
+          param2 && param2[0] ? param2 : NULL);
 
   free(param1);
   free(param2);
