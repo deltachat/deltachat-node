@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.28.2] - 2018-12-18
+
+### Fixed
+* Pass in empty string instead of `null` as `param2` in `dc.importExport()` (@jikstra)
+
+### Changed
+* Change minimum node version to `v8.6.0` (@ralphtheninja)
+
 ## [0.28.1] - 2018-12-10
 
 ### Fixed
@@ -468,7 +476,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...HEAD
+[0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
 [0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...v0.27.0
