@@ -14,4 +14,4 @@ run:
 	docker run --rm -it -u $(EUID):$(EUID) -v $(CURDIR)/..:/bindings -w /bindings deltachat/node-builder /bin/bash
 
 
-.PHONY: image push bindings
+.PHONY: image push bindings run
