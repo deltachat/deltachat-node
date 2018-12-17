@@ -383,7 +383,7 @@ class DeltaChat extends EventEmitter {
   }
 
   importExport (what, param1, param2) {
-    if(!param2) param2 = null
+    if (!param2) param2 = null
     binding.dcn_imex(this.dcn_context, what, param1, param2)
   }
 
