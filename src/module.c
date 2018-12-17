@@ -885,22 +885,12 @@ NAPI_METHOD(dcn_imex) {
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_INT32(what, 1);
   NAPI_ARGV_UTF8_MALLOC(param1, 2);
+  NAPI_ARGV_UTF8_MALLOC(param2, 2);
 
-  char* param2 = NULL;
-
-  napi_valuetype valuetype_argv3;
-  NAPI_STATUS_THROWS(napi_typeof(env, argv[3], &valuetype_argv3));
-
-  if(valuetype_argv3 != napi_null) {
-    size_t param2_size = 0;
-    NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, argv[3], NULL, 0, &param2_size))
-    param2 = (char*)malloc((param2_size + 1) * sizeof(char));
-    size_t param2_len;
-    NAPI_STATUS_THROWS(napi_get_value_string_utf8(env, argv[3], param2, param2_size + 1, &param2_len))
-    param2[param2_size] = '\0';
-  }
-
-  dc_imex(dcn_context->dc_context, what, param1, param2);
+  dc_imex(dcn_context->dc_context,
+          what,
+          param1,
+          param2 && param2[0] ? param2 : NULL);
 
   free(param1);
   free(param2);
