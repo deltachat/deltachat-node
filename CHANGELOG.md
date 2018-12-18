@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.29.0] - 2018-12-18
+
+### Changed
+*  the core sends simultaneously to the INBOX now; for these purposes, users shoud create a 3rd thread calling the new functions dc_perform_mvbox_fetch() and dc_perform_mvbox_idle()
+* add config-option mvbox_enabled
+
 ## [0.28.2] - 2018-12-18
 
 ### Fixed

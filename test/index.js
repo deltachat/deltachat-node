@@ -55,11 +55,12 @@ tape('dc.getInfo()', t => {
     'arch',
     'blobdir',
     'compile_date',
+    'configured_mvbox',
+    'configured_mvbox_folder',
     'database_dir',
     'database_version',
     'deltachat_core_version',
     'display_name',
-    'e2ee_default_enabled',
     'e2ee_enabled',
     'entered_account_settings',
     'fingerprint',
@@ -67,6 +68,7 @@ tape('dc.getInfo()', t => {
     'libetpan_version',
     'mdns_enabled',
     'messages_in_contact_requests',
+    'mvbox_enabled',
     'number_of_chat_messages',
     'number_of_chats',
     'number_of_contacts',
@@ -77,6 +79,7 @@ tape('dc.getInfo()', t => {
     'sqlite_version',
     'used_account_settings'
   ])
+
   t.is(Object.values(info).every(v => {
     return typeof v === 'string'
   }), true, 'all values are strings')
