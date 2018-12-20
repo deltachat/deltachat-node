@@ -2,11 +2,10 @@
 
 ## [Unreleased]
 
-## [0.29.0] - 2018-12-18
+## [0.29.0] - 2018-12-20
 
 ### Changed
-*  the core sends simultaneously to the INBOX now; for these purposes, users shoud create a 3rd thread calling the new functions dc_perform_mvbox_fetch() and dc_perform_mvbox_idle()
-* add config-option mvbox_enabled
+* Upgrade `deltachat-core` dependency to `v0.31.0` (core sends simultaneously to the INBOX) (@karissa, @ralphtheninja)
 
 ## [0.28.2] - 2018-12-18
 
@@ -482,7 +481,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...HEAD
+[0.29.0]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...v0.29.0
 [0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
 [0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0
