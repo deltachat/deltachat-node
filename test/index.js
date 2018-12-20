@@ -418,8 +418,14 @@ function test (desc, fn) {
     const end = t.end.bind(t)
 
     t.end = () => {
-      dc.close()
-      end()
+      // TODO Here be dragons!
+      // This is to give threads time to enter idle so dc_interrupt_*_idle()
+      // functions can interrupt threads safely. Only doing this on the test
+      // side since it's an edge case when starting/stopping threads quickly.
+      setTimeout(() => {
+        dc.close()
+        end()
+      }, 50)
     }
 
     t.is(dc.isOpen(), false, 'context database is not open')
