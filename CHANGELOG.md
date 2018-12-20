@@ -5,7 +5,7 @@
 ## [0.29.0] - 2018-12-20
 
 ### Changed
-* Upgrade `deltachat-core` dependency to `v0.31.0` (core sends simultaneously to the INBOX) (@karissa, @ralphtheninja)
+* Upgrade `deltachat-core` dependency to `v0.31.1` (core sends simultaneously to the INBOX) (@karissa, @ralphtheninja)
 
 ## [0.28.2] - 2018-12-18
 
