@@ -23,8 +23,9 @@ typedef struct dcn_context_t {
   eventqueue_t* event_queue;
 #endif
   strtable_t* strtable;
-  uv_thread_t smtp_thread;
   uv_thread_t imap_thread;
+  uv_thread_t smtp_thread;
+  uv_thread_t mvbox_thread;
   int loop_thread;
   pthread_mutex_t dc_event_http_mutex;
   pthread_cond_t  dc_event_http_cond;
@@ -195,6 +196,25 @@ static void smtp_thread_func(void* arg)
 #endif
 }
 
+static void mvbox_thread_func(void* arg)
+{
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
+
+#ifdef NODE_10_6
+  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
+#endif
+
+  while (dcn_context->loop_thread) {
+    dc_perform_mvbox_fetch(dc_context);
+    dc_perform_mvbox_idle(dc_context);
+  }
+
+#ifdef NODE_10_6
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
+#endif
+}
+
 /**
  * Finalize functions. These are called once the corresponding
  * external is garbage collected on the JavaScript side.
@@ -300,8 +320,11 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->event_queue = eventqueue_new();
 #endif
   dcn_context->strtable = strtable_new();
+
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
+  dcn_context->mvbox_thread = 0;
+
   dcn_context->loop_thread = 0;
 
   dcn_context->dc_event_http_done = 0;
@@ -1363,6 +1386,7 @@ NAPI_METHOD(dcn_start_threads) {
   dcn_context->loop_thread = 1;
   uv_thread_create(&dcn_context->imap_thread, imap_thread_func, dcn_context);
   uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func, dcn_context);
+  uv_thread_create(&dcn_context->mvbox_thread, mvbox_thread_func, dcn_context);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -1373,15 +1397,18 @@ NAPI_METHOD(dcn_stop_threads) {
 
   dcn_context->loop_thread = 0;
 
-  if (dcn_context->imap_thread && dcn_context->smtp_thread) {
+  if (dcn_context->imap_thread && dcn_context->smtp_thread && dcn_context->mvbox_thread) {
     dc_interrupt_imap_idle(dcn_context->dc_context);
     dc_interrupt_smtp_idle(dcn_context->dc_context);
+    dc_interrupt_mvbox_idle(dcn_context->dc_context);
 
     uv_thread_join(&dcn_context->imap_thread);
     uv_thread_join(&dcn_context->smtp_thread);
+    uv_thread_join(&dcn_context->mvbox_thread);
 
     dcn_context->imap_thread = 0;
     dcn_context->smtp_thread = 0;
+    dcn_context->mvbox_thread = 0;
   }
 
   NAPI_RETURN_UNDEFINED();

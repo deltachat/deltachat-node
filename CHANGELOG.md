@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.29.0] - 2018-12-20
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.31.1` (core sends simultaneously to the INBOX) (@karissa, @ralphtheninja)
+
 ## [0.28.2] - 2018-12-18
 
 ### Fixed
@@ -476,7 +481,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...HEAD
+[0.29.0]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...v0.29.0
 [0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
 [0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0

@@ -55,18 +55,21 @@ tape('dc.getInfo()', t => {
     'arch',
     'blobdir',
     'compile_date',
+    'configured_mvbox_folder',
     'database_dir',
     'database_version',
     'deltachat_core_version',
     'display_name',
-    'e2ee_default_enabled',
     'e2ee_enabled',
     'entered_account_settings',
     'fingerprint',
+    'folders_configured',
     'is_configured',
     'libetpan_version',
     'mdns_enabled',
     'messages_in_contact_requests',
+    'mvbox_move',
+    'mvbox_watch',
     'number_of_chat_messages',
     'number_of_chats',
     'number_of_contacts',
@@ -77,6 +80,7 @@ tape('dc.getInfo()', t => {
     'sqlite_version',
     'used_account_settings'
   ])
+
   t.is(Object.values(info).every(v => {
     return typeof v === 'string'
   }), true, 'all values are strings')
@@ -414,8 +418,14 @@ function test (desc, fn) {
     const end = t.end.bind(t)
 
     t.end = () => {
-      dc.close()
-      end()
+      // TODO Here be dragons!
+      // This is to give threads time to enter idle so dc_interrupt_*_idle()
+      // functions can interrupt threads safely. Only doing this on the test
+      // side since it's an edge case when starting/stopping threads quickly.
+      setTimeout(() => {
+        dc.close()
+        end()
+      }, 50)
     }
 
     t.is(dc.isOpen(), false, 'context database is not open')
