@@ -1397,7 +1397,7 @@ NAPI_METHOD(dcn_stop_threads) {
 
   dcn_context->loop_thread = 0;
 
-  if (dcn_context->imap_thread && dcn_context->smtp_thread) {
+  if (dcn_context->imap_thread && dcn_context->smtp_thread && dcn_context->mvbox_thread) {
     dc_interrupt_imap_idle(dcn_context->dc_context);
     dc_interrupt_smtp_idle(dcn_context->dc_context);
     dc_interrupt_mvbox_idle(dcn_context->dc_context);
