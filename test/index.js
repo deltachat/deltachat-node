@@ -56,6 +56,7 @@ tape('dc.getInfo()', t => {
     'blobdir',
     'compile_date',
     'configured_mvbox_folder',
+    'configured_sentbox_folder',
     'database_dir',
     'database_version',
     'deltachat_core_version',
@@ -64,6 +65,7 @@ tape('dc.getInfo()', t => {
     'entered_account_settings',
     'fingerprint',
     'folders_configured',
+    'inbox_watch',
     'is_configured',
     'libetpan_version',
     'mdns_enabled',
@@ -76,6 +78,7 @@ tape('dc.getInfo()', t => {
     'openssl_version',
     'private_key_count',
     'public_key_count',
+    'sentbox_watch',
     'sqlite_thread_safe',
     'sqlite_version',
     'used_account_settings'
