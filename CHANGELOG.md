@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.30.0] - 2018-12-24
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.32.0` (@ralphtheninja)
+
+**Historical Note** This release temporarily disables `mvbox` and `sentbox` threads, i.e. only one thread for IMAP and SMTP will be running.
+
 ## [0.29.0] - 2018-12-20
 
 ### Changed
@@ -481,7 +488,8 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.30.0...HEAD
+[0.30.0]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...v0.29.0
 [0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
