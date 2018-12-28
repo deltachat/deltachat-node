@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.30.1] - 2018-12-28
+
+### Changed
+* Upgrade `deltachat-core` dependency to `v0.34.0` (@ralphtheninja)
+
 ## [0.30.0] - 2018-12-24
 
 ### Changed
