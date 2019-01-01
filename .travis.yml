@@ -1,35 +1,23 @@
-sudo: required
-
 language: node_js
 
-services:
-  - docker
-
 os:
-  - linux
-
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - python3-pip
-    - python3.5
-    - g++-7
-
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
-  - ./scripts/travis-before-install
+  - osx
 
 node_js:
-  - 8
+  - 8.6.0
+
+before_install:
+  - ./scripts/travis-before-install
 
 install:
   - npm install --verbose
 
 script:
   - npm test
+  - npm run test-integration
+
+# TODO add prebuildify and deploy stuff once
+# integration tests pass
 
 notifications:
   email: false
