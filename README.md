@@ -249,18 +249,14 @@ Get contact ids belonging to a chat. Corresponds to [`dc_get_chat_contacts()`](h
 
 Check, if there is a normal chat with a given contact. Corresponds to [`dc_get_chat_id_by_contact_id()`](https://c.delta.chat/classdc__context__t.html#a8736b580af3d4e33e5bd205159af2e29).
 
-#### `dc.getChatMedia(chatId, msgType, orMsgType)`
+#### `dc.getChatMedia(chatId, msgType1, msgType2, msgType3)`
 
-Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://c.delta.chat/classdc__context__t.html#a8ca56905333780d5989e11692118f7a9).
+Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://c.delta.chat/classdc__context__t.html#a344a82b9f288b5eb5d39c7cf475cddb7).
 
 <a name="getmimeheaders"></a>
 #### `dc.getMimeHeaders(messageId)`
 
 Get the raw mime-headers of the given message. Corresponds to [`dc_get_mime_headers()`](https://c.delta.chat/classdc__context__t.html#ad0f0df9128a6881af5114561c54ef53e).
-
-#### `dc.getStarredMessages()`
-
-Returns an array of starred messages.
 
 #### `dc.getChatMessages(chatId, flags, marker1before)`
 
@@ -357,17 +353,21 @@ Get the total number of messages in a chat. Corresponds to [`dc_get_msg_cnt()`](
 
 Get an informational text for a single message. Corresponds to [`dc_get_msg_info()`](https://c.delta.chat/classdc__context__t.html#a9752923b64ca8288045e999a11ccf7f4).
 
-#### `dc.getNextMediaMessage(messageId)`
+#### `dc.getNextMediaMessage(messageId, msgType1, msgType2, msgType3)`
 
-Get next message of the same type. Corresponds to [`dc_get_next_media()`](https://c.delta.chat/classdc__context__t.html#a399e23e5b39b72c1c911055b03d5c0b2).
+Get next message of the same type. Corresponds to [`dc_get_next_media()`](https://c.delta.chat/classdc__context__t.html#accc839bc6995dc6007d3ebb947d38989).
 
-#### `dc.getPreviousMediaMessage(messageId)`
+#### `dc.getPreviousMediaMessage(messageId, msgType1, msgType2, msgType3)`
 
-Get previous message of the same type. Corresponds to [`dc_get_next_media()`](https://c.delta.chat/classdc__context__t.html#a399e23e5b39b72c1c911055b03d5c0b2).
+Get previous message of the same type. Corresponds to [`dc_get_next_media()`](https://c.delta.chat/classdc__context__t.html#accc839bc6995dc6007d3ebb947d38989).
 
 #### `dc.getSecurejoinQrCode(groupChatId)`
 
 Get QR code text that will offer a secure-join verification. Corresponds to [`dc_get_securejoin_qr()`](https://c.delta.chat/classdc__context__t.html#aeec58fc8a478229925ec8b7d48cf18bf).
+
+#### `dc.getStarredMessages()`
+
+Returns an array of starred messages.
 
 #### `DeltaChat.getSystemInfo()`
 

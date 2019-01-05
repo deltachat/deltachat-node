@@ -223,21 +223,18 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_chat_id_by_contact_id(this.dcn_context, Number(contactId))
   }
 
-  getChatMedia (chatId, msgType, orMsgType) {
+  getChatMedia (chatId, msgType1, msgType2, msgType3) {
     return binding.dcn_get_chat_media(
       this.dcn_context,
       Number(chatId),
-      msgType,
-      orMsgType
+      msgType1,
+      msgType2 || 0,
+      msgType3 || 0
     )
   }
 
   getMimeHeaders (messageId) {
     return binding.dcn_get_mime_headers(this.dcn_context, Number(messageId))
-  }
-
-  getStarredMessages () {
-    return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
   }
 
   getChatMessages (chatId, flags, marker1before) {
@@ -355,16 +352,43 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, Number(messageId))
   }
 
-  getNextMediaMessage (messageId) {
-    return binding.dcn_get_next_media(this.dcn_context, Number(messageId), 1)
+  getNextMediaMessage (messageId, msgType1, msgType2, msgType3) {
+    return this._getNextMedia(
+      messageId,
+      1,
+      msgType1,
+      msgType2,
+      msgType3
+    )
   }
 
-  getPreviousMediaMessage (messageId) {
-    return binding.dcn_get_next_media(this.dcn_context, Number(messageId), -1)
+  getPreviousMediaMessage (messageId, msgType1, msgType2, msgType3) {
+    return this._getNextMedia(
+      messageId,
+      -1,
+      msgType1,
+      msgType2,
+      msgType3
+    )
+  }
+
+  _getNextMedia (messageId, dir, msgType1, msgType2, msgType3) {
+    return binding.dcn_get_next_media(
+      this.dcn_context,
+      Number(messageId),
+      dir,
+      msgType1 || 0,
+      msgType2 || 0,
+      msgType3 || 0
+    )
   }
 
   getSecurejoinQrCode (groupChatId) {
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(groupChatId))
+  }
+
+  getStarredMessages () {
+    return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
   }
 
   static getSystemInfo () {

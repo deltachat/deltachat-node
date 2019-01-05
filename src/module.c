@@ -694,16 +694,18 @@ NAPI_METHOD(dcn_get_chat_id_by_contact_id) {
 }
 
 NAPI_METHOD(dcn_get_chat_media) {
-  NAPI_ARGV(4);
+  NAPI_ARGV(5);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_INT32(msg_type, 2);
-  NAPI_ARGV_INT32(or_msg_type, 3);
+  NAPI_ARGV_INT32(msg_type1, 2);
+  NAPI_ARGV_INT32(msg_type2, 3);
+  NAPI_ARGV_INT32(msg_type3, 4);
 
   dc_array_t* msg_ids = dc_get_chat_media(dcn_context->dc_context,
                                           chat_id,
-                                          msg_type,
-                                          or_msg_type);
+                                          msg_type1,
+                                          msg_type2,
+                                          msg_type3);
   napi_value js_array = dc_array_to_js_array(env, msg_ids);
   dc_array_unref(msg_ids);
 
@@ -904,13 +906,20 @@ NAPI_METHOD(dcn_get_msg_info) {
 }
 
 NAPI_METHOD(dcn_get_next_media) {
-  NAPI_ARGV(3);
+  NAPI_ARGV(6);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UINT32(msg_id, 1);
   NAPI_ARGV_INT32(dir, 2);
+  NAPI_ARGV_INT32(msg_type1, 3);
+  NAPI_ARGV_INT32(msg_type2, 4);
+  NAPI_ARGV_INT32(msg_type3, 5);
 
   uint32_t next_id = dc_get_next_media(dcn_context->dc_context,
-                                       msg_id, dir);
+                                       msg_id,
+                                       dir,
+                                       msg_type1,
+                                       msg_type2,
+                                       msg_type3);
 
   NAPI_RETURN_UINT32(next_id);
 }
