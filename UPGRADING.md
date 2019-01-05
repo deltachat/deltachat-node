@@ -2,6 +2,10 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
+## v0.35.0
+
+More parameters were added to `dc.getChatMedia()`, `dc.getNextMediaMessage()` and `dc.getPreviousMediaMessage()`.
+
 ## v0.25.0
 
 The error code parameter in the `DC_EVENT_ERROR` event is no longer emitted.

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.35.0] - 2019-01-05
+
+### Changed
+* Uncomment `mvbox` and `sentbox` code (@jikstra)
+* Upgrade `deltachat-core` dependency to `v0.35.0` (changes to `dc_get_chat_media()` and `dc_get_next_media()`) (@ralphtheninja)
+
+**Historical Note** We started following the core version from this point to make it easier to identify what we're using in e.g. the desktop application.
+
 ## [0.30.1] - 2018-12-28
 
 ### Changed
@@ -493,7 +501,9 @@
 
 :seedling: Initial release.
 
-[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.30.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.35.0...HEAD
+[0.35.0]: https://github.com/deltachat/deltachat-node/compare/v0.30.1...v0.35.0
+[0.30.1]: https://github.com/deltachat/deltachat-node/compare/v0.30.0...v0.30.1
 [0.30.0]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...v0.29.0
 [0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
