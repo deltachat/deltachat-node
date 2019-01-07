@@ -5,7 +5,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
-    "dependency-check": "dependency-check package.json --missing --unused -i dependency-check -i nyc -i opn-cli -i standard -i napi-macros -i coveralls --entry index.js --entry test/index.js --entry scripts/*.js",
+    "dependency-check": "dependency-check package.json --missing --entry index.js --entry test/index.js --entry scripts/*.js",
     "generate-constants": "./scripts/generate-constants.js",
     "install": "node-gyp-build scripts/rebuild-core.js",
     "prebuild": "node scripts/prebuildify.js",
