@@ -100,16 +100,16 @@ dc.open(() => {
 
 The high level JavaScript API is a collection of classes wrapping most context types provided by `deltachat-core`. Please see the [class list](https://c.delta.chat/annotated.html) for an overview of this.
 
-- [<code><b>DeltaChat()</b></code>](#deltachat_ctor)
-- [<code><b>class DeltaChat</b></code>](#class_deltachat)
-- [<code><b>class Chat</b></code>](#class_chat)
-- [<code><b>class ChatList</b></code>](#class_chatlist)
-- [<code><b>class Contact</b></code>](#class_contact)
-- [<code><b>class Lot</b></code>](#class_lot)
-- [<code><b>class Message</b></code>](#class_message)
-- [<code><b>class MessageState</b></code>](#class_message_state)
-- [<code><b>class MessageViewType</b></code>](#class_message_view_type)
-- [<code><b>Events</b></code>](#events)
+- <a href="#deltachat_ctor"><code><b>DeltaChat()</b></code></a>
+- <a href="#class_deltachat"><code><b>class DeltaChat</b></code></a>
+- <a href="#class_chat"><code><b>class Chat</b></code></a>
+- <a href="#class_chatlist"><code><b>class ChatList</b></code></a>
+- <a href="#class_contact"><code><b>class Contact</b></code></a>
+- <a href="#class_lot"><code><b>class Lot</b></code></a>
+- <a href="#class_message"><code><b>class Message</b></code></a>
+- <a href="#class_message_state"><code><b>class MessageState</b></code></a>
+- <a href="#class_message_view_type"><code><b>class MessageViewType</b></code></a>
+- <a href="#events"><code><b>Events</b></code></a>
 
 <a name="deltachat_ctor"></a>
 
@@ -181,7 +181,7 @@ The `options` object takes the following properties:
 - `options.selfAvatar` _(string, optional)_: File containing avatar.
 - `options.e2eeEnabled` _(boolean, optional)_: Enable E2EE. Defaults to `true`.
 - `options.mdnsEnabled` _(boolean, optional)_: Send and request read receipts. Defaults to `true`.
-- `options.saveMimeHeaders` _(boolean, optional)_: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
+- `options.saveMimeHeaders` _(boolean, optional)_: Set to `true` if you want to use <a href="#getmimeheaders">`dc.getMimeHeaders()`</a> later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 
@@ -241,7 +241,7 @@ Get blocked contacts. Corresponds to [`dc_get_blocked_contacts()`](https://c.del
 
 #### `dc.getChat(chatId)`
 
-Get [`Chat`](#class_chat) object by a chat id. Corresponds to [`dc_get_chat()`](https://c.delta.chat/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
+Get <a href="#class_chat">`Chat`</a> object by a chat id. Corresponds to [`dc_get_chat()`](https://c.delta.chat/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
 
 #### `dc.getChatContacts(chatId)`
 
@@ -271,7 +271,7 @@ Like `dc.getChatList()` but returns a JavaScript array of ids.
 
 #### `dc.getChatList(listFlags, queryStr, queryContactId)`
 
-Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds to [`dc_get_chatlist()`](https://c.delta.chat/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
+Get a list of chats. Returns a <a href="#class_chatlist">`ChatList`</a> object. Corresponds to [`dc_get_chatlist()`](https://c.delta.chat/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
 
 #### `DeltaChat.getConfig(path, callback)`
 
@@ -285,7 +285,7 @@ Get a configuration option. Corresponds to [`dc_get_config()`](https://c.delta.c
 
 #### `dc.getContact(contactId)`
 
-Get a single [`Contact`](#class_contact) object. Corresponds to [`dc_get_contact()`](https://c.delta.chat/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
+Get a single <a href="#class_contact">`Contact`</a> object. Corresponds to [`dc_get_contact()`](https://c.delta.chat/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
 
 #### `dc.getContactEncryptionInfo(contactId)`
 
@@ -346,7 +346,7 @@ Returns an object with the following properties:
 
 #### `dc.getMessage(messageId)`
 
-Get a single [`Message`](#class_message) object. Corresponds to [`dc_get_msg()`](https://c.delta.chat/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
+Get a single <a href="#class_message">`Message`</a> object. Corresponds to [`dc_get_msg()`](https://c.delta.chat/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
 
 #### `dc.getMessageCount(chatId)`
 
@@ -436,7 +436,7 @@ Called as a hint to `deltachat-core` that the network is available again, to tri
 
 #### `dc.messageNew([viewType])`
 
-Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
+Create a new <a href="#class_message">`Message`</a> object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
 
 - `DC_MSG_TEXT`
 - `DC_MSG_AUDIO`
@@ -563,7 +563,7 @@ Get a single message id of a chatlist. Corresponds to [`dc_chatlist_get_msg_id()
 
 #### `list.getSummary(index, chat)`
 
-Get a summary for a chatlist index. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_chatlist_get_summary()`](https://c.delta.chat/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
+Get a summary for a chatlist index. Returns a <a href="#class_lot">`Lot`</a> object. Corresponds to [`dc_chatlist_get_summary()`](https://c.delta.chat/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
 
 * * *
 
@@ -711,11 +711,11 @@ Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_g
 
 #### `message.getState()`
 
-Get the state of the message. Returns a [`MessageState`](#class_message_state) object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
+Get the state of the message. Returns a <a href="#class_message_state">`MessageState`</a> object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
 
 #### `message.getSummary(chat)`
 
-Get a summary of a message. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_summary()`](https://c.delta.chat/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
+Get a summary of a message. Returns a <a href="#class_lot">`Lot`</a> object. Corresponds to [`dc_msg_get_summary()`](https://c.delta.chat/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
 
 #### `message.getSummarytext(approxCharacters)`
 
@@ -731,7 +731,7 @@ Get message sending time. Corresponds to [`dc_msg_get_timestamp()`](https://c.de
 
 #### `message.getViewType()`
 
-Get the view type of the message. Returns a [`MessageViewType`](#class_message_view_type) object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
+Get the view type of the message. Returns a <a href="#class_message_view_type">`MessageViewType`</a> object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
 
 #### `message.getWidth()`
 
@@ -795,7 +795,7 @@ Returns the object state as a JavaScript serializable object.
 
 ### `class MessageState`
 
-An object representing a [`Message`](#class_message) state.
+An object representing a <a href="#class_message">`Message`</a> state.
 
 #### `state.isUndefined()`
 
@@ -839,7 +839,7 @@ Internal `state` property.
 
 ### `class MessageViewType`
 
-An object representing a [`Message`](#class_message) view type.
+An object representing a <a href="#class_message">`Message`</a> view type.
 
 #### `viewType.isText()`
 
