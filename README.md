@@ -20,6 +20,8 @@
 
 **Note** We've changed the underlying event mechanism to polling. This is a temporary solution to allow for compatibility with earlier node versions and current versions of `electron` at time of writing. Once `electron` has support for node `v10.7.0` this will be removed and we will go back to using a push mechanism.
 
+## Table of Contents
+
 - [Install](#install)
 - [Troubleshooting](#troubleshooting)
 - [Usage](#usage)
