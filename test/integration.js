@@ -73,7 +73,7 @@ test('setUp dc context', t => {
   dc.on('DC_EVENT_ERROR_NETWORK', (first, err) => {
     throw new Error(err)
   })
-  dc.once('ALL', (event, data1, data2) => {
+  dc.on('ALL', (event, data1, data2) => {
     console.log('ALL', event, data1, data2)
   })
   dc.open(cwd, err => {
