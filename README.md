@@ -936,14 +936,6 @@ At time of writing we use `Jenkins` to generate prebuilt binaries, which current
 
 ## Tests and Coverage
 
-To run the tests you need to set the `DC_ADDR` and `DC_MAIL_PW` environment variables. E.g.:
-
-```
-$ export DC_ADDR=user@site.org
-$ export DC_MAIL_PW=myp4ssw0rD
-$ npm test
-```
-
 Running `npm test` ends with showing a code coverage report, which is produced by [`nyc`](https://github.com/istanbuljs/nyc#readme).
 
 ![test output](images/tests.png)
@@ -951,6 +943,14 @@ Running `npm test` ends with showing a code coverage report, which is produced b
 The coverage report from `nyc` in the console is rather limited. To get a more detailed coverage report you can run `npm run coverage-html-report`. This will produce a html report from the `nyc` data and display it in a browser on your local machine.
 
 On `Travis` the coverage report is also passed to [`coveralls`](https://coveralls.io/github/deltachat/deltachat-node).
+
+To run the integration tests you need to set the `DC_ADDR` and `DC_MAIL_PW` environment variables. E.g.:
+
+```
+$ export DC_ADDR=user@site.org
+$ export DC_MAIL_PW=myp4ssw0rD
+$ npm run test-integration
+```
 
 ## Scripts
 

@@ -5,6 +5,16 @@ const path = require('path')
 
 let dc = null
 
+if (typeof process.env.DC_ADDR !== 'string') {
+  console.error('Missing DC_ADDR environment variable!')
+  process.exit(1)
+}
+
+if (typeof process.env.DC_MAIL_PW !== 'string') {
+  console.error('Missing DC_MAIL_PW environment variable!')
+  process.exit(1)
+}
+
 const ADDR = process.env.DC_ADDR
 const SERVER = ADDR.split('@')[1]
 
