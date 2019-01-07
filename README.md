@@ -15,20 +15,26 @@
 
 `deltachat-node` primarily aims to offer two things:
 
-* A high level JavaScript api with syntactic sugar
-* A low level c binding api around  [`deltachat-core`][deltachat-core]
+- A high level JavaScript api with syntactic sugar
+- A low level c binding api around  [`deltachat-core`][deltachat-core]
 
 **Note** We've changed the underlying event mechanism to polling. This is a temporary solution to allow for compatibility with earlier node versions and current versions of `electron` at time of writing. Once `electron` has support for node `v10.7.0` this will be removed and we will go back to using a push mechanism.
 
-* [Install](#install)
-* [Troubleshooting](#troubleshooting)
-* [Usage](#usage)
-* [API](#api)
-* [Developing](#developing)
-* [Prebuilt Binaries](#prebuilt-binaries)
-* [Tests and Coverage](#tests-and-coverage)
-* [Scripts](#scripts)
-* [License](#license)
+## Table of Contents
+
+<details><summary>Click to expand</summary>
+
+- [Install](#install)
+- [Troubleshooting](#troubleshooting)
+- [Usage](#usage)
+- [API](#api)
+- [Developing](#developing)
+- [Prebuilt Binaries](#prebuilt-binaries)
+- [Tests and Coverage](#tests-and-coverage)
+- [Scripts](#scripts)
+- [License](#license)
+
+</details>
 
 ## Install
 
@@ -57,10 +63,10 @@ sudo apt-get install ninja-build
 
 You might also need the following system dependencies:
 
-* `libssl-dev`
-* `libsasl2-dev`
-* `libsqlite3-dev`
-* `zlib1g-dev`
+- `libssl-dev`
+- `libsasl2-dev`
+- `libsqlite3-dev`
+- `zlib1g-dev`
 
 To fix these issues do:
 
@@ -100,27 +106,29 @@ dc.open(() => {
 
 The high level JavaScript API is a collection of classes wrapping most context types provided by `deltachat-core`. Please see the [class list](https://c.delta.chat/annotated.html) for an overview of this.
 
-* [<code><b>DeltaChat()</b></code>](#deltachat_ctor)
-* [<code><b>class DeltaChat</b></code>](#class_deltachat)
-* [<code><b>class Chat</b></code>](#class_chat)
-* [<code><b>class ChatList</b></code>](#class_chatlist)
-* [<code><b>class Contact</b></code>](#class_contact)
-* [<code><b>class Lot</b></code>](#class_lot)
-* [<code><b>class Message</b></code>](#class_message)
-* [<code><b>class MessageState</b></code>](#class_message_state)
-* [<code><b>class MessageViewType</b></code>](#class_message_view_type)
-* [<code><b>Events</b></code>](#events)
+- <a href="#deltachat_ctor"><code><b>DeltaChat()</b></code></a>
+- <a href="#class_deltachat"><code><b>class DeltaChat</b></code></a>
+- <a href="#class_chat"><code><b>class Chat</b></code></a>
+- <a href="#class_chatlist"><code><b>class ChatList</b></code></a>
+- <a href="#class_contact"><code><b>class Contact</b></code></a>
+- <a href="#class_lot"><code><b>class Lot</b></code></a>
+- <a href="#class_message"><code><b>class Message</b></code></a>
+- <a href="#class_message_state"><code><b>class MessageState</b></code></a>
+- <a href="#class_message_view_type"><code><b>class MessageViewType</b></code></a>
+- <a href="#events"><code><b>Events</b></code></a>
 
 <a name="deltachat_ctor"></a>
+
 ### `dc = DeltaChat()`
 
 Creates a new `DeltaChat` instance.
 
 Initializes the main context and sets up event handling. Call `dc.open(cwd, cb)` to start and `dc.configure(opts, cb)` if needed.
 
-------------------------------------
+* * *
 
 <a name="class_deltachat"></a>
+
 ### `class DeltaChat`
 
 The `DeltaChat` class wraps a `dc_context_t*` and handles most operations, such as connecting to an `IMAP` server, sending messages with `SMTP` etc. It is through this instance you get references to the other class types following below.
@@ -163,31 +171,31 @@ Configure and connect a context. Corresponds to [`dc_configure()`](https://c.del
 
 The `options` object takes the following properties:
 
-* `options.addr` *(string, required)*: Email address of the chat user.
-* `options.mailServer` *(string, optional)*: IMAP-server, guessed if left out.
-* `options.mailUser` *(string, optional)*: IMAP-username, guessed if left out.
-* `options.mailPw` *(string, required)*: IMAP-password of the chat user.
-* `options.mailPort` *(string | integer, optional)*: IMAP-port, guessed if left out.
-* `options.sendServer` *(string, optional)*: SMTP-server, guessed if left out.
-* `options.sendUser` *(string, optional)*: SMTP-user, guessed if left out.
-* `options.sendPw` *(string, optional)*: SMTP-password, guessed if left out.
-* `options.sendPort` *(string | integer, optional)*: SMTP-port, guessed if left out.
-* `options.serverFlags` *(integer, optional)*: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
-* `options.imapFolder` *(string, optional)*: IMAP folder to use, defaults to `'INBOX'`.
-* `options.displayName` *(string, optional)*: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
-* `options.selfStatus` *(string, optional)*: Own status to display e.g. in email footers, defaults to a standard text.
-* `options.selfAvatar` *(string, optional)*: File containing avatar.
-* `options.e2eeEnabled` *(boolean, optional)*: Enable E2EE. Defaults to `true`.
-* `options.mdnsEnabled` *(boolean, optional)*: Send and request read receipts. Defaults to `true`.
-* `options.saveMimeHeaders` *(boolean, optional)*: Set to `true` if you want to use [`dc.getMimeHeaders()`](#getmimeheaders) later.
+- `options.addr` _(string, required)_: Email address of the chat user.
+- `options.mailServer` _(string, optional)_: IMAP-server, guessed if left out.
+- `options.mailUser` _(string, optional)_: IMAP-username, guessed if left out.
+- `options.mailPw` _(string, required)_: IMAP-password of the chat user.
+- `options.mailPort` _(string | integer, optional)_: IMAP-port, guessed if left out.
+- `options.sendServer` _(string, optional)_: SMTP-server, guessed if left out.
+- `options.sendUser` _(string, optional)_: SMTP-user, guessed if left out.
+- `options.sendPw` _(string, optional)_: SMTP-password, guessed if left out.
+- `options.sendPort` _(string | integer, optional)_: SMTP-port, guessed if left out.
+- `options.serverFlags` _(integer, optional)_: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
+- `options.imapFolder` _(string, optional)_: IMAP folder to use, defaults to `'INBOX'`.
+- `options.displayName` _(string, optional)_: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
+- `options.selfStatus` _(string, optional)_: Own status to display e.g. in email footers, defaults to a standard text.
+- `options.selfAvatar` _(string, optional)_: File containing avatar.
+- `options.e2eeEnabled` _(boolean, optional)_: Enable E2EE. Defaults to `true`.
+- `options.mdnsEnabled` _(boolean, optional)_: Send and request read receipts. Defaults to `true`.
+- `options.saveMimeHeaders` _(boolean, optional)_: Set to `true` if you want to use <a href="#getmimeheaders">`dc.getMimeHeaders()`</a> later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
 
 Continue the AutoCrypt key transfer on another device. Corresponds to [`dc_continue_key_transfer()`](https://c.delta.chat/classdc__context__t.html#a5af2cdd80c7286b2a495d56fa6c0832f).
 
-* `messageId` *(string|integer, required)* See deltachat api documentation
-* `setupCode` *(string, required)* See deltachat api documentation
-* `callback` *(function, required)* Called with an error if setup code is bad
+- `messageId` _(string|integer, required)_ See deltachat api documentation
+- `setupCode` _(string, required)_ See deltachat api documentation
+- `callback` _(function, required)_ Called with an error if setup code is bad
 
 #### `dc.createChatByContactId(contactId)`
 
@@ -239,7 +247,7 @@ Get blocked contacts. Corresponds to [`dc_get_blocked_contacts()`](https://c.del
 
 #### `dc.getChat(chatId)`
 
-Get [`Chat`](#class_chat) object by a chat id. Corresponds to [`dc_get_chat()`](https://c.delta.chat/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
+Get <a href="#class_chat">`Chat`</a> object by a chat id. Corresponds to [`dc_get_chat()`](https://c.delta.chat/classdc__context__t.html#a9cec1e2e3dba9d83035cf363cfc3530f).
 
 #### `dc.getChatContacts(chatId)`
 
@@ -254,6 +262,7 @@ Check, if there is a normal chat with a given contact. Corresponds to [`dc_get_c
 Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://c.delta.chat/classdc__context__t.html#a344a82b9f288b5eb5d39c7cf475cddb7).
 
 <a name="getmimeheaders"></a>
+
 #### `dc.getMimeHeaders(messageId)`
 
 Get the raw mime-headers of the given message. Corresponds to [`dc_get_mime_headers()`](https://c.delta.chat/classdc__context__t.html#ad0f0df9128a6881af5114561c54ef53e).
@@ -268,13 +277,13 @@ Like `dc.getChatList()` but returns a JavaScript array of ids.
 
 #### `dc.getChatList(listFlags, queryStr, queryContactId)`
 
-Get a list of chats. Returns a [`ChatList`](#class_chatlist) object. Corresponds to [`dc_get_chatlist()`](https://c.delta.chat/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
+Get a list of chats. Returns a <a href="#class_chatlist">`ChatList`</a> object. Corresponds to [`dc_get_chatlist()`](https://c.delta.chat/classdc__context__t.html#a709a7b5b9b606d85f21e988e89d99fef).
 
 #### `DeltaChat.getConfig(path, callback)`
 
 Get configuration from a path. Calls back with `(err, config)`. A static method which does a minimal open and if the path has a configured state the `config` parameter contains the following properties:
 
-* `addr` *(string)*: Email address used to configure the account.
+- `addr` _(string)_: Email address used to configure the account.
 
 #### `dc.getConfig(key)`
 
@@ -282,7 +291,7 @@ Get a configuration option. Corresponds to [`dc_get_config()`](https://c.delta.c
 
 #### `dc.getContact(contactId)`
 
-Get a single [`Contact`](#class_contact) object. Corresponds to [`dc_get_contact()`](https://c.delta.chat/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
+Get a single <a href="#class_contact">`Contact`</a> object. Corresponds to [`dc_get_contact()`](https://c.delta.chat/classdc__context__t.html#a36b0e1a01730411b15294da5024ad311).
 
 #### `dc.getContactEncryptionInfo(contactId)`
 
@@ -310,40 +319,40 @@ Get info about the context. Corresponds to [`dc_get_info()`](https://c.delta.cha
 
 Returns an object with the following properties:
 
-* `arch`
-* `blobdir`
-* `compile_date`
-* `configured_mvbox_folder`
-* `configured_sentbox_folder`
-* `database_dir`
-* `database_version`
-* `deltachat_core_version`
-* `display_name`
-* `e2ee_enabled`
-* `entered_account_settings`
-* `fingerprint`
-* `folders_configured`
-* `inbox_watch`
-* `is_configured`
-* `libetpan_version`
-* `mdns_enabled`
-* `messages_in_contact_requests`
-* `mvbox_move`
-* `mvbox_watch`
-* `number_of_chat_messages`
-* `number_of_chats`
-* `number_of_contacts`
-* `openssl_version`
-* `private_key_count`
-* `public_key_count`
-* `sentbox_watch`
-* `sqlite_thread_safe`
-* `sqlite_version`
-* `used_account_settings`
+- `arch`
+- `blobdir`
+- `compile_date`
+- `configured_mvbox_folder`
+- `configured_sentbox_folder`
+- `database_dir`
+- `database_version`
+- `deltachat_core_version`
+- `display_name`
+- `e2ee_enabled`
+- `entered_account_settings`
+- `fingerprint`
+- `folders_configured`
+- `inbox_watch`
+- `is_configured`
+- `libetpan_version`
+- `mdns_enabled`
+- `messages_in_contact_requests`
+- `mvbox_move`
+- `mvbox_watch`
+- `number_of_chat_messages`
+- `number_of_chats`
+- `number_of_contacts`
+- `openssl_version`
+- `private_key_count`
+- `public_key_count`
+- `sentbox_watch`
+- `sqlite_thread_safe`
+- `sqlite_version`
+- `used_account_settings`
 
 #### `dc.getMessage(messageId)`
 
-Get a single [`Message`](#class_message) object. Corresponds to [`dc_get_msg()`](https://c.delta.chat/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
+Get a single <a href="#class_message">`Message`</a> object. Corresponds to [`dc_get_msg()`](https://c.delta.chat/classdc__context__t.html#a4fd6b4565081c558fcd6ff827f22cb01).
 
 #### `dc.getMessageCount(chatId)`
 
@@ -385,7 +394,7 @@ Check if there is a backup file. Corresponds to [`dc_imex_has_backup()`](https:/
 
 Initiate Autocrypt setup transfer. Corresponds to [`dc_initiate_key_transfer()`](https://c.delta.chat/classdc__context__t.html#af327aa51e2e18ce3f5948545a637eac9).
 
-* `callback` *(function, required)* Called with an error as first argument (or null) and the setup code as second argument if no error occured.
+- `callback` _(function, required)_ Called with an error as first argument (or null) and the setup code as second argument if no error occured.
 
 #### `dc.isConfigured()`
 
@@ -433,22 +442,22 @@ Called as a hint to `deltachat-core` that the network is available again, to tri
 
 #### `dc.messageNew([viewType])`
 
-Create a new [`Message`](#class_message) object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
+Create a new <a href="#class_message">`Message`</a> object. Corresponds to [`dc_msg_new()`](https://c.delta.chat/classdc__msg__t.html#aa694c4f707ad51918703218cc8887143). The `viewType` parameter is optional and defaults to `DC_MSG_TEXT`. Pick from one of the following values:
 
-* `DC_MSG_TEXT`
-* `DC_MSG_AUDIO`
-* `DC_MSG_FILE`
-* `DC_MSG_GIF`
-* `DC_MSG_IMAGE`
-* `DC_MSG_VIDEO`
-* `DC_MSG_VOICE`
+- `DC_MSG_TEXT`
+- `DC_MSG_AUDIO`
+- `DC_MSG_FILE`
+- `DC_MSG_GIF`
+- `DC_MSG_IMAGE`
+- `DC_MSG_VIDEO`
+- `DC_MSG_VOICE`
 
 #### `dc.open([cwd], callback)`
 
 Opens the underlying database.
 
-* `cwd` *(string, optional)* Path to working directory, defaults to current working directory.
-* `callback` *(function, required)* Called with an error if the database could not be opened.
+- `cwd` _(string, optional)_ Path to working directory, defaults to current working directory.
+- `callback` _(function, required)_ Called with an error if the database could not be opened.
 
 #### `dc.removeContactFromChat(chatId, contactId)`
 
@@ -486,9 +495,10 @@ Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. w
 
 Star/unstar messages. Corresponds to [`dc_star_msgs()`](https://c.delta.chat/classdc__context__t.html#a211ab66e424092c2b617af637d1e1d35).
 
-------------------------------------
+* * *
 
 <a name="class_chat"></a>
+
 ### `class Chat`
 
 An object representing a single chat in memory.
@@ -537,9 +547,10 @@ Check if a chat is verified. Corresponds to [`dc_chat_is_verified()`](https://c.
 
 Returns the object state as a JavaScript serializable object.
 
-------------------------------------
+* * *
 
 <a name="class_chatlist"></a>
+
 ### `class ChatList`
 
 An object representing a single chatlist in memory.
@@ -558,11 +569,12 @@ Get a single message id of a chatlist. Corresponds to [`dc_chatlist_get_msg_id()
 
 #### `list.getSummary(index, chat)`
 
-Get a summary for a chatlist index. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_chatlist_get_summary()`](https://c.delta.chat/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
+Get a summary for a chatlist index. Returns a <a href="#class_lot">`Lot`</a> object. Corresponds to [`dc_chatlist_get_summary()`](https://c.delta.chat/classdc__chatlist__t.html#a7e155ba468613547743bf383600914d1).
 
-------------------------------------
+* * *
 
 <a name="class_contact"></a>
+
 ### `class Contact`
 
 An object representing a single contact in memory.
@@ -611,9 +623,10 @@ Check if a contact is verified. Corresponds to [`dc_contact_is_verified()`](http
 
 Returns the object state as a JavaScript serializable object.
 
-------------------------------------
+* * *
 
 <a name="class_lot"></a>
+
 ### `class Lot`
 
 An object containing a set of values in memory.
@@ -646,9 +659,10 @@ Get the associated timestamp. Corresponds to [`dc_lot_get_timestamp()`](https://
 
 Returns the object state as a JavaScript serializable object.
 
-------------------------------------
+* * *
 
 <a name="class_message"></a>
+
 ### `class Message`
 
 An object representing a single message in memory.
@@ -703,11 +717,11 @@ Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_g
 
 #### `message.getState()`
 
-Get the state of the message. Returns a [`MessageState`](#class_message_state) object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
+Get the state of the message. Returns a <a href="#class_message_state">`MessageState`</a> object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
 
 #### `message.getSummary(chat)`
 
-Get a summary of a message. Returns a [`Lot`](#class_lot) object. Corresponds to [`dc_msg_get_summary()`](https://c.delta.chat/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
+Get a summary of a message. Returns a <a href="#class_lot">`Lot`</a> object. Corresponds to [`dc_msg_get_summary()`](https://c.delta.chat/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
 
 #### `message.getSummarytext(approxCharacters)`
 
@@ -723,7 +737,7 @@ Get message sending time. Corresponds to [`dc_msg_get_timestamp()`](https://c.de
 
 #### `message.getViewType()`
 
-Get the view type of the message. Returns a [`MessageViewType`](#class_message_view_type) object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
+Get the view type of the message. Returns a <a href="#class_message_view_type">`MessageViewType`</a> object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
 
 #### `message.getWidth()`
 
@@ -781,12 +795,13 @@ Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c
 
 Returns the object state as a JavaScript serializable object.
 
-------------------------------------
+* * *
 
 <a name="class_message_state"></a>
+
 ### `class MessageState`
 
-An object representing a [`Message`](#class_message) state.
+An object representing a <a href="#class_message">`Message`</a> state.
 
 #### `state.isUndefined()`
 
@@ -824,12 +839,13 @@ Message state is `DC_STATE_OUT_MDN_RCVD`.
 
 Internal `state` property.
 
-------------------------------------
+* * *
 
 <a name="class_message_view_type"></a>
+
 ### `class MessageViewType`
 
-An object representing a [`Message`](#class_message) view type.
+An object representing a <a href="#class_message">`Message`</a> view type.
 
 #### `viewType.isText()`
 
@@ -867,30 +883,30 @@ Internal `viewType` property.
 
 `DeltaChat` is an [`EventEmitter`](https://nodejs.org/api/events.html) and emits the following events.
 
-| Event     | Description                 | Arguments            |
-|:----------|:----------------------------|:---------------------|
-| `ready`  | `DeltaChat` is ready    | -  |
-| [`DC_EVENT_INFO`](https://c.delta.chat/group__DC__EVENT.html#ga0f492424e22941431e2562731a5f21ba)  | Info string    | `(info)`  |
-| [`DC_EVENT_SMTP_CONNECTED`](https://c.delta.chat/group__DC__EVENT.html#ga68af4630b2e79d8a387c8a9b83c9a088)  | Info string    | `(info)`  |
-| [`DC_EVENT_IMAP_CONNECTED`](https://c.delta.chat/group__DC__EVENT.html#ga867b454250458393e4f405a064c02928)  | Info string    | `(info)`  |
-| [`DC_EVENT_SMTP_MESSAGE_SENT`](https://c.delta.chat/group__DC__EVENT.html#gace252b291eaa12fd593ea8384b2205e4)  | Info string    | `(info)`  |
-| [`DC_EVENT_WARNING`](https://c.delta.chat/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)  | Warning string    | `(warning)`  |
-| [`DC_EVENT_ERROR`](https://c.delta.chat/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)  | Error string    | `(error)`  |
-| [`DC_EVENT_ERROR_NETWORK`](https://c.delta.chat/group__DC__EVENT.html#ga055e6bfcba292678fc5f0d687f6230a1)  | Network error    | `(first, error)`  |
-| [`DC_EVENT_ERROR_SELF_NOT_IN_GROUP`](https://c.delta.chat/group__DC__EVENT.html#gab55bc1fec869d92d722618c05bd74604)  | Info string    | `(info)`  |
-| [`DC_EVENT_MSGS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga0f52cdaad70dd24f7540abda6193cc2d)  | Messages or chats changed    | `(chatId, msgId)`  |
-| [`DC_EVENT_INCOMING_MSG`](https://c.delta.chat/group__DC__EVENT.html#ga3f0831ca83189879a2f224b424d8b58f)  | There is a fresh message    | `(chatId, msgId)`  |
-| [`DC_EVENT_MSG_DELIVERED`](https://c.delta.chat/group__DC__EVENT.html#ga4438030310448a61af0a4bc72c6765dc)  | Message was sent successfully    | `(chatId, msgId)`  |
-| [`DC_EVENT_MSG_FAILED`](https://c.delta.chat/group__DC__EVENT.html#ga1690a84950e2bc948c674d0271262d2a)  | Message could not be sent    | `(chatId, msgId)`  |
-| [`DC_EVENT_MSG_READ`](https://c.delta.chat/group__DC__EVENT.html#ga750f252b4bc82d91dfdd788860f36989)  | Message read by the receiver    | `(chatId, msgId)`  |
-| [`DC_EVENT_CHAT_MODIFIED`](https://c.delta.chat/group__DC__EVENT.html#ga27512e465c573fcf295014f8e0075adf)  | Chat modified    | `(chatId)`  |
-| [`DC_EVENT_CONTACTS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga658b9fc4315badab7afe265b7fa8c2af)  | Contact changed    | `(contactId)`  |
-| [`DC_EVENT_CONFIGURE_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae047f9361d57c42d82a794324f5b9fd6)  | Configuration progress    | `(progress)`  |
-| [`DC_EVENT_IMEX_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#ga006ea41d9c1a76ffc672752484c61e6c)  | Import/export progress    | `(progress)`  |
-| [`DC_EVENT_IMEX_FILE_WRITTEN`](https://c.delta.chat/group__DC__EVENT.html#ga7ffbea55be6a5e6da7ac7e35ba6bf985)  | A file has been exported    | `(fileName)`  |
-| [`DC_EVENT_SECUREJOIN_INVITER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae1b19779138b8ea63d1b6a5b450c181a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
-| [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake    | `(contactId, progress)`  |
-| `ALL`     | All events from [`deltachat-core`](https://c.delta.chat/group__DC__EVENT.html)        | `(event, data1, data2)`   |
+| Event                                                                                                                   | Description                                                                    | Arguments               |
+| :---------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :---------------------- |
+| `ready`                                                                                                                 | `DeltaChat` is ready                                                           | -                       |
+| [`DC_EVENT_INFO`](https://c.delta.chat/group__DC__EVENT.html#ga0f492424e22941431e2562731a5f21ba)                        | Info string                                                                    | `(info)`                |
+| [`DC_EVENT_SMTP_CONNECTED`](https://c.delta.chat/group__DC__EVENT.html#ga68af4630b2e79d8a387c8a9b83c9a088)              | Info string                                                                    | `(info)`                |
+| [`DC_EVENT_IMAP_CONNECTED`](https://c.delta.chat/group__DC__EVENT.html#ga867b454250458393e4f405a064c02928)              | Info string                                                                    | `(info)`                |
+| [`DC_EVENT_SMTP_MESSAGE_SENT`](https://c.delta.chat/group__DC__EVENT.html#gace252b291eaa12fd593ea8384b2205e4)           | Info string                                                                    | `(info)`                |
+| [`DC_EVENT_WARNING`](https://c.delta.chat/group__DC__EVENT.html#ga2e4cc3e6e1c3ba8f152b2cf94632a967)                     | Warning string                                                                 | `(warning)`             |
+| [`DC_EVENT_ERROR`](https://c.delta.chat/group__DC__EVENT.html#gaf7b3f4a361fc9515a79758bd49a376d0)                       | Error string                                                                   | `(error)`               |
+| [`DC_EVENT_ERROR_NETWORK`](https://c.delta.chat/group__DC__EVENT.html#ga055e6bfcba292678fc5f0d687f6230a1)               | Network error                                                                  | `(first, error)`        |
+| [`DC_EVENT_ERROR_SELF_NOT_IN_GROUP`](https://c.delta.chat/group__DC__EVENT.html#gab55bc1fec869d92d722618c05bd74604)     | Info string                                                                    | `(info)`                |
+| [`DC_EVENT_MSGS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga0f52cdaad70dd24f7540abda6193cc2d)                | Messages or chats changed                                                      | `(chatId, msgId)`       |
+| [`DC_EVENT_INCOMING_MSG`](https://c.delta.chat/group__DC__EVENT.html#ga3f0831ca83189879a2f224b424d8b58f)                | There is a fresh message                                                       | `(chatId, msgId)`       |
+| [`DC_EVENT_MSG_DELIVERED`](https://c.delta.chat/group__DC__EVENT.html#ga4438030310448a61af0a4bc72c6765dc)               | Message was sent successfully                                                  | `(chatId, msgId)`       |
+| [`DC_EVENT_MSG_FAILED`](https://c.delta.chat/group__DC__EVENT.html#ga1690a84950e2bc948c674d0271262d2a)                  | Message could not be sent                                                      | `(chatId, msgId)`       |
+| [`DC_EVENT_MSG_READ`](https://c.delta.chat/group__DC__EVENT.html#ga750f252b4bc82d91dfdd788860f36989)                    | Message read by the receiver                                                   | `(chatId, msgId)`       |
+| [`DC_EVENT_CHAT_MODIFIED`](https://c.delta.chat/group__DC__EVENT.html#ga27512e465c573fcf295014f8e0075adf)               | Chat modified                                                                  | `(chatId)`              |
+| [`DC_EVENT_CONTACTS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga658b9fc4315badab7afe265b7fa8c2af)            | Contact changed                                                                | `(contactId)`           |
+| [`DC_EVENT_CONFIGURE_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae047f9361d57c42d82a794324f5b9fd6)          | Configuration progress                                                         | `(progress)`            |
+| [`DC_EVENT_IMEX_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#ga006ea41d9c1a76ffc672752484c61e6c)               | Import/export progress                                                         | `(progress)`            |
+| [`DC_EVENT_IMEX_FILE_WRITTEN`](https://c.delta.chat/group__DC__EVENT.html#ga7ffbea55be6a5e6da7ac7e35ba6bf985)           | A file has been exported                                                       | `(fileName)`            |
+| [`DC_EVENT_SECUREJOIN_INVITER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae1b19779138b8ea63d1b6a5b450c181a) | Progress of a secure-join handshake                                            | `(contactId, progress)` |
+| [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake                                            | `(contactId, progress)` |
+| `ALL`                                                                                                                   | All events from [`deltachat-core`](https://c.delta.chat/group__DC__EVENT.html) | `(event, data1, data2)` |
 
 ## Developing
 
@@ -909,14 +925,14 @@ npm install
 
 At time of writing we use `Jenkins` to generate prebuilt binaries, which currently only covers the Linux platform. The workflow for building and releasing them is as follows:
 
-* Version `vX.Y.Z` is created (via `npm version`)
-* Code is pushed to Github (`git push && git push --tags`)
-* The new version will cause `Jenkins` to run `npm run prebuild` (see `Scripts` section below), which
-  * Builds the binaries using [`prebuildify`](https://github.com/mafintosh/prebuildify)
-  * Creates a release on GitHub
-  * Uploads the binaries to the GitHub release
-* When `Jenkins` has finished `prebuildify-ci download` is run, which downloads the binaries from GitHub to a local `./prebuilds` folder
-* `npm publish` finishes off by publishing to `npm` with the bundled binaries
+- Version `vX.Y.Z` is created (via `npm version`)
+- Code is pushed to Github (`git push && git push --tags`)
+- The new version will cause `Jenkins` to run `npm run prebuild` (see `Scripts` section below), which
+  - Builds the binaries using [`prebuildify`](https://github.com/mafintosh/prebuildify)
+  - Creates a release on GitHub
+  - Uploads the binaries to the GitHub release
+- When `Jenkins` has finished `prebuildify-ci download` is run, which downloads the binaries from GitHub to a local `./prebuilds` folder
+- `npm publish` finishes off by publishing to `npm` with the bundled binaries
 
 ## Tests and Coverage
 
@@ -940,14 +956,14 @@ On `Travis` the coverage report is also passed to [`coveralls`](https://coverall
 
 We have the following scripts for building, testing and coverage:
 
-* `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
-* `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
-* `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
-* `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core/deltachat.h` header file.
-* `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-* `npm run prebuild` Builds `node-napi.node` and `electron-napi.node` for the current platform. Used in ci step for prebuilt binaries.
-* `npm run submodule` Updates the git submodule in `deltachat-core/`.
-* `npm test` Runs `dependency-check`, `standard` and then the tests in `test/index.js`.
+- `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
+- `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
+- `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
+- `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core/deltachat.h` header file.
+- `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
+- `npm run prebuild` Builds `node-napi.node` and `electron-napi.node` for the current platform. Used in ci step for prebuilt binaries.
+- `npm run submodule` Updates the git submodule in `deltachat-core/`.
+- `npm test` Runs `dependency-check`, `standard` and then the tests in `test/index.js`.
 
 By default `npm install` will build in `Release` mode and will be as silent as possible. Use `--debug` flag to build in `Debug` mode and `--verbose` for more verbose output, e.g. to build in `Debug` mode with full verbosity, do:
 
