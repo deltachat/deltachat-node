@@ -3,5 +3,5 @@
 set -e
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    brew install meson ninja libetpan
+    brew install meson ninja libetpan openssl
 fi
