@@ -22,6 +22,8 @@
 
 ## Table of Contents
 
+<details><summary>Click to expand</summary>
+
 - [Install](#install)
 - [Troubleshooting](#troubleshooting)
 - [Usage](#usage)
@@ -31,6 +33,8 @@
 - [Tests and Coverage](#tests-and-coverage)
 - [Scripts](#scripts)
 - [License](#license)
+
+</details>
 
 ## Install
 
