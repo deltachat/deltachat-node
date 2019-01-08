@@ -20,6 +20,22 @@ function build () {
     cwd: path.resolve(__dirname, '..')
   }
 
+  if (process.env.CI === 'true') {
+    console.log('Running in CI.')
+    if (process.env.TRAVIS === 'true') {
+      console.log('Running in Travis.')
+      const branch = process.env.TRAVIS_BRANCH
+      const tag = process.env.TRAVIS_TAG
+      if (branch !== tag) {
+        // Only allow a single build to prebuild and upload to GitHub.
+        // When pushing a tag to GitHub, the branch and tag are identical
+        // for one of the builds.
+        console.log(`Branch ('${branch}') is different from tag ('${tag}'). Skipping.`)
+        process.exit(0)
+      }
+    }
+  }
+
   prebuildify(opts, err => {
     if (err) exit(err)
     versionChanged((err, changed) => {
