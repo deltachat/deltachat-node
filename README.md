@@ -958,12 +958,11 @@ We have the following scripts for building, testing and coverage:
 
 - `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
-- `npm run dependency-check` Makes sure all `dependencies` and `devDependencies` specified in `package.json` are used and that no dependency is missing.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
 - `npm run prebuild` Builds `node-napi.node` and `electron-napi.node` for the current platform. Used in ci step for prebuilt binaries.
 - `npm run submodule` Updates the git submodule in `deltachat-core/`.
-- `npm test` Runs `dependency-check`, `standard` and then the tests in `test/index.js`.
+- `npm test` Runs `standard` and then the tests in `test/index.js`.
 
 By default `npm install` will build in `Release` mode and will be as silent as possible. Use `--debug` flag to build in `Debug` mode and `--verbose` for more verbose output, e.g. to build in `Debug` mode with full verbosity, do:
 

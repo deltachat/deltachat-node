@@ -18,8 +18,11 @@
         [ "OS == 'mac'", {
           "libraries": [
             "../deltachat-core/builddir/src/libdeltachat.a",
-            "../deltachat-core/builddir/libs/libetpan/libetpan.a",
+            "/usr/local/Cellar/libetpan/1.9.2_1/lib/libetpan.a",
             "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
+            "-framework CoreFoundation",
+            "-framework CoreServices",
+            "-framework Security",
             "-lsasl2",
             "-lssl",
             "-lsqlite3",

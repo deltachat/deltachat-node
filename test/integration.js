@@ -46,7 +46,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(17)
+  t.plan(16)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
@@ -73,7 +73,9 @@ test('setUp dc context', t => {
   dc.on('DC_EVENT_ERROR_NETWORK', (first, err) => {
     throw new Error(err)
   })
-  dc.once('ALL', () => t.pass('ALL event fired at least once'))
+  dc.on('ALL', (event, data1, data2) => {
+    console.log('ALL', event, data1, data2)
+  })
   dc.open(cwd, err => {
     t.error(err, 'no error during open')
     t.is(dc.isConfigured(), false, 'should not be configured')

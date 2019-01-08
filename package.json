@@ -5,12 +5,11 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
-    "dependency-check": "dependency-check package.json --missing --entry index.js --entry test/index.js --entry scripts/*.js",
     "generate-constants": "./scripts/generate-constants.js",
     "install": "node-gyp-build scripts/rebuild-core.js",
     "prebuild": "node scripts/prebuildify.js",
     "submodule": "git submodule update --recursive --init",
-    "test": "standard && hallmark && npm run dependency-check && nyc node test/index.js",
+    "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
     "reset": "rm -rf node_modules/ build/ prebuilds/ deltachat-core/",
     "hallmark": "hallmark --fix"
@@ -35,7 +34,6 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "dependency-check": "^3.2.0",
     "ghreleases": "^3.0.1",
     "hallmark": "^0.1.0",
     "node-abi": "^2.5.0",
