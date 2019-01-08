@@ -5,7 +5,7 @@ const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 const spawnSync = require('child_process').spawnSync
 
-const verbose = process.env.npm_config_loglevel === 'verbose'
+const verbose = isVerbose()
 const coreBuildDir = path.resolve(__dirname, '../deltachat-core/builddir')
 log(`>> Removing ${coreBuildDir}`)
 rimraf.sync(coreBuildDir)
@@ -49,4 +49,9 @@ function spawn (cmd, args, opts) {
 
 function log (...args) {
   if (verbose) console.log(...args)
+}
+
+function isVerbose () {
+  const loglevel = process.env.npm_config_loglevel
+  return loglevel === 'verbose' || process.env.CI === 'true'
 }
