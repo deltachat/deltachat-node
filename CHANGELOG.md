@@ -2,6 +2,23 @@
 
 ## [Unreleased][unreleased]
 
+## [0.36.0] - 2019-01-08
+
+### Changed
+
+- Allow passing in string to `dc.sendMessage()` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Upgrade `deltachat-core` dependency to `v0.36.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+
+- Make example in README more useful ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Prebuild for `node@8.6.0` and `electron@3.0.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Make `deltachat-node` build on mac ([**@jikstra**](https://github.com/jikstra))
+- Tweak integration tests ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+### Added
+
+- Add `hallmark` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
 ## [0.35.0] - 2019-01-05
 
 ### Changed
@@ -598,7 +615,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.35.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.36.0...HEAD
+
+[0.36.0]: https://github.com/deltachat/deltachat-node/compare/v0.35.0...v0.36.0
 
 [0.35.0]: https://github.com/deltachat/deltachat-node/compare/v0.30.1...v0.35.0
 
