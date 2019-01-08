@@ -82,23 +82,45 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 
 ```js
 const DeltaChat = require('deltachat-node')
+const C = require('deltachat-node/constants')
 const dc = new DeltaChat()
 
+// Config
+const DC_Account = {
+    address: '[email]',
+    password: '[password]'
+}
+
+const first_recipient = "[email]"
+
+dc.on('ALL', console.log.bind(null, 'core |'))
+
+dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+    const msg = dc.getMessage(msgId)
+    console.log(chatId, msg)
+
+    const answer = dc.messageNew(C.DC_MSG_TEXT)
+    answer.setText(`Bot agrees to ${Math.random() * 100}%`)
+    dc.sendMessage(chatId, answer)
+})
+
 dc.open(() => {
-  const onReady = () => {
-    const contactId = dc.createContact('homie', 'friend@site.org')
-    const chatId = dc.createChatByContactId(contactId)
-    dc.sendTextMessage(chatId, 'Hi!')
-  }
-  if (!dc.isConfigured()) {
-    dc.once('ready', onReady)
-    dc.configure({
-      addr: 'user@site.org',
-      mailPw: 'password'
-    })
-  } else {
-    onReady()
-  }
+    const onReady = () => {
+        const contactId = dc.createContact('Test', first_recipient)
+        const chatId = dc.createChatByContactId(contactId)
+        const msg = dc.messageNew(C.DC_MSG_TEXT)
+        msg.setText('Hi!')
+        dc.sendMessage(chatId, msg)
+    }
+    if (!dc.isConfigured()) {
+        dc.once('ready', onReady)
+        dc.configure({
+            addr: DC_Account.address,
+            mailPw: DC_Account.password
+        })
+    } else {
+        onReady()
+    }
 })
 ```
 
