@@ -9,6 +9,7 @@ pipeline {
   stages {
     stage('Install') {
       steps {
+        sh 'printenv'
         sh 'npm run reset'
         sh 'npm run submodule'
         sh 'npm install'
