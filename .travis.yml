@@ -16,6 +16,7 @@ install:
   - npm install --verbose
 
 script:
+  - env
   - npm test
   - npm run test-integration
   - npm run prebuild
