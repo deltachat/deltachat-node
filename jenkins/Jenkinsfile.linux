@@ -9,9 +9,10 @@ pipeline {
   stages {
     stage('Install') {
       steps {
+        sh 'printenv'
         sh 'npm run reset'
         sh 'npm run submodule'
-        sh 'npm install --verbose'
+        sh 'npm install'
         sh 'ldd build/Release/deltachat.node'
       }
     }
