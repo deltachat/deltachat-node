@@ -541,7 +541,6 @@ class DeltaChat extends EventEmitter {
     if (!msg.dc_msg) {
       throw new Error('invalid msg object')
     }
-    console.log('sending message', msg)
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
   }
 
