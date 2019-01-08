@@ -88,7 +88,7 @@ dc.open(() => {
   const onReady = () => {
     const contactId = dc.createContact('homie', 'friend@site.org')
     const chatId = dc.createChatByContactId(contactId)
-    dc.sendTextMessage(chatId, 'Hi!')
+    dc.sendMessage(chatId, 'Hi!')
   }
   if (!dc.isConfigured()) {
     dc.once('ready', onReady)
