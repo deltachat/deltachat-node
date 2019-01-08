@@ -1,24 +1,15 @@
 const prebuildify = require('prebuildify')
 const path = require('path')
 const tar = require('tar')
-const abi = require('node-abi')
 const versionChanged = require('version-changed')
 const gh = require('ghreleases')
 
 const pkg = require('../package.json')
 
 function build () {
-  function onlyNode (t) {
-    return t.runtime === 'node'
-  }
-
-  function onlyElectron (t) {
-    return t.runtime === 'electron'
-  }
-
   const targets = [
-    abi.supportedTargets.filter(onlyNode).pop(),
-    abi.supportedTargets.filter(onlyElectron).pop()
+    { runtime: 'node', target: '8.6.0' },
+    { runtime: 'electron', target: '3.0.0' }
   ]
 
   const opts = {
