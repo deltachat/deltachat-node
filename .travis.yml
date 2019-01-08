@@ -31,6 +31,7 @@ deploy:
   file: "$ARCHIVE_NAME"
   skip_cleanup: true
   on:
+    all_branches: true
     tags: true
     node: '8'
 
