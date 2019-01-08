@@ -4,6 +4,7 @@ os:
   - osx
 
 before_install:
+  - env
   - export LDFLAGS="-L/usr/local/opt/openssl/lib"
   - export CPPFLAGS="-I/usr/local/opt/openssl/include"
   - export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
@@ -16,7 +17,6 @@ install:
   - npm install --verbose
 
 script:
-  - env
   - npm test
   - npm run test-integration
   - npm run prebuild
