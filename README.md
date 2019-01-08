@@ -85,42 +85,38 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const dc = new DeltaChat()
 
-// Config
-const DC_Account = {
-    address: '[email]',
-    password: '[password]'
+const opts = {
+  addr: '[email]',
+  mailPw: '[password]'
 }
 
-const first_recipient = "[email]"
+const contact = '[email]'
 
 dc.on('ALL', console.log.bind(null, 'core |'))
 
 dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-    const msg = dc.getMessage(msgId)
-    console.log(chatId, msg)
+  const msg = dc.getMessage(msgId)
+  console.log(chatId, msg)
 
-    const answer = dc.messageNew(C.DC_MSG_TEXT)
-    answer.setText(`Bot agrees to ${Math.random() * 100}%`)
-    dc.sendMessage(chatId, answer)
+  const answer = dc.messageNew(C.DC_MSG_TEXT)
+  answer.setText(`Bot agrees to ${Math.random() * 100}%`)
+  dc.sendMessage(chatId, answer)
 })
 
 dc.open(() => {
-    const onReady = () => {
-        const contactId = dc.createContact('Test', first_recipient)
-        const chatId = dc.createChatByContactId(contactId)
-        const msg = dc.messageNew(C.DC_MSG_TEXT)
-        msg.setText('Hi!')
-        dc.sendMessage(chatId, msg)
-    }
-    if (!dc.isConfigured()) {
-        dc.once('ready', onReady)
-        dc.configure({
-            addr: DC_Account.address,
-            mailPw: DC_Account.password
-        })
-    } else {
-        onReady()
-    }
+  const onReady = () => {
+    const contactId = dc.createContact('Test', contact)
+    const chatId = dc.createChatByContactId(contactId)
+    const msg = dc.messageNew(C.DC_MSG_TEXT)
+    msg.setText('Hi!')
+    dc.sendMessage(chatId, msg)
+  }
+  if (!dc.isConfigured()) {
+    dc.once('ready', onReady)
+    dc.configure(opts)
+  } else {
+    onReady()
+  }
 })
 ```
 
