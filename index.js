@@ -530,9 +530,18 @@ class DeltaChat extends EventEmitter {
   }
 
   sendMessage (chatId, msg) {
-    if (!msg || !msg.dc_msg) {
-      throw new Error('msg parameter is not a valid Message object')
+    if (!msg) {
+      throw new Error('invalid msg parameter')
     }
+    if (typeof msg === 'string') {
+      const msgObj = this.messageNew()
+      msgObj.setText(msg)
+      msg = msgObj
+    }
+    if (!msg.dc_msg) {
+      throw new Error('invalid msg object')
+    }
+    console.log('sending message', msg)
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
   }
 

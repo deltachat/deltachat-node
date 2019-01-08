@@ -82,7 +82,6 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 
 ```js
 const DeltaChat = require('deltachat-node')
-const C = require('deltachat-node/constants')
 const dc = new DeltaChat()
 
 const opts = {
@@ -97,19 +96,14 @@ dc.on('ALL', console.log.bind(null, 'core |'))
 dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
   const msg = dc.getMessage(msgId)
   console.log(chatId, msg)
-
-  const answer = dc.messageNew(C.DC_MSG_TEXT)
-  answer.setText(`Bot agrees to ${Math.random() * 100}%`)
-  dc.sendMessage(chatId, answer)
+  dc.sendMessage(chatId, `Bot agrees to ${Math.random() * 100}%`)
 })
 
 dc.open(() => {
   const onReady = () => {
     const contactId = dc.createContact('Test', contact)
     const chatId = dc.createChatByContactId(contactId)
-    const msg = dc.messageNew(C.DC_MSG_TEXT)
-    msg.setText('Hi!')
-    dc.sendMessage(chatId, msg)
+    dc.sendMessage(chatId, 'Hi!')
   }
   if (!dc.isConfigured()) {
     dc.once('ready', onReady)
@@ -487,7 +481,7 @@ Search messages containing the given query string. Corresponds to [`dc_search_ms
 
 #### `dc.sendMessage(chatId, msg)`
 
-Send a message of any type to a chat. Corresponds to [`dc_send_msg()`](https://c.delta.chat/classdc__context__t.html#aaba70910f9c3b3819bba1d04e4d54e02).
+Send a message of any type to a chat. Corresponds to [`dc_send_msg()`](https://c.delta.chat/classdc__context__t.html#aaba70910f9c3b3819bba1d04e4d54e02). The `msg` parameter can either be a `string` or a `Message` object.
 
 #### `dc.setChatName(chatId, name)`
 
