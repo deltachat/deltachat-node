@@ -8,8 +8,6 @@
 
 - Allow passing in string to `dc.sendMessage()` ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Upgrade `deltachat-core` dependency to `v0.36.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
-
-
 - Make example in README more useful ([**@Simon-Laux**](https://github.com/Simon-Laux))
 - Prebuild for `node@8.6.0` and `electron@3.0.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make `deltachat-node` build on mac ([**@jikstra**](https://github.com/jikstra))
