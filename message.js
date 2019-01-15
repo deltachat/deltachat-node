@@ -104,6 +104,7 @@ class Message {
       fromId: this.getFromId(),
       id: this.getId(),
       receivedTimestamp: this.getReceivedTimestamp(),
+      sortTimestamp: this.getSortTimestamp(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
       viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
@@ -162,6 +163,10 @@ class Message {
 
   getShowpadlock () {
     return Boolean(binding.dcn_msg_get_showpadlock(this.dc_msg))
+  }
+
+  getSortTimestamp () {
+    return binding.dcn_msg_get_sort_timestamp(this.dc_msg)
   }
 
   getState () {
