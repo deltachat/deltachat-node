@@ -2,6 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+## [0.38.0] - 2019-01-15
+
+### Changed
+
+- Upgrade `deltachat-core` dependency to `v0.38.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+### Added
+
+- Add `Message#getSortTimestamp()` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Add `Message#hasDeviatingTimestamp()` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
 ## [0.36.0] - 2019-01-08
 
 ### Changed
@@ -613,7 +624,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.36.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.38.0...HEAD
+
+[0.38.0]: https://github.com/deltachat/deltachat-node/compare/v0.36.0...v0.38.0
 
 [0.36.0]: https://github.com/deltachat/deltachat-node/compare/v0.35.0...v0.36.0
 
