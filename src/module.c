@@ -13,6 +13,11 @@
 #include "strtable.h"
 
 /**
+ * TODO remove once upgrading core to new version
+ */
+int dc_msg_has_deviating_timestamp(const dc_msg_t*);
+
+/**
  * Custom context
  */
 typedef struct dcn_context_t {
@@ -1889,6 +1894,15 @@ NAPI_METHOD(dcn_msg_get_showpadlock) {
   NAPI_RETURN_INT32(showpadlock);
 }
 
+NAPI_METHOD(dcn_msg_get_sort_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int timestamp = dc_msg_get_sort_timestamp(dc_msg);
+
+  NAPI_RETURN_INT32(timestamp);
+}
+
 NAPI_METHOD(dcn_msg_get_state) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -1958,6 +1972,15 @@ NAPI_METHOD(dcn_msg_get_width) {
   int width = dc_msg_get_width(dc_msg);
 
   NAPI_RETURN_INT32(width);
+}
+
+NAPI_METHOD(dcn_msg_has_deviating_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int has_deviating_timestamp = dc_msg_has_deviating_timestamp(dc_msg);
+
+  NAPI_RETURN_INT32(has_deviating_timestamp);
 }
 
 NAPI_METHOD(dcn_msg_is_forwarded) {
@@ -2229,6 +2252,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_sort_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_state);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_summary);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_summarytext);
@@ -2236,6 +2260,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
+  NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_info);

@@ -727,6 +727,10 @@ Get first characters of the setup code. Corresponds to [`dc_msg_get_setupcodebeg
 
 Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_get_showpadlock()`](https://c.delta.chat/classdc__msg__t.html#a1beb22d18c9c045f7982718879a78440).
 
+#### `message.getSortTimestamp()`
+
+Get message time used for sorting. Corresponds to [`dc_msg_get_sort_timestamp()`](https://c.delta.chat/classdc__msg__t.html#a755c0ad1fe20b0e31405fc62a699fad0).
+
 #### `message.getState()`
 
 Get the state of the message. Returns a <a href="#class_message_state">`MessageState`</a> object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
@@ -754,6 +758,10 @@ Get the view type of the message. Returns a <a href="#class_message_view_type">`
 #### `message.getWidth()`
 
 Get the width of image or video. Corresponds to [`dc_msg_get_width()`](https://c.delta.chat/classdc__msg__t.html#a5249ddd8d5eea3155a3c0bc121722a1d).
+
+#### `message.hasDeviatingTimestamp()`
+
+Check if a message has a deviating timestamp. Corresponds to [`dc_msg_has_deviating_timestamp()`](https://c.delta.chat/classdc__msg__t.html#a6dc38654dbb222305ee086af338113b2).
 
 #### `message.isDeadDrop()`
 

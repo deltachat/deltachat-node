@@ -104,10 +104,12 @@ class Message {
       fromId: this.getFromId(),
       id: this.getId(),
       receivedTimestamp: this.getReceivedTimestamp(),
+      sortTimestamp: this.getSortTimestamp(),
       text: this.getText(),
       timestamp: this.getTimestamp(),
       viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
+      hasDeviatingTimestamp: this.hasDeviatingTimestamp(),
       showPadlock: this.getShowpadlock(),
       summary: this.getSummary().toJson(),
       isSetupmessage: this.isSetupmessage(),
@@ -164,6 +166,10 @@ class Message {
     return Boolean(binding.dcn_msg_get_showpadlock(this.dc_msg))
   }
 
+  getSortTimestamp () {
+    return binding.dcn_msg_get_sort_timestamp(this.dc_msg)
+  }
+
   getState () {
     return new MessageState(binding.dcn_msg_get_state(this.dc_msg))
   }
@@ -192,6 +198,10 @@ class Message {
 
   getWidth () {
     return binding.dcn_msg_get_width(this.dc_msg)
+  }
+
+  hasDeviatingTimestamp () {
+    return binding.dcn_msg_has_deviating_timestamp(this.dc_msg)
   }
 
   isDeadDrop () {
