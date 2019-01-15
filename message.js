@@ -109,6 +109,7 @@ class Message {
       timestamp: this.getTimestamp(),
       viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
+      hasDeviatingTimestamp: this.hasDeviatingTimestamp(),
       showPadlock: this.getShowpadlock(),
       summary: this.getSummary().toJson(),
       isSetupmessage: this.isSetupmessage(),
@@ -197,6 +198,10 @@ class Message {
 
   getWidth () {
     return binding.dcn_msg_get_width(this.dc_msg)
+  }
+
+  hasDeviatingTimestamp () {
+    return binding.dcn_msg_has_deviating_timestamp(this.dc_msg)
   }
 
   isDeadDrop () {

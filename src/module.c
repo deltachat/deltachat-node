@@ -1974,6 +1974,15 @@ NAPI_METHOD(dcn_msg_get_width) {
   NAPI_RETURN_INT32(width);
 }
 
+NAPI_METHOD(dcn_msg_has_deviating_timestamp) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int has_deviating_timestamp = dc_msg_has_deviating_timestamp(dc_msg);
+
+  NAPI_RETURN_INT32(has_deviating_timestamp);
+}
+
 NAPI_METHOD(dcn_msg_is_forwarded) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2251,6 +2260,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
+  NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_info);

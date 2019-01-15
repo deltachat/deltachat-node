@@ -759,6 +759,10 @@ Get the view type of the message. Returns a <a href="#class_message_view_type">`
 
 Get the width of image or video. Corresponds to [`dc_msg_get_width()`](https://c.delta.chat/classdc__msg__t.html#a5249ddd8d5eea3155a3c0bc121722a1d).
 
+#### `message.hasDeviatingTimestamp()`
+
+Check if a message has a deviating timestamp. Corresponds to [`dc_msg_has_deviating_timestamp()`](https://c.delta.chat/classdc__msg__t.html#a6dc38654dbb222305ee086af338113b2).
+
 #### `message.isDeadDrop()`
 
 Check if the message belongs to the virtual dead drop chat.
