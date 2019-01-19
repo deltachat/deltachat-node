@@ -14,7 +14,7 @@ function build () {
 
   const opts = {
     quiet: false,
-    strip: true,
+    strip: false,
     napi: true,
     targets,
     cwd: path.resolve(__dirname, '..')
