@@ -45,6 +45,7 @@ tape('invalid input to configure throws', t => {
   t.throws(function () {
     dc.configure({ mailPw: 'delta1' })
   }, /Missing \.addr/, 'missing addr throws')
+  dc.close()
   t.end()
 })
 
@@ -88,6 +89,8 @@ tape('dc.getInfo()', t => {
     return typeof v === 'string'
   }), true, 'all values are strings')
   t.is(info.fingerprint, '<Not yet calculated>', 'fingerprint')
+
+  dc.close()
   t.end()
 })
 

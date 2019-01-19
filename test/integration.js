@@ -105,6 +105,7 @@ test.skip('key transfer', t => {
 
   dc2.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
     t.comment('incoming msg')
+    dc2.close()
     t.end()
   })
 

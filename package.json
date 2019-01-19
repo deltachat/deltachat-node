@@ -20,7 +20,7 @@
     "url": "https://github.com/deltachat/deltachat-node.git"
   },
   "engines": {
-    "node": ">=8.6.0"
+    "node": ">=10.6.0"
   },
   "license": "GPL-3.0",
   "dependencies": {
@@ -36,6 +36,7 @@
     "coveralls": "^3.0.2",
     "ghreleases": "^3.0.1",
     "hallmark": "^0.1.0",
+    "node-gyp": "^3.8.0",
     "nyc": "^13.2.0",
     "opn-cli": "^4.0.0",
     "prebuildify": "^2.9.1",

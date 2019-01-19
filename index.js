@@ -23,12 +23,10 @@ class DeltaChat extends EventEmitter {
     debug('DeltaChat constructor')
     super()
 
-    this._pollInterval = null
     this.dcn_context = binding.dcn_context_new()
-    // TODO comment back in once polling is gone
-    // binding.dcn_set_event_handler(this.dcn_context, (event, data1, data2) => {
-    //   handleEvent(this, event, data1, data2)
-    // })
+    binding.dcn_set_event_handler(this.dcn_context, (event, data1, data2) => {
+      handleEvent(this, event, data1, data2)
+    })
   }
 
   addAddressBook (addressBook) {
@@ -84,15 +82,7 @@ class DeltaChat extends EventEmitter {
   close () {
     debug('close')
     this.removeAllListeners()
-
-    // TODO temporary polling interval
-    if (this._pollInterval) {
-      clearInterval(this._pollInterval)
-      this._pollInterval = null
-    }
-
-    // TODO comment back in once polling is gone
-    // binding.dcn_unset_event_handler(this.dcn_context)
+    binding.dcn_unset_event_handler(this.dcn_context)
     binding.dcn_stop_threads(this.dcn_context)
   }
 
@@ -305,6 +295,7 @@ class DeltaChat extends EventEmitter {
     debug(`DeltaChat.getConfig ${dir}`)
     let dc = new DeltaChat()
     function done (err, config) {
+      dc.close()
       dc = null
       cb(err, config)
     }
@@ -450,6 +441,7 @@ class DeltaChat extends EventEmitter {
       'compile_date',
       'arch'
     ])
+    dc.close()
     dc = null
     return result
   }
@@ -564,15 +556,6 @@ class DeltaChat extends EventEmitter {
       binding.dcn_open(this.dcn_context, db, '', err => {
         if (err) return cb(err)
         binding.dcn_start_threads(this.dcn_context)
-
-        // TODO temporary timer for polling events
-        this._pollInterval = setInterval(() => {
-          const event = binding.dcn_poll_event(this.dcn_context)
-          if (event) {
-            handleEvent(this, event.event, event.data1, event.data2)
-          }
-        }, 50)
-
         cb()
       })
     })
