@@ -11,7 +11,7 @@ before_install:
   - ./scripts/travis-before-install
 
 node_js:
-  - 8
+  - 10
 
 script:
   - npm test
