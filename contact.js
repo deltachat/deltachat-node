@@ -1,16 +1,19 @@
 /* eslint-disable camelcase */
 
 const binding = require('./binding')
+const debug = require('debug')('deltachat:contact')
 
 /**
  * Wrapper around dc_contact_t*
  */
 class Contact {
   constructor (dc_contact) {
+    debug('Contact constructor')
     this.dc_contact = dc_contact
   }
 
   toJson () {
+    debug('toJson')
     return {
       address: this.getAddress(),
       color: this.getColor(),
