@@ -3,6 +3,7 @@
 const binding = require('./binding')
 const C = require('./constants')
 const Lot = require('./lot')
+const debug = require('debug')('deltachat:message')
 
 /**
  * Helper class for message states so you can do e.g.
@@ -12,6 +13,7 @@ const Lot = require('./lot')
  */
 class MessageState {
   constructor (state) {
+    debug(`MessageState constructor ${state}`)
     this.state = state
   }
 
@@ -56,6 +58,7 @@ class MessageState {
  */
 class MessageViewType {
   constructor (viewType) {
+    debug(`MessageViewType constructor ${viewType}`)
     this.viewType = viewType
   }
 
@@ -93,10 +96,12 @@ class MessageViewType {
  */
 class Message {
   constructor (dc_msg) {
+    debug('Message constructor')
     this.dc_msg = dc_msg
   }
 
   toJson () {
+    debug('toJson')
     return {
       chatId: this.getChatId(),
       duration: this.getDuration(),
