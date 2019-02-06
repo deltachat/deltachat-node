@@ -8,8 +8,8 @@ const pkg = require('../package.json')
 
 function build () {
   const targets = [
-    { runtime: 'node', target: '10.6.0' },
-    { runtime: 'electron', target: '4.0.0' }
+    { runtime: 'node', target: '10.15.0' },
+    { runtime: 'electron', target: '4.0.4' }
   ]
 
   const opts = {
