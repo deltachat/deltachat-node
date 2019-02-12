@@ -16,7 +16,21 @@ node_js:
 script:
   - npm test
   - npm run test-integration
+
+before_deploy:
+  - export ARCHIVE_NAME="${TRAVIS_TAG:-latest}-darwin-x64.tar.gz"
   - npm run prebuild
+  - file prebuilds/*/*
+  - tar -zcvf "$ARCHIVE_NAME" -C prebuilds .
+
+deploy:
+  provider: releases
+  draft: false
+  api_key: "$GH_TOKEN"
+  file: "$ARCHIVE_NAME"
+  skip_cleanup: true
+  on:
+    tags: true
 
 notifications:
   email: false

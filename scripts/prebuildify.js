@@ -50,6 +50,12 @@ function build () {
 }
 
 function bundle () {
+  // FIXME. Temporary fix so Jenkins which is faster can upload
+  // binaries. Travis uses deploy functionality in .travis.yml and
+  // not using the ghreleases module (which seems to fail if there
+  // are already binaries uploaded)
+  if (process.env.TRAVIS === 'true') return
+
   const prebuilds = `${process.platform}-${process.arch}`
   const file = `v${pkg.version}-${process.platform}-${process.arch}.tar.gz`
   const cwd = path.join(process.cwd(), 'prebuilds')
