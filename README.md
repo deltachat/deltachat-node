@@ -29,6 +29,7 @@
 - [Usage](#usage)
 - [API](#api)
 - [Developing](#developing)
+- [Build](#build)
 - [Prebuilt Binaries](#prebuilt-binaries)
 - [Tests and Coverage](#tests-and-coverage)
 - [Scripts](#scripts)
@@ -951,7 +952,7 @@ $ make image
 $ make bindings
 ```
 
-### Prebuilt Binaries
+## Prebuilt Binaries
 
 At time of writing we use `Jenkins` to generate prebuilt binaries, which currently only covers the Linux platform. The workflow for building and releasing them is as follows:
 
