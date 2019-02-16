@@ -13,6 +13,9 @@
             "-lssl",
             "-lsqlite3",
             "-lpthread"
+          ],
+          "cflags": [
+            "-std=gnu99"
           ]
         }],
         [ "OS == 'mac'", {
