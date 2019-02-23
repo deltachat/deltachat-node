@@ -567,9 +567,13 @@ class DeltaChat extends EventEmitter {
 
         // TODO temporary timer for polling events
         this._pollInterval = setInterval(() => {
-          const event = binding.dcn_poll_event(this.dcn_context)
-          if (event) {
-            handleEvent(this, event.event, event.data1, event.data2)
+          try {
+            const event = binding.dcn_poll_event(this.dcn_context)
+            if (event) {
+              handleEvent(this, event.event, event.data1, event.data2)
+            }
+          } catch(err) {
+            debug(`dcn_poll_event error ${err}`)
           }
         }, 50)
 
