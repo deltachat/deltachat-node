@@ -572,7 +572,7 @@ class DeltaChat extends EventEmitter {
             if (event) {
               handleEvent(this, event.event, event.data1, event.data2)
             }
-          } catch(err) {
+          } catch (err) {
             debug(`dcn_poll_event error ${err}`)
           }
         }, 50)
