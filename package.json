@@ -1,6 +1,6 @@
 {
   "name": "deltachat-node",
-  "version": "0.39.0",
+  "version": "0.40.2",
   "description": "node.js bindings for deltachat-core",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -36,7 +36,7 @@
     "coveralls": "^3.0.2",
     "ghreleases": "^3.0.1",
     "hallmark": "^0.1.0",
-    "nyc": "^12.0.2",
+    "nyc": "^13.2.0",
     "opn-cli": "^4.0.0",
     "prebuildify": "^2.9.1",
     "split2": "^3.0.0",

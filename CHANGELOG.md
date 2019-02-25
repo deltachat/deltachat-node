@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [0.40.0] - 2019-02-12
+
+### Changed
+
+- Upgrade `deltachat-core` dependency to `v0.40.0` ([**@jikstra**](https://github.com/jikstra))
+
 ## [0.39.0] - 2019-01-17
 
 ### Changed
@@ -630,7 +636,11 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.38.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.40.0...HEAD
+
+[0.40.0]: https://github.com/deltachat/deltachat-node/compare/v0.39.0...v0.40.0
+
+[0.39.0]: https://github.com/deltachat/deltachat-node/compare/v0.38.0...v0.39.0
 
 [0.38.0]: https://github.com/deltachat/deltachat-node/compare/v0.36.0...v0.38.0
 
