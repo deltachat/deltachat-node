@@ -646,6 +646,25 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  setLocation (latitude, longitude, accuracy) {
+    debug(`setLocation ${latitude}`)
+    binding.dcn_set_location(
+      this.dcn_context,
+      Number(latitude),
+      Number(longitude),
+      Number(accuracy)
+    )
+  }
+
+  getLocations (chatId, contactId) {
+    debug(`getLocations ${chatId}`)
+    binding.dcn_get_locations(
+      this.dcn_context,
+      Number(chatId),
+      Number(contactId)
+    )
+  }
+
   setStringTable (index, str) {
     debug(`setStringTable ${index} ${str}`)
     binding.dcn_set_string_table(this.dcn_context, Number(index), str)

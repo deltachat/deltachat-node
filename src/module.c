@@ -2096,6 +2096,37 @@ NAPI_METHOD(dcn_msg_set_text) {
   NAPI_RETURN_UNDEFINED();
 }
 
+/**
+ * locations
+ */
+
+NAPI_METHOD(dcn_set_location) {
+   NAPI_ARGV(4);
+   NAPI_DCN_CONTEXT();
+   NAPI_ARGV_DOUBLE(latitude, 1);
+   NAPI_ARGV_DOUBLE(longitude, 2);
+   NAPI_ARGV_DOUBLE(accuracy, 3);
+
+   int result = dc_set_location(dcn_context->dc_context, latitude, longitude, accuracy);
+
+   NAPI_RETURN_INT32(result);
+}
+
+NAPI_METHOD(dcn_get_locations) {
+   NAPI_ARGV(3);
+   NAPI_DCN_CONTEXT();
+   NAPI_ARGV_INT32(chat_id, 1);
+   NAPI_ARGV_INT32(contact_id, 2);
+
+   dc_array_t* locations = dc_get_locations(dcn_context->dc_context,
+                                          chat_id, contact_id);
+
+   // this doesn't work probably since locations are of type dc_location
+   napi_value js_array = dc_array_to_js_array(env, locations);
+   dc_array_unref(locations);
+   return js_array;
+}
+
 NAPI_INIT() {
   /**
    * Main context
@@ -2272,4 +2303,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
+
+  /**
+   * dc_location
+   */
+   NAPI_EXPORT_FUNCTION(dcn_set_location);
+   NAPI_EXPORT_FUNCTION(dcn_get_locations);
 }
