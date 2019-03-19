@@ -7,11 +7,10 @@
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
     "install": "node-gyp-build \"node scripts/rebuild-core.js\"",
-    "prebuild": "node scripts/prebuildify.js",
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
-    "reset": "rm -rf node_modules/ build/ prebuilds/ deltachat-core/",
+    "reset": "rm -rf node_modules/ build/ deltachat-core/",
     "hallmark": "hallmark --fix"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
@@ -34,16 +33,12 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "ghreleases": "^3.0.1",
     "hallmark": "^0.1.0",
     "nyc": "^13.2.0",
     "opn-cli": "^4.0.0",
-    "prebuildify": "^2.9.1",
     "split2": "^3.0.0",
     "standard": "^12.0.0",
     "tape": "^4.9.1",
-    "tar": "^4.4.8",
-    "tempy": "^0.2.1",
-    "version-changed": "^1.1.0"
+    "tempy": "^0.2.1"
   }
 }
