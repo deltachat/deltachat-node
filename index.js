@@ -12,6 +12,7 @@ const EventEmitter = require('events').EventEmitter
 const mkdirp = require('mkdirp')
 const path = require('path')
 const got = require('got')
+const Locations = require('./lib/locations')
 const pick = require('lodash.pick')
 const debug = require('debug')('deltachat:index')
 
@@ -658,11 +659,11 @@ class DeltaChat extends EventEmitter {
 
   getLocations (chatId, contactId) {
     debug(`getLocations ${chatId}`)
-    binding.dcn_get_locations(
-      this.dcn_context,
-      Number(chatId),
-      Number(contactId)
-    )
+    const l = binding.dcn_get_locations(this.dcn_context, 27, 21);
+    const count = binding.dcn_array_get_cnt(l)
+    console.log('getLocations: ' + count);
+    let locations = new Locations(binding.dcn_get_locations(this.dcn_context, Number(chatId), Number(contactId)))
+    return locations.toJson()
   }
 
   setStringTable (index, str) {

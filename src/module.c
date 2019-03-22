@@ -2170,6 +2170,36 @@ NAPI_METHOD(dcn_array_get_accuracy) {
   return napi_accuracy;
 }
 
+NAPI_METHOD(dcn_array_get_longitude) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  double longitude = dc_array_get_longitude(dc_array, index);
+
+  napi_value napi_longitude;
+  NAPI_STATUS_THROWS(napi_create_double(env, longitude, &napi_longitude));
+
+  return napi_longitude;
+}
+
+NAPI_METHOD(dcn_array_get_latitude) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  double latitude = dc_array_get_latitude(dc_array, index);
+
+  napi_value napi_latitude;
+  NAPI_STATUS_THROWS(napi_create_double(env, latitude, &napi_latitude));
+
+  return napi_latitude;
+}
+
 NAPI_INIT() {
   /**
    * Main context
@@ -2359,5 +2389,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_cnt);
   NAPI_EXPORT_FUNCTION(dcn_array_get_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_accuracy);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_latitude);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_longitude);
 }
 
