@@ -2113,12 +2113,12 @@ NAPI_METHOD(dcn_set_location) {
 }
 
 NAPI_METHOD(dcn_get_locations) {
-   NAPI_ARGV(3);
-   NAPI_DCN_CONTEXT();
-   NAPI_ARGV_INT32(chat_id, 1);
-   NAPI_ARGV_INT32(contact_id, 2);
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_INT32(chat_id, 1);
+  NAPI_ARGV_INT32(contact_id, 2);
 
-   dc_array_t* locations = dc_get_locations(dcn_context->dc_context,
+  dc_array_t* locations = dc_get_locations(dcn_context->dc_context,
                                           chat_id, contact_id);
 
   napi_value napi_locations;
@@ -2129,20 +2129,46 @@ NAPI_METHOD(dcn_get_locations) {
 }
 
 NAPI_METHOD(dcn_array_get_cnt) {
-   NAPI_ARGV(1);
-  dc_array_t* array;
-  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&array));
-  size_t size = dc_array_get_cnt(array);
+  NAPI_ARGV(1);
+  NAPI_DC_ARRAY();
+
+  uint32_t size = dc_array_get_cnt(dc_array);
 
   napi_value napi_size;
-  NAPI_STATUS_THROWS(napi_create_int64(env, size, &napi_size));
+  NAPI_STATUS_THROWS(napi_create_uint32(env, size, &napi_size));
 
   return napi_size;
 }
 
+NAPI_METHOD(dcn_array_get_id) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
 
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
 
+  uint32_t id = dc_array_get_id(dc_array, index);
 
+  napi_value napi_id;
+  NAPI_STATUS_THROWS(napi_create_uint32(env, id, &napi_id));
+
+  return napi_id;
+}
+
+NAPI_METHOD(dcn_array_get_accuracy) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  double accuracy = dc_array_get_accuracy(dc_array, index);
+
+  napi_value napi_accuracy;
+  NAPI_STATUS_THROWS(napi_create_double(env, accuracy, &napi_accuracy));
+
+  return napi_accuracy;
+}
 
 NAPI_INIT() {
   /**
@@ -2331,4 +2357,7 @@ NAPI_INIT() {
    * dc_array
    */
   NAPI_EXPORT_FUNCTION(dcn_array_get_cnt);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_accuracy);
 }
+

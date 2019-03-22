@@ -24,7 +24,9 @@ function main(dc) {
 
   const a = binding.dcn_get_locations(dc.dcn_context, 255, 10)
   const b = binding.dcn_array_get_cnt(a)
-  console.log(a, b)
+  const c = binding.dcn_array_get_id(a, 0)
+  const d = binding.dcn_array_get_accuracy(a, 2)
+  console.log(a, b, c, d)
 }
 
 setup_dc(main)
