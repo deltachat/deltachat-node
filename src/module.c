@@ -2121,11 +2121,28 @@ NAPI_METHOD(dcn_get_locations) {
    dc_array_t* locations = dc_get_locations(dcn_context->dc_context,
                                           chat_id, contact_id);
 
-   // this doesn't work probably since locations are of type dc_location
-   napi_value js_array = dc_array_to_js_array(env, locations);
-   dc_array_unref(locations);
-   return js_array;
+  napi_value napi_locations;
+  NAPI_STATUS_THROWS(napi_create_external(env, locations,
+                                          finalize_context,
+                                          NULL, &napi_locations));
+  return napi_locations;
 }
+
+NAPI_METHOD(dcn_array_get_cnt) {
+   NAPI_ARGV(1);
+  dc_array_t* array;
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&array));
+  size_t size = dc_array_get_cnt(array);
+
+  napi_value napi_size;
+  NAPI_STATUS_THROWS(napi_create_int64(env, size, &napi_size));
+
+  return napi_size;
+}
+
+
+
+
 
 NAPI_INIT() {
   /**
@@ -2307,6 +2324,11 @@ NAPI_INIT() {
   /**
    * dc_location
    */
-   NAPI_EXPORT_FUNCTION(dcn_set_location);
-   NAPI_EXPORT_FUNCTION(dcn_get_locations);
+  NAPI_EXPORT_FUNCTION(dcn_set_location);
+  NAPI_EXPORT_FUNCTION(dcn_get_locations);
+
+  /**
+   * dc_array
+   */
+  NAPI_EXPORT_FUNCTION(dcn_array_get_cnt);
 }

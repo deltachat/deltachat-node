@@ -23,7 +23,8 @@ function main(dc) {
   //binding.dcn_set_draft(dc.dcn_context, 13, msg)
 
   const a = binding.dcn_get_locations(dc.dcn_context, 255, 10)
-  console.log(a)
+  const b = binding.dcn_array_get_cnt(a)
+  console.log(a, b)
 }
 
 setup_dc(main)
