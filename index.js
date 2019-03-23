@@ -659,9 +659,6 @@ class DeltaChat extends EventEmitter {
 
   getLocations (chatId, contactId) {
     debug(`getLocations ${chatId}`)
-    const l = binding.dcn_get_locations(this.dcn_context, 27, 21);
-    const count = binding.dcn_array_get_cnt(l)
-    console.log('getLocations: ' + count);
     let locations = new Locations(binding.dcn_get_locations(this.dcn_context, Number(chatId), Number(contactId)))
     return locations.toJson()
   }

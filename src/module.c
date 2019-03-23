@@ -291,6 +291,12 @@ static void finalize_lot(napi_env env, void* data, void* hint) {
   }
 }
 
+static void finalize_array(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_array_unref((dc_array_t*)data);
+  }
+}
+
 static void finalize_msg(napi_env env, void* data, void* hint) {
   if (data) {
     dc_msg_unref((dc_msg_t*)data);
@@ -2123,7 +2129,7 @@ NAPI_METHOD(dcn_get_locations) {
 
   napi_value napi_locations;
   NAPI_STATUS_THROWS(napi_create_external(env, locations,
-                                          finalize_context,
+                                          finalize_array,
                                           NULL, &napi_locations));
   return napi_locations;
 }
@@ -2198,6 +2204,36 @@ NAPI_METHOD(dcn_array_get_latitude) {
   NAPI_STATUS_THROWS(napi_create_double(env, latitude, &napi_latitude));
 
   return napi_latitude;
+}
+
+NAPI_METHOD(dcn_array_get_timestamp) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  int timestamp = dc_array_get_timestamp(dc_array, index);
+
+  napi_value napi_timestamp;
+  NAPI_STATUS_THROWS(napi_create_int64(env, timestamp, &napi_timestamp));
+
+  return napi_timestamp;
+}
+
+NAPI_METHOD(dcn_array_get_msg_id) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  uint32_t msg_id = dc_array_get_msg_id(dc_array, index);
+
+  napi_value napi_msg_id;
+  NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &napi_msg_id));
+
+  return napi_msg_id;
 }
 
 NAPI_INIT() {
@@ -2391,5 +2427,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_accuracy);
   NAPI_EXPORT_FUNCTION(dcn_array_get_latitude);
   NAPI_EXPORT_FUNCTION(dcn_array_get_longitude);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_timestamp);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_msg_id);
 }
 
