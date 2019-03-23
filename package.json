@@ -22,17 +22,18 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "bindings": "^1.5.0",
     "debug": "^4.1.1",
     "got": "^9.6.0",
     "lodash.pick": "^4.4.0",
     "mkdirp": "^0.5.1",
     "napi-macros": "^1.7.0",
-    "node-gyp": "^3.8.0",
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
     "hallmark": "^0.1.0",
+    "node-gyp": "^3.8.0",
     "nyc": "^13.2.0",
     "opn-cli": "^4.1.0",
     "split2": "^3.1.1",

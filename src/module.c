@@ -6,7 +6,7 @@
 #include <string.h>
 #include <node_api.h>
 #include <uv.h>
-#include <deltachat.h>
+#include <deltachat/deltachat.h>
 #include "napi-macros-extensions.h"
 #include "strtable.h"
 
