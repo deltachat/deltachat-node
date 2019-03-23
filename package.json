@@ -6,14 +6,10 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
-    "install": "npm run rebuild-all",
-    "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
-    "rebuild-core": "node scripts/rebuild-core.js",
-    "rebuild-bindings": "node-gyp rebuild",
-    "submodule": "git submodule update --recursive --init",
+    "install": "node-gyp rebuild",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
-    "reset": "rm -rf node_modules/ build/ deltachat-core/",
+    "reset": "rm -rf node_modules/ build/",
     "hallmark": "hallmark --fix"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
@@ -32,7 +28,6 @@
     "mkdirp": "^0.5.1",
     "napi-macros": "^1.7.0",
     "node-gyp": "^3.8.0",
-    "node-gyp-build": "^3.8.0",
     "rimraf": "^2.6.3"
   },
   "devDependencies": {

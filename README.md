@@ -35,45 +35,20 @@
 
 ## Install
 
+You need to have installed `deltachat-core` before installing
+`deltachat-node`.  Once this is installed install using
+
 ```
 npm install deltachat-node
 ```
 
 ## Troubleshooting
 
-This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
-
-If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
-
-If `meson` is missing:
-
-```
-sudo apt-get install python3-pip
-sudo pip3 install meson
-```
-
-If `ninja` is missing:
-
-```
-sudo apt-get install ninja-build
-```
-
-You might also need the following system dependencies:
-
-- `libssl-dev`
-- `libsasl2-dev`
-- `libsqlite3-dev`
-- `zlib1g-dev`
-
-To fix these issues do:
-
-```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
-```
-
-Then try running `npm install` again.
-
-Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
+This module builds on top of `deltachat-core`, which in turn has
+external dependencies.
+Please see [build
+instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso)
+for additional information.
 
 ## Usage
 
@@ -939,15 +914,25 @@ Internal `viewType` property.
 
 ## Developing
 
-If you're cloning this repository in order to hack on it, you need to setup the `deltachat-core` submodule, before doing `npm install`.
-
-The following commands should be enough to get started.
+You can build against an uninstalled `deltachat-core` by using a few
+environment variables.  You need to point to both the `deltachat-core`
+repository and to its build directory using the `DC_SRC` and
+`DC_BUILD` environment variables:
 
 ```
-git clone https://github.com/deltachat/deltachat-node.git
-cd deltachat-node
-npm run submodule
+export DC_SRC=../deltachat-core
+export DC_BUILD=../deltachat-core/builddir
 npm install
+# or:
+#   node-gyp configure --verbose
+#   node-gyp build --verbose
+```
+
+Now you also need to set `LD_LIBRARY_PATH` to the built version before
+being able to run node using the bindings:
+```
+export LD_LIBRARY_PATH=$DC_BUILD/src
+npm test
 ```
 
 ## Tests and Coverage

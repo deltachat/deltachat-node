@@ -6,17 +6,30 @@
         [ "OS == 'win'", {}],
         [ "OS == 'linux'", {
           "libraries": [
-            "../deltachat-core/builddir/src/libdeltachat.a",
-            "../deltachat-core/builddir/libs/libetpan/libetpan.a",
-            "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
-            "-lsasl2",
-            "-lssl",
-            "-lsqlite3",
             "-lpthread"
           ],
           "cflags": [
-            "-std=gnu99"
-          ]
+            "-std=gnu99",
+          ],
+          "conditions": [
+            [ "'<!(echo $DC_SRC)x' == 'x'", {
+              "libraries": [
+                "<!(pkg-config --libs deltachat)",
+              ],
+              "cflags": [
+                "<!(pkg-config --cflags deltachat)"
+              ],
+            }],
+            [ "'<!(echo $DC_SRC)x' != 'x'", {
+              "libraries": [
+                "-L../<!(echo $DC_BUILD/src)",
+                "-ldeltachat",
+              ],
+              "cflags": [
+                "-I../<!(echo $DC_SRC/src)",
+              ],
+            }],
+          ],
         }],
         [ "OS == 'mac'", {
           "libraries": [
