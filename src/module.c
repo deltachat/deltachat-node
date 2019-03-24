@@ -2119,13 +2119,18 @@ NAPI_METHOD(dcn_set_location) {
 }
 
 NAPI_METHOD(dcn_get_locations) {
-  NAPI_ARGV(3);
+  NAPI_ARGV(5);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_INT32(chat_id, 1);
   NAPI_ARGV_INT32(contact_id, 2);
+  NAPI_ARGV_INT32(timestamp_from, 3);
+  NAPI_ARGV_INT32(timestamp_to, 4);
 
   dc_array_t* locations = dc_get_locations(dcn_context->dc_context,
-                                          chat_id, contact_id);
+                                          chat_id,
+                                          contact_id,
+                                          timestamp_from,
+                                          timestamp_to);
 
   napi_value napi_locations;
   NAPI_STATUS_THROWS(napi_create_external(env, locations,

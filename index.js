@@ -657,9 +657,18 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  getLocations (chatId, contactId) {
-    debug(`getLocations ${chatId}`)
-    let locations = new Locations(binding.dcn_get_locations(this.dcn_context, Number(chatId), Number(contactId)))
+  getLocations (chatId, contactId, timestampFrom, timestampTo) {
+    // fallback: since ever
+    timestampFrom = timestampFrom ? timestampFrom : 0
+    // fallback until now
+    timestampTo = timestampTo ? timestampTo : Math.floor(Date.now() / 1000)
+    const locs = binding.dcn_get_locations(
+      this.dcn_context,
+      Number(chatId),
+      Number(contactId),
+      timestampFrom,
+      timestampTo)
+    let locations = new Locations(locs)
     return locations.toJson()
   }
 
