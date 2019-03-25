@@ -29,7 +29,6 @@
 - [Usage](#usage)
 - [API](#api)
 - [Developing](#developing)
-- [Prebuilt Binaries](#prebuilt-binaries)
 - [Tests and Coverage](#tests-and-coverage)
 - [Scripts](#scripts)
 - [License](#license)
@@ -941,19 +940,6 @@ npm run submodule
 npm install
 ```
 
-## Prebuilt Binaries
-
-At time of writing we use `Jenkins` to generate prebuilt binaries, which currently only covers the Linux platform. The workflow for building and releasing them is as follows:
-
-- Version `vX.Y.Z` is created (via `npm version`)
-- Code is pushed to Github (`git push && git push --tags`)
-- The new version will cause `Jenkins` to run `npm run prebuild` (see `Scripts` section below), which
-  - Builds the binaries using [`prebuildify`](https://github.com/mafintosh/prebuildify)
-  - Creates a release on GitHub
-  - Uploads the binaries to the GitHub release
-- When `Jenkins` has finished `prebuildify-ci download` is run, which downloads the binaries from GitHub to a local `./prebuilds` folder
-- `npm publish` finishes off by publishing to `npm` with the bundled binaries
-
 ## Tests and Coverage
 
 Running `npm test` ends with showing a code coverage report, which is produced by [`nyc`](https://github.com/istanbuljs/nyc#readme).
@@ -980,7 +966,6 @@ We have the following scripts for building, testing and coverage:
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-- `npm run prebuild` Builds `node-napi.node` and `electron-napi.node` for the current platform. Used in ci step for prebuilt binaries.
 - `npm run submodule` Updates the git submodule in `deltachat-core/`.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
 

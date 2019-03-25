@@ -6,7 +6,6 @@ images/
 scripts/generate-constants.js
 scripts/travis-before-install
 test/
-jenkins/
 deltachat-core/python/
 deltachat-core/docs/
 deltachat-core/.git
