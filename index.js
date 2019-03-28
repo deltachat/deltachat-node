@@ -657,11 +657,39 @@ class DeltaChat extends EventEmitter {
     )
   }
 
+  /*
+   * @param chatId Chat-id to get location information for.
+   *     0 to get locations independently of the chat.
+   * @param contactId Contact id to get location information for.
+   *     If also a chat-id is given, this should be a member of the given chat.
+   *     0 to get locations independently of the contact.
+   * @param timestampFrom Start of timespan to return.
+   *     Must be given in number of seconds since 00:00 hours, Jan 1, 1970 UTC.
+   *     0 for "start from the beginning".
+   * @param timestampTo End of timespan to return.
+   *     Must be given in number of seconds since 00:00 hours, Jan 1, 1970 UTC.
+   *     0 for "all up to now".
+   * @return Array of locations, NULL is never returned.
+   *     The array is sorted decending;
+   *     the first entry in the array is the location with the newest timestamp.
+   *
+   * Examples:
+   * // get locations from the last hour for a global map
+   * getLocations(context, 0, 0, time(NULL)-60*60, 0);
+   *
+   * // get locations from a contact for a global map
+   *  getLocations(context, 0, contact_id, 0, 0);
+   *
+   * // get all locations known for a given chat
+   *  getLocations(context, chat_id, 0, 0, 0);
+   *
+   * // get locations from a single contact for a given chat
+   *  getLocations(context, chat_id, contact_id, 0, 0);
+   */
+
   getLocations (chatId, contactId, timestampFrom, timestampTo) {
-    // fallback: since ever
     timestampFrom = timestampFrom ? timestampFrom : 0
-    // fallback until now
-    timestampTo = timestampTo ? timestampTo : Math.floor(Date.now() / 1000)
+    timestampTo = timestampTo ? timestampTo : 0
     const locs = binding.dcn_get_locations(
       this.dcn_context,
       Number(chatId),
