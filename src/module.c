@@ -2449,5 +2449,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_longitude);
   NAPI_EXPORT_FUNCTION(dcn_array_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_array_get_msg_id);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_contact_id);
 }
 
