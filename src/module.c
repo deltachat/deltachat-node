@@ -2256,6 +2256,21 @@ NAPI_METHOD(dcn_array_get_contact_id) {
   return napi_contact_id;
 }
 
+NAPI_METHOD(dcn_array_get_chat_id) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  uint32_t chat_id = dc_array_get_chat_id(dc_array, index);
+
+  napi_value napi_chat_id;
+  NAPI_STATUS_THROWS(napi_create_uint32(env, chat_id, &napi_chat_id));
+
+  return napi_chat_id;
+}
+
 NAPI_INIT() {
   /**
    * Main context
@@ -2450,5 +2465,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_array_get_msg_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_contact_id);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_chat_id);
 }
 
