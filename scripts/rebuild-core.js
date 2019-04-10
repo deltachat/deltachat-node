@@ -16,7 +16,8 @@ const mesonOpts = { cwd: coreBuildDir }
 let mesonArgs
 if (process.platform === 'darwin') {
   mesonArgs = [
-    '--default-library=static'
+    '--default-library=static',
+    '-Drpgp=true'
   ]
 } else {
   mesonArgs = [
@@ -30,6 +31,11 @@ spawn('meson', mesonArgs, mesonOpts)
 
 spawn('ninja', verbose ? [ '-v' ] : [], {
   cwd: coreBuildDir,
+  stdio: 'inherit'
+})
+
+spawn('npx', [ 'node-gyp', 'rebuild' ], {
+  cwd: path.resolve(__dirname, '../'),
   stdio: 'inherit'
 })
 

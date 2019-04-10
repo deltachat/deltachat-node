@@ -24,6 +24,10 @@
   dc_msg_t* dc_msg; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg));
 
+#define NAPI_DC_ARRAY() \
+  dc_array_t* dc_array; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_array));
+
 #define NAPI_RETURN_UNDEFINED() \
   return 0;
 
@@ -84,3 +88,15 @@
                                             name##_execute, name##_complete, \
                                             carrier, &carrier->async_work)); \
   NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work));
+
+/***  this could/should be moved to napi-macros ***/
+
+#define NAPI_DOUBLE(name, val) \
+  double name; \
+  if (napi_get_value_double(env, val, &name) != napi_ok) { \
+    napi_throw_error(env, "EINVAL", "Expected double"); \
+    return NULL; \
+  }
+
+#define NAPI_ARGV_DOUBLE(name, i) \
+  NAPI_DOUBLE(name, argv[i])
