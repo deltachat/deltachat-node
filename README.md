@@ -914,26 +914,17 @@ Internal `viewType` property.
 
 ## Developing
 
-You can build against an uninstalled `deltachat-core` by using a few
-environment variables.  You need to point to both the `deltachat-core`
-repository and to its build directory using the `DC_SRC` and
-`DC_BUILD` environment variables:
+You can build against an uninstalled `deltachat-core` by passing the
+`dc_core_builddir` variable to `node-gyp`:
 
 ```
-export DC_SRC=../deltachat-core
-export DC_BUILD=../deltachat-core/builddir
-npm install
-# or:
-#   node-gyp configure --verbose
-#   node-gyp build --verbose
-```
-
-Now you also need to set `LD_LIBRARY_PATH` to the built version before
-being able to run node using the bindings:
-```
-export LD_LIBRARY_PATH=$DC_BUILD/src
+node-gyp configure -- -Ddc_core_builddir=../deltachat-core/builddir
+node-gyp build --verbose
 npm test
 ```
+
+This hardcodes the location of the `libdeltachat.so` inside the
+builddir into the node extension, so this can not be moved around.
 
 ## Tests and Coverage
 
