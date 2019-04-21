@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  run-tests-ubuntu-18_04:
+    machine: True
+    steps:
+      - checkout
+      - run: 
+          command: ci_scripts/build-image.sh ci_scripts/run-tests-ubuntu-18_04
+      - run: 
+          command: ci_scripts/run-image.sh ci_scripts/run-tests-ubuntu-18_04
+
+workflows:
+  version: 2
+  build_all:
+    jobs:
+      - run-tests-ubuntu-18_04
