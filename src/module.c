@@ -26,6 +26,7 @@ typedef struct dcn_context_t {
   uv_thread_t smtp_thread;
   uv_thread_t mvbox_thread;
   uv_thread_t sentbox_thread;
+  int gc;
   int loop_thread;
   pthread_mutex_t dc_event_http_mutex;
   pthread_cond_t  dc_event_http_cond;
@@ -47,6 +48,11 @@ typedef struct dcn_event_t {
 static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
 {
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
+
+  // Don't process events if we're being garbage collected!
+  if (dcn_context->gc) {
+    return 0;
+  }
 
   switch (event) {
     case DC_EVENT_GET_STRING:
@@ -234,6 +240,7 @@ static void finalize_contact(napi_env env, void* data, void* hint) {
 static void finalize_context(napi_env env, void* data, void* hint) {
   if (data) {
     dcn_context_t* dcn_context = (dcn_context_t*)data;
+    dcn_context->gc = 1;
     dc_context_unref(dcn_context->dc_context);
     dcn_context->dc_context = NULL;
 
@@ -317,6 +324,7 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->mvbox_thread = 0;
   dcn_context->sentbox_thread = 0;
 
+  dcn_context->gc = 0;
   dcn_context->loop_thread = 0;
 
   dcn_context->dc_event_http_done = 0;
