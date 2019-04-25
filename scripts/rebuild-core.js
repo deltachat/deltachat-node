@@ -16,7 +16,8 @@ const mesonOpts = { cwd: coreBuildDir }
 let mesonArgs
 if (process.platform === 'darwin') {
   mesonArgs = [
-    '--default-library=static'
+    '--default-library=static',
+    '-Drpgp=true'
   ]
 } else {
   mesonArgs = [
