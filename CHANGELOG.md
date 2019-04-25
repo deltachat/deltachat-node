@@ -6,23 +6,23 @@
 
 ### Changed
 
-- Upgrade `deltachat-core` dependency to `v0.42.0` ([**@ralptheninja****](https://github.com/ralphtheninja))
-- Adding gnu99 cstd for CentOS 7 build (@chrries)
-- Tweak preinstall script for `node-gyp-build` to work on Windows (@ralphtheninja)
-- Switch to using `rpgp` for Mac (@nicodh)
-- Make events push based (@ralphtheninja)
-- Update dependencies (@jikstra)
-- Update to node 10 on Travis for Mac (@ralphtheninja)
+- Upgrade `deltachat-core` dependency to `v0.42.0` ([**@ralptheninja**](https://github.com/ralphtheninja))
+- Adding gnu99 cstd for CentOS 7 build ([**@chrries**](https://github.com/chrries))
+- Tweak preinstall script for `node-gyp-build` to work on Windows ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Switch to using `rpgp` for Mac ([**@nicodh**](https://github.com/nicodh))
+- Make events push based ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Update dependencies ([**@jikstra**](https://github.com/jikstra))
+- Update to node 10 on Travis for Mac ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
 ### Added
 
-- Implement location streaming (@nicodh)
+- Implement location streaming ([**@nicodh**](https://github.com/nicodh))
 
 ### Removed
 
-- Skip integration tests for PR from forked repositories (@nicodh)
-- Remove prebuildify (@ralphtheninja)
-- Remove Jenkins (@ralphtheninja)
+- Skip integration tests for PR from forked repositories ([**@nicodh**](https://github.com/nicodh))
+- Remove prebuildify ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Remove Jenkins ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
 ## [0.40.2] - 2019-02-12
 
