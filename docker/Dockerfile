@@ -19,13 +19,25 @@ RUN apt-get update && \
 
 # Install meson and ninja
 ENV NINJA_VERSION v1.9.0
-ENV NINJA_SHA256 609cc10d0f226a4d9050e4d4a57be9ea706858cce64b9132102c3789c868da92
+ENV NINJA_SHA256 1b1235f2b0b4df55ac6d80bbe681ea3639c9d2c505c7ff2159a3daf63d196305
 RUN curl -L -o ninja-linux-${NINJA_VERSION}.zip https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip
 RUN echo "${NINJA_SHA256}  ninja-linux-${NINJA_VERSION}.zip" | sha256sum -c -
 RUN unzip ninja-linux-${NINJA_VERSION}.zip
 RUN mv ninja /usr/bin/ninja
 RUN chmod +x /usr/bin/ninja
 RUN pip3 install meson
+
+# Need a new zlib because node does not get on with the one shipped in
+# debian stretch
+ENV ZLIB_VERSION 1.2.11
+ENV ZLIB_SHA256 c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
+RUN curl -O https://www.zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+RUN echo "${ZLIB_SHA256}  zlib-${ZLIB_VERSION}.tar.gz" | sha256sum -c -
+RUN tar -xzf zlib-${ZLIB_VERSION}.tar.gz
+RUN cd zlib-${ZLIB_VERSION} && ./configure
+RUN cd zlib-${ZLIB_VERSION} && make
+RUN cd zlib-${ZLIB_VERSION} && make install
+RUN ldconfig -v
 
 # Install node.js using shared zlib and libssl.  This is important
 # because these libraries are a shared dependency between libssl and
@@ -86,5 +98,8 @@ RUN cd libetpan-${ETPAN_VERSION} && \
 RUN cd libetpan-${ETPAN_VERSION} && make -j $(nproc)
 RUN cd libetpan-${ETPAN_VERSION} && make install
 RUN ldconfig -v
+
+# Configure ld.so to look in /usr/local/lib/x86_64-linux-gnu/
+RUN echo /usr/local/lib/x86_64-linux-gnu/ > /etc/ld.so.conf.d/local.conf
 
 CMD /usr/bin/tail -f /dev/null
