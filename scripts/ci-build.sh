@@ -39,5 +39,4 @@ fi
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
 $EXEC pkg-config --cflags deltachat
 $EXEC pkg-config --libs deltachat
-$EXEC npm -v
 $EXEC npm install --verbose;

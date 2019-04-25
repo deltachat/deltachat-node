@@ -32,13 +32,14 @@ fi
 case $TRAVIS_OS_NAME in
     linux)
         docker pull $DOCKER_IMAGE
-        CONTAINER_ID=$(docker run -d -v$(pwd):/work -u$(id -u):$(id -g) -w/work -eHOME=/work $DOCKER_IMAGE)
+        CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
         EXEC="docker exec $CONTAINER_ID";
         EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
         $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
         $EXEC meson deltachat-core-build deltachat-core-src
         $EXEC ninja -v -C deltachat-core-build
         $EXEC_ROOT ninja -v -C deltachat-core-build install
+        $EXEC_ROOT ldconfig -v
         $EXEC rm -rf deltachat-core-build deltachat-core-src
         ;;
     osx)
