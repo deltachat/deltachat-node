@@ -270,6 +270,18 @@ Check, if there is a normal chat with a given contact. Corresponds to [`dc_get_c
 
 Returns all message ids of the given type in a chat. Corresponds to [`dc_get_chat_media()`](https://c.delta.chat/classdc__context__t.html#a344a82b9f288b5eb5d39c7cf475cddb7).
 
+#### `dc.getLocations(chatId, contactId, timestampFrom, timestampTo)`
+
+Returns an array of locations for a given chat, contact and timestamp range. Each item in the array is an object with the following properties:
+
+* `accuracy`
+* `latitude`
+* `longitude`
+* `timestamp`
+* `contactId`
+* `msgId`
+* `chatId`
+
 <a name="getmimeheaders"></a>
 
 #### `dc.getMimeHeaders(messageId)`
