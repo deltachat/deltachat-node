@@ -2,6 +2,36 @@
 
 ## [Unreleased][unreleased]
 
+## [0.42.0] - 2019-04-25
+
+### Changed
+
+- Upgrade `deltachat-core` dependency to `v0.42.0` ([**@ralptheninja**](https://github.com/ralphtheninja))
+- Adding gnu99 cstd for CentOS 7 build ([**@chrries**](https://github.com/chrries))
+- Tweak preinstall script for `node-gyp-build` to work on Windows ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Switch to using `rpgp` for Mac ([**@nicodh**](https://github.com/nicodh))
+- Make events push based ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Update dependencies ([**@jikstra**](https://github.com/jikstra))
+- Update to node 10 on Travis for Mac ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+### Added
+
+- Implement location streaming ([**@nicodh**](https://github.com/nicodh))
+
+### Removed
+
+- Skip integration tests for PR from forked repositories ([**@nicodh**](https://github.com/nicodh))
+- Remove prebuildify ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Remove Jenkins ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+## [0.40.2] - 2019-02-12
+
+### Fixed
+
+- Fix Jenkins vs Travis race ([**@ralptheninja**](https://github.com/ralphtheninja))
+
+## [0.40.1] - 2019-02-12
+
 ## [0.40.0] - 2019-02-12
 
 ### Changed
@@ -636,7 +666,13 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.40.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.42.0...HEAD
+
+[0.42.0]: https://github.com/deltachat/deltachat-node/compare/v0.40.2...v0.42.0
+
+[0.40.2]: https://github.com/deltachat/deltachat-node/compare/v0.40.1...v0.40.2
+
+[0.40.1]: https://github.com/deltachat/deltachat-node/compare/v0.40.0...v0.40.1
 
 [0.40.0]: https://github.com/deltachat/deltachat-node/compare/v0.39.0...v0.40.0
 

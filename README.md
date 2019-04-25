@@ -274,13 +274,13 @@ Returns all message ids of the given type in a chat. Corresponds to [`dc_get_cha
 
 Returns an array of locations for a given chat, contact and timestamp range. Each item in the array is an object with the following properties:
 
-* `accuracy`
-* `latitude`
-* `longitude`
-* `timestamp`
-* `contactId`
-* `msgId`
-* `chatId`
+- `accuracy`
+- `latitude`
+- `longitude`
+- `timestamp`
+- `contactId`
+- `msgId`
+- `chatId`
 
 <a name="getmimeheaders"></a>
 
