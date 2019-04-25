@@ -22,7 +22,7 @@
           "libraries": [
             "../deltachat-core/builddir/src/libdeltachat.a",
             "/usr/local/Cellar/libetpan/1.9.2_1/lib/libetpan.a",
-            "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
+            "/usr/local/lib/rpgp/libpgp_ffi.a",
             "-framework CoreFoundation",
             "-framework CoreServices",
             "-framework Security",
