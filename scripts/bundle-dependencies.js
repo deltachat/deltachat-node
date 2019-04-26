@@ -63,8 +63,8 @@ function patchBundleLibraries(libFile, librariesToPatch) {
 }
 
 function main() {
-  if(process.env.SKIP_BUNDLING_DEPENDENCIES !== 'true') {
-    console.log('Did not find environment variable SKIP_BUNDLING_DEPENDENCIES set to "true", skipping bundling dependencies...')
+  if(process.env.BUNDLE_DEPENDENCIES !== 'true') {
+    console.log('Did not find environment variable BUNDLE_DEPENDENCIES="true", skipping bundling dependencies...')
     return
   }
 
