@@ -25,11 +25,6 @@ spawn('ninja', verbose ? [ '-v' ] : [], {
   stdio: 'inherit'
 })
 
-spawn('npx', [ 'node-gyp', 'rebuild' ], {
-  cwd: path.resolve(__dirname, '../'),
-  stdio: 'inherit'
-})
-
 function spawn (cmd, args, opts) {
   log(`>> ${cmd}`)
   const result = spawnSync(cmd, args, opts)
