@@ -6,12 +6,12 @@
 
 ### Changed
 
-* Upgrade `deltachat-core` dependency to `v0.43.0` (@ralphtheninja)
-* Handle `DC_EVENT_LOCATION_CHANGED` event (@ralphtheninja)
+- Upgrade `deltachat-core` dependency to `v0.43.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Handle `DC_EVENT_LOCATION_CHANGED` event ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
 ### Added
 
-* Add `msg.setLocation()` and `msg.hasLocation()` (@nicodh)
+- Add `msg.setLocation()` and `msg.hasLocation()` ([**@nicodh**](https://github.com/nicodh))
 
 ## [0.42.0] - 2019-04-25
 
