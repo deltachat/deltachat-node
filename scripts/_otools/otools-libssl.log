@@ -1,0 +1,4 @@
+libssl.0.9.8.dylib:
+	/usr/lib/libssl.0.9.8.dylib (compatibility version 0.9.8, current version 0.9.8)
+	/usr/lib/libcrypto.0.9.8.dylib (compatibility version 0.9.8, current version 0.9.8)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.60.2)
