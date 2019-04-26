@@ -1,5 +1,7 @@
 const { execSync } = require('child_process')
 
+const librariesToBundle = ['libsasl', 'libssl', 'libcrypto', 'libsqlite', 'libz']
+
 var str = `deltachat.node:
 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 1349.93.0)
 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices (compatibility version 1.0.0, current version 775.20.0)
@@ -26,8 +28,12 @@ function parseOtoolLibLine(libLine) {
 }
 
 function otool(file) {
-  let cmd = execSync(`otool -L ${file}`)
+  let cmd = execSync(`otool -L "${file}"`)
   console.log(cmd)
+}
+
+function installNameToolChange(file, oldLib, newLib) {
+  let cmd = execSync(`install_name_tool -change "${oldLib}" "${newLib}" "${file}"`)
 }
 
 //console.log(parseOtool(str))
