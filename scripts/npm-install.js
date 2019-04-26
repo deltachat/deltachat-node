@@ -15,8 +15,6 @@ if (process.env.npm_config_dc_system_lib === 'true') {
   })
 }
 
-
-
 function spawn (cmd, args, opts) {
   log(`>> ${cmd}`)
   const result = spawnSync(cmd, args, opts)
