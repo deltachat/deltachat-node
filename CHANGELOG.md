@@ -2,11 +2,22 @@
 
 ## [Unreleased][unreleased]
 
+## [0.43.0] - 2019-04-26
+
+### Changed
+
+- Upgrade `deltachat-core` dependency to `v0.43.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Handle `DC_EVENT_LOCATION_CHANGED` event ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+### Added
+
+- Add `msg.setLocation()` and `msg.hasLocation()` ([**@nicodh**](https://github.com/nicodh))
+
 ## [0.42.0] - 2019-04-25
 
 ### Changed
 
-- Upgrade `deltachat-core` dependency to `v0.42.0` ([**@ralptheninja**](https://github.com/ralphtheninja))
+- Upgrade `deltachat-core` dependency to `v0.42.0` ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Adding gnu99 cstd for CentOS 7 build ([**@chrries**](https://github.com/chrries))
 - Tweak preinstall script for `node-gyp-build` to work on Windows ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Switch to using `rpgp` for Mac ([**@nicodh**](https://github.com/nicodh))
@@ -666,7 +677,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.42.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...HEAD
+
+[0.43.0]: https://github.com/deltachat/deltachat-node/compare/v0.42.0...v0.43.0
 
 [0.42.0]: https://github.com/deltachat/deltachat-node/compare/v0.40.2...v0.42.0
 
