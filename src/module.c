@@ -6,7 +6,7 @@
 #include <string.h>
 #include <node_api.h>
 #include <uv.h>
-#include <deltachat.h>
+#include <deltachat/deltachat.h>
 #include "napi-macros-extensions.h"
 #include "strtable.h"
 
@@ -1907,6 +1907,15 @@ NAPI_METHOD(dcn_msg_has_deviating_timestamp) {
   NAPI_RETURN_INT32(has_deviating_timestamp);
 }
 
+NAPI_METHOD(dcn_msg_has_location) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  int has_location = dc_msg_has_location(dc_msg);
+
+  NAPI_RETURN_INT32(has_location);
+}
+
 NAPI_METHOD(dcn_msg_is_forwarded) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2018,6 +2027,21 @@ NAPI_METHOD(dcn_msg_set_text) {
   free(text);
 
   NAPI_RETURN_UNDEFINED();
+}
+
+/**
+ * locations
+ */
+
+NAPI_METHOD(dcn_msg_set_location) {
+   NAPI_ARGV(3);
+   NAPI_DC_MSG();
+   NAPI_ARGV_DOUBLE(latitude, 1);
+   NAPI_ARGV_DOUBLE(longitude, 2);
+
+   dc_msg_set_location(dc_msg, latitude, longitude);
+
+   NAPI_RETURN_UNDEFINED();
 }
 
 /**
@@ -2157,6 +2181,17 @@ NAPI_METHOD(dcn_array_get_msg_id) {
   NAPI_STATUS_THROWS(napi_create_uint32(env, msg_id, &napi_msg_id));
 
   return napi_msg_id;
+}
+
+NAPI_METHOD(dcn_array_is_independent) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  int result = dc_array_is_independent(dc_array, index);
+  NAPI_RETURN_INT32(result);
 }
 
 NAPI_METHOD(dcn_array_get_contact_id) {
@@ -2353,6 +2388,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
+  NAPI_EXPORT_FUNCTION(dcn_msg_has_location);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_info);
@@ -2364,6 +2400,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_location);
 
   /**
    * dc_location
@@ -2381,6 +2418,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_longitude);
   NAPI_EXPORT_FUNCTION(dcn_array_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_array_get_msg_id);
+  NAPI_EXPORT_FUNCTION(dcn_array_is_independent);
   NAPI_EXPORT_FUNCTION(dcn_array_get_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_chat_id);
 }

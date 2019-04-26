@@ -35,45 +35,34 @@
 
 ## Install
 
+By default the installation will build deltachat-core from the
+submodule using `scripts/rebuild-core.js`.  This requires you to have
+all the dependencies of the deltachat-core library available for it to
+be able to compile, see the README of deltachat-core itself for this.
+Simply invoke npm:
+
 ```
-npm install deltachat-node
+npm install deltchat-node
+```
+
+### Using system libdeltachat
+
+It is possible to use the system-wide installed `libdeltachat.so`
+library which will be located using `pkg-config`.  You need to have
+installed `deltachat-core` before installing this way.  Invoke npm
+with the extra arguments:
+
+```
+npm install deltachat-node --dc-system-lib=true
 ```
 
 ## Troubleshooting
 
-This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
-
-If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
-
-If `meson` is missing:
-
-```
-sudo apt-get install python3-pip
-sudo pip3 install meson
-```
-
-If `ninja` is missing:
-
-```
-sudo apt-get install ninja-build
-```
-
-You might also need the following system dependencies:
-
-- `libssl-dev`
-- `libsasl2-dev`
-- `libsqlite3-dev`
-- `zlib1g-dev`
-
-To fix these issues do:
-
-```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
-```
-
-Then try running `npm install` again.
-
-Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
+This module builds on top of `deltachat-core`, which in turn has
+external dependencies.
+Please see [build
+instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso)
+for additional information.
 
 ## Usage
 
@@ -274,13 +263,13 @@ Returns all message ids of the given type in a chat. Corresponds to [`dc_get_cha
 
 Returns an array of locations for a given chat, contact and timestamp range. Each item in the array is an object with the following properties:
 
-* `accuracy`
-* `latitude`
-* `longitude`
-* `timestamp`
-* `contactId`
-* `msgId`
-* `chatId`
+- `accuracy`
+- `latitude`
+- `longitude`
+- `timestamp`
+- `contactId`
+- `msgId`
+- `chatId`
 
 <a name="getmimeheaders"></a>
 
@@ -688,139 +677,147 @@ Returns the object state as a JavaScript serializable object.
 
 An object representing a single message in memory.
 
-#### `message.getChatId()`
+#### `msg.getChatId()`
 
 Get the id of the chat the message belongs to. Corresponds to [`dc_msg_get_chat_id()`](https://c.delta.chat/classdc__msg__t.html#a21aa5dbd0c7391b707f77b97ac137cbf).
 
-#### `message.getDuration()`
+#### `msg.getDuration()`
 
 Get duration of audio of video. Corresponds to [`dc_msg_get_duration()`](https://c.delta.chat/classdc__msg__t.html#aaedb426314f3d701d606ba3daa24fc1a).
 
-#### `message.getFile()`
+#### `msg.getFile()`
 
 Find out full path, file name and extension of the file associated with a message. Corresponds to [`dc_msg_get_file()`](https://c.delta.chat/classdc__msg__t.html#ae8b750f6aa5e388a36c8be4c57b16271).
 
-#### `message.getFilebytes()`
+#### `msg.getFilebytes()`
 
 Get the size of the file. Corresponds to [`dc_msg_get_filebytes()`](https://c.delta.chat/classdc__msg__t.html#a918893073cf6bb0ac324a66a47062db3).
 
-#### `message.getFilemime()`
+#### `msg.getFilemime()`
 
 Get mime type of the file. Corresponds to [`dc_msg_get_filemime()`](https://c.delta.chat/classdc__msg__t.html#a56b59cbaae2f570723600ba130ea12a4).
 
-#### `message.getFilename()`
+#### `msg.getFilename()`
 
 Get base file name without path. Corresponds to [`dc_msg_get_filename()`](https://c.delta.chat/classdc__msg__t.html#a0ee3fda6369513391f64b996c8cbeb34).
 
-#### `message.getFromId()`
+#### `msg.getFromId()`
 
 Get the id of the contact that wrote the message. Corresponds to [`dc_msg_get_from_id()`](https://c.delta.chat/classdc__msg__t.html#a2b031e216af41a41f6c12f4142d2e447).
 
-#### `message.getHeight()`
+#### `msg.getHeight()`
 
 Get height of image or video. Corresponds to [`dc_msg_get_height()`](https://c.delta.chat/classdc__msg__t.html#ae4b99aa662455a4c37430e678894bfdb).
 
-#### `message.getId()`
+#### `msg.getId()`
 
 Get the id of the message. Corresponds to [`dc_msg_get_id()`](https://c.delta.chat/classdc__msg__t.html#ab007f6ccf670907af9ac6788c74a0641).
 
-#### `message.getReceivedTimestamp()`
+#### `msg.getReceivedTimestamp()`
 
 Get message receive time. Corresponds to [`dc_msg_get_received_timestamp()`](https://c.delta.chat/classdc__msg__t.html#abc26107674c04684492e7d96fdf6a69a).
 
-#### `message.getSetupcodebegin()`
+#### `msg.getSetupcodebegin()`
 
 Get first characters of the setup code. Corresponds to [`dc_msg_get_setupcodebegin()`](https://c.delta.chat/classdc__msg__t.html#a677bca5655a8cc9f7a838fa588562d12).
 
-#### `message.getShowpadlock()`
+#### `msg.getShowpadlock()`
 
 Check if a padlock should be shown beside the message. Corresponds to [`dc_msg_get_showpadlock()`](https://c.delta.chat/classdc__msg__t.html#a1beb22d18c9c045f7982718879a78440).
 
-#### `message.getSortTimestamp()`
+#### `msg.getSortTimestamp()`
 
 Get message time used for sorting. Corresponds to [`dc_msg_get_sort_timestamp()`](https://c.delta.chat/classdc__msg__t.html#a755c0ad1fe20b0e31405fc62a699fad0).
 
-#### `message.getState()`
+#### `msg.getState()`
 
 Get the state of the message. Returns a <a href="#class_message_state">`MessageState`</a> object. Corresponds to [`dc_msg_get_state()`](https://c.delta.chat/classdc__msg__t.html#a83fbf6e74d09a0b598ccefe9b48bd68c).
 
-#### `message.getSummary(chat)`
+#### `msg.getSummary(chat)`
 
 Get a summary of a message. Returns a <a href="#class_lot">`Lot`</a> object. Corresponds to [`dc_msg_get_summary()`](https://c.delta.chat/classdc__msg__t.html#a2107a9532d0d157766329c53fa1617d8).
 
-#### `message.getSummarytext(approxCharacters)`
+#### `msg.getSummarytext(approxCharacters)`
 
 Get a message summary as a single line of text. Corresponds to [`dc_msg_get_summarytext()`](https://c.delta.chat/classdc__msg__t.html#a14af0d3ec8277eaad7f66464a0cd8fb3).
 
-#### `message.getText()`
+#### `msg.getText()`
 
 Get the text of the message. Corresponds to [`dc_msg_get_text()`](https://c.delta.chat/classdc__msg__t.html#a2577851182c3665a8b8a2de759fd09f1).
 
-#### `message.getTimestamp()`
+#### `msg.getTimestamp()`
 
 Get message sending time. Corresponds to [`dc_msg_get_timestamp()`](https://c.delta.chat/classdc__msg__t.html#af667c538fd07771eb94d6c5d1879b906).
 
-#### `message.getViewType()`
+#### `msg.getViewType()`
 
 Get the view type of the message. Returns a <a href="#class_message_view_type">`MessageViewType`</a> object. Corresponds to [`dc_msg_get_viewtype()`](https://c.delta.chat/classdc__msg__t.html#abbe7ce82d642e217363aa27bcc6274b3).
 
-#### `message.getWidth()`
+#### `msg.getWidth()`
 
 Get the width of image or video. Corresponds to [`dc_msg_get_width()`](https://c.delta.chat/classdc__msg__t.html#a5249ddd8d5eea3155a3c0bc121722a1d).
 
-#### `message.hasDeviatingTimestamp()`
+#### `msg.hasDeviatingTimestamp()`
 
 Check if a message has a deviating timestamp. Corresponds to [`dc_msg_has_deviating_timestamp()`](https://c.delta.chat/classdc__msg__t.html#a6dc38654dbb222305ee086af338113b2).
 
-#### `message.isDeadDrop()`
+#### `msg.hasLocation()`
+
+Check if a message has a location. Corresponds to `dc_msg_has_location()`.
+
+#### `msg.isDeadDrop()`
 
 Check if the message belongs to the virtual dead drop chat.
 
-#### `message.isForwarded()`
+#### `msg.isForwarded()`
 
 Check if the message is a forwarded message. Corresponds to [`dc_msg_is_forwarded()`](https://c.delta.chat/classdc__msg__t.html#a6d5b3b500fc36d7e1fc53bc2622c7dad).
 
-#### `message.isIncreation()`
+#### `msg.isIncreation()`
 
 Check if a message is still in creation. Corresponds to [`dc_msg_is_increation()`](https://c.delta.chat/classdc__msg__t.html#abd187cb4f114fd77c83b6d914d3977db).
 
-#### `message.isInfo()`
+#### `msg.isInfo()`
 
 Check if the message is an informational message, created by the device or by another user. Corresponds to [`dc_msg_is_info()`](https://c.delta.chat/classdc__msg__t.html#a7272ddc7b2da2605463fa3ce0a00edc7).
 
-#### `message.isSent()`
+#### `msg.isSent()`
 
 Check if a message was sent successfully. Corresponds to [`dc_msg_is_sent()`](https://c.delta.chat/classdc__msg__t.html#ae75e92a28d0c3dc3e7239f0f132d8788).
 
-#### `message.isSetupmessage()`
+#### `msg.isSetupmessage()`
 
 Check if the message is an Autocrypt setup message. Corresponds to [`dc_msg_is_setupmessage()`](https://c.delta.chat/classdc__msg__t.html#a8a1c2f34e4b56161bd0057983ac2d104).
 
-#### `message.isStarred()`
+#### `msg.isStarred()`
 
 Check if a message is starred. Corresponds to [`dc_msg_is_starred()`](https://c.delta.chat/classdc__msg__t.html#aa1fa85cab4cdcf7a1cb5565939367ea0).
 
-#### `message.latefilingMediasize(width, height, duration)`
+#### `msg.latefilingMediasize(width, height, duration)`
 
 Late filing information to a message. Corresponds to [`dc_msg_latefiling_mediasize()`](https://c.delta.chat/classdc__msg__t.html#a7687ff969841f3d00c3a212f9ad27861).
 
-#### `message.setDimension(width, height)`
+#### `msg.setDimension(width, height)`
 
 Set the dimensions associated with a message. Corresponds to [`dc_msg_set_dimension()`](https://c.delta.chat/classdc__msg__t.html#a6bc82bec36d7bc4218f9a26ebc3c24ae). Returns `this` so you can do chained commands.
 
-#### `message.setDuration(duration)`
+#### `msg.setDuration(duration)`
 
 Set the duration assocated with the message object. Corresponds to [`dc_msg_set_duration()`](https://c.delta.chat/classdc__msg__t.html#a32bd05a4c5113b098004c16c2b4a14ec). Returns `this` so you can do chained commands.
 
-#### `message.setFile(file, mime)`
+#### `msg.setLocation(latitude, longitude)`
+
+Set the location of a message. Corresponds to `dc_msg_set_location()`. Returns `this` so you can do chained commands.
+
+#### `msg.setFile(file, mime)`
 
 Set the file assocated with the message object. Corresponds to [`dc_msg_set_file()`](https://c.delta.chat/classdc__msg__t.html#ae3d4b2a4ed4b10dbe13396ff7739160e). Returns `this` so you can do chained commands.
 
-#### `message.setText(text)`
+#### `msg.setText(text)`
 
 Set the test of a message object. Corresponds to [`dc_msg_set_text()`](https://c.delta.chat/classdc__msg__t.html#a352d9e2cc2fcacac43bb540550a578a1). Returns `this` so you can do chained commands.
 
-#### `message.toJson()`
+#### `msg.toJson()`
 
 Returns the object state as a JavaScript serializable object.
 
@@ -930,6 +927,7 @@ Internal `viewType` property.
 | [`DC_EVENT_MSG_READ`](https://c.delta.chat/group__DC__EVENT.html#ga750f252b4bc82d91dfdd788860f36989)                    | Message read by the receiver                                                   | `(chatId, msgId)`       |
 | [`DC_EVENT_CHAT_MODIFIED`](https://c.delta.chat/group__DC__EVENT.html#ga27512e465c573fcf295014f8e0075adf)               | Chat modified                                                                  | `(chatId)`              |
 | [`DC_EVENT_CONTACTS_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga658b9fc4315badab7afe265b7fa8c2af)            | Contact changed                                                                | `(contactId)`           |
+| [`DC_EVENT_LOCATION_CHANGED`](https://c.delta.chat/group__DC__EVENT.html#ga1eded0156765a6c55f31e39ca6cf6adf)            | Location changed for a contact                                                 | `(contactId)`           |
 | [`DC_EVENT_CONFIGURE_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae047f9361d57c42d82a794324f5b9fd6)          | Configuration progress                                                         | `(progress)`            |
 | [`DC_EVENT_IMEX_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#ga006ea41d9c1a76ffc672752484c61e6c)               | Import/export progress                                                         | `(progress)`            |
 | [`DC_EVENT_IMEX_FILE_WRITTEN`](https://c.delta.chat/group__DC__EVENT.html#ga7ffbea55be6a5e6da7ac7e35ba6bf985)           | A file has been exported                                                       | `(fileName)`            |
@@ -939,16 +937,17 @@ Internal `viewType` property.
 
 ## Developing
 
-If you're cloning this repository in order to hack on it, you need to setup the `deltachat-core` submodule, before doing `npm install`.
-
-The following commands should be enough to get started.
+You can build against an uninstalled `deltachat-core` by passing the
+`dc_core_builddir` variable to `node-gyp`:
 
 ```
-git clone https://github.com/deltachat/deltachat-node.git
-cd deltachat-node
-npm run submodule
-npm install
+node-gyp configure -- -Ddc_core_builddir=../deltachat-core/builddir
+node-gyp build --verbose
+npm test
 ```
+
+This hardcodes the location of the `libdeltachat.so` inside the
+builddir into the node extension, so this can not be moved around.
 
 ## Tests and Coverage
 
