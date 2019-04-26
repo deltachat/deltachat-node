@@ -35,45 +35,34 @@
 
 ## Install
 
+By default the installation will build deltachat-core from the
+submodule using `scripts/rebuild-core.js`.  This requires you to have
+all the dependencies of the deltachat-core library available for it to
+be able to compile, see the README of deltachat-core itself for this.
+Simply invoke npm:
+
 ```
-npm install deltachat-node
+npm install deltchat-node
+```
+
+### Using system libdeltachat
+
+It is possible to use the system-wide installed `libdeltachat.so`
+library which will be located using `pkg-config`.  You need to have
+installed `deltachat-core` before installing this way.  Invoke npm
+with the extra arguments:
+
+```
+npm install deltachat-node --dc-system-lib=true
 ```
 
 ## Troubleshooting
 
-This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
-
-If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
-
-If `meson` is missing:
-
-```
-sudo apt-get install python3-pip
-sudo pip3 install meson
-```
-
-If `ninja` is missing:
-
-```
-sudo apt-get install ninja-build
-```
-
-You might also need the following system dependencies:
-
-- `libssl-dev`
-- `libsasl2-dev`
-- `libsqlite3-dev`
-- `zlib1g-dev`
-
-To fix these issues do:
-
-```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
-```
-
-Then try running `npm install` again.
-
-Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
+This module builds on top of `deltachat-core`, which in turn has
+external dependencies.
+Please see [build
+instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso)
+for additional information.
 
 ## Usage
 
@@ -948,16 +937,17 @@ Internal `viewType` property.
 
 ## Developing
 
-If you're cloning this repository in order to hack on it, you need to setup the `deltachat-core` submodule, before doing `npm install`.
-
-The following commands should be enough to get started.
+You can build against an uninstalled `deltachat-core` by passing the
+`dc_core_builddir` variable to `node-gyp`:
 
 ```
-git clone https://github.com/deltachat/deltachat-node.git
-cd deltachat-node
-npm run submodule
-npm install
+node-gyp configure -- -Ddc_core_builddir=../deltachat-core/builddir
+node-gyp build --verbose
+npm test
 ```
+
+This hardcodes the location of the `libdeltachat.so` inside the
+builddir into the node extension, so this can not be moved around.
 
 ## Tests and Coverage
 
