@@ -40,7 +40,7 @@
                                     "-Wl,-rpath='$$ORIGIN/../../<(deltachat_core)/builddir/src'",
                                 ],
                             }, { # OS == 'mac'
-                                "ldfalgs": [
+                                "ldflags": [
                                     "-Wl,-rpath='@loader_path/../../<(deltachat_core)/builddir/src'",
                                 ],
                             }],
