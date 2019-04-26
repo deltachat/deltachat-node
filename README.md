@@ -35,11 +35,25 @@
 
 ## Install
 
-You need to have installed `deltachat-core` before installing
-`deltachat-node`.  Once this is installed install using
+By default the installation will build deltachat-core from the
+submodule using `scripts/rebuild-core.js`.  This requires you to have
+all the dependencies of the deltachat-core library available for it to
+be able to compile, see the README of deltachat-core itself for this.
+Simply invoke npm:
 
 ```
-npm install deltachat-node
+npm install deltchat-node
+```
+
+### Using system libdeltachat
+
+It is possible to use the system-wide installed `libdeltachat.so`
+library which will be located using `pkg-config`.  You need to have
+installed `deltachat-core` before installing this way.  Invoke npm
+with the extra arguments:
+
+```
+npm install deltachat-node --dc-system-lib=true
 ```
 
 ## Troubleshooting
