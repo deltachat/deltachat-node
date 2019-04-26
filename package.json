@@ -9,7 +9,7 @@
     "install": "npm run rebuild-all",
     "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
     "rebuild-core": "node scripts/rebuild-core.js",
-    "rebuild-bindings": "node-gyp rebuild && ./scripts/mac-prepare-build.sh",
+    "rebuild-bindings": "node-gyp rebuild && node scripts/bundle-dependencies.js",
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
+    "fs-extra": "^7.0.1",
     "hallmark": "^0.1.0",
     "nyc": "^13.2.0",
     "opn-cli": "^4.1.0",
