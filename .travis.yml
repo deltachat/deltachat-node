@@ -24,7 +24,8 @@ env:
     - DOCKER_IMAGE=deltachat/travis-dc-node-base:latest
 
   matrix:
-    - DC_CORE_VERSION="master"
+    - DC_CORE_VERSION="master" SYS_DC_CORE="false"
+    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
 before_install:
   - ./scripts/ci-prelude.sh

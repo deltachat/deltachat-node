@@ -27,6 +27,7 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
             exit 1
     esac
 fi
+SYS_DC_CORE=${SYS_DC_CORE:-true}
 
 
 case $TRAVIS_OS_NAME in
@@ -35,21 +36,25 @@ case $TRAVIS_OS_NAME in
         CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
         EXEC="docker exec $CONTAINER_ID";
         EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
-        $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-        $EXEC meson deltachat-core-build deltachat-core-src
-        $EXEC ninja -v -C deltachat-core-build
-        $EXEC_ROOT ninja -v -C deltachat-core-build install
-        $EXEC_ROOT ldconfig -v
-        $EXEC rm -rf deltachat-core-build deltachat-core-src
+        if [ "$SYS_DC_CORE" = "true" ]; then
+            $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
+            $EXEC meson deltachat-core-build deltachat-core-src
+            $EXEC ninja -v -C deltachat-core-build
+            $EXEC_ROOT ninja -v -C deltachat-core-build install
+            $EXEC_ROOT ldconfig -v
+            $EXEC rm -rf deltachat-core-build deltachat-core-src
+        fi
         ;;
     osx)
         sudo pip3 install meson
-        git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
         ./scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-        meson deltachat-core-build deltachat-core-src
-        ninja -v -C deltachat-core-build
-        sudo ninja -v -C deltachat-core-build install
+        if [ "$SYS_DC_CORE" = "true" ]; then
+            git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
+            meson deltachat-core-build deltachat-core-src
+            ninja -v -C deltachat-core-build
+            sudo ninja -v -C deltachat-core-build install
+        fi
         rm -rf deltachat-core-build deltachat-core-src cyrus-sasl-*
         ;;
     *)

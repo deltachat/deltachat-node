@@ -13,22 +13,25 @@
         "target_name": "deltachat",
         "sources": [
             "./src/module.c",
-            "./src/strtable.c"
+            "./src/strtable.c",
         ],
         "include_dirs": [
-            "<!(node -e \"require('napi-macros')\")"
+            "<!(node -e \"require('napi-macros')\")",
         ],
         "conditions": [
             [ "OS == 'win'", {}],
             [ "OS == 'linux' or OS == 'mac'", {
                 "libraries": [
-                    "-lpthread"
+                    "-lpthread",
                 ],
                 "cflags": [
                     "-std=gnu99",
                 ],
                 "conditions": [
                     [ "system_dc_core == 'false'", {
+                        "include_dirs": [
+                            "<(submod_builddir)",
+                        ],
                         "libraries": [
                             "-L../<(submod_builddir)/src",
                             "-ldeltachat",
