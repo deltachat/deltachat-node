@@ -27,8 +27,6 @@
 - [Usage](#usage)
 - [API](#api)
 - [Developing](#developing)
-- [Tests and Coverage](#tests-and-coverage)
-- [Scripts](#scripts)
 - [License](#license)
 
 </details>
@@ -65,7 +63,6 @@ different way:
 ```
 node-gyp rebuild -- -Dsystem_dc_core=true
 ```
-
 
 ## Troubleshooting
 
@@ -946,8 +943,9 @@ Internal `viewType` property.
 | [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake                                            | `(contactId, progress)` |
 | `ALL`                                                                                                                   | All events from [`deltachat-core`](https://c.delta.chat/group__DC__EVENT.html) | `(event, data1, data2)` |
 
+## Developing
 
-## Tests and Coverage
+### Tests and Coverage
 
 Running `npm test` ends with showing a code coverage report, which is produced by [`nyc`](https://github.com/istanbuljs/nyc#readme).
 
@@ -965,7 +963,7 @@ $ export DC_MAIL_PW=myp4ssw0rD
 $ npm run test-integration
 ```
 
-## Scripts
+### Scripts
 
 We have the following scripts for building, testing and coverage:
 
@@ -981,6 +979,15 @@ By default `npm install` will build in `Release` mode and will be as silent as p
 ```
 npm install --debug --verbose
 ```
+
+### Releases
+
+The following steps are needed to make a release:
+
+1. Update `CHANGELOG.md` (and run `npm run hallmark` to adjust markdown)
+2. Bump version number, e.g. `npm version minor`, which will update version number in `package.json`, commit the changes and tag the commit
+3. Push to github, e.g. `git push origin master && git push origin --tags`
+4. Publish to npm, `npm publish`
 
 ## License
 
