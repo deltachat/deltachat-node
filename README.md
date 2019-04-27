@@ -49,12 +49,23 @@ npm install deltchat-node
 
 It is possible to use the system-wide installed `libdeltachat.so`
 library which will be located using `pkg-config`.  You need to have
-installed `deltachat-core` before installing this way.  Invoke npm
-with the extra arguments:
+installed `deltachat-core` before installing this way.  Using this
+approach allows you to build `libdeltachat.so` with your own specific
+options.
+
+Invoke npm with the extra arguments:
 
 ```
 npm install deltachat-node --dc-system-lib=true
 ```
+
+When invoking `node-gyp` directly this can be achieved in a slightly
+different way:
+
+```
+node-gyp rebuild -- -Dsystem_dc_core=true
+```
+
 
 ## Troubleshooting
 
@@ -935,19 +946,6 @@ Internal `viewType` property.
 | [`DC_EVENT_SECUREJOIN_JOINER_PROGRESS`](https://c.delta.chat/group__DC__EVENT.html#gae9113049bec969095e2cda81ebc1773a)  | Progress of a secure-join handshake                                            | `(contactId, progress)` |
 | `ALL`                                                                                                                   | All events from [`deltachat-core`](https://c.delta.chat/group__DC__EVENT.html) | `(event, data1, data2)` |
 
-## Developing
-
-You can build against an uninstalled `deltachat-core` by passing the
-`dc_core_builddir` variable to `node-gyp`:
-
-```
-node-gyp configure -- -Ddc_core_builddir=../deltachat-core/builddir
-node-gyp build --verbose
-npm test
-```
-
-This hardcodes the location of the `libdeltachat.so` inside the
-builddir into the node extension, so this can not be moved around.
 
 ## Tests and Coverage
 
