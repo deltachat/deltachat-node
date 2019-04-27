@@ -7,7 +7,7 @@
         "system_dc_core%": "false",
         # The location, relative to the project's directory, where the
         # submodule is built by ci_scripts/rebuild-core.js.
-        "deltachat_core%": "deltachat-core",
+        "submod_builddir%": "deltachat-core/builddir",
     },
     "targets": [{
         "target_name": "deltachat",
@@ -16,8 +16,7 @@
             "./src/strtable.c"
         ],
         "include_dirs": [
-            "<!(node -e \"require('napi-macros')\")",
-            "<(deltachat_core)/src",
+            "<!(node -e \"require('napi-macros')\")"
         ],
         "conditions": [
             [ "OS == 'win'", {}],
@@ -31,17 +30,17 @@
                 "conditions": [
                     [ "system_dc_core == 'false'", {
                         "libraries": [
-                            "-L../<(deltachat_core)/builddir/src",
+                            "-L../<(submod_builddir)/src",
                             "-ldeltachat",
                         ],
                         "conditions": [
                             [ "OS == 'linux'", {
                                 "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(deltachat_core)/builddir/src'",
+                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
                                 ],
                             }, { # OS == 'mac'
                                 "ldflags": [
-                                    "-Wl,-rpath='@loader_path/../../<(deltachat_core)/builddir/src'",
+                                    "-Wl,-rpath='@loader_path/../../<(submod_builddir)/src'",
                                 ],
                             }],
                         ],
