@@ -42,8 +42,8 @@
                                     "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
                                 ],
                             }, { # OS == 'mac'
-                                "ldflags": [
-                                    "-Wl,-rpath='@loader_path/../../<(submod_builddir)/src'",
+                                "libraries": [
+                                    "-rpath '@loader_path/../../<(submod_builddir)/src'",
                                 ],
                             }],
                         ],
