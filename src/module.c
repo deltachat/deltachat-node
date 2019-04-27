@@ -2194,6 +2194,19 @@ NAPI_METHOD(dcn_array_is_independent) {
   NAPI_RETURN_INT32(result);
 }
 
+NAPI_METHOD(dcn_array_get_marker) {
+  NAPI_ARGV(2);
+  NAPI_DC_ARRAY();
+
+  uint32_t index;
+  NAPI_STATUS_THROWS(napi_get_value_uint32(env, argv[1], &index));
+
+  char* marker = dc_array_get_marker(dc_array, index);
+
+  NAPI_RETURN_AND_FREE_STRING(marker);
+
+}
+
 NAPI_METHOD(dcn_array_get_contact_id) {
   NAPI_ARGV(2);
   NAPI_DC_ARRAY();
@@ -2421,5 +2434,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_is_independent);
   NAPI_EXPORT_FUNCTION(dcn_array_get_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_chat_id);
+  NAPI_EXPORT_FUNCTION(dcn_array_get_marker);
 }
 
