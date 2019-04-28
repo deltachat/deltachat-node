@@ -38,7 +38,7 @@ case $TRAVIS_OS_NAME in
         EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
         if [ "$SYS_DC_CORE" = "true" ]; then
             $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-            $EXEC meson deltachat-core-build deltachat-core-src
+            $EXEC meson -Drpgp=true deltachat-core-build deltachat-core-src
             $EXEC ninja -v -C deltachat-core-build
             $EXEC_ROOT ninja -v -C deltachat-core-build install
             $EXEC_ROOT ldconfig -v
@@ -49,9 +49,16 @@ case $TRAVIS_OS_NAME in
         sudo pip3 install meson
         ./scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+            | sh -s -- --default-toolchain nightly -y
+        . ~/.cargo/env
+        git clone https://github.com/rpgp/rpgp.git
+        pushd rpgp/pgp-ffi
+        make install
+        popd
         if [ "$SYS_DC_CORE" = "true" ]; then
             git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-            meson deltachat-core-build deltachat-core-src
+            meson -Drpgp=true deltachat-core-build deltachat-core-src
             ninja -v -C deltachat-core-build
             sudo ninja -v -C deltachat-core-build install
         fi
