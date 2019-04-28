@@ -44,6 +44,9 @@
                             }, { # OS == 'mac'
                                 "libraries": [
                                     "-rpath '@loader_path/../../<(submod_builddir)/src'",
+                                    "-framework CoreFoundation",
+                                    "-framework CoreServices",
+                                    "-framework Security",
                                 ],
                             }],
                         ],
