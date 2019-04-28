@@ -7,41 +7,43 @@
         "system_dc_core%": "false",
         # The location, relative to the project's directory, where the
         # submodule is built by ci_scripts/rebuild-core.js.
-        "deltachat_core%": "deltachat-core",
+        "submod_builddir%": "deltachat-core/builddir",
     },
     "targets": [{
         "target_name": "deltachat",
         "sources": [
             "./src/module.c",
-            "./src/strtable.c"
+            "./src/strtable.c",
         ],
         "include_dirs": [
             "<!(node -e \"require('napi-macros')\")",
-            "<(deltachat_core)/src",
         ],
         "conditions": [
             [ "OS == 'win'", {}],
             [ "OS == 'linux' or OS == 'mac'", {
                 "libraries": [
-                    "-lpthread"
+                    "-lpthread",
                 ],
                 "cflags": [
                     "-std=gnu99",
                 ],
                 "conditions": [
                     [ "system_dc_core == 'false'", {
+                        "include_dirs": [
+                            "<(submod_builddir)",
+                        ],
                         "libraries": [
-                            "-L../<(deltachat_core)/builddir/src",
+                            "-L../<(submod_builddir)/src",
                             "-ldeltachat",
                         ],
                         "conditions": [
                             [ "OS == 'linux'", {
                                 "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(deltachat_core)/builddir/src'",
+                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
                                 ],
                             }, { # OS == 'mac'
-                                "ldflags": [
-                                    "-Wl,-rpath='@loader_path/../../<(deltachat_core)/builddir/src'",
+                                "libraries": [
+                                    "-rpath '@loader_path/../../<(submod_builddir)/src'",
                                 ],
                             }],
                         ],

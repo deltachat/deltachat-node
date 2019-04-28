@@ -25,6 +25,7 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
             exit 1
     esac
 fi
+SYS_DC_CORE=${SYS_DC_CORE:-true}
 
 
 if [ $TRAVIS_OS_NAME = linux ]; then
@@ -37,6 +38,12 @@ else
 fi
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-$EXEC pkg-config --cflags deltachat
-$EXEC pkg-config --libs deltachat
-$EXEC npm install;
+$EXEC npm install --dc-system-lib=$SYS_DC_CORE;
+
+if [ $TRAVIS_OS_NAME = linux ]; then
+    readelf -d build/Release/deltachat.node
+    ldd build/Release/deltachat.node
+fi
+if [ $TRAVIS_OS_NAME = osx ]; then
+    otool -L build/Release/deltachat.node
+fi
