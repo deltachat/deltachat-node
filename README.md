@@ -64,6 +64,15 @@ different way:
 node-gyp rebuild -- -Dsystem_dc_core=true
 ```
 
+### Bundling dependencies (currently only Mac)
+
+We implemented an experimental way of bundling/including all system dependencies
+like openssl, libetpan... and put it next to the compiled `deltachat.node`. To
+enable this feature you need to pass the environment variable `BUNDLE_DEPENDENCIES=true`
+when running `npm run rebuild-bindings` or any other script which later rebuilds
+the bindings. You can even do this from the outside with something like
+`BUNDLE_DEPENDENCIES=true npm install deltachat-node`.
+
 ## Troubleshooting
 
 This module builds on top of `deltachat-core`, which in turn has
