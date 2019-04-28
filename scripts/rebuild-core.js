@@ -13,7 +13,7 @@ mkdirp.sync(coreBuildDir)
 const mesonOpts = { cwd: coreBuildDir }
 
 let mesonArgs = [
-  // '-Drpgp=true'
+  '-Drpgp=true'
 ]
 
 if (verbose) mesonOpts.stdio = 'inherit'

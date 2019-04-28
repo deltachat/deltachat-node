@@ -102,4 +102,14 @@ RUN ldconfig -v
 # Configure ld.so to look in /usr/local/lib/x86_64-linux-gnu/
 RUN echo /usr/local/lib/x86_64-linux-gnu/ > /etc/ld.so.conf.d/local.conf
 
+# Install rust for rpgp
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+    | sh -s -- --default-toolchain nightly -y
+ENV PATH=/root/.cargo/bin:$PATH
+
+# Install rpgp
+RUN git clone https://github.com/rpgp/rpgp.git
+RUN cd rpgp/pgp-ffi && make install
+RUN ldconfig -v
+
 CMD /usr/bin/tail -f /dev/null
