@@ -54,36 +54,36 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
     return 0;
   }
 
-  switch (event) {
-    case DC_EVENT_GET_STRING:
-      return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+  if (event == DC_EVENT_GET_STRING) {
+    return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+  }
 
-    case DC_EVENT_HTTP_GET: {
-      uintptr_t http_ret = 0;
-      pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
-        // while() is to protect against spuriously wakeups
-        while (!dcn_context->dc_event_http_done) {
-          // unlock -> wait -> lock
-          pthread_cond_wait(&dcn_context->dc_event_http_cond, &dcn_context->dc_event_http_mutex);
-        }
-        http_ret = (uintptr_t)dcn_context->dc_event_http_response;
-        dcn_context->dc_event_http_response = NULL;
-        dcn_context->dc_event_http_done = 0;
-      pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
-      return http_ret;
-    }
+  if (!dcn_context->threadsafe_event_handler) {
+    return 0;
+  }
 
-    default:
-      if (dcn_context->threadsafe_event_handler) {
-        dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
-        dcn_event->event = event;
-        dcn_event->data1_int = data1;
-        dcn_event->data2_int = data2;
-        dcn_event->data1_str = (DC_EVENT_DATA1_IS_STRING(event) && data1) ? strdup((char*)data1) : NULL;
-        dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
-        napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
+  dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
+  dcn_event->event = event;
+  dcn_event->data1_int = data1;
+  dcn_event->data2_int = data2;
+  dcn_event->data1_str = (DC_EVENT_DATA1_IS_STRING(event) && data1) ? strdup((char*)data1) : NULL;
+  dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
+
+  napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
+
+  if (event == DC_EVENT_HTTP_GET) {
+    uintptr_t http_ret = 0;
+    pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
+      // while() is to protect against spuriously wakeups
+      while (!dcn_context->dc_event_http_done) {
+        // unlock -> wait -> lock
+        pthread_cond_wait(&dcn_context->dc_event_http_cond, &dcn_context->dc_event_http_mutex);
       }
-      break;
+      http_ret = (uintptr_t)dcn_context->dc_event_http_response;
+      dcn_context->dc_event_http_response = NULL;
+      dcn_context->dc_event_http_done = 0;
+    pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
+    return http_ret;
   }
 
   return 0;
