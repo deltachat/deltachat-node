@@ -67,11 +67,13 @@ test('setUp dc context', t => {
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
     t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
   })
-  dc.on('DC_EVENT_ERROR', err => {
-    throw new Error(err)
+  dc.on('DC_EVENT_ERROR', error => {
+    console.error('DC_EVENT_ERROR', error)
+    process.exit(1)
   })
-  dc.on('DC_EVENT_ERROR_NETWORK', (first, err) => {
-    throw new Error(err)
+  dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+    console.error('DC_EVENT_ERROR_NETWORK', error)
+    process.exit(1)
   })
   dc.on('ALL', (event, data1, data2) => {
     console.log('ALL', event, data1, data2)
