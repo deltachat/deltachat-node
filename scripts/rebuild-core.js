@@ -12,9 +12,18 @@ mkdirp.sync(coreBuildDir)
 
 const mesonOpts = { cwd: coreBuildDir }
 
-let mesonArgs = [
-  '-Drpgp=true'
-]
+let mesonArgs
+if (process.platform === 'darwin') {
+  mesonArgs = [
+    '--default-library=static',
+    '-Drpgp=true'
+  ]
+} else {
+  mesonArgs = [
+    '--default-library=static',
+    '-Dforce-etpan-fallback=true'
+  ]
+}
 
 if (verbose) mesonOpts.stdio = 'inherit'
 spawn('meson', mesonArgs, mesonOpts)

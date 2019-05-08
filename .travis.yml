@@ -1,40 +1,20 @@
 language: node_js
-services:
-  - docker
-sudo: required
-dist: xenial
-
-addons:
-  homebrew:
-    packages:
-      - ninja
-      - libetpan
-      - openssl
-      - coreutils
 
 os:
   - osx
-  - linux
-
-node_js:
-  - 10
-
-env:
-  global:
-    - DOCKER_IMAGE=deltachat/travis-dc-node-base:latest
-
-  matrix:
-    - DC_CORE_VERSION="master" SYS_DC_CORE="false"
-    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
 before_install:
-  - ./scripts/ci-prelude.sh
+  - export LDFLAGS="-L/usr/local/opt/openssl/lib"
+  - export CPPFLAGS="-I/usr/local/opt/openssl/include"
+  - export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
+  - ./scripts/travis-before-install
 
-install:
-  - ./scripts/ci-build.sh
+node_js:
+  - 8
 
 script:
-  - ./scripts/ci-test.sh
+  - npm test
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run test-integration; fi'
 
 notifications:
   email: false

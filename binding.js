@@ -1,1 +1,1 @@
-module.exports = require('bindings')('deltachat.node')
+module.exports = require('node-gyp-build')(__dirname)

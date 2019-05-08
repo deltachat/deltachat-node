@@ -33,36 +33,44 @@
 
 ## Install
 
-By default the installation will build deltachat-core from the
-submodule using `scripts/rebuild-core.js`.  This requires you to have
-all the dependencies of the deltachat-core library available for it to
-be able to compile, see the README of deltachat-core itself for this.
-Simply invoke npm:
+```
+npm install deltachat-node
+```
+## Troubleshooting
+
+This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
+
+If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
+
+If `meson` is missing:
 
 ```
-npm install deltchat-node
+sudo apt-get install python3-pip
+sudo pip3 install meson
 ```
 
-### Using system libdeltachat
-
-It is possible to use the system-wide installed `libdeltachat.so`
-library which will be located using `pkg-config`.  You need to have
-installed `deltachat-core` before installing this way.  Using this
-approach allows you to build `libdeltachat.so` with your own specific
-options.
-
-Invoke npm with the extra arguments:
+If `ninja` is missing:
 
 ```
-npm install deltachat-node --dc-system-lib=true
+sudo apt-get install ninja-build
 ```
 
-When invoking `node-gyp` directly this can be achieved in a slightly
-different way:
+You might also need the following system dependencies:
+
+- `libssl-dev`
+- `libsasl2-dev`
+- `libsqlite3-dev`
+- `zlib1g-dev`
+
+To fix these issues do:
 
 ```
-node-gyp rebuild -- -Dsystem_dc_core=true
+sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
 ```
+
+Then try running `npm install` again.
+
+Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
 ### Bundling dependencies (currently only Mac)
 
@@ -72,14 +80,6 @@ enable this feature you need to pass the environment variable `BUNDLE_DEPENDENCI
 when running `npm run rebuild-bindings` or any other script which later rebuilds
 the bindings. You can even do this from the outside with something like
 `BUNDLE_DEPENDENCIES=true npm install deltachat-node`.
-
-## Troubleshooting
-
-This module builds on top of `deltachat-core`, which in turn has
-external dependencies.
-Please see [build
-instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso)
-for additional information.
 
 ## Usage
 
@@ -953,6 +953,17 @@ Internal `viewType` property.
 | `ALL`                                                                                                                   | All events from [`deltachat-core`](https://c.delta.chat/group__DC__EVENT.html) | `(event, data1, data2)` |
 
 ## Developing
+
+If you're cloning this repository in order to hack on it, you need to setup the `deltachat-core` submodule, before doing `npm install`.
+
+The following commands should be enough to get started.
+
+```
+git clone https://github.com/deltachat/deltachat-node.git
+cd deltachat-node
+npm run submodule
+npm install
+```
 
 ### Tests and Coverage
 

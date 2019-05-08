@@ -1,62 +1,46 @@
 {
-    # Variables can be specified when calling node-gyp as so:
-    #   node-gyp configure -- -Dvarname=value
-    "variables": {
-        # Whether to use a system-wide installation of deltachat-core
-        # using pkg-config.  Set to either "true" or "false".
-        "system_dc_core%": "false",
-        # The location, relative to the project's directory, where the
-        # submodule is built by ci_scripts/rebuild-core.js.
-        "submod_builddir%": "deltachat-core/builddir",
-    },
-    "targets": [{
-        "target_name": "deltachat",
-        "sources": [
-            "./src/module.c",
-            "./src/strtable.c",
-        ],
-        "include_dirs": [
-            "<!(node -e \"require('napi-macros')\")",
-        ],
-        "conditions": [
-            [ "OS == 'win'", {}],
-            [ "OS == 'linux' or OS == 'mac'", {
-                "libraries": [
-                    "-lpthread",
-                ],
-                "cflags": [
-                    "-std=gnu99",
-                ],
-                "conditions": [
-                    [ "system_dc_core == 'false'", {
-                        "include_dirs": [
-                            "<(submod_builddir)",
-                        ],
-                        "libraries": [
-                            "-L../<(submod_builddir)/src",
-                            "-ldeltachat",
-                        ],
-                        "conditions": [
-                            [ "OS == 'linux'", {
-                                "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
-                                ],
-                            }, { # OS == 'mac'
-                                "libraries": [
-                                    "-rpath '@loader_path/../../<(submod_builddir)/src'",
-                                ],
-                            }],
-                        ],
-                    }, { # system_dc_core == 'true'
-                        "cflags": [
-                            "<!(pkg-config --cflags deltachat)"
-                        ],
-                        "libraries": [
-                            "<!(pkg-config --libs deltachat)",
-                        ],
-                    }],
-                ],
-            }],
-        ],
-    }],
+  "targets": [
+    {
+      "target_name": "deltachat",
+      "conditions": [
+        [ "OS == 'win'", {}],
+        [ "OS == 'linux'", {
+          "libraries": [
+            "../deltachat-core/builddir/src/libdeltachat.a",
+            "../deltachat-core/builddir/libs/libetpan/libetpan.a",
+            "../deltachat-core/builddir/libs/netpgp/libnetpgp.a",
+            "-lsasl2",
+            "-lssl",
+            "-lsqlite3",
+            "-lpthread"
+          ],
+          "cflags": [
+            "-std=gnu99"
+          ]
+        }],
+        [ "OS == 'mac'", {
+          "libraries": [
+            "../deltachat-core/builddir/src/libdeltachat.a",
+            "/usr/local/Cellar/libetpan/1.9.2_1/lib/libetpan.a",
+            "/usr/local/lib/rpgp/libpgp_ffi.a",
+            "-framework CoreFoundation",
+            "-framework CoreServices",
+            "-framework Security",
+            "-lsasl2",
+            "-lssl",
+            "-lsqlite3",
+            "-lpthread"
+          ]
+        }]
+      ],
+      "sources": [
+        "./src/module.c",
+        "./src/strtable.c"
+      ],
+      "include_dirs": [
+        "deltachat-core/src",
+        "<!(node -e \"require('napi-macros')\")"
+      ]
+    }
+  ]
 }
