@@ -2,6 +2,32 @@
 
 ## [Unreleased][unreleased]
 
+## [0.44.0] - 2019-05-14
+
+### Changed
+
+- Remove --verbose from npm install @ralptheninja
+- Add section in README about making releases @ralphtheninja
+- Update nyc @ralphtheninja #305
+
+### Added
+
+- Allow the bindings to build against the installed version of libdeltachat.so using pkg-config. Also fixes a lot of ci related issues. @flub @jikstra #257
+- Implement bundle dependencies script for mac os x @nicodh @jikstra #276
+- Add marker methods for location streaming @ralphtheninja #301
+- Build deltachat-core with rpgp @flub #301
+
+
+### Fixed
+
+- Fix scripts, refactor and split out helper methods for scripts @jikstra #284
+- Set variable to point to core root and fix include dirs @ralphtheninja #285
+- Build on node v12 and v11 @jikstra #293
+- Fix docker integration tests @ralphtheninja #299
+- Fix broken http get for autoconfigure @ralphtheninja #303
+- Fix mac ci @jikstra #313
+- Fix bundle dependency scripts @jikstra #314
+
 ## [0.43.0] - 2019-04-26
 
 ### Changed
@@ -677,7 +703,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...HEAD
+
+[0.44.0]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...v0.44.0
 
 [0.43.0]: https://github.com/deltachat/deltachat-node/compare/v0.42.0...v0.43.0
 
