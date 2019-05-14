@@ -13,8 +13,13 @@ mkdirp.sync(coreBuildDir)
 const mesonOpts = { cwd: coreBuildDir }
 
 let mesonArgs = [
-  '-Drpgp=true'
 ]
+
+if(process.env.RPGP === 'false') {
+  console.log('[i] Disbaling RPGP, falling back to netpgp')
+} else {
+  mesonArgs.push('-Drpgp=true') 
+}
 
 if (verbose) mesonOpts.stdio = 'inherit'
 spawn('meson', mesonArgs, mesonOpts)

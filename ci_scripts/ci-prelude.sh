@@ -47,7 +47,8 @@ case $TRAVIS_OS_NAME in
         ;;
     osx)
         # Install meson, ninja, openssl & libetpan
-        true && brew install openssl meson libetpan
+        brew install openssl meson
+        brew upgrade libetpan
 
         # Install cyrus sasl
         ./ci_scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
