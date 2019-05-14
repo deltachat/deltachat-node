@@ -7,11 +7,11 @@ dist: xenial
 addons:
   homebrew:
     packages:
-      - ninja
+      - meson
       - libetpan
       - openssl
       - coreutils
-
+    update: true
 os:
   - osx
   - linux

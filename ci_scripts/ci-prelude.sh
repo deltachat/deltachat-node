@@ -46,9 +46,6 @@ case $TRAVIS_OS_NAME in
         fi
         ;;
     osx)
-        # Upgrade all brew dependencies defined in .travis.yml
-        brew upgrade
-        
         # Install cyrus sasl
         ./ci_scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
 
