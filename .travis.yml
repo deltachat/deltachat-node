@@ -7,11 +7,11 @@ dist: xenial
 addons:
   homebrew:
     packages:
-      - ninja
+      - meson
       - libetpan
       - openssl
       - coreutils
-
+    update: true
 os:
   - osx
   - linux
@@ -27,14 +27,23 @@ env:
     - DC_CORE_VERSION="master" SYS_DC_CORE="false"
     - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
+    - $HOME/.cargo
+    - $TRAVIS_BUILD_DIR/target
+
+before_cache:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cleanup;
+
 before_install:
-  - ./scripts/ci-prelude.sh
+  - ./ci_scripts/ci-prelude.sh
 
 install:
-  - ./scripts/ci-build.sh
+  - ./ci_scripts/ci-build.sh
 
 script:
-  - ./scripts/ci-test.sh
+  - ./ci_scripts/ci-test.sh
 
 notifications:
   email: false
