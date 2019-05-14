@@ -2,7 +2,7 @@ const { execSync } = require('child_process')
 const { basename, dirname } = require('path')
 const fs = require('fs-extra')
 
-const librariesToBundle = ['libdeltachat', 'libsasl', 'libssl', 'libcrypto', 'libsqlite', 'libz']
+const librariesToBundle = ['libdeltachat', 'libsasl', 'libssl', 'libcrypto', 'libsqlite', 'libz', 'libpgp_ffi']
 
 function parseOtool (output) {
   let outputSplitted = output.split('\n')
