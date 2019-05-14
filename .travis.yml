@@ -27,6 +27,15 @@ env:
     - DC_CORE_VERSION="master" SYS_DC_CORE="false"
     - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
+    - $HOME/.cargo
+    - $TRAVIS_BUILD_DIR/target
+
+before_cache:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cleanup;
+
 before_install:
   - ./ci_scripts/ci-prelude.sh
 
