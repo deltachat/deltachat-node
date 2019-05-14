@@ -28,13 +28,13 @@ env:
     - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
 before_install:
-  - ./scripts/ci-prelude.sh
+  - ./ci_scripts/ci-prelude.sh
 
 install:
-  - ./scripts/ci-build.sh
+  - ./ci_scripts/ci-build.sh
 
 script:
-  - ./scripts/ci-test.sh
+  - ./ci_scripts/ci-test.sh
 
 notifications:
   email: false
