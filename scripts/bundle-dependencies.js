@@ -2,7 +2,7 @@ const { execSync } = require('child_process')
 const { basename, dirname } = require('path')
 const fs = require('fs-extra')
 
-const librariesToBundle = ['libsasl', 'libssl', 'libcrypto', 'libsqlite', 'libz']
+const librariesToBundle = ['libdeltachat', 'libsasl', 'libssl', 'libcrypto', 'libsqlite', 'libz', 'libpgp_ffi']
 
 function parseOtool (output) {
   let outputSplitted = output.split('\n')
@@ -25,11 +25,17 @@ function otool (file) {
 }
 
 function copyLibIfNotExists (lib) {
+  let pathToLib = lib.path
+  if (pathToLib.startsWith('@rpath')) {
+    console.log('startswith')
+    pathToLib = pathToLib.replace('@rpath', '../../deltachat-core/builddir/src')
+  }
+
   if (fs.existsSync(`./${lib.basename}`)) {
     console.log(` - skipping copying ${lib.basename}`)
     return
   }
-  fs.copySync(lib.path, `./${lib.basename}`)
+  fs.copySync(pathToLib, `./${lib.basename}`)
   console.log(` - copied ${lib.basename}`)
 }
 
