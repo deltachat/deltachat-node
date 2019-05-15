@@ -1,25 +1,41 @@
 const path = require('path')
-const rimraf = require('rimraf')
-const mkdirp = require('mkdirp')
-const { verbose, log, spawn } = require('./_commons.js')
+// const rimraf = require('rimraf')
+// const mkdirp = require('mkdirp')
+// const { verbose, log, spawn } = require('./_commons.js')
+const { verbose, spawn } = require('./_commons.js')
 
-const coreBuildDir = path.resolve(__dirname, '../deltachat-core/builddir')
-log(`>> Removing ${coreBuildDir}`)
-rimraf.sync(coreBuildDir)
+const coreDir = path.resolve(__dirname, '../deltachat-core-rust')
 
-log(`>> Creating ${coreBuildDir}`)
-mkdirp.sync(coreBuildDir)
+// log(`>> Removing ${coreBuildDir}`)
+// rimraf.sync(coreBuildDir)
 
-const mesonOpts = { cwd: coreBuildDir }
+// log(`>> Creating ${coreBuildDir}`)
+// mkdirp.sync(coreBuildDir)
 
-let mesonArgs = [
-  '-Drpgp=true'
+// const mesonOpts = { cwd: coreBuildDir }
+
+// let mesonArgs = [
+//   '-Drpgp=true'
+// ]
+
+// if (verbose) mesonOpts.stdio = 'inherit'
+// spawn('meson', mesonArgs, mesonOpts)
+
+// spawn('ninja', verbose ? [ '-v' ] : [], {
+//   cwd: coreBuildDir,
+//   stdio: 'inherit'
+// })
+
+let cargoArgs = [
+  'build',
+  '--release',
+  '-p',
+  'deltachat_ffi'
 ]
 
-if (verbose) mesonOpts.stdio = 'inherit'
-spawn('meson', mesonArgs, mesonOpts)
+if (verbose) cargoArgs.push('-v')
 
-spawn('ninja', verbose ? [ '-v' ] : [], {
-  cwd: coreBuildDir,
+spawn('cargo', cargoArgs, {
+  cwd: coreDir,
   stdio: 'inherit'
 })

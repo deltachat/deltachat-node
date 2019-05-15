@@ -7,7 +7,7 @@
         "system_dc_core%": "false",
         # The location, relative to the project's directory, where the
         # submodule is built by ci_scripts/rebuild-core.js.
-        "submod_builddir%": "deltachat-core/builddir",
+        "submod_builddir%": "deltachat-core-rust",
     },
     "targets": [{
         "target_name": "deltachat",
@@ -33,17 +33,17 @@
                             "<(submod_builddir)",
                         ],
                         "libraries": [
-                            "-L../<(submod_builddir)/src",
-                            "-ldeltachat",
+                            "-L../<(submod_builddir)/target/release",
+                            "-ldeltachat_ffi",
                         ],
                         "conditions": [
                             [ "OS == 'linux'", {
                                 "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
+                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/target/release'",
                                 ],
                             }, { # OS == 'mac'
                                 "libraries": [
-                                    "-rpath '@loader_path/../../<(submod_builddir)/src'",
+                                    "-rpath '@loader_path/../../<(submod_builddir)/target/release'",
                                 ],
                             }],
                         ],
