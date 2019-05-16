@@ -33,19 +33,7 @@
                             "<(submod_builddir)",
                         ],
                         "libraries": [
-                            "-L../<(submod_builddir)/target/release",
-                            "-ldeltachat_ffi",
-                        ],
-                        "conditions": [
-                            [ "OS == 'linux'", {
-                                "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/target/release'",
-                                ],
-                            }, { # OS == 'mac'
-                                "libraries": [
-                                    "-rpath '@loader_path/../../<(submod_builddir)/target/release'",
-                                ],
-                            }],
+                            "../deltachat-core-rust/target/release/libdeltachat_ffi.a"
                         ],
                     }, { # system_dc_core == 'true'
                         "cflags": [
