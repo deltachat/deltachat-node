@@ -5,10 +5,8 @@
 
 set -ex
 
-
 # Some default variables, these are normally provided by the CI
 # runtime.
-#DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
 
 # To facilitate running locally, derive some Travis environment
@@ -33,19 +31,16 @@ SYS_DC_CORE=${SYS_DC_CORE:-false}
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
     | sh -s -- --default-toolchain nightly -y
 
+# TODO fix builds against system installed rust-core
 case $TRAVIS_OS_NAME in
     linux)
-#        docker pull $DOCKER_IMAGE
-#        CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
-#        EXEC="docker exec $CONTAINER_ID";
-#        EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
 #        if [ "$SYS_DC_CORE" = "true" ]; then
-#            $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-#            $EXEC meson -Drpgp=true deltachat-core-build deltachat-core-src
-#            $EXEC ninja -v -C deltachat-core-build
-#            $EXEC_ROOT ninja -v -C deltachat-core-build install
-#            $EXEC_ROOT ldconfig -v
-#            $EXEC rm -rf deltachat-core-build deltachat-core-src
+#            git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
+#            meson -Drpgp=true deltachat-core-build deltachat-core-src
+#            ninja -v -C deltachat-core-build
+#            ninja -v -C deltachat-core-build install
+#            ldconfig -v
+#            rm -rf deltachat-core-build deltachat-core-src
 #        fi
         ;;
     osx)

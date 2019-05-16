@@ -2,12 +2,6 @@
 
 # Build deltachat-node itself.
 
-# TODO remove
-# On linux this uses the latest created docker container, which works
-# fine on the CI build but may be the wrong continer if you are doing
-# things somewhere else.  Set CONTAINER_ID to the correct container to
-# avoid using the latest created container.
-
 set -ex
 
 # To facilitate running locally, derive some Travis environment
@@ -28,18 +22,9 @@ fi
 
 SYS_DC_CORE=${SYS_DC_CORE:-false}
 
-#if [ $TRAVIS_OS_NAME = linux ]; then
-#    CONTAINER_ID=${CONTAINER_ID:-$(docker ps --latest --format='{{.ID}}')}
-#    EXEC="docker exec $CONTAINER_ID";
-#    EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
-#else
-#    EXEC=
-#    EXEC_ROOT=sudo
-#fi
-
+# Load cargo
 . ~/.cargo/env
 
-#$EXEC npm install --dc-system-lib=$SYS_DC_CORE;
 npm install --dc-system-lib=$SYS_DC_CORE;
 
 if [ $TRAVIS_OS_NAME = linux ]; then
