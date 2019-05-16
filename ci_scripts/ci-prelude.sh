@@ -46,22 +46,9 @@ case $TRAVIS_OS_NAME in
         fi
         ;;
     osx)
-        # Install cyrus sasl
-#        ./ci_scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
-
-#        export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-
         # Install rust
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
             | sh -s -- --default-toolchain nightly -y
-        . ~/.cargo/env
-
-        # Install rpgp
-#        git clone https://github.com/rpgp/rpgp.git
-#        pushd rpgp/pgp-ffi
-#        make install
-#        popd
-
 
         if [ "$SYS_DC_CORE" = "true" ]; then
             git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src

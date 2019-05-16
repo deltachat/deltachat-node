@@ -9,7 +9,6 @@
 
 set -ex
 
-
 # To facilitate running locally, derive some Travis environment
 # variables.
 if [ -z "$TRAVIS_OS_NAME" ]; then
@@ -38,7 +37,7 @@ else
 fi
 
 . ~/.cargo/env
-#export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+
 $EXEC npm install --dc-system-lib=$SYS_DC_CORE;
 
 if [ $TRAVIS_OS_NAME = linux ]; then
