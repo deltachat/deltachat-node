@@ -30,6 +30,10 @@ fi
 
 SYS_DC_CORE=${SYS_DC_CORE:-false}
 
+# Install rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+    | sh -s -- --default-toolchain nightly -y
+
 case $TRAVIS_OS_NAME in
     linux)
         docker pull $DOCKER_IMAGE
@@ -46,10 +50,6 @@ case $TRAVIS_OS_NAME in
         fi
         ;;
     osx)
-        # Install rust
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
-            | sh -s -- --default-toolchain nightly -y
-
         if [ "$SYS_DC_CORE" = "true" ]; then
             git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
             meson -Drpgp=true deltachat-core-build deltachat-core-src
