@@ -8,9 +8,8 @@ set -ex
 
 # Some default variables, these are normally provided by the CI
 # runtime.
-DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
+#DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
-
 
 # To facilitate running locally, derive some Travis environment
 # variables.
@@ -36,10 +35,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
 
 case $TRAVIS_OS_NAME in
     linux)
-        docker pull $DOCKER_IMAGE
-        CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
-        EXEC="docker exec $CONTAINER_ID";
-        EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
+#        docker pull $DOCKER_IMAGE
+#        CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
+#        EXEC="docker exec $CONTAINER_ID";
+#        EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
 #        if [ "$SYS_DC_CORE" = "true" ]; then
 #            $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
 #            $EXEC meson -Drpgp=true deltachat-core-build deltachat-core-src
