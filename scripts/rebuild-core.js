@@ -37,6 +37,8 @@ let cargoArgs = [
 
 if (verbose) cargoArgs.push('-v')
 
+console.log('process.env', process.env)
+
 spawn('cargo', cargoArgs, {
   cwd: coreDir,
   stdio: 'inherit'
