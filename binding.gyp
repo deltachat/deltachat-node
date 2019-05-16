@@ -35,6 +35,15 @@
                         "libraries": [
                             "../deltachat-core-rust/target/release/libdeltachat_ffi.a"
                         ],
+                        "conditions": [
+                            [ "OS == 'mac'", {
+                                "libraries": [
+                                    "-framework CoreFoundation",
+                                    "-framework CoreServices",
+                                    "-framework Security",
+                                ],
+                            }],
+                        ],
                     }, { # system_dc_core == 'true'
                         "cflags": [
                             "<!(pkg-config --cflags deltachat)"
