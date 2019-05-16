@@ -25,8 +25,8 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
             exit 1
     esac
 fi
-SYS_DC_CORE=${SYS_DC_CORE:-true}
 
+SYS_DC_CORE=${SYS_DC_CORE:-false}
 
 if [ $TRAVIS_OS_NAME = linux ]; then
     CONTAINER_ID=${CONTAINER_ID:-$(docker ps --latest --format='{{.ID}}')}
