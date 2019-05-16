@@ -68,7 +68,7 @@ tape('dc.getInfo()', t => {
     'folders_configured',
     'inbox_watch',
     'is_configured',
-    'libetpan_version',
+    'level',
     'mdns_enabled',
     'messages_in_contact_requests',
     'mvbox_move',
@@ -76,10 +76,8 @@ tape('dc.getInfo()', t => {
     'number_of_chat_messages',
     'number_of_chats',
     'number_of_contacts',
-    'openssl_version',
     'private_key_count',
     'public_key_count',
-    'rpgp_enabled',
     'sentbox_watch',
     'sqlite_thread_safe',
     'sqlite_version',
@@ -101,8 +99,6 @@ tape('static getSystemInfo()', t => {
     'arch',
     'compile_date',
     'deltachat_core_version',
-    'libetpan_version',
-    'openssl_version',
     'sqlite_thread_safe',
     'sqlite_version'
   ])
