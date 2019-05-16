@@ -37,7 +37,8 @@ else
     EXEC_ROOT=sudo
 fi
 
-export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+. ~/.cargo/env
+#export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
 $EXEC npm install --dc-system-lib=$SYS_DC_CORE;
 
 if [ $TRAVIS_OS_NAME = linux ]; then
