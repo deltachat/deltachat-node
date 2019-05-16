@@ -29,6 +29,8 @@ const coreDir = path.resolve(__dirname, '../deltachat-core-rust')
 let cargoArgs = [
   'build',
   '--release',
+  '--features',
+  'vendored',
   '-p',
   'deltachat_ffi'
 ]
