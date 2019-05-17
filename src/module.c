@@ -55,6 +55,11 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
 {
   dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
 
+  if (!dcn_context->threadsafe_event_handler) {
+    TRACE("threadsafe_event_handler not set, bailing");
+    return 0;
+  }
+
   // Don't process events if we're being garbage collected!
   if (dcn_context->gc) {
     TRACE("dc_context has been destroyed, bailing");
@@ -67,11 +72,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
 
   // Start tracing events here. DC_EVENT_GET_STRING is just too spammy.
   TRACE("event %d", event);
-
-  if (!dcn_context->threadsafe_event_handler) {
-    TRACE("threadsafe_event_handler not set, bailing");
-    return 0;
-  }
 
   dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
   dcn_event->event = event;
