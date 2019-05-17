@@ -4,10 +4,7 @@
     "variables": {
         # Whether to use a system-wide installation of deltachat-core
         # using pkg-config.  Set to either "true" or "false".
-        "system_dc_core%": "false",
-        # The location, relative to the project's directory, where the
-        # submodule is built by ci_scripts/rebuild-core.js.
-        "submod_builddir%": "deltachat-core/builddir",
+        "system_dc_core%": "false"
     },
     "targets": [{
         "target_name": "deltachat",
@@ -30,20 +27,17 @@
                 "conditions": [
                     [ "system_dc_core == 'false'", {
                         "include_dirs": [
-                            "<(submod_builddir)",
+                            "deltachat-core-rust",
                         ],
                         "libraries": [
-                            "-L../<(submod_builddir)/src",
-                            "-ldeltachat",
+                            "../deltachat-core-rust/target/release/libdeltachat.a"
                         ],
                         "conditions": [
-                            [ "OS == 'linux'", {
-                                "ldflags": [
-                                    "-Wl,-rpath='$$ORIGIN/../../<(submod_builddir)/src'",
-                                ],
-                            }, { # OS == 'mac'
+                            [ "OS == 'mac'", {
                                 "libraries": [
-                                    "-rpath '@loader_path/../../<(submod_builddir)/src'",
+                                    "-framework CoreFoundation",
+                                    "-framework CoreServices",
+                                    "-framework Security",
                                 ],
                             }],
                         ],
