@@ -6,7 +6,7 @@ const split = require('split2')
 
 const data = []
 const regex = /^#define\s+(\w+)\s+(\w+)/i
-const header = path.resolve(__dirname, '../deltachat-core/src/deltachat.h')
+const header = path.resolve(__dirname, '../deltachat-core-rust/deltachat-ffi/deltachat.h')
 
 fs.createReadStream(header)
   .pipe(split())
