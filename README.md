@@ -107,6 +107,9 @@ dc.open(() => {
     const contactId = dc.createContact('Test', contact)
     const chatId = dc.createChatByContactId(contactId)
     dc.sendMessage(chatId, 'Hi!')
+    dc.close(() => {
+      console.log('Bye.')
+    })
   }
   if (!dc.isConfigured()) {
     dc.once('ready', onReady)
@@ -176,9 +179,9 @@ Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://c.delta.chat/c
 
 Clears the string table for handling `DC_EVENT_GET_STR` events from core.
 
-#### `dc.close()`
+#### `dc.close([cb])`
 
-Stops the threads and closes down the `DeltaChat` instance.
+Stops the threads and closes down the `DeltaChat` instance. Calls back when underlying context has been fully closed.
 
 #### `dc.configure(options[, cb])`
 
