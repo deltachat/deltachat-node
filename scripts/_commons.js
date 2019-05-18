@@ -3,7 +3,7 @@ const spawnSync = require('child_process').spawnSync
 const verbose = isVerbose()
 
 function spawn (cmd, args, opts) {
-  log(`>> ${cmd}`)
+  log(`>> ${cmd} ${args.join(' ')}`)
   const result = spawnSync(cmd, args, opts)
   if (result.status === null) {
     console.error(`Could not find ${cmd}`)
