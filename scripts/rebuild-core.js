@@ -1,12 +1,11 @@
 const path = require('path')
 const { spawn } = require('./_commons.js')
-const coreDir = path.resolve(__dirname, '../deltachat-core-rust')
-
-spawn('cargo', [ 'update' ], {
-  cwd: coreDir,
+const opts = {
+  cwd: path.resolve(__dirname, '../deltachat-core-rust'),
   stdio: 'inherit'
-})
+}
 
+spawn('cargo', [ 'update' ], opts)
 spawn('cargo', [
   'build',
   '--release',
@@ -14,7 +13,4 @@ spawn('cargo', [
   'vendored',
   '-p',
   'deltachat_ffi'
-], {
-  cwd: coreDir,
-  stdio: 'inherit'
-})
+], opts)
