@@ -17,6 +17,7 @@ let mesonArgs = [
 ]
 
 if (verbose) mesonOpts.stdio = 'inherit'
+spawn('pwd', [], mesonOpts)
 spawn('meson', mesonArgs, mesonOpts)
 
 spawn('ninja', verbose ? [ '-v' ] : [], {
