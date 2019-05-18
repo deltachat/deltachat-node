@@ -133,7 +133,9 @@ test('initiate key transfer', t => {
 })
 
 test('tearDown dc context', t => {
-  // TODO dc.close() should callback
-  dc.close()
-  t.end()
+  console.time('dc.close')
+  dc.close(() => {
+    console.timeEnd('dc.close')
+    t.end()
+  })
 })
