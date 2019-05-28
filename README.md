@@ -167,10 +167,6 @@ Archive or unarchive a chat. Corresponds to [`dc_archive_chat()`](https://c.delt
 
 Block or unblock a contact. Corresponds to [`dc_block_contact()`](https://c.delta.chat/classdc__context__t.html#a4d4ffdc880e149c0c717c5b13a00c2e1).
 
-#### `dc.checkPassword(password)`
-
-Check if the user is authorized by the given password in some way. Corresponds to [`dc_check_password()`](https://c.delta.chat/classdc__context__t.html#a9934f68e0233f4c2ba5d9b26d2a0db05).
-
 #### `dc.checkQrCode(qrCode)`
 
 Check a scanned QR code. Corresponds to [`dc_check_qr()`](https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c).

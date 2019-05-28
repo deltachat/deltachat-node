@@ -410,20 +410,6 @@ NAPI_METHOD(dcn_block_contact) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_check_password) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UTF8_MALLOC(password, 1);
-
-  //TRACE("calling..");
-  int result = dc_check_password(dcn_context->dc_context, password);
-  //TRACE("result %d", result);
-
-  free(password);
-
-  NAPI_RETURN_INT32(result);
-}
-
 NAPI_METHOD(dcn_check_qr) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2604,7 +2590,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
-  NAPI_EXPORT_FUNCTION(dcn_check_password);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
   NAPI_EXPORT_FUNCTION(dcn_clear_string_table);
   NAPI_EXPORT_FUNCTION(dcn_close);
