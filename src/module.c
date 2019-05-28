@@ -34,10 +34,6 @@ typedef struct dcn_context_t {
   uv_thread_t sentbox_thread;
   int gc;
   int loop_thread;
-  pthread_mutex_t dc_event_http_mutex;
-  pthread_cond_t  dc_event_http_cond;
-  int             dc_event_http_done;
-  char*           dc_event_http_response;
 } dcn_context_t;
 
 /**
@@ -87,27 +83,6 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
 
   napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
-
-  if (event == DC_EVENT_HTTP_GET) {
-    uintptr_t http_ret = 0;
-    pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
-      // while() is to protect against spuriously wakeups
-      while (!dcn_context->dc_event_http_done) {
-        // unlock -> wait -> lock
-	TRACE("DC_EVENT_HTTP_GET, waiting for cond");
-        pthread_cond_wait(&dcn_context->dc_event_http_cond, &dcn_context->dc_event_http_mutex);
-      }
-      http_ret = (uintptr_t)dcn_context->dc_event_http_response;
-      dcn_context->dc_event_http_response = NULL;
-      dcn_context->dc_event_http_done = 0;
-    pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
-    TRACE("DC_EVENT_HTTP_GET, returning result to core");
-    return http_ret;
-  } else if (event == DC_EVENT_INFO) {
-    return 0;
-  }
-
-  TRACE("unhandled event %d", event);
 
   return 0;
 }
@@ -354,11 +329,6 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context->gc = 0;
   dcn_context->loop_thread = 0;
 
-  dcn_context->dc_event_http_done = 0;
-  dcn_context->dc_event_http_response = NULL;
-  pthread_mutex_init(&dcn_context->dc_event_http_mutex, NULL);
-  pthread_cond_init(&dcn_context->dc_event_http_cond, NULL);
-
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
                                           NULL, NULL, &result));
@@ -549,12 +519,6 @@ static void dcn_close_execute(napi_env env, void* data) {
   TRACE("cleaning up string table");
   strtable_unref(dcn_context->strtable);
   dcn_context->strtable = NULL;
-
-  TRACE("cleaning up http_cond");
-  pthread_cond_destroy(&dcn_context->dc_event_http_cond);
-
-  TRACE("cleaning up http_mutex");
-  pthread_mutex_destroy(&dcn_context->dc_event_http_mutex);
 
   TRACE("freeing dcn_context");
   free(dcn_context);
@@ -1568,22 +1532,6 @@ NAPI_METHOD(dcn_set_event_handler) {
     dcn_context,
     call_js_event_handler,
     &dcn_context->threadsafe_event_handler));
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
-NAPI_METHOD(dcn_set_http_get_response) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UTF8_MALLOC(response, 1);
-
-  //TRACE("calling..");
-  pthread_mutex_lock(&dcn_context->dc_event_http_mutex);
-    dcn_context->dc_event_http_done = 1;
-    dcn_context->dc_event_http_response = response;
-    pthread_cond_signal(&dcn_context->dc_event_http_cond);
-  pthread_mutex_unlock(&dcn_context->dc_event_http_mutex);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -2716,7 +2664,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
-  NAPI_EXPORT_FUNCTION(dcn_set_http_get_response);
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
