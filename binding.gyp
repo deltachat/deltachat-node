@@ -10,13 +10,25 @@
         "target_name": "deltachat",
         "sources": [
             "./src/module.c",
-            "./src/strtable.c",
         ],
         "include_dirs": [
             "<!(node -e \"require('napi-macros')\")",
         ],
         "conditions": [
-            [ "OS == 'win'", {}],
+            [ "OS == 'win'", {
+                "conditions": [
+                    [ "system_dc_core == 'false'", {
+                        "include_dirs": [
+                            "deltachat-core-rust",
+                        ],
+                        "libraries": [
+                            "../deltachat-core-rust/target/release/libdeltachat.a"
+                        ],
+                    }, { # system_dc_core == 'true'
+
+                    }],
+                ],
+            }],
             [ "OS == 'linux' or OS == 'mac'", {
                 "libraries": [
                     "-lpthread",
