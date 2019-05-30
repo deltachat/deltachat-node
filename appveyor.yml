@@ -4,6 +4,7 @@ skip_branch_with_pr: true
 environment:
   matrix:
     - nodejs_version: "10"
+      TARGET: x86_64-pc-windows-msvc
 
 configuration: Release
 platform:
