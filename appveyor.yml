@@ -14,6 +14,7 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - SET PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
   - git submodule update --init --recursive
+  - SET
   - npm i
 
 test_script:
