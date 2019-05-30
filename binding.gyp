@@ -22,7 +22,7 @@
                             "deltachat-core-rust",
                         ],
                         "libraries": [
-                            "../deltachat-core-rust/target/release/libdeltachat.a"
+                            "../deltachat-core-rust/target/release/deltachat.lib"
                         ],
                     }, { # system_dc_core == 'true'
 

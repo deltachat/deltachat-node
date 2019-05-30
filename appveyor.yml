@@ -19,14 +19,11 @@ install:
   - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
   - rustc -vV
   - cargo -vV
-  - SET
   - node --version
   - npm --version
-  - git submodule update --init --recursive
-  - cd %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust
-  - cargo build --release --features vendored -p deltachat_ffi
-  - DIR %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust\target\release
   - npm i
+  - DIR %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust\target\release
+  - DIR %APPVEYOR_BUILD_FOLDER%\build\Release
 
 test_script:
   - npm test

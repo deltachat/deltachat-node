@@ -5,12 +5,12 @@ const opts = {
   stdio: 'inherit'
 }
 
-//spawn('cargo', [ 'update' ], opts)
-//spawn('cargo', [
-  //'build',
-  //'--release',
-  //'--features',
-  //'vendored',
-  //'-p',
-  //'deltachat_ffi'
-//], opts)
+spawn('cargo', [ 'update' ], opts)
+spawn('cargo', [
+  'build',
+  '--release',
+  '--features',
+  'vendored',
+  '-p',
+  'deltachat_ffi'
+], opts)
