@@ -21,7 +21,10 @@ install:
   - cargo -vV
   - node --version
   - npm --version
-  - npm i
+  - npm run rebuild-core
+  - npm run configure-bindings
+  - type build/binding.sln
+  - npm run build-bindings
   - DIR %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust\target\release
   - DIR %APPVEYOR_BUILD_FOLDER%\build\Release
 
