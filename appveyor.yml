@@ -22,8 +22,10 @@ install:
   - SET
   - node --version
   - npm --version
-  - npm i
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - cargo build --release --features vendored -p deltachat_ffi
   - DIR %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust\target\release
+  - npm i
 
 test_script:
   - npm test
