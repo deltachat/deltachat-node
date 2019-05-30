@@ -23,6 +23,7 @@ install:
   - node --version
   - npm --version
   - npm i
+  - DIR %APPVEYOR_BUILD_FOLDER%\deltachat-core-rust\target\release
 
 test_script:
   - npm test
