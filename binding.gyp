@@ -21,6 +21,9 @@
                         "include_dirs": [
                             "deltachat-core-rust",
                         ],
+                        "libraries": [
+                            "../deltachat-core-rust/target/release/deltachat.dll.lib"
+                        ],
                     }, { # system_dc_core == 'true'
 
                     }],
