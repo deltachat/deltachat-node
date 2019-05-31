@@ -8,5 +8,6 @@ const opts = {
 if (process.env.npm_config_dc_system_lib === 'true') {
   spawn('npx', [ 'node-gyp', 'rebuild', '--', '-Dsystem_dc_core=true' ], opts)
 } else {
-  spawn('npm', [ 'run', 'rebuild-all' ], opts)
+  const npmExec = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+  spawn(npmExec, [ 'run', 'rebuild-all' ], opts)
 }
