@@ -6,7 +6,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
-    "install": "node ./scripts/npm-install.js",
+    "install": "npm run rebuild-all",
     "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
     "rebuild-core": "npm run submodule && node scripts/rebuild-core.js",
     "rebuild-bindings": "node-gyp rebuild",
