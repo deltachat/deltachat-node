@@ -8,7 +8,8 @@
 #include <uv.h>
 #include <deltachat-ffi/deltachat.h>
 #include "napi-macros-extensions.h"
-#include "strtable.h"
+// TODO remove
+//#include "strtable.h"
 
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
@@ -27,7 +28,8 @@ int dc_msg_has_deviating_timestamp(const dc_msg_t*);
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function threadsafe_event_handler;
-  strtable_t* strtable;
+  // TODO remove
+  //strtable_t* strtable;
   uv_thread_t imap_thread;
   uv_thread_t smtp_thread;
   uv_thread_t mvbox_thread;
@@ -63,7 +65,10 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   }
 
   if (event == DC_EVENT_GET_STRING) {
-    return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+    // TODO handle this in core
+    // TODO remove
+    //return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+    return 0;
   }
 
   // Start tracing events here. DC_EVENT_GET_STRING is just too spammy.
@@ -319,7 +324,8 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->threadsafe_event_handler = NULL;
-  dcn_context->strtable = strtable_new();
+  // TODO remove
+  //dcn_context->strtable = strtable_new();
 
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
@@ -433,12 +439,14 @@ NAPI_METHOD(dcn_check_qr) {
   return result;
 }
 
+// TODO remove this function
 NAPI_METHOD(dcn_clear_string_table) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
   //TRACE("calling..");
-  strtable_clear(dcn_context->strtable);
+  // TODO remove
+  //strtable_clear(dcn_context->strtable);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -502,9 +510,10 @@ static void dcn_close_execute(napi_env env, void* data) {
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
 
-  TRACE("cleaning up string table");
-  strtable_unref(dcn_context->strtable);
-  dcn_context->strtable = NULL;
+  // TODO remove
+  //TRACE("cleaning up string table");
+  //strtable_unref(dcn_context->strtable);
+  //dcn_context->strtable = NULL;
 
   TRACE("freeing dcn_context");
   free(dcn_context);
@@ -1523,6 +1532,7 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_UNDEFINED();
 }
 
+// TODO remove this function
 NAPI_METHOD(dcn_set_string_table) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1530,7 +1540,8 @@ NAPI_METHOD(dcn_set_string_table) {
   NAPI_ARGV_UTF8_MALLOC(str, 2);
 
   //TRACE("calling..");
-  strtable_set_str(dcn_context->strtable, index, str);
+  // TODO remove
+  //strtable_set_str(dcn_context->strtable, index, str);
   //TRACE("done");
 
   free(str);
@@ -2591,6 +2602,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
+  // TODO remove
   NAPI_EXPORT_FUNCTION(dcn_clear_string_table);
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
@@ -2649,6 +2661,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
+  // TODO remove
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
