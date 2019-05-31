@@ -111,7 +111,11 @@ tape('static getSystemInfo()', t => {
 test('basic configuration', (t, dc, cwd) => {
   t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
-  t.is(dc.getBlobdir(), `${cwd}/db.sqlite-blobs`, 'correct blobdir')
+  t.is(
+    dc.getBlobdir(),
+    path.join(cwd, 'db.sqlite-blobs'),
+    'correct blobdir'
+  )
   t.end()
 })
 
