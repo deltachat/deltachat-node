@@ -16,7 +16,17 @@
             "<!(node -e \"require('napi-macros')\")",
         ],
         "conditions": [
-            [ "OS == 'win'", {}],
+            [ "OS == 'win'", {
+                "conditions": [
+                    [ "system_dc_core == 'false'", {
+                        "include_dirs": [
+                            "deltachat-core-rust",
+                        ],
+                    }, { # system_dc_core == 'true'
+
+                    }],
+                ],
+            }],
             [ "OS == 'linux' or OS == 'mac'", {
                 "libraries": [
                     "-lpthread",
