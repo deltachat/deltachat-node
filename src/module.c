@@ -103,8 +103,10 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
     napi_throw_error(env, NULL, "Unable to get global");
   }
 
-  const int argc = 3;
-  napi_value argv[argc];
+#define CALL_JS_CALLBACK_ARGC 3
+
+  const int argc = CALL_JS_CALLBACK_ARGC;
+  napi_value argv[CALL_JS_CALLBACK_ARGC];
 
   status = napi_create_int32(env, dcn_event->event, &argv[0]);
   if (status != napi_ok) {
@@ -531,8 +533,10 @@ static void dcn_close_complete(napi_env env, napi_status status, void* data) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_CLOSE_CALLBACK_ARGC 1
+
+  const int argc = DCN_CLOSE_CALLBACK_ARGC;
+  napi_value argv[DCN_CLOSE_CALLBACK_ARGC];
 
   NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
 
@@ -610,8 +614,10 @@ NAPI_ASYNC_COMPLETE(dcn_continue_key_transfer) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC 1
+
+  const int argc = DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC;
+  napi_value argv[DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC];
   NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
 
   NAPI_ASYNC_CALL_AND_DELETE_CB()
@@ -1146,14 +1152,17 @@ NAPI_ASYNC_EXECUTE(dcn_initiate_key_transfer) {
 
 NAPI_ASYNC_COMPLETE(dcn_initiate_key_transfer) {
   NAPI_ASYNC_GET_CARRIER(dcn_initiate_key_transfer);
-   if (status != napi_ok) {
+  if (status != napi_ok) {
     napi_throw_type_error(env, NULL, "Execute callback failed.");
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
-   if (carrier->result) {
+#define DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC 1
+
+  const int argc = DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC;
+  napi_value argv[DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC];
+
+  if (carrier->result) {
     NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
   } else {
     NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
@@ -1340,8 +1349,10 @@ static void dcn_open_complete(napi_env env, napi_status status, void* data) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_OPEN_COMPLETE_CALLBACK_ARGC 1
+
+  const int argc = DCN_OPEN_COMPLETE_CALLBACK_ARGC;
+  napi_value argv[DCN_OPEN_COMPLETE_CALLBACK_ARGC];
 
   if (carrier->result == 1) {
     NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
