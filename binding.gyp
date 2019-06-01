@@ -16,17 +16,11 @@
         ],
         "conditions": [
             [ "OS == 'win'", {
-                "conditions": [
-                    [ "system_dc_core == 'false'", {
-                        "include_dirs": [
-                            "deltachat-core-rust",
-                        ],
-                        "libraries": [
-                            "../deltachat-core-rust/target/release/deltachat.dll.lib"
-                        ],
-                    }, { # system_dc_core == 'true'
-
-                    }],
+                "include_dirs": [
+                    "deltachat-core-rust",
+                ],
+                "libraries": [
+                    "../deltachat-core-rust/target/release/deltachat.dll.lib"
                 ],
             }],
             [ "OS == 'linux' or OS == 'mac'", {
