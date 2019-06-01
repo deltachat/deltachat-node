@@ -6,7 +6,7 @@ const opts = {
 }
 
 if (process.platform === 'win32') {
-  spawn('node-gyp.cmd', [ 'rebuild', '--debug' ], opts)
+  spawn('node-gyp.cmd', [ 'rebuild', '--debug', '--verbose' ], opts)
 } else {
   spawn('node-gyp', [ 'rebuild' ], opts)
 }
