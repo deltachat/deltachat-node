@@ -6,11 +6,17 @@ const opts = {
 }
 
 spawn('cargo', [ 'update' ], opts)
-spawn('cargo', [
+
+const buildArgs = [
   'build',
-  '--release',
   '--features',
   'vendored',
   '-p',
   'deltachat_ffi'
-], opts)
+]
+
+if (process.platform !== 'win32') {
+  buildArgs.push('--release')
+}
+
+spawn('cargo', buildArgs, opts)
