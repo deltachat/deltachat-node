@@ -36,14 +36,14 @@
   NAPI_STATUS_THROWS(napi_create_bigint_int64(env, name, &return_int64)); \
   return return_int64;
 
-#define NAPI_RETURN_AND_FREE_STRING(name) \
+#define NAPI_RETURN_AND_UNREF_STRING(name) \
   napi_value return_value; \
   if (name == NULL) { \
     NAPI_STATUS_THROWS(napi_get_null(env, &return_value)); \
     return return_value; \
   } \
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, name, NAPI_AUTO_LENGTH, &return_value)); \
-  free(name); \
+  dc_str_unref(name); \
   return return_value;
 
 #define NAPI_ASYNC_CARRIER_BEGIN(name) \

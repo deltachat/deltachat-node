@@ -6,11 +6,14 @@ const opts = {
 }
 
 spawn('cargo', [ 'update' ], opts)
-spawn('cargo', [
+
+const buildArgs = [
   'build',
   '--release',
   '--features',
   'vendored',
   '-p',
   'deltachat_ffi'
-], opts)
+]
+
+spawn('cargo', buildArgs, opts)

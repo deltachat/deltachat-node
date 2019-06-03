@@ -8,7 +8,8 @@
 #include <uv.h>
 #include <deltachat-ffi/deltachat.h>
 #include "napi-macros-extensions.h"
-#include "strtable.h"
+// TODO remove
+//#include "strtable.h"
 
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
@@ -27,7 +28,8 @@ int dc_msg_has_deviating_timestamp(const dc_msg_t*);
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function threadsafe_event_handler;
-  strtable_t* strtable;
+  // TODO remove
+  //strtable_t* strtable;
   uv_thread_t imap_thread;
   uv_thread_t smtp_thread;
   uv_thread_t mvbox_thread;
@@ -63,7 +65,10 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   }
 
   if (event == DC_EVENT_GET_STRING) {
-    return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+    // TODO handle this in core
+    // TODO remove
+    //return (uintptr_t)strtable_get_str(dcn_context->strtable, (int)data1);
+    return 0;
   }
 
   // Start tracing events here. DC_EVENT_GET_STRING is just too spammy.
@@ -98,8 +103,10 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
     napi_throw_error(env, NULL, "Unable to get global");
   }
 
-  const int argc = 3;
-  napi_value argv[argc];
+#define CALL_JS_CALLBACK_ARGC 3
+
+  const int argc = CALL_JS_CALLBACK_ARGC;
+  napi_value argv[CALL_JS_CALLBACK_ARGC];
 
   status = napi_create_int32(env, dcn_event->event, &argv[0]);
   if (status != napi_ok) {
@@ -135,7 +142,7 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   free(dcn_event);
   dcn_event = NULL;
 
-  TRACE("calling back into js");
+  //TRACE("calling back into js");
 
   napi_value result;
   status = napi_call_function(
@@ -319,7 +326,8 @@ NAPI_METHOD(dcn_context_new) {
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
   dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
   dcn_context->threadsafe_event_handler = NULL;
-  dcn_context->strtable = strtable_new();
+  // TODO remove
+  //dcn_context->strtable = strtable_new();
 
   dcn_context->imap_thread = 0;
   dcn_context->smtp_thread = 0;
@@ -433,12 +441,14 @@ NAPI_METHOD(dcn_check_qr) {
   return result;
 }
 
+// TODO remove this function
 NAPI_METHOD(dcn_clear_string_table) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
   //TRACE("calling..");
-  strtable_clear(dcn_context->strtable);
+  // TODO remove
+  //strtable_clear(dcn_context->strtable);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -502,9 +512,10 @@ static void dcn_close_execute(napi_env env, void* data) {
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
 
-  TRACE("cleaning up string table");
-  strtable_unref(dcn_context->strtable);
-  dcn_context->strtable = NULL;
+  // TODO remove
+  //TRACE("cleaning up string table");
+  //strtable_unref(dcn_context->strtable);
+  //dcn_context->strtable = NULL;
 
   TRACE("freeing dcn_context");
   free(dcn_context);
@@ -522,8 +533,10 @@ static void dcn_close_complete(napi_env env, napi_status status, void* data) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_CLOSE_CALLBACK_ARGC 1
+
+  const int argc = DCN_CLOSE_CALLBACK_ARGC;
+  napi_value argv[DCN_CLOSE_CALLBACK_ARGC];
 
   NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
 
@@ -601,12 +614,14 @@ NAPI_ASYNC_COMPLETE(dcn_continue_key_transfer) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC 1
+
+  const int argc = DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC;
+  napi_value argv[DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC];
   NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
 
   NAPI_ASYNC_CALL_AND_DELETE_CB()
-  free(carrier->setup_code);
+  dc_str_unref(carrier->setup_code);
   free(carrier);
 }
 
@@ -741,7 +756,7 @@ NAPI_METHOD(dcn_get_blobdir) {
   char* blobdir = dc_get_blobdir(dcn_context->dc_context);
   //TRACE("result %s", blobdir);
 
-  NAPI_RETURN_AND_FREE_STRING(blobdir);
+  NAPI_RETURN_AND_UNREF_STRING(blobdir);
 }
 
 NAPI_METHOD(dcn_get_blocked_cnt) {
@@ -845,7 +860,7 @@ NAPI_METHOD(dcn_get_mime_headers) {
   char* headers = dc_get_mime_headers(dcn_context->dc_context, msg_id);
   //TRACE("result %s", headers);
 
-  NAPI_RETURN_AND_FREE_STRING(headers);
+  NAPI_RETURN_AND_UNREF_STRING(headers);
 }
 
 NAPI_METHOD(dcn_get_chat_msgs) {
@@ -904,7 +919,7 @@ NAPI_METHOD(dcn_get_config) {
 
   free(key);
 
-  NAPI_RETURN_AND_FREE_STRING(value);
+  NAPI_RETURN_AND_UNREF_STRING(value);
 }
 
 NAPI_METHOD(dcn_get_contact) {
@@ -938,7 +953,7 @@ NAPI_METHOD(dcn_get_contact_encrinfo) {
                                             contact_id);
   //TRACE("result %s", encr_info);
 
-  NAPI_RETURN_AND_FREE_STRING(encr_info);
+  NAPI_RETURN_AND_UNREF_STRING(encr_info);
 }
 
 NAPI_METHOD(dcn_get_contacts) {
@@ -1011,7 +1026,7 @@ NAPI_METHOD(dcn_get_info) {
   char *str = dc_get_info(dcn_context->dc_context);
   //TRACE("result %s", str);
 
-  NAPI_RETURN_AND_FREE_STRING(str);
+  NAPI_RETURN_AND_UNREF_STRING(str);
 }
 
 NAPI_METHOD(dcn_get_msg) {
@@ -1055,7 +1070,7 @@ NAPI_METHOD(dcn_get_msg_info) {
   char* msg_info = dc_get_msg_info(dcn_context->dc_context, msg_id);
   //TRACE("result %s", msg_info);
 
-  NAPI_RETURN_AND_FREE_STRING(msg_info);
+  NAPI_RETURN_AND_UNREF_STRING(msg_info);
 }
 
 NAPI_METHOD(dcn_get_next_media) {
@@ -1089,7 +1104,7 @@ NAPI_METHOD(dcn_get_securejoin_qr) {
                                     group_chat_id);
   //TRACE("result %s", code);
 
-  NAPI_RETURN_AND_FREE_STRING(code);
+  NAPI_RETURN_AND_UNREF_STRING(code);
 }
 
 NAPI_METHOD(dcn_imex) {
@@ -1123,7 +1138,7 @@ NAPI_METHOD(dcn_imex_has_backup) {
 
   free(dir_name);
 
-  NAPI_RETURN_AND_FREE_STRING(file);
+  NAPI_RETURN_AND_UNREF_STRING(file);
 }
 
 NAPI_ASYNC_CARRIER_BEGIN(dcn_initiate_key_transfer)
@@ -1137,21 +1152,24 @@ NAPI_ASYNC_EXECUTE(dcn_initiate_key_transfer) {
 
 NAPI_ASYNC_COMPLETE(dcn_initiate_key_transfer) {
   NAPI_ASYNC_GET_CARRIER(dcn_initiate_key_transfer);
-   if (status != napi_ok) {
+  if (status != napi_ok) {
     napi_throw_type_error(env, NULL, "Execute callback failed.");
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
-   if (carrier->result) {
+#define DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC 1
+
+  const int argc = DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC;
+  napi_value argv[DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC];
+
+  if (carrier->result) {
     NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
   } else {
     NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
   }
 
   NAPI_ASYNC_CALL_AND_DELETE_CB();
-  free(carrier->result);
+  dc_str_unref(carrier->result);
   free(carrier);
 }
 
@@ -1331,8 +1349,10 @@ static void dcn_open_complete(napi_env env, napi_status status, void* data) {
     return;
   }
 
-  const int argc = 1;
-  napi_value argv[argc];
+#define DCN_OPEN_COMPLETE_CALLBACK_ARGC 1
+
+  const int argc = DCN_OPEN_COMPLETE_CALLBACK_ARGC;
+  napi_value argv[DCN_OPEN_COMPLETE_CALLBACK_ARGC];
 
   if (carrier->result == 1) {
     NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
@@ -1422,8 +1442,9 @@ NAPI_METHOD(dcn_send_msg) {
   NAPI_ARGV_UINT32(chat_id, 1);
 
   //TRACE("calling..");
-  dc_msg_t* dc_msg;
+  dc_msg_t* dc_msg = NULL;
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
+
   uint32_t msg_id = dc_send_msg(dcn_context->dc_context, chat_id, dc_msg);
   //TRACE("done");
 
@@ -1487,7 +1508,7 @@ NAPI_METHOD(dcn_set_draft) {
   NAPI_ARGV_UINT32(chat_id, 1);
 
   //TRACE("calling..");
-  dc_msg_t* dc_msg;
+  dc_msg_t* dc_msg = NULL;
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
 
   dc_set_draft(dcn_context->dc_context, chat_id, dc_msg);
@@ -1523,6 +1544,7 @@ NAPI_METHOD(dcn_set_event_handler) {
   NAPI_RETURN_UNDEFINED();
 }
 
+// TODO remove this function
 NAPI_METHOD(dcn_set_string_table) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1530,7 +1552,8 @@ NAPI_METHOD(dcn_set_string_table) {
   NAPI_ARGV_UTF8_MALLOC(str, 2);
 
   //TRACE("calling..");
-  strtable_set_str(dcn_context->strtable, index, str);
+  // TODO remove
+  //strtable_set_str(dcn_context->strtable, index, str);
   //TRACE("done");
 
   free(str);
@@ -1625,7 +1648,7 @@ NAPI_METHOD(dcn_chat_get_name) {
   char* name = dc_chat_get_name(dc_chat);
   //TRACE("result %s", name);
 
-  NAPI_RETURN_AND_FREE_STRING(name);
+  NAPI_RETURN_AND_UNREF_STRING(name);
 }
 
 NAPI_METHOD(dcn_chat_get_profile_image) {
@@ -1636,7 +1659,7 @@ NAPI_METHOD(dcn_chat_get_profile_image) {
   char* profile_image = dc_chat_get_profile_image(dc_chat);
   //TRACE("result %s", profile_image);
 
-  NAPI_RETURN_AND_FREE_STRING(profile_image);
+  NAPI_RETURN_AND_UNREF_STRING(profile_image);
 }
 
 NAPI_METHOD(dcn_chat_get_subtitle) {
@@ -1647,7 +1670,7 @@ NAPI_METHOD(dcn_chat_get_subtitle) {
   char* subtitle = dc_chat_get_subtitle(dc_chat);
   //TRACE("result %s", subtitle);
 
-  NAPI_RETURN_AND_FREE_STRING(subtitle);
+  NAPI_RETURN_AND_UNREF_STRING(subtitle);
 }
 
 NAPI_METHOD(dcn_chat_get_type) {
@@ -1769,7 +1792,7 @@ NAPI_METHOD(dcn_contact_get_addr) {
   char* addr = dc_contact_get_addr(dc_contact);
   //TRACE("result %s", addr);
 
-  NAPI_RETURN_AND_FREE_STRING(addr);
+  NAPI_RETURN_AND_UNREF_STRING(addr);
 }
 
 NAPI_METHOD(dcn_contact_get_color) {
@@ -1791,7 +1814,7 @@ NAPI_METHOD(dcn_contact_get_display_name) {
   char* display_name = dc_contact_get_display_name(dc_contact);
   //TRACE("result %s", display_name);
 
-  NAPI_RETURN_AND_FREE_STRING(display_name);
+  NAPI_RETURN_AND_UNREF_STRING(display_name);
 }
 
 NAPI_METHOD(dcn_contact_get_first_name) {
@@ -1802,7 +1825,7 @@ NAPI_METHOD(dcn_contact_get_first_name) {
   char* first_name = dc_contact_get_first_name(dc_contact);
   //TRACE("result %s", first_name);
 
-  NAPI_RETURN_AND_FREE_STRING(first_name);
+  NAPI_RETURN_AND_UNREF_STRING(first_name);
 }
 
 NAPI_METHOD(dcn_contact_get_id) {
@@ -1824,7 +1847,7 @@ NAPI_METHOD(dcn_contact_get_name) {
   char* name = dc_contact_get_name(dc_contact);
   //TRACE("result %s", name);
 
-  NAPI_RETURN_AND_FREE_STRING(name);
+  NAPI_RETURN_AND_UNREF_STRING(name);
 }
 
 NAPI_METHOD(dcn_contact_get_name_n_addr) {
@@ -1835,7 +1858,7 @@ NAPI_METHOD(dcn_contact_get_name_n_addr) {
   char* name_n_addr = dc_contact_get_name_n_addr(dc_contact);
   //TRACE("result %s", name_n_addr);
 
-  NAPI_RETURN_AND_FREE_STRING(name_n_addr);
+  NAPI_RETURN_AND_UNREF_STRING(name_n_addr);
 }
 
 NAPI_METHOD(dcn_contact_get_profile_image) {
@@ -1846,7 +1869,7 @@ NAPI_METHOD(dcn_contact_get_profile_image) {
   char* profile_image = dc_contact_get_profile_image(dc_contact);
   //TRACE("result %s", profile_image);
 
-  NAPI_RETURN_AND_FREE_STRING(profile_image);
+  NAPI_RETURN_AND_UNREF_STRING(profile_image);
 }
 
 NAPI_METHOD(dcn_contact_is_blocked) {
@@ -1905,7 +1928,7 @@ NAPI_METHOD(dcn_lot_get_text1) {
   char* text1 = dc_lot_get_text1(dc_lot);
   //TRACE("result %s", text1);
 
-  NAPI_RETURN_AND_FREE_STRING(text1);
+  NAPI_RETURN_AND_UNREF_STRING(text1);
 }
 
 NAPI_METHOD(dcn_lot_get_text1_meaning) {
@@ -1927,7 +1950,7 @@ NAPI_METHOD(dcn_lot_get_text2) {
   char* text2 = dc_lot_get_text2(dc_lot);
   //TRACE("result %s", text2);
 
-  NAPI_RETURN_AND_FREE_STRING(text2);
+  NAPI_RETURN_AND_UNREF_STRING(text2);
 }
 
 NAPI_METHOD(dcn_lot_get_timestamp) {
@@ -1975,7 +1998,7 @@ NAPI_METHOD(dcn_msg_get_file) {
   char* file = dc_msg_get_file(dc_msg);
   //TRACE("result %s", file);
 
-  NAPI_RETURN_AND_FREE_STRING(file);
+  NAPI_RETURN_AND_UNREF_STRING(file);
 }
 
 NAPI_METHOD(dcn_msg_get_filebytes) {
@@ -1997,7 +2020,7 @@ NAPI_METHOD(dcn_msg_get_filemime) {
   char* filemime = dc_msg_get_filemime(dc_msg);
   //TRACE("result %s", filemime);
 
-  NAPI_RETURN_AND_FREE_STRING(filemime);
+  NAPI_RETURN_AND_UNREF_STRING(filemime);
 }
 
 NAPI_METHOD(dcn_msg_get_filename) {
@@ -2008,7 +2031,7 @@ NAPI_METHOD(dcn_msg_get_filename) {
   char* filename = dc_msg_get_filename(dc_msg);
   //TRACE("result %s", filename);
 
-  NAPI_RETURN_AND_FREE_STRING(filename);
+  NAPI_RETURN_AND_UNREF_STRING(filename);
 }
 
 NAPI_METHOD(dcn_msg_get_from_id) {
@@ -2064,7 +2087,7 @@ NAPI_METHOD(dcn_msg_get_setupcodebegin) {
   char* setupcodebegin = dc_msg_get_setupcodebegin(dc_msg);
   //TRACE("result %s", setupcodebegin);
 
-  NAPI_RETURN_AND_FREE_STRING(setupcodebegin);
+  NAPI_RETURN_AND_UNREF_STRING(setupcodebegin);
 }
 
 NAPI_METHOD(dcn_msg_get_showpadlock) {
@@ -2128,7 +2151,7 @@ NAPI_METHOD(dcn_msg_get_summarytext) {
   char* summarytext = dc_msg_get_summarytext(dc_msg, approx_characters);
   //TRACE("result %s", summarytext);
 
-  NAPI_RETURN_AND_FREE_STRING(summarytext);
+  NAPI_RETURN_AND_UNREF_STRING(summarytext);
 }
 
 NAPI_METHOD(dcn_msg_get_text) {
@@ -2139,7 +2162,7 @@ NAPI_METHOD(dcn_msg_get_text) {
   char* text = dc_msg_get_text(dc_msg);
   //TRACE("result %s", text);
 
-  NAPI_RETURN_AND_FREE_STRING(text);
+  NAPI_RETURN_AND_UNREF_STRING(text);
 }
 
 NAPI_METHOD(dcn_msg_get_timestamp) {
@@ -2532,7 +2555,7 @@ NAPI_METHOD(dcn_array_get_marker) {
   char* marker = dc_array_get_marker(dc_array, index);
   //TRACE("result %s", marker);
 
-  NAPI_RETURN_AND_FREE_STRING(marker);
+  NAPI_RETURN_AND_UNREF_STRING(marker);
 }
 
 NAPI_METHOD(dcn_array_get_contact_id) {
@@ -2591,6 +2614,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
+  // TODO remove
   NAPI_EXPORT_FUNCTION(dcn_clear_string_table);
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
@@ -2649,6 +2673,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
+  // TODO remove
   NAPI_EXPORT_FUNCTION(dcn_set_string_table);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_threads);
