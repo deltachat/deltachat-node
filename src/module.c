@@ -1442,8 +1442,9 @@ NAPI_METHOD(dcn_send_msg) {
   NAPI_ARGV_UINT32(chat_id, 1);
 
   //TRACE("calling..");
-  dc_msg_t* dc_msg;
+  dc_msg_t* dc_msg = NULL;
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
+
   uint32_t msg_id = dc_send_msg(dcn_context->dc_context, chat_id, dc_msg);
   //TRACE("done");
 
@@ -1507,7 +1508,7 @@ NAPI_METHOD(dcn_set_draft) {
   NAPI_ARGV_UINT32(chat_id, 1);
 
   //TRACE("calling..");
-  dc_msg_t* dc_msg;
+  dc_msg_t* dc_msg = NULL;
   napi_get_value_external(env, argv[2], (void**)&dc_msg);
 
   dc_set_draft(dcn_context->dc_context, chat_id, dc_msg);
