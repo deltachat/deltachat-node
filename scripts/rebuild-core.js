@@ -9,14 +9,11 @@ spawn('cargo', [ 'update' ], opts)
 
 const buildArgs = [
   'build',
+  '--release',
   '--features',
   'vendored',
   '-p',
   'deltachat_ffi'
 ]
-
-if (process.platform !== 'win32') {
-  buildArgs.push('--release')
-}
 
 spawn('cargo', buildArgs, opts)

@@ -20,7 +20,7 @@
                     "deltachat-core-rust",
                 ],
                 "libraries": [
-                    "../deltachat-core-rust/target/debug/deltachat.dll.lib"
+                    "../deltachat-core-rust/target/release/deltachat.dll.lib"
                 ],
             }],
             [ "OS == 'linux' or OS == 'mac'", {
