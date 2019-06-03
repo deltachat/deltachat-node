@@ -71,7 +71,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('save_mime_headers'), '1', 'saveMimeHeaders correct')
     t.is(
       dc.getBlobdir(),
-       path.join(cwd, 'db.sqlite-blobs'),
+      path.join(cwd, 'db.sqlite-blobs'),
       'correct blobdir'
     )
   })
