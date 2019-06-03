@@ -24,7 +24,6 @@
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
-- [Troubleshooting](#troubleshooting)
 - [Usage](#usage)
 - [API](#api)
 - [Developing](#developing)
@@ -236,7 +235,7 @@ Get blocked contacts. Corresponds to `dc_get_blocked_contacts()`.
 
 #### `dc.getChat(chatId)`
 
-Get <a href="#class_chat">`Chat`</a> object by a chat id. Corresponds to `dc_get_chat().
+Get <a href="#class_chat">`Chat`</a> object by a chat id. Corresponds to \`dc_get_chat().
 
 #### `dc.getChatContacts(chatId)`
 
@@ -244,7 +243,7 @@ Get contact ids belonging to a chat. Corresponds to `dc_get_chat_contacts()`.
 
 #### `dc.getChatIdByContactId(contactId)`
 
-Check, if there is a normal chat with a given contact. Corresponds to `dc_get_chat_id_by_contact_id().
+Check, if there is a normal chat with a given contact. Corresponds to \`dc_get_chat_id_by_contact_id().
 
 #### `dc.getChatMedia(chatId, msgType1, msgType2, msgType3)`
 
@@ -730,7 +729,7 @@ Get a summary of a message. Returns a <a href="#class_lot">`Lot`</a> object. Cor
 
 #### `msg.getSummarytext(approxCharacters)`
 
-Get a message summary as a single line of text. Corresponds to `dc_msg_get_summarytext().
+Get a message summary as a single line of text. Corresponds to \`dc_msg_get_summarytext().
 
 #### `msg.getText()`
 

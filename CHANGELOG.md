@@ -6,27 +6,26 @@
 
 ### Changed
 
-- Remove --verbose from npm install @ralptheninja
-- Add section in README about making releases @ralphtheninja
-- Update nyc @ralphtheninja #305
+- Remove --verbose from npm install [**@ralptheninja**](https://github.com/ralptheninja)
+- Add section in README about making releases [**@ralphtheninja**](https://github.com/ralphtheninja)
+- Update nyc [**@ralphtheninja**](https://github.com/ralphtheninja) [#305](https://github.com/deltachat/deltachat-node/issues/305)
 
 ### Added
 
-- Allow the bindings to build against the installed version of libdeltachat.so using pkg-config. Also fixes a lot of ci related issues. @flub @jikstra #257
-- Implement bundle dependencies script for mac os x @nicodh @jikstra #276
-- Add marker methods for location streaming @ralphtheninja #301
-- Build deltachat-core with rpgp @flub #301
-
+- Allow the bindings to build against the installed version of libdeltachat.so using pkg-config. Also fixes a lot of ci related issues. [**@flub**](https://github.com/flub) [**@jikstra**](https://github.com/jikstra) [#257](https://github.com/deltachat/deltachat-node/issues/257)
+- Implement bundle dependencies script for mac os x [**@nicodh**](https://github.com/nicodh) [**@jikstra**](https://github.com/jikstra) [#276](https://github.com/deltachat/deltachat-node/issues/276)
+- Add marker methods for location streaming [**@ralphtheninja**](https://github.com/ralphtheninja) [#301](https://github.com/deltachat/deltachat-node/issues/301)
+- Build deltachat-core with rpgp [**@flub**](https://github.com/flub) [#301](https://github.com/deltachat/deltachat-node/issues/301)
 
 ### Fixed
 
-- Fix scripts, refactor and split out helper methods for scripts @jikstra #284
-- Set variable to point to core root and fix include dirs @ralphtheninja #285
-- Build on node v12 and v11 @jikstra #293
-- Fix docker integration tests @ralphtheninja #299
-- Fix broken http get for autoconfigure @ralphtheninja #303
-- Fix mac ci @jikstra #313
-- Fix bundle dependency scripts @jikstra #314
+- Fix scripts, refactor and split out helper methods for scripts [**@jikstra**](https://github.com/jikstra) [#284](https://github.com/deltachat/deltachat-node/issues/284)
+- Set variable to point to core root and fix include dirs [**@ralphtheninja**](https://github.com/ralphtheninja) [#285](https://github.com/deltachat/deltachat-node/issues/285)
+- Build on node v12 and v11 [**@jikstra**](https://github.com/jikstra) [#293](https://github.com/deltachat/deltachat-node/issues/293)
+- Fix docker integration tests [**@ralphtheninja**](https://github.com/ralphtheninja) [#299](https://github.com/deltachat/deltachat-node/issues/299)
+- Fix broken http get for autoconfigure [**@ralphtheninja**](https://github.com/ralphtheninja) [#303](https://github.com/deltachat/deltachat-node/issues/303)
+- Fix mac ci [**@jikstra**](https://github.com/jikstra) [#313](https://github.com/deltachat/deltachat-node/issues/313)
+- Fix bundle dependency scripts [**@jikstra**](https://github.com/jikstra) [#314](https://github.com/deltachat/deltachat-node/issues/314)
 
 ## [0.43.0] - 2019-04-26
 
