@@ -43,7 +43,7 @@
     return return_value; \
   } \
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, name, NAPI_AUTO_LENGTH, &return_value)); \
-  free(name); \
+  dc_str_unref(name); \
   return return_value;
 
 #define NAPI_ASYNC_CARRIER_BEGIN(name) \
