@@ -1,0 +1,31 @@
+build: false
+skip_branch_with_pr: true
+
+environment:
+  matrix:
+    - nodejs_version: "10"
+
+configuration: Release
+platform:
+  - x64
+
+install:
+  - SET PATH=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin;%PATH%
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - SET PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
+  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
+  - rustup-init -yv
+  - SET PATH=%PATH%;%USERPROFILE%\.cargo\bin
+  - rustc -vV
+  - cargo -vV
+  - node --version
+  - npm --version
+  - npm i
+
+test_script:
+  - npm test
+  - npm run test-integration
+
+cache:
+  - C:\Users\appveyor\.rustup
+  - C:\Users\appveyor\.cargo

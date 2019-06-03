@@ -2,8 +2,9 @@
 
 > node.js bindings for [`deltachat-core`][deltachat-core]
 
-[![npm](https://img.shields.io/npm/v/deltachat-node.svg)](https://www.npmjs.com/package/deltachat-node)
+[![Appveyor build status][appveyor-shield]][appveyor]
 [![Build Status](https://travis-ci.org/deltachat/deltachat-node.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-node)
+[![npm](https://img.shields.io/npm/v/deltachat-node.svg)](https://www.npmjs.com/package/deltachat-node)
 ![Node version](https://img.shields.io/node/v/deltachat-node.svg)
 [![Coverage Status](https://coveralls.io/repos/github/deltachat/deltachat-node/badge.svg)](https://coveralls.io/github/deltachat/deltachat-node)
 [![dependencies](https://david-dm.org/deltachat/deltachat-node.svg)](https://david-dm.org/deltachat/deltachat-node)
@@ -1004,3 +1005,5 @@ Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 Copyright © 2018 Delta Chat contributors.
 
 [deltachat-core]: https://github.com/deltachat/deltachat-core
+[appveyor-shield]: https://ci.appveyor.com/api/projects/status/t0narp672wpbl6pd?svg=true
+[appveyor]: https://ci.appveyor.com/project/ralphtheninja/deltachat-node/branch/master
