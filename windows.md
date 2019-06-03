@@ -32,6 +32,6 @@ $ git clone https://github.com/deltachat/deltachat-node
 ## build the code
 
 ```
-$ cd src/deltachat
+$ cd src/deltachat/deltachat-node
 $ npm install
 ```
