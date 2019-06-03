@@ -142,7 +142,7 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   free(dcn_event);
   dcn_event = NULL;
 
-  TRACE("calling back into js");
+  //TRACE("calling back into js");
 
   napi_value result;
   status = napi_call_function(
