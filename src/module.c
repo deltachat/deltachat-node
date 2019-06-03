@@ -756,7 +756,7 @@ NAPI_METHOD(dcn_get_blobdir) {
   char* blobdir = dc_get_blobdir(dcn_context->dc_context);
   //TRACE("result %s", blobdir);
 
-  NAPI_RETURN_AND_FREE_STRING(blobdir);
+  NAPI_RETURN_AND_UNREF_STRING(blobdir);
 }
 
 NAPI_METHOD(dcn_get_blocked_cnt) {
@@ -860,7 +860,7 @@ NAPI_METHOD(dcn_get_mime_headers) {
   char* headers = dc_get_mime_headers(dcn_context->dc_context, msg_id);
   //TRACE("result %s", headers);
 
-  NAPI_RETURN_AND_FREE_STRING(headers);
+  NAPI_RETURN_AND_UNREF_STRING(headers);
 }
 
 NAPI_METHOD(dcn_get_chat_msgs) {
@@ -919,7 +919,7 @@ NAPI_METHOD(dcn_get_config) {
 
   free(key);
 
-  NAPI_RETURN_AND_FREE_STRING(value);
+  NAPI_RETURN_AND_UNREF_STRING(value);
 }
 
 NAPI_METHOD(dcn_get_contact) {
@@ -953,7 +953,7 @@ NAPI_METHOD(dcn_get_contact_encrinfo) {
                                             contact_id);
   //TRACE("result %s", encr_info);
 
-  NAPI_RETURN_AND_FREE_STRING(encr_info);
+  NAPI_RETURN_AND_UNREF_STRING(encr_info);
 }
 
 NAPI_METHOD(dcn_get_contacts) {
@@ -1026,7 +1026,7 @@ NAPI_METHOD(dcn_get_info) {
   char *str = dc_get_info(dcn_context->dc_context);
   //TRACE("result %s", str);
 
-  NAPI_RETURN_AND_FREE_STRING(str);
+  NAPI_RETURN_AND_UNREF_STRING(str);
 }
 
 NAPI_METHOD(dcn_get_msg) {
@@ -1070,7 +1070,7 @@ NAPI_METHOD(dcn_get_msg_info) {
   char* msg_info = dc_get_msg_info(dcn_context->dc_context, msg_id);
   //TRACE("result %s", msg_info);
 
-  NAPI_RETURN_AND_FREE_STRING(msg_info);
+  NAPI_RETURN_AND_UNREF_STRING(msg_info);
 }
 
 NAPI_METHOD(dcn_get_next_media) {
@@ -1104,7 +1104,7 @@ NAPI_METHOD(dcn_get_securejoin_qr) {
                                     group_chat_id);
   //TRACE("result %s", code);
 
-  NAPI_RETURN_AND_FREE_STRING(code);
+  NAPI_RETURN_AND_UNREF_STRING(code);
 }
 
 NAPI_METHOD(dcn_imex) {
@@ -1138,7 +1138,7 @@ NAPI_METHOD(dcn_imex_has_backup) {
 
   free(dir_name);
 
-  NAPI_RETURN_AND_FREE_STRING(file);
+  NAPI_RETURN_AND_UNREF_STRING(file);
 }
 
 NAPI_ASYNC_CARRIER_BEGIN(dcn_initiate_key_transfer)
@@ -1648,7 +1648,7 @@ NAPI_METHOD(dcn_chat_get_name) {
   char* name = dc_chat_get_name(dc_chat);
   //TRACE("result %s", name);
 
-  NAPI_RETURN_AND_FREE_STRING(name);
+  NAPI_RETURN_AND_UNREF_STRING(name);
 }
 
 NAPI_METHOD(dcn_chat_get_profile_image) {
@@ -1659,7 +1659,7 @@ NAPI_METHOD(dcn_chat_get_profile_image) {
   char* profile_image = dc_chat_get_profile_image(dc_chat);
   //TRACE("result %s", profile_image);
 
-  NAPI_RETURN_AND_FREE_STRING(profile_image);
+  NAPI_RETURN_AND_UNREF_STRING(profile_image);
 }
 
 NAPI_METHOD(dcn_chat_get_subtitle) {
@@ -1670,7 +1670,7 @@ NAPI_METHOD(dcn_chat_get_subtitle) {
   char* subtitle = dc_chat_get_subtitle(dc_chat);
   //TRACE("result %s", subtitle);
 
-  NAPI_RETURN_AND_FREE_STRING(subtitle);
+  NAPI_RETURN_AND_UNREF_STRING(subtitle);
 }
 
 NAPI_METHOD(dcn_chat_get_type) {
@@ -1792,7 +1792,7 @@ NAPI_METHOD(dcn_contact_get_addr) {
   char* addr = dc_contact_get_addr(dc_contact);
   //TRACE("result %s", addr);
 
-  NAPI_RETURN_AND_FREE_STRING(addr);
+  NAPI_RETURN_AND_UNREF_STRING(addr);
 }
 
 NAPI_METHOD(dcn_contact_get_color) {
@@ -1814,7 +1814,7 @@ NAPI_METHOD(dcn_contact_get_display_name) {
   char* display_name = dc_contact_get_display_name(dc_contact);
   //TRACE("result %s", display_name);
 
-  NAPI_RETURN_AND_FREE_STRING(display_name);
+  NAPI_RETURN_AND_UNREF_STRING(display_name);
 }
 
 NAPI_METHOD(dcn_contact_get_first_name) {
@@ -1825,7 +1825,7 @@ NAPI_METHOD(dcn_contact_get_first_name) {
   char* first_name = dc_contact_get_first_name(dc_contact);
   //TRACE("result %s", first_name);
 
-  NAPI_RETURN_AND_FREE_STRING(first_name);
+  NAPI_RETURN_AND_UNREF_STRING(first_name);
 }
 
 NAPI_METHOD(dcn_contact_get_id) {
@@ -1847,7 +1847,7 @@ NAPI_METHOD(dcn_contact_get_name) {
   char* name = dc_contact_get_name(dc_contact);
   //TRACE("result %s", name);
 
-  NAPI_RETURN_AND_FREE_STRING(name);
+  NAPI_RETURN_AND_UNREF_STRING(name);
 }
 
 NAPI_METHOD(dcn_contact_get_name_n_addr) {
@@ -1858,7 +1858,7 @@ NAPI_METHOD(dcn_contact_get_name_n_addr) {
   char* name_n_addr = dc_contact_get_name_n_addr(dc_contact);
   //TRACE("result %s", name_n_addr);
 
-  NAPI_RETURN_AND_FREE_STRING(name_n_addr);
+  NAPI_RETURN_AND_UNREF_STRING(name_n_addr);
 }
 
 NAPI_METHOD(dcn_contact_get_profile_image) {
@@ -1869,7 +1869,7 @@ NAPI_METHOD(dcn_contact_get_profile_image) {
   char* profile_image = dc_contact_get_profile_image(dc_contact);
   //TRACE("result %s", profile_image);
 
-  NAPI_RETURN_AND_FREE_STRING(profile_image);
+  NAPI_RETURN_AND_UNREF_STRING(profile_image);
 }
 
 NAPI_METHOD(dcn_contact_is_blocked) {
@@ -1928,7 +1928,7 @@ NAPI_METHOD(dcn_lot_get_text1) {
   char* text1 = dc_lot_get_text1(dc_lot);
   //TRACE("result %s", text1);
 
-  NAPI_RETURN_AND_FREE_STRING(text1);
+  NAPI_RETURN_AND_UNREF_STRING(text1);
 }
 
 NAPI_METHOD(dcn_lot_get_text1_meaning) {
@@ -1950,7 +1950,7 @@ NAPI_METHOD(dcn_lot_get_text2) {
   char* text2 = dc_lot_get_text2(dc_lot);
   //TRACE("result %s", text2);
 
-  NAPI_RETURN_AND_FREE_STRING(text2);
+  NAPI_RETURN_AND_UNREF_STRING(text2);
 }
 
 NAPI_METHOD(dcn_lot_get_timestamp) {
@@ -1998,7 +1998,7 @@ NAPI_METHOD(dcn_msg_get_file) {
   char* file = dc_msg_get_file(dc_msg);
   //TRACE("result %s", file);
 
-  NAPI_RETURN_AND_FREE_STRING(file);
+  NAPI_RETURN_AND_UNREF_STRING(file);
 }
 
 NAPI_METHOD(dcn_msg_get_filebytes) {
@@ -2020,7 +2020,7 @@ NAPI_METHOD(dcn_msg_get_filemime) {
   char* filemime = dc_msg_get_filemime(dc_msg);
   //TRACE("result %s", filemime);
 
-  NAPI_RETURN_AND_FREE_STRING(filemime);
+  NAPI_RETURN_AND_UNREF_STRING(filemime);
 }
 
 NAPI_METHOD(dcn_msg_get_filename) {
@@ -2031,7 +2031,7 @@ NAPI_METHOD(dcn_msg_get_filename) {
   char* filename = dc_msg_get_filename(dc_msg);
   //TRACE("result %s", filename);
 
-  NAPI_RETURN_AND_FREE_STRING(filename);
+  NAPI_RETURN_AND_UNREF_STRING(filename);
 }
 
 NAPI_METHOD(dcn_msg_get_from_id) {
@@ -2087,7 +2087,7 @@ NAPI_METHOD(dcn_msg_get_setupcodebegin) {
   char* setupcodebegin = dc_msg_get_setupcodebegin(dc_msg);
   //TRACE("result %s", setupcodebegin);
 
-  NAPI_RETURN_AND_FREE_STRING(setupcodebegin);
+  NAPI_RETURN_AND_UNREF_STRING(setupcodebegin);
 }
 
 NAPI_METHOD(dcn_msg_get_showpadlock) {
@@ -2151,7 +2151,7 @@ NAPI_METHOD(dcn_msg_get_summarytext) {
   char* summarytext = dc_msg_get_summarytext(dc_msg, approx_characters);
   //TRACE("result %s", summarytext);
 
-  NAPI_RETURN_AND_FREE_STRING(summarytext);
+  NAPI_RETURN_AND_UNREF_STRING(summarytext);
 }
 
 NAPI_METHOD(dcn_msg_get_text) {
@@ -2162,7 +2162,7 @@ NAPI_METHOD(dcn_msg_get_text) {
   char* text = dc_msg_get_text(dc_msg);
   //TRACE("result %s", text);
 
-  NAPI_RETURN_AND_FREE_STRING(text);
+  NAPI_RETURN_AND_UNREF_STRING(text);
 }
 
 NAPI_METHOD(dcn_msg_get_timestamp) {
@@ -2555,7 +2555,7 @@ NAPI_METHOD(dcn_array_get_marker) {
   char* marker = dc_array_get_marker(dc_array, index);
   //TRACE("result %s", marker);
 
-  NAPI_RETURN_AND_FREE_STRING(marker);
+  NAPI_RETURN_AND_UNREF_STRING(marker);
 }
 
 NAPI_METHOD(dcn_array_get_contact_id) {
