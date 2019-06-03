@@ -621,7 +621,7 @@ NAPI_ASYNC_COMPLETE(dcn_continue_key_transfer) {
   NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
 
   NAPI_ASYNC_CALL_AND_DELETE_CB()
-  free(carrier->setup_code);
+  dc_str_unref(carrier->setup_code);
   free(carrier);
 }
 
@@ -1169,7 +1169,7 @@ NAPI_ASYNC_COMPLETE(dcn_initiate_key_transfer) {
   }
 
   NAPI_ASYNC_CALL_AND_DELETE_CB();
-  free(carrier->result);
+  dc_str_unref(carrier->result);
   free(carrier);
 }
 
