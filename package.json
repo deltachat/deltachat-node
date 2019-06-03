@@ -10,6 +10,7 @@
     "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
     "rebuild-core": "npm run submodule && node scripts/rebuild-core.js",
     "rebuild-bindings": "node-gyp rebuild --verbose",
+    "postinstall": "node scripts/npm-postinstall.js",
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
