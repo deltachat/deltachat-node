@@ -1,6 +1,6 @@
 # deltachat-node
 
-> node.js bindings for [`deltachat-core`][deltachat-core]
+> node.js bindings for [`deltachat-core-rust`][deltachat-core-rust]
 
 [![Appveyor build status][appveyor-shield]][appveyor]
 [![Build Status](https://travis-ci.org/deltachat/deltachat-node.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-node)
@@ -17,7 +17,7 @@
 `deltachat-node` primarily aims to offer two things:
 
 - A high level JavaScript api with syntactic sugar
-- A low level c binding api around  [`deltachat-core`][deltachat-core]
+- A low level c binding api around  [`deltachat-core-rust`][deltachat-core-rust]
 
 ## Table of Contents
 
@@ -34,11 +34,7 @@
 
 ## Install
 
-By default the installation will build deltachat-core from the
-submodule using `scripts/rebuild-core.js`.  This requires you to have
-all the dependencies of the deltachat-core library available for it to
-be able to compile, see the README of deltachat-core itself for this.
-Simply invoke npm:
+By default the installation will build `deltachat-core-rust` from the submodule using `scripts/rebuild-core.js`. Simply invoke npm:
 
 ```
 npm install deltchat-node
@@ -46,11 +42,7 @@ npm install deltchat-node
 
 ### Using system libdeltachat
 
-It is possible to use the system-wide installed `libdeltachat.so`
-library which will be located using `pkg-config`.  You need to have
-installed `deltachat-core` before installing this way.  Using this
-approach allows you to build `libdeltachat.so` with your own specific
-options.
+It is possible to use the system-wide installed `libdeltachat.so` library which will be located using `pkg-config`. You need to have installed `deltachat-core-rust` before installing this way.  Using this approach allows you to build `libdeltachat.so` with your own specific options.
 
 Invoke npm with the extra arguments:
 
@@ -58,29 +50,11 @@ Invoke npm with the extra arguments:
 npm install deltachat-node --dc-system-lib=true
 ```
 
-When invoking `node-gyp` directly this can be achieved in a slightly
-different way:
+When invoking `node-gyp` directly this can be achieved in a slightly different way:
 
 ```
 node-gyp rebuild -- -Dsystem_dc_core=true
 ```
-
-### Bundling dependencies (currently only Mac)
-
-We implemented an experimental way of bundling/including all system dependencies
-like openssl, libetpan... and put it next to the compiled `deltachat.node`. To
-enable this feature you need to pass the environment variable `BUNDLE_DEPENDENCIES=true`
-when running `npm run rebuild-bindings` or any other script which later rebuilds
-the bindings. You can even do this from the outside with something like
-`BUNDLE_DEPENDENCIES=true npm install deltachat-node`.
-
-## Troubleshooting
-
-This module builds on top of `deltachat-core`, which in turn has
-external dependencies.
-Please see [build
-instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso)
-for additional information.
 
 ## Usage
 
@@ -123,7 +97,7 @@ dc.open(() => {
 
 ## API
 
-The high level JavaScript API is a collection of classes wrapping most context types provided by `deltachat-core`. Please see the [class list](https://c.delta.chat/annotated.html) for an overview of this.
+The high level JavaScript API is a collection of classes wrapping most context types provided by `deltachat-core-rust`. Please see the [class list](https://c.delta.chat/annotated.html) for an overview of this.
 
 - <a href="#deltachat_ctor"><code><b>DeltaChat()</b></code></a>
 - <a href="#class_deltachat"><code><b>class DeltaChat</b></code></a>
@@ -465,7 +439,7 @@ Static method. Returns `true` if `addr` maybe is a valid e-mail address, otherwi
 
 #### `dc.maybeNetwork()`
 
-Called as a hint to `deltachat-core` that the network is available again, to trigger pending messages to be sent. Corresponds to [`dc_maybe_network()`](https://c.delta.chat/classdc__context__t.html#a2f61e875270dbb7e7a2533461baa659b).
+Called as a hint to `deltachat-core-rust` that the network is available again, to trigger pending messages to be sent. Corresponds to [`dc_maybe_network()`](https://c.delta.chat/classdc__context__t.html#a2f61e875270dbb7e7a2533461baa659b).
 
 #### `dc.messageNew([viewType])`
 
@@ -978,9 +952,9 @@ We have the following scripts for building, testing and coverage:
 
 - `npm run coverage` Creates a coverage report and passes it to `coveralls`. Only done by `Travis`.
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
-- `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core/deltachat.h` header file.
+- `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-- `npm run submodule` Updates the git submodule in `deltachat-core/`.
+- `npm run submodule` Updates the git submodule in `deltachat-core-rust/`.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
 
 By default `npm install` will build in `Release` mode and will be as silent as possible. Use `--debug` flag to build in `Debug` mode and `--verbose` for more verbose output, e.g. to build in `Debug` mode with full verbosity, do:
@@ -1004,6 +978,6 @@ Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 
 Copyright © 2018 Delta Chat contributors.
 
-[deltachat-core]: https://github.com/deltachat/deltachat-core
+[deltachat-core-rust]: https://github.com/deltachat/deltachat-core-rust
 [appveyor-shield]: https://ci.appveyor.com/api/projects/status/t0narp672wpbl6pd?svg=true
 [appveyor]: https://ci.appveyor.com/project/ralphtheninja/deltachat-node/branch/master
