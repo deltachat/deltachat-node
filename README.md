@@ -979,4 +979,4 @@ Copyright © 2018 Delta Chat contributors.
 
 [deltachat-core-rust]: https://github.com/deltachat/deltachat-core-rust
 [appveyor-shield]: https://ci.appveyor.com/api/projects/status/t0narp672wpbl6pd?svg=true
-[appveyor]: https://ci.appveyor.com/project/ralphtheninja/deltachat-node/branch/master
+[appveyor]: https://ci.appveyor.com/project/ralphtheninja/deltachat-node-d4bf8
