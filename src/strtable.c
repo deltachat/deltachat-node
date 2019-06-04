@@ -24,81 +24,77 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
+#include <uv.h>
 #include "strtable.h"
 #include <deltachat-ffi/deltachat.h>
 
 
 typedef struct strtable_t {
-	pthread_mutex_t mutex;
-	char*           str[DC_STR_COUNT];
+  uv_mutex_t mutex;
+  char*      str[DC_STR_COUNT];
 } strtable_t;
-
 
 strtable_t* strtable_new()
 {
-	strtable_t* strtable = calloc(1, sizeof(strtable_t));
-	if (strtable==NULL) {
-		exit(666);
-	}
+  strtable_t* strtable = calloc(1, sizeof(strtable_t));
+  if (strtable == NULL) {
+    exit(666);
+  }
 
-	pthread_mutex_init(&strtable->mutex, NULL);
+  uv_mutex_init(&strtable->mutex);
 
-	return strtable;
+  return strtable;
 }
-
 
 void strtable_unref(strtable_t* strtable)
 {
-	if (strtable==NULL) {
-		return;
-	}
+  if (strtable == NULL) {
+    return;
+  }
 
-	for (int i=0; i<DC_STR_COUNT; i++) {
-		free(strtable->str[i]);
-	}
+  for (int i = 0; i < DC_STR_COUNT; i++) {
+    free(strtable->str[i]);
+  }
 
-	pthread_mutex_destroy(&strtable->mutex);
+  uv_mutex_destroy(&strtable->mutex);
 
-	free(strtable);
+  free(strtable);
 }
-
 
 void strtable_set_str(strtable_t* strtable, int i, const char* str)
 {
-	if (strtable==NULL || i<0 || i>=DC_STR_COUNT) {
-		return;
-	}
+  if (strtable == NULL || i < 0 || i >= DC_STR_COUNT) {
+    return;
+  }
 
-	pthread_mutex_lock(&strtable->mutex);
-		free(strtable->str[i]);
-		strtable->str[i] = str? strdup(str) : NULL;
-	pthread_mutex_unlock(&strtable->mutex);
+  uv_mutex_lock(&strtable->mutex);
+    free(strtable->str[i]);
+    strtable->str[i] = str? strdup(str) : NULL;
+  uv_mutex_unlock(&strtable->mutex);
 }
-
 
 char* strtable_get_str(strtable_t* strtable, int i)
 {
-	char* str = NULL;
+  char* str = NULL;
 
-	if (strtable==NULL || i<0 || i>=DC_STR_COUNT) {
-		return NULL;
-	}
+  if (strtable == NULL || i < 0 || i >= DC_STR_COUNT) {
+    return NULL;
+  }
 
-	pthread_mutex_lock(&strtable->mutex);
-		str = strtable->str[i]? strdup(strtable->str[i]) : NULL;
-	pthread_mutex_unlock(&strtable->mutex);
+  uv_mutex_lock(&strtable->mutex);
+    str = strtable->str[i]? strdup(strtable->str[i]) : NULL;
+  uv_mutex_unlock(&strtable->mutex);
 
-	return str;
+  return str;
 }
 
 
 void strtable_clear(strtable_t* strtable)
 {
-	pthread_mutex_lock(&strtable->mutex);
-		for (int i=0; i<DC_STR_COUNT; i++) {
-			free(strtable->str[i]);
-			strtable->str[i] = NULL;
-		}
-	pthread_mutex_unlock(&strtable->mutex);
+  uv_mutex_lock(&strtable->mutex);
+    for (int i=0; i<DC_STR_COUNT; i++) {
+      free(strtable->str[i]);
+      strtable->str[i] = NULL;
+    }
+  uv_mutex_unlock(&strtable->mutex);
 }
