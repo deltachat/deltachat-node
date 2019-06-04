@@ -1,18 +1,13 @@
 language: node_js
-sudo: required
-dist: xenial
 
-os:
-  - osx
-  - linux
-
-node_js:
-  - 10
-
-env:
-  matrix:
-    - DC_CORE_VERSION="master" SYS_DC_CORE="false"
-#    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
+jobs:
+  include:
+    - os: linux
+      node_js: 10
+      env: [BUILD_CMD=prebuild, BUILD_GROUP=linux-x64]
+    - os: osx
+      node_js: 10
+      env: [BUILD_CMD=prebuild, BUILD_GROUP=darwin-x64]
 
 cache:
   directories:
@@ -29,7 +24,23 @@ script:
   - ./ci_scripts/ci-test.sh
 
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; fi
+
+before_deploy:
+  - export ARCHIVE_NAME="${TRAVIS_TAG:-latest}-$BUILD_GROUP.tar.gz"
+  - npm run $BUILD_CMD
+  - file prebuilds/*/*
+  - tar -zcvf "$ARCHIVE_NAME" -C prebuilds .
+
+deploy:
+  provider: releases
+  draft: false
+  api_key: "$GH_TOKEN"
+  file: "$ARCHIVE_NAME"
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: "! -z $BUILD_CMD"
 
 notifications:
   email: false
