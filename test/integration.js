@@ -22,20 +22,20 @@ function configureDefaultDC (dc) {
   dc.configure({
     addr: ADDR,
 
-    mailServer: SERVER,
-    mailUser: ADDR,
-    mailPw: process.env.DC_MAIL_PW,
+    mail_server: SERVER,
+    mail_user: ADDR,
+    mail_pw: process.env.DC_MAIL_PW,
 
-    sendServer: SERVER,
-    sendUser: ADDR,
-    sendPw: process.env.DC_MAIL_PW,
+    send_server: SERVER,
+    send_user: ADDR,
+    send_pw: process.env.DC_MAIL_PW,
 
-    displayName: 'Delta One',
-    selfStatus: 'From Delta One with <3',
-    selfAvatar: path.join(__dirname, 'fixtures', 'avatar.png'),
+    displayname: 'Delta One',
+    selfstatus: 'From Delta One with <3',
+    selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
-    e2eeEnabled: true,
-    saveMimeHeaders: true
+    e2ee_enabled: true,
+    save_mime_headers: true
   })
 }
 
@@ -46,17 +46,15 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(15)
+  t.plan(13)
   const cwd = tempy.directory()
   dc = new DeltaChat()
-  t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), ADDR, 'addr correct')
     t.is(dc.getConfig('mail_server'), SERVER, 'mailServer correct')
     t.is(dc.getConfig('mail_user'), ADDR, 'mailUser correct')
     t.is(dc.getConfig('send_server'), SERVER, 'sendServer correct')
     t.is(dc.getConfig('send_user'), ADDR, 'sendUser correct')
-    t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
     // TODO comment back in once fixed in core
@@ -65,10 +63,10 @@ test('setUp dc context', t => {
     //   path.join(cwd,
     //             'db.sqlite-blobs',
     //             'avatar.png'),
-    //   'selfAvatar correct'
+    //   'selfavatar correct'
     // )
-    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
-    t.is(dc.getConfig('save_mime_headers'), '1', 'saveMimeHeaders correct')
+    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
+    t.is(dc.getConfig('save_mime_headers'), '1', 'save_mime_headers correct')
     t.is(
       dc.getBlobdir(),
       path.join(cwd, 'db.sqlite-blobs'),

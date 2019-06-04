@@ -41,9 +41,9 @@ tape('invalid input to configure throws', t => {
   const dc = new DeltaChat()
   t.throws(function () {
     dc.configure({ addr: 'delta1@delta.localhost' })
-  }, /Missing \.mailPw/, 'missing mailPw throws')
+  }, /Missing \.mail_pw/, 'missing mail_pw throws')
   t.throws(function () {
-    dc.configure({ mailPw: 'delta1' })
+    dc.configure({ mail_pw: 'delta1' })
   }, /Missing \.addr/, 'missing addr throws')
   dc.close()
   t.end()
@@ -109,7 +109,6 @@ tape('static getSystemInfo()', t => {
 })
 
 test('basic configuration', (t, dc, cwd) => {
-  t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
   t.is(
     dc.getBlobdir(),
