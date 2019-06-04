@@ -28,5 +28,8 @@ install:
 script:
   - ./ci_scripts/ci-test.sh
 
+after_success:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run coverage; else true; fi
+
 notifications:
   email: false
