@@ -27,8 +27,7 @@
     "lodash.pick": "^4.4.0",
     "mkdirp": "^0.5.1",
     "napi-macros": "^1.7.0",
-    "node-gyp-build": "^4.1.0",
-    "rimraf": "^2.6.3"
+    "node-gyp-build": "^4.1.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
