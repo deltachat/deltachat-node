@@ -956,6 +956,7 @@ We have the following scripts for building, testing and coverage:
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
 - `npm run node-gyp-build` Tries to load prebuilts and falls back to rebuilding the code.
+- `npm run prebuild` Builds prebuilt binary to `prebuilds/$PLATFORM-$ARCH`. Copies `deltachat.dll` from `deltachat-core-rust` for windows.
 - `npm run submodule` Updates the `deltachat-core-rust` submodule.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
 - `npm run test-integration` Runs the integration tests.
