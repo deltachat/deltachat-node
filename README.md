@@ -955,8 +955,12 @@ We have the following scripts for building, testing and coverage:
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
+- `npm run rebuild-all` Rebuilds all code.
+- `npm run rebuild-core` Rebuilds code in `deltachat-core-rust`.
+- `npm run rebuild-bindings` Rebuilds the bindings and links with `deltachat-core-rust`.
 - `npm run node-gyp-build` Tries to load prebuilts and falls back to rebuilding the code.
 - `npm run prebuild` Builds prebuilt binary to `prebuilds/$PLATFORM-$ARCH`. Copies `deltachat.dll` from `deltachat-core-rust` for windows.
+- `npm run download-prebuilds` Downloads all prebuilt binaries from github before `npm publish`.
 - `npm run submodule` Updates the `deltachat-core-rust` submodule.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
 - `npm run test-integration` Runs the integration tests.
