@@ -14,7 +14,6 @@
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
-    "reset": "rm -rf node_modules/ build/ deltachat-core/",
     "hallmark": "hallmark --fix"
   },
   "homepage": "https://github.com/deltachat/deltachat-node",

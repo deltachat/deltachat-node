@@ -953,14 +953,14 @@ We have the following scripts for building, testing and coverage:
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-- `npm run submodule` Updates the git submodule in `deltachat-core-rust/`.
+- `npm run rebuild-all` Rebuilds all the code.
+- `npm run rebuild-core` Builds the `deltachat-core-rust` submodule.
+- `npm run rebuild-bindings` Builds `deltachat.node`.
+- `npm run postinstall` Copies `deltachat.dll` from `deltachat-core-rust` to `build/Release`. Windows only.
+- `npm run submodule` Updates the `deltachat-core-rust` submodule.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
-
-By default `npm install` will build in `Release` mode and will be as silent as possible. Use `--debug` flag to build in `Debug` mode and `--verbose` for more verbose output, e.g. to build in `Debug` mode with full verbosity, do:
-
-```
-npm install --debug --verbose
-```
+- `npm run test-integration` Runs the integration tests.
+- `npm run hallmark` Runs `hallmark` on all markdown files.
 
 ### Releases
 
