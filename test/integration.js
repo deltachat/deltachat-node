@@ -46,17 +46,15 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(15)
+  t.plan(13)
   const cwd = tempy.directory()
   dc = new DeltaChat()
-  t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
   dc.once('ready', () => {
     t.is(dc.getConfig('addr'), ADDR, 'addr correct')
     t.is(dc.getConfig('mail_server'), SERVER, 'mailServer correct')
     t.is(dc.getConfig('mail_user'), ADDR, 'mailUser correct')
     t.is(dc.getConfig('send_server'), SERVER, 'sendServer correct')
     t.is(dc.getConfig('send_user'), ADDR, 'sendUser correct')
-    t.is(dc.getConfig('imap_folder'), 'INBOX', 'default imap folder')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
     // TODO comment back in once fixed in core
