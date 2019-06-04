@@ -5,6 +5,10 @@ environment:
   matrix:
     - nodejs_version: "10"
 
+cache:
+  - C:\Users\appveyor\.rustup
+  - C:\Users\appveyor\.cargo
+
 configuration: Release
 platform:
   - x64
@@ -27,6 +31,17 @@ test_script:
   - npm test
   - npm run test-integration
 
-cache:
-  - C:\Users\appveyor\.rustup
-  - C:\Users\appveyor\.cargo
+before_deploy:
+  - SET ARCHIVE_NAME=%APPVEYOR_REPO_TAG_NAME%-win32-x64.tar.gz
+  - npm run prebuild
+  - tar -zcvf "%ARCHIVE_NAME%" -C prebuilds .
+  - appveyor PushArtifact %ARCHIVE_NAME%
+
+deploy:
+  - provider: GitHub
+    artifact: $(ARCHIVE_NAME)
+    auth_token:
+      secure: iY0PIcxaGMkJLcAnVJv/VlnGGxPQAa2FqsuN3/fcVjvxosfv4P8b4bYyQqM8NJkg
+    draft: false
+    on:
+      appveyor_repo_tag: true
