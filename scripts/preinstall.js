@@ -1,5 +1,5 @@
 const path = require('path')
-const { spawn } = require('./_commons.js')
+const { spawn } = require('./common')
 const opts = {
   cwd: path.resolve(__dirname, '../deltachat-core-rust'),
   stdio: 'inherit'

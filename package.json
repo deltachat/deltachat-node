@@ -6,11 +6,8 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
-    "install": "node scripts/npm-install.js",
-    "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
-    "rebuild-core": "npm run submodule && node scripts/rebuild-core.js",
-    "rebuild-bindings": "node-gyp rebuild --verbose",
-    "postinstall": "node scripts/npm-postinstall.js",
+    "install": "node scripts/install.js",
+    "node-gyp-build": "node-gyp-build \"node scripts/preinstall.js\" \"node scripts/postinstall.js\"",
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
     "test-integration": "node test/integration.js",
@@ -26,11 +23,11 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
-    "bindings": "^1.5.0",
     "debug": "^4.1.1",
     "lodash.pick": "^4.4.0",
     "mkdirp": "^0.5.1",
     "napi-macros": "^1.7.0",
+    "node-gyp-build": "^4.1.0",
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
