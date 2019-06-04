@@ -338,7 +338,6 @@ Returns an object with the following properties:
 - `folders_configured`
 - `inbox_watch`
 - `is_configured`
-- `libetpan_version`
 - `mdns_enabled`
 - `messages_in_contact_requests`
 - `mvbox_move`
@@ -346,7 +345,6 @@ Returns an object with the following properties:
 - `number_of_chat_messages`
 - `number_of_chats`
 - `number_of_contacts`
-- `openssl_version`
 - `private_key_count`
 - `public_key_count`
 - `sentbox_watch`
