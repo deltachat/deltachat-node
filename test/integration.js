@@ -22,20 +22,20 @@ function configureDefaultDC (dc) {
   dc.configure({
     addr: ADDR,
 
-    mailServer: SERVER,
-    mailUser: ADDR,
-    mailPw: process.env.DC_MAIL_PW,
+    mail_server: SERVER,
+    mail_user: ADDR,
+    mail_pw: process.env.DC_MAIL_PW,
 
-    sendServer: SERVER,
-    sendUser: ADDR,
-    sendPw: process.env.DC_MAIL_PW,
+    send_server: SERVER,
+    send_user: ADDR,
+    send_pw: process.env.DC_MAIL_PW,
 
-    displayName: 'Delta One',
-    selfStatus: 'From Delta One with <3',
-    selfAvatar: path.join(__dirname, 'fixtures', 'avatar.png'),
+    displayname: 'Delta One',
+    selfstatus: 'From Delta One with <3',
+    selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
-    e2eeEnabled: true,
-    saveMimeHeaders: true
+    e2ee_enabled: true,
+    save_mime_headers: true
   })
 }
 
@@ -65,10 +65,10 @@ test('setUp dc context', t => {
     //   path.join(cwd,
     //             'db.sqlite-blobs',
     //             'avatar.png'),
-    //   'selfAvatar correct'
+    //   'selfavatar correct'
     // )
-    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
-    t.is(dc.getConfig('save_mime_headers'), '1', 'saveMimeHeaders correct')
+    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
+    t.is(dc.getConfig('save_mime_headers'), '1', 'save_mime_headers correct')
     t.is(
       dc.getBlobdir(),
       path.join(cwd, 'db.sqlite-blobs'),
