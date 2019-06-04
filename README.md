@@ -174,6 +174,11 @@ The `options` object takes the following properties:
 - `options.selfavatar` _(string, optional)_: File containing avatar.
 - `options.e2ee_enabled` _(boolean, optional)_: Enable E2EE. Defaults to `true`.
 - `options.mdns_enabled` _(boolean, optional)_: Send and request read receipts. Defaults to `true`.
+- `options.inbox_watch` _(boolean, optional)_: Watch `INBOX`-folder for changes. Defaults to `true`.
+- `options.sentbox_watch` _(boolean, optional)_: Watch `Sent`-folder for changes. Defaults to `true`.
+- `options.mvbox_watch` _(boolean, optional)_: Watch `DeltaChat`-folder for changes. Defaults to `true`.
+- `options.mvbox_move` _(boolean, optional)_: Heuristically detect chat-messages and move them to the `DeltaChat`-folder. Defaults to `true`.
+- `options.show_emails` _(integer, optional)_: `DC_SHOW_EMAILS_OFF` (0) show direct replies to chats only (default), `DC_SHOW_EMAILS_ACCEPTED_CONTACTS` (1) also show all mails of confirmed contacts, `DC_SHOW_EMAILS_ALL` (2) also show mails of unconfirmed contacts in the deaddrop.
 - `options.save_mime_headers` _(boolean, optional)_: Set to `true` if you want to use <a href="#getmimeheaders">`dc.getMimeHeaders()`</a> later.
 
 #### `dc.continueKeyTransfer(messageId, setupCode, callback)`
