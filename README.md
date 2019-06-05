@@ -955,10 +955,12 @@ We have the following scripts for building, testing and coverage:
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-- `npm run rebuild-all` Rebuilds all the code.
-- `npm run rebuild-core` Builds the `deltachat-core-rust` submodule.
-- `npm run rebuild-bindings` Builds `deltachat.node`.
-- `npm run postinstall` Copies `deltachat.dll` from `deltachat-core-rust` to `build/Release`. Windows only.
+- `npm run rebuild-all` Rebuilds all code.
+- `npm run rebuild-core` Rebuilds code in `deltachat-core-rust`.
+- `npm run rebuild-bindings` Rebuilds the bindings and links with `deltachat-core-rust`.
+- `npm run node-gyp-build` Tries to load prebuilts and falls back to rebuilding the code.
+- `npm run prebuild` Builds prebuilt binary to `prebuilds/$PLATFORM-$ARCH`. Copies `deltachat.dll` from `deltachat-core-rust` for windows.
+- `npm run download-prebuilds` Downloads all prebuilt binaries from github before `npm publish`.
 - `npm run submodule` Updates the `deltachat-core-rust` submodule.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
 - `npm run test-integration` Runs the integration tests.
@@ -971,7 +973,9 @@ The following steps are needed to make a release:
 1. Update `CHANGELOG.md` (and run `npm run hallmark` to adjust markdown)
 2. Bump version number, e.g. `npm version minor`, which will update version number in `package.json`, commit the changes and tag the commit
 3. Push to github, e.g. `git push origin master && git push origin --tags`
-4. Publish to npm, `npm publish`
+4. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
+5. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
+6. `npm publish`
 
 ## License
 
