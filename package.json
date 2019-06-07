@@ -1,6 +1,6 @@
 {
   "name": "deltachat-node",
-  "version": "0.44.1",
+  "version": "1.0.0-alpha.0",
   "description": "node.js bindings for deltachat-core",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
