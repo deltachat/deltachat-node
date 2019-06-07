@@ -63,7 +63,7 @@ const dc = new DeltaChat()
 
 const opts = {
   addr: '[email]',
-  mailPw: '[password]'
+  mail_pw: '[password]'
 }
 
 const contact = '[email]'
@@ -984,5 +984,7 @@ Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 Copyright © 2018 Delta Chat contributors.
 
 [deltachat-core-rust]: https://github.com/deltachat/deltachat-core-rust
+
 [appveyor-shield]: https://ci.appveyor.com/api/projects/status/t0narp672wpbl6pd?svg=true
+
 [appveyor]: https://ci.appveyor.com/project/ralphtheninja/deltachat-node-d4bf8

@@ -2,6 +2,35 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.0] - 2019-06-07
+
+### Changed
+
+- Make options to `dc.configure()` 1-1 with core ([**@ralptheninja**](https://github.com/ralptheninja))
+- Bring back prebuilt binaries using `node-gyp-build`, `prebuildify` and `prebuildify-ci` ([**@ralptheninja**](https://github.com/ralptheninja))
+- Run coverage on Travis ([**@ralptheninja**](https://github.com/ralptheninja))
+
+### Added
+
+- Add `deltachat-core-rust` submodule ([**@ralptheninja**](https://github.com/ralptheninja))
+- Add windows to `bindings.gyp` ([**@ralptheninja**](https://github.com/ralptheninja))
+- Add AppVeyor ([**@ralptheninja**](https://github.com/ralptheninja))
+- Add `.inbox_watch`, `.sentbox_watch`, `.mvbox_watch`, `.mvbox_move` and `.show_emails` to options ([**@ralptheninja**](https://github.com/ralptheninja))
+
+### Removed
+
+- Remove `deltachat-core` submodule ([**@ralptheninja**](https://github.com/ralptheninja))
+- Remove http get (handled by core) ([**@ralptheninja**](https://github.com/ralptheninja))
+- Remove code related to `dc_check_password()` ([**@ralptheninja**](https://github.com/ralptheninja))
+- Remove deprecated `.imap_folder` option ([**@ralptheninja**](https://github.com/ralptheninja))
+
+### Fixed
+
+- Make `dc.close()` async ([**@ralptheninja**](https://github.com/ralptheninja))
+- Fix spawn npm on windows ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Call `dc_str_unref()` to free strings allocated in core ([**@ralptheninja**](https://github.com/ralptheninja))
+- Use mutex from `libuv` for windows support ([**@ralptheninja**](https://github.com/ralptheninja))
+
 ## [0.44.0] - 2019-05-14
 
 ### Changed
@@ -702,7 +731,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...HEAD
+
+[1.0.0-alpha.0]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...v1.0.0-alpha.0
 
 [0.44.0]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...v0.44.0
 
