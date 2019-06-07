@@ -63,7 +63,7 @@ const dc = new DeltaChat()
 
 const opts = {
   addr: '[email]',
-  mailPw: '[password]'
+  mail_pw: '[password]'
 }
 
 const contact = '[email]'
