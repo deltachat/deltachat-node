@@ -2,6 +2,31 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.0] - 2019-06-07
+
+### Changed
+* Make options to `dc.configure()` 1-1 with core (@ralptheninja)
+* Bring back prebuilt binaries using `node-gyp-build`, `prebuildify` and `prebuildify-ci` (@ralptheninja)
+* Run coverage on Travis (@ralptheninja)
+
+### Added
+* Add `deltachat-core-rust` submodule (@ralptheninja)
+* Add windows to `bindings.gyp` (@ralptheninja)
+* Add AppVeyor (@ralptheninja)
+* Add `.inbox_watch`, `.sentbox_watch`, `.mvbox_watch`, `.mvbox_move` and `.show_emails` to options (@ralptheninja)
+
+### Removed
+* Remove `deltachat-core` submodule (@ralptheninja)
+* Remove http get (handled by core) (@ralptheninja)
+* Remove code related to `dc_check_password()` (@ralptheninja)
+* Remove deprecated `.imap_folder` option (@ralptheninja)
+
+### Fixed
+* Make `dc.close()` async (@ralptheninja)
+* Fix spawn npm on windows (@Simon-Laux)
+* Call `dc_str_unref()` to free strings allocated in core (@ralptheninja)
+* Use mutex from `libuv` for windows support (@ralptheninja)
+
 ## [0.44.0] - 2019-05-14
 
 ### Changed
@@ -702,7 +727,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...HEAD
+
+[1.0.0-alpha.0]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...v1.0.0-alpha.0
 
 [0.44.0]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...v0.44.0
 
