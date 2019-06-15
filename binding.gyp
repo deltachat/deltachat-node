@@ -37,7 +37,10 @@
                             "deltachat-core-rust",
                         ],
                         "libraries": [
-                            "../deltachat-core-rust/target/release/libdeltachat.a"
+                            "../deltachat-core-rust/target/release/libdeltachat.a",
+                            "-lm",
+                            "-ldl",
+                            "-lrt"
                         ],
                         "conditions": [
                             [ "OS == 'mac'", {
