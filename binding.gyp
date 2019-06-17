@@ -38,9 +38,7 @@
                         ],
                         "libraries": [
                             "../deltachat-core-rust/target/release/libdeltachat.a",
-                            "-lm",
                             "-ldl",
-                            "-lrt"
                         ],
                         "conditions": [
                             [ "OS == 'mac'", {
@@ -48,7 +46,13 @@
                                     "-framework CoreFoundation",
                                     "-framework CoreServices",
                                     "-framework Security",
+                                    "-lresolv",
                                 ],
+                            }, { # OS == 'linux'
+                                 "libraries": [
+                                     "-lm",
+                                     "-lrt",
+                                 ]
                             }],
                         ],
                     }, { # system_dc_core == 'true'
