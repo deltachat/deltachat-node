@@ -46,7 +46,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(18)
+  t.plan(17)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
