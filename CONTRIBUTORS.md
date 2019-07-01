@@ -3,8 +3,8 @@
 | Name                  | GitHub                                           |
 | :-------------------- | :----------------------------------------------- |
 | **Lars-Magnus Skog**  |                                                  |
-| **jikstra**           |                                                  |
 | **Nico de Haen**      |                                                  |
+| **jikstra**           |                                                  |
 | **björn petersen**    |                                                  |
 | **Jikstra**           | [**@Jikstra**](https://github.com/Jikstra)       |
 | **Karissa McKelvey**  |                                                  |

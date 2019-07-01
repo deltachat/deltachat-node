@@ -2,6 +2,20 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.1] - 2019-07-02
+
+### Changed
+
+- Upgrade `deltachat-core-rust` submodule to `v1.0.0-alpha.1` ([**@ralptheninja**](https://github.com/ralptheninja))
+
+### Fixed
+
+- Fix defaults for mailbox flags ([**@nicodh**](https://github.com/nicodh))
+
+### Removed
+
+- Remove `compile_date` from info ([**@ralptheninja**](https://github.com/ralptheninja))
+
 ## [1.0.0-alpha.0] - 2019-06-07
 
 ### Changed
@@ -731,7 +745,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.1...HEAD
+
+[1.0.0-alpha.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 
 [1.0.0-alpha.0]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...v1.0.0-alpha.0
 
