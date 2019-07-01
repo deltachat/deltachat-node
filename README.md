@@ -325,7 +325,6 @@ Returns an object with the following properties:
 
 - `arch`
 - `blobdir`
-- `compile_date`
 - `configured_mvbox_folder`
 - `configured_sentbox_folder`
 - `database_dir`

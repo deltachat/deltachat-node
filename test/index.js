@@ -55,7 +55,6 @@ tape('dc.getInfo()', t => {
   t.same(Object.keys(info).sort(), [
     'arch',
     'blobdir',
-    'compile_date',
     'configured_mvbox_folder',
     'configured_sentbox_folder',
     'database_dir',
@@ -97,7 +96,6 @@ tape('static getSystemInfo()', t => {
   const info = DeltaChat.getSystemInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
-    'compile_date',
     'deltachat_core_version',
     'sqlite_thread_safe',
     'sqlite_version'
