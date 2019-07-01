@@ -46,7 +46,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(13)
+  t.plan(17)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -66,6 +66,10 @@ test('setUp dc context', t => {
     //   'selfavatar correct'
     // )
     t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
+    t.is(dc.getConfig('inbox_watch'), '1', 'inbox_watch')
+    t.is(dc.getConfig('sentbox_watch'), '1', 'sentbox_watch')
+    t.is(dc.getConfig('mvbox_watch'), '1', 'mvbox_watch')
+    t.is(dc.getConfig('mvbox_move'), '1', 'mvbox_move')
     t.is(dc.getConfig('save_mime_headers'), '1', 'save_mime_headers correct')
     t.is(
       dc.getBlobdir(),
