@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.2] - 2019-07-09
+
+### Changed
+
+- Upgrade `deltachat-core-rust` submodule to `816fa1df9b23ed0b30815e80873258432618d7f0` ([**@jikstra**](https://github.com/jikstra))
+
 ## [1.0.0-alpha.1] - 2019-07-02
 
 ### Changed
@@ -745,7 +751,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.2...HEAD
+
+[1.0.0-alpha.2]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
 
 [1.0.0-alpha.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 
