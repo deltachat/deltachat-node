@@ -2581,12 +2581,23 @@ NAPI_METHOD(dcn_array_get_chat_id) {
   return napi_chat_id;
 }
 
+NAPI_METHOD(dcn_perform_imap_jobs) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_perform_imap_jobs(dcn_context->dc_context);
+
+  //TRACE("calling..");
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_INIT() {
   /**
    * Main context
    */
 
   NAPI_EXPORT_FUNCTION(dcn_context_new);
+  NAPI_EXPORT_FUNCTION(dcn_perform_imap_jobs);
 
   /**
    * Static functions
