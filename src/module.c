@@ -82,7 +82,13 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   dcn_event->data1_str = (DC_EVENT_DATA1_IS_STRING(event) && data1) ? strdup((char*)data1) : NULL;
   dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
 
-  napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_blocking);
+  napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_nonblocking);
+
+  if (status == napi_queue_full) {
+    TRACE("Queue is full!");
+  } else {
+    NAPI_STATUS_THROWS(status);
+  }
 
   return 0;
 }
@@ -1523,7 +1529,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     callback,
     0,
     async_resource_name,
-    100,
+    1000,
     1,
     NULL,
     NULL,
