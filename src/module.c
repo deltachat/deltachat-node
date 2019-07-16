@@ -85,11 +85,9 @@ static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t
   napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_nonblocking);
 
   if (status == napi_queue_full) {
-    TRACE("Queue is full!");
-  } else {
-    NAPI_STATUS_THROWS(status);
+    TRACE("Queue is full, can't call callback");
   }
-
+  
   return 0;
 }
 
