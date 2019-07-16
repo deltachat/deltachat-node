@@ -1529,7 +1529,7 @@ NAPI_METHOD(dcn_set_event_handler) {
     callback,
     0,
     async_resource_name,
-    1000,
+    0,
     1,
     NULL,
     NULL,
