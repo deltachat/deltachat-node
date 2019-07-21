@@ -5,7 +5,7 @@ const opts = {
   stdio: 'inherit'
 }
 
-spawn('cargo', [ 'update' ], opts)
+spawn('cargo', ['update'], opts)
 
 const buildArgs = [
   'build',

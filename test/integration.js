@@ -116,7 +116,7 @@ test.skip('key transfer', t => {
   t.timeoutAfter(900)
 
   // Spawn a second dc instance with same account
-  let dc2 = new DeltaChat()
+  const dc2 = new DeltaChat()
 
   dc2.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
     t.comment('incoming msg')

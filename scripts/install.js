@@ -6,8 +6,8 @@ const opts = {
 }
 
 if (process.env.npm_config_dc_system_lib === 'true') {
-  spawn('npx', [ 'node-gyp', 'rebuild', '--', '-Dsystem_dc_core=true' ], opts)
+  spawn('npx', ['node-gyp', 'rebuild', '--', '-Dsystem_dc_core=true'], opts)
 } else {
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
-  spawn(npm, [ 'run', 'node-gyp-build' ], opts)
+  spawn(npm, ['run', 'node-gyp-build'], opts)
 }

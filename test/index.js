@@ -144,7 +144,7 @@ test('create chat from contact and Chat methods', (t, dc) => {
   t.is(dc.getDraft(chatId), null, 'draft removed')
 
   t.is(dc.getChatIdByContactId(contactId), chatId)
-  t.same(dc.getChatContacts(chatId), [ contactId ])
+  t.same(dc.getChatContacts(chatId), [contactId])
 
   dc.archiveChat(chatId, true)
   t.is(dc.getChat(chatId).getArchived(), 1, 'chat archived')
@@ -155,7 +155,7 @@ test('create chat from contact and Chat methods', (t, dc) => {
   chat = dc.getChat(chatId)
   t.is(chat.isVerified(), false, 'is not verified')
   t.is(chat.getType(), c.DC_CHAT_TYPE_GROUP, 'group chat')
-  t.same(dc.getChatContacts(chatId), [ c.DC_CONTACT_ID_SELF ])
+  t.same(dc.getChatContacts(chatId), [c.DC_CONTACT_ID_SELF])
 
   const draft2 = dc.getDraft(chatId)
   t.ok(draft2, 'unverified group has a draft by default')
@@ -201,8 +201,8 @@ test('test setting profile image', (t, dc) => {
 })
 
 test('create and delete chat', (t, dc) => {
-  let chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
-  let chat = dc.getChat(chatId)
+  const chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
+  const chat = dc.getChat(chatId)
   t.is(chat.getId(), chatId, 'correct chatId')
   dc.deleteChat(chat.getId())
   t.same(dc.getChat(chatId), null, 'chat removed')
@@ -211,7 +211,7 @@ test('create and delete chat', (t, dc) => {
 
 test('new message and Message methods', (t, dc) => {
   const text = 'w00t!'
-  let msg = dc.messageNew().setText(text)
+  const msg = dc.messageNew().setText(text)
 
   t.is(msg.getChatId(), 0, 'chat id 0 before sent')
   t.is(msg.getDuration(), 0, 'duration 0 before sent')
@@ -235,7 +235,7 @@ test('new message and Message methods', (t, dc) => {
   t.is(state.isDelivered(), false, 'no state by default')
   t.is(state.isReceived(), false, 'no state by default')
 
-  let summary = msg.getSummary()
+  const summary = msg.getSummary()
   t.is(summary.getId(), 0, 'no summary id')
   t.is(summary.getState(), 0, 'no summary state')
   t.is(summary.getText1(), null, 'no summary text1')
@@ -299,7 +299,7 @@ test('new message and Message methods', (t, dc) => {
 
 test('Contact methods', (t, dc) => {
   const contactId = dc.createContact('First Last', 'first.last@site.org')
-  let contact = dc.getContact(contactId)
+  const contact = dc.getContact(contactId)
 
   t.is(contact.getAddress(), 'first.last@site.org', 'correct address')
   t.is(typeof contact.getColor(), 'number', 'color is a number')
@@ -336,8 +336,8 @@ test('create contacts from address book', (t, dc) => {
 })
 
 test('delete contacts', (t, dc) => {
-  let id = dc.createContact('someuser', 'someuser@site.com')
-  let contact = dc.getContact(id)
+  const id = dc.createContact('someuser', 'someuser@site.com')
+  const contact = dc.getContact(id)
   t.is(contact.getId(), id, 'contact id matches')
   t.is(dc.deleteContact(id), true, 'delete call succesful')
   t.is(dc.getContact(id), null, 'contact is gone')
@@ -355,7 +355,7 @@ test('adding and removing a contact from a chat', (t, dc) => {
 })
 
 test('blocking contacts', (t, dc) => {
-  let id = dc.createContact('badcontact', 'bad@site.com')
+  const id = dc.createContact('badcontact', 'bad@site.com')
 
   t.is(dc.getBlockedCount(), 0)
   t.same(dc.getContact(id).isBlocked(), false)
@@ -364,7 +364,7 @@ test('blocking contacts', (t, dc) => {
   dc.blockContact(id, true)
   t.is(dc.getBlockedCount(), 1)
   t.same(dc.getContact(id).isBlocked(), true)
-  t.same(dc.getBlockedContacts(), [ id ])
+  t.same(dc.getBlockedContacts(), [id])
 
   dc.blockContact(id, false)
   t.is(dc.getBlockedCount(), 0)
@@ -387,7 +387,7 @@ test('ChatList methods', (t, dc) => {
   t.notEqual(ids.indexOf(chatList.getChatId(1)), -1)
   t.notEqual(ids.indexOf(chatList.getChatId(2)), -1)
 
-  let lot = chatList.getSummary(0)
+  const lot = chatList.getSummary(0)
   t.is(lot.getId(), 0, 'lot has no id')
   t.is(lot.getState(), c.DC_STATE_OUT_DRAFT, 'correct state')
   t.is(lot.getText1(), 'Draft', 'text1 is set')
