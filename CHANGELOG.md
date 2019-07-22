@@ -2,6 +2,22 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.3] - 2019-07-22
+
+### Changed
+
+- Upgrade `deltachat-core-rust` submodule to `6f798008244304d1c7dc499fd8cb00b38ca2cddc` [**@jikstra**](https://github.com/jikstra)
+- Upgrade hallmark dependency to version 1.0.0 [**@nicodh**](https://github.com/nicodh) [#363](https://github.com/deltachat/deltachat-node/issues/363)
+- Upgrade standard to version 13.0.1 [**@ralptheninja**](https://github.com/ralptheninja) [#362](https://github.com/deltachat/deltachat-node/issues/362)
+
+### Fixed
+
+- Fix `call_threadsafe_function` blocking/producing deadlock [**@jikstra**](https://github.com/jikstra) [#364](https://github.com/deltachat/deltachat-node/issues/364)
+
+### Added
+
+- Expose `dcn_perform_imap_jobs` [**@jikstra**](https://github.com/jikstra) [#364](https://github.com/deltachat/deltachat-node/issues/364)
+
 ## [1.0.0-alpha.2] - 2019-07-09
 
 ### Changed
@@ -751,7 +767,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.3...HEAD
+
+[1.0.0-alpha.3]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
 
 [1.0.0-alpha.2]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
 
