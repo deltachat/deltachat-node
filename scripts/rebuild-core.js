@@ -5,8 +5,6 @@ const opts = {
   stdio: 'inherit'
 }
 
-spawn('cargo', ['update'], opts)
-
 const buildArgs = [
   'build',
   '--release',
