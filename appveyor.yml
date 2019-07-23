@@ -32,7 +32,6 @@ install:
   - node --version
   - npm --version
   - npm i
-  - mv deltachat-core-rust/target _target
 
 test_script:
   - npm test
@@ -52,3 +51,6 @@ deploy:
     draft: false
     on:
       appveyor_repo_tag: true
+
+on_finish:
+  - mv deltachat-core-rust/target _target
