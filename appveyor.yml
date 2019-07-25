@@ -7,7 +7,6 @@ environment:
 
 cache:
   - node_modules
-  - _target
   - C:\Users\appveyor\.rustup
   - C:\Users\appveyor\.cargo
 
@@ -20,10 +19,6 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - SET PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
   - npm run submodule
-  - ps: >-
-      If (Test-Path -Path _target) {
-        mv _target deltachat-core-rust/target
-      }
   - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
   - rustup-init -yv
   - SET PATH=%PATH%;%USERPROFILE%\.cargo\bin
@@ -32,7 +27,6 @@ install:
   - node --version
   - npm --version
   - npm i
-  - mv deltachat-core-rust/target _target
 
 test_script:
   - npm test
