@@ -7,7 +7,6 @@ const opts = {
 
 const buildArgs = [
   'build',
-  '--release',
   '--features',
   'vendored',
   '-p',
