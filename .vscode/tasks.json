@@ -10,11 +10,6 @@
                 "$rustc"
             ],
             "label": "rebuild-all-dc-node"
-        },
-        {
-            "type": "npm",
-            "script": "build",
-            "label": "build-interface"
         }
     ]
 }
