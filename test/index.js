@@ -6,7 +6,6 @@ const fs = require('fs')
 const events = require('../events')
 const c = require('../constants')
 
-
 test('reverse lookup of events', t => {
   const eventKeys = Object.keys(events).map(k => Number(k))
   const eventValues = Object.values(events)
@@ -416,9 +415,7 @@ test('ChatList methods', dc((t, dc) => {
   t.end()
 }))
 
-
-
-function dc(fn) {
+function dc (fn) {
   return t => {
     const dc = new DeltaChat()
     const cwd = tempy.directory()
