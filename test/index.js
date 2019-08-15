@@ -1,12 +1,13 @@
 const DeltaChat = require('..')
-const tape = require('tape')
+const test = require('tape')
 const tempy = require('tempy')
 const path = require('path')
 const fs = require('fs')
 const events = require('../events')
 const c = require('../constants')
 
-tape('reverse lookup of events', t => {
+
+test('reverse lookup of events', t => {
   const eventKeys = Object.keys(events).map(k => Number(k))
   const eventValues = Object.values(events)
   const reverse = eventValues.map(v => c[v])
@@ -14,14 +15,14 @@ tape('reverse lookup of events', t => {
   t.end()
 })
 
-tape('event constants are consistent', t => {
+test('event constants are consistent', t => {
   const eventKeys = Object.keys(c).filter(k => k.startsWith('DC_EVENT_')).sort()
   const eventValues = Object.values(events).sort()
   t.same(eventKeys, eventValues, 'identical')
   t.end()
 })
 
-tape('static method maybeValidAddr()', t => {
+test('static method maybeValidAddr()', t => {
   t.is(DeltaChat.maybeValidAddr(null), false)
   t.is(DeltaChat.maybeValidAddr(''), false)
   t.is(DeltaChat.maybeValidAddr('uuu'), false)
@@ -37,7 +38,7 @@ tape('static method maybeValidAddr()', t => {
   t.end()
 })
 
-tape('invalid input to configure throws', t => {
+test('invalid input to configure throws', t => {
   const dc = new DeltaChat()
   t.throws(function () {
     dc.configure({ addr: 'delta1@delta.localhost' })
@@ -49,7 +50,7 @@ tape('invalid input to configure throws', t => {
   t.end()
 })
 
-tape('dc.getInfo()', t => {
+test('dc.getInfo()', t => {
   const dc = new DeltaChat()
   const info = dc.getInfo()
   t.same(Object.keys(info).sort(), [
@@ -92,7 +93,7 @@ tape('dc.getInfo()', t => {
   t.end()
 })
 
-tape('static getSystemInfo()', t => {
+test('static getSystemInfo()', t => {
   const info = DeltaChat.getSystemInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
@@ -106,7 +107,7 @@ tape('static getSystemInfo()', t => {
   t.end()
 })
 
-test('basic configuration', (t, dc, cwd) => {
+test('basic configuration', dc((t, dc, cwd) => {
   t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
   t.is(
     dc.getBlobdir(),
@@ -114,9 +115,9 @@ test('basic configuration', (t, dc, cwd) => {
     'correct blobdir'
   )
   t.end()
-})
+}))
 
-test('create chat from contact and Chat methods', (t, dc) => {
+test('create chat from contact and Chat methods', dc((t, dc) => {
   const contactId = dc.createContact('aaa', 'aaa@site.org')
 
   t.is(dc.lookupContactIdByAddr('aaa@site.org'), true)
@@ -176,9 +177,9 @@ test('create chat from contact and Chat methods', (t, dc) => {
   t.is(chat.getType(), c.DC_CHAT_TYPE_VERIFIED_GROUP, 'verified group chat')
 
   t.end()
-})
+}))
 
-test('test setting profile image', (t, dc) => {
+test('test setting profile image', dc((t, dc) => {
   const chatId = dc.createUnverifiedGroupChat('testing profile image group')
   const image = 'image.jpeg'
   const imagePath = path.join(__dirname, 'fixtures', image)
@@ -198,18 +199,18 @@ test('test setting profile image', (t, dc) => {
   )
 
   t.end()
-})
+}))
 
-test('create and delete chat', (t, dc) => {
+test('create and delete chat', dc((t, dc) => {
   const chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
   const chat = dc.getChat(chatId)
   t.is(chat.getId(), chatId, 'correct chatId')
   dc.deleteChat(chat.getId())
   t.same(dc.getChat(chatId), null, 'chat removed')
   t.end()
-})
+}))
 
-test('new message and Message methods', (t, dc) => {
+test('new message and Message methods', dc((t, dc) => {
   const text = 'w00t!'
   const msg = dc.messageNew().setText(text)
 
@@ -295,9 +296,9 @@ test('new message and Message methods', (t, dc) => {
   t.is(typeof json, 'object', 'json object')
 
   t.end()
-})
+}))
 
-test('Contact methods', (t, dc) => {
+test('Contact methods', dc((t, dc) => {
   const contactId = dc.createContact('First Last', 'first.last@site.org')
   const contact = dc.getContact(contactId)
 
@@ -313,9 +314,9 @@ test('Contact methods', (t, dc) => {
   t.is(contact.isVerified(), false, 'unverified status')
 
   t.end()
-})
+}))
 
-test('create contacts from address book', (t, dc) => {
+test('create contacts from address book', dc((t, dc) => {
   const addresses = [
     'Name One',
     'name1@site.org',
@@ -333,18 +334,18 @@ test('create contacts from address book', (t, dc) => {
     })
 
   t.end()
-})
+}))
 
-test('delete contacts', (t, dc) => {
+test('delete contacts', dc((t, dc) => {
   const id = dc.createContact('someuser', 'someuser@site.com')
   const contact = dc.getContact(id)
   t.is(contact.getId(), id, 'contact id matches')
   t.is(dc.deleteContact(id), true, 'delete call succesful')
   t.is(dc.getContact(id), null, 'contact is gone')
   t.end()
-})
+}))
 
-test('adding and removing a contact from a chat', (t, dc) => {
+test('adding and removing a contact from a chat', dc((t, dc) => {
   const chatId = dc.createUnverifiedGroupChat('adding_and_removing')
   const contactId = dc.createContact('Add Remove', 'add.remove@site.com')
   t.is(dc.addContactToChat(chatId, contactId), true, 'contact added')
@@ -352,9 +353,9 @@ test('adding and removing a contact from a chat', (t, dc) => {
   t.is(dc.removeContactFromChat(chatId, contactId), true, 'contact removed')
   t.is(dc.isContactInChat(chatId, contactId), false, 'contact not in chat')
   t.end()
-})
+}))
 
-test('blocking contacts', (t, dc) => {
+test('blocking contacts', dc((t, dc) => {
   const id = dc.createContact('badcontact', 'bad@site.com')
 
   t.is(dc.getBlockedCount(), 0)
@@ -372,9 +373,9 @@ test('blocking contacts', (t, dc) => {
   t.same(dc.getBlockedContacts(), [])
 
   t.end()
-})
+}))
 
-test('ChatList methods', (t, dc) => {
+test('ChatList methods', dc((t, dc) => {
   const ids = [
     dc.createUnverifiedGroupChat('groupchat1'),
     dc.createUnverifiedGroupChat('groupchat11'),
@@ -413,10 +414,12 @@ test('ChatList methods', (t, dc) => {
   t.is(chatList.getCount(), 1, 'only one archived')
 
   t.end()
-})
+}))
 
-function test (desc, fn) {
-  tape(desc, t => {
+
+
+function dc(fn) {
+  return t => {
     const dc = new DeltaChat()
     const cwd = tempy.directory()
     const end = t.end.bind(t)
@@ -439,5 +442,5 @@ function test (desc, fn) {
       t.is(dc.isConfigured(), false, 'should not be configured')
       fn(t, dc, cwd)
     })
-  })
+  }
 }
