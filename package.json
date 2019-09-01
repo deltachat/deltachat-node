@@ -7,7 +7,7 @@
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
     "install": "node scripts/install.js",
-    "node-gyp-build": "node-gyp-build --debug \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
+    "node-gyp-build": "node-gyp-build \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
     "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
     "rebuild-core": "node scripts/rebuild-core.js",
     "rebuild-bindings": "node-gyp rebuild && npm run generate-constants",
