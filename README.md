@@ -978,7 +978,7 @@ The following steps are needed to make a release:
 
 ## License
 
-Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
+Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
 
 Copyright © 2018 Delta Chat contributors.
 
