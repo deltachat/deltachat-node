@@ -533,19 +533,19 @@ static void dcn_close_complete(napi_env env, napi_status status, void* data) {
   const int argc = DCN_CLOSE_CALLBACK_ARGC;
   napi_value argv[DCN_CLOSE_CALLBACK_ARGC];
 
-  NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+  napi_get_null(env, &argv[0]);
 
   napi_value global;
-  NAPI_STATUS_THROWS(napi_get_global(env, &global));
+  napi_get_global(env, &global);
   napi_value callback;
-  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
+  napi_get_reference_value(env, carrier->callback_ref, &callback);
 
   TRACE("calling back to js");
-  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
+  napi_call_function(env, global, callback, argc, argv, NULL);
 
   TRACE("cleaning up carrier");
-  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
+  napi_delete_reference(env, carrier->callback_ref);
+  napi_delete_async_work(env, carrier->async_work);
 
   free(carrier);
   TRACE("done");
@@ -613,7 +613,7 @@ NAPI_ASYNC_COMPLETE(dcn_continue_key_transfer) {
 
   const int argc = DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC;
   napi_value argv[DCN_CONTINUE_KEY_TRANSFER_CALLBACK_ARGC];
-  NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
+  napi_create_int32(env, carrier->result, &argv[0]);
 
   NAPI_ASYNC_CALL_AND_DELETE_CB()
   dc_str_unref(carrier->setup_code);
@@ -1158,9 +1158,9 @@ NAPI_ASYNC_COMPLETE(dcn_initiate_key_transfer) {
   napi_value argv[DCN_INITIATE_KEY_TRANSFER_CALLBACK_ARGC];
 
   if (carrier->result) {
-    NAPI_STATUS_THROWS(napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]));
+    napi_create_string_utf8(env, carrier->result, NAPI_AUTO_LENGTH, &argv[0]);
   } else {
-    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+    napi_get_null(env, &argv[0]);
   }
 
   NAPI_ASYNC_CALL_AND_DELETE_CB();
@@ -1350,22 +1350,22 @@ static void dcn_open_complete(napi_env env, napi_status status, void* data) {
   napi_value argv[DCN_OPEN_COMPLETE_CALLBACK_ARGC];
 
   if (carrier->result == 1) {
-    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
+    napi_get_null(env, &argv[0]);
   } else {
     const char* err_string = "Failed to open";
     napi_value msg;
-    NAPI_STATUS_THROWS(napi_create_string_utf8(env, err_string, strlen(err_string), &msg));
-    NAPI_STATUS_THROWS(napi_create_error(env, NULL, msg, &argv[0]));
+    napi_create_string_utf8(env, err_string, strlen(err_string), &msg);
+    napi_create_error(env, NULL, msg, &argv[0]);
   }
 
   napi_value global;
-  NAPI_STATUS_THROWS(napi_get_global(env, &global));
+  napi_get_global(env, &global);
   napi_value callback;
-  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
-  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
+  napi_get_reference_value(env, carrier->callback_ref, &callback);
+  napi_call_function(env, global, callback, argc, argv, NULL);
 
-  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
+  napi_delete_reference(env, carrier->callback_ref);
+  napi_delete_async_work(env, carrier->async_work);
 
   free(carrier->dbfile);
   free(carrier->blobdir);
