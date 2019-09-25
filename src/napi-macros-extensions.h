@@ -1,5 +1,12 @@
 #include <napi-macros.h>
 
+#undef NAPI_STATUS_THROWS
+
+#define NAPI_STATUS_THROWS(call) \
+  if ((call) != napi_ok) { \
+    napi_throw_error(env, NULL, #call " failed!"); \
+  }
+
 #define NAPI_DCN_CONTEXT() \
   dcn_context_t* dcn_context; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context));
