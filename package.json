@@ -36,15 +36,15 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
-    "hallmark": "^1.0.0",
+    "hallmark": "^2.0.0",
     "node-gyp": "^5.0.0",
     "nyc": "^14.1.0",
-    "opn-cli": "^4.1.0",
+    "opn-cli": "^5.0.0",
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
     "split2": "^3.1.1",
     "standard": "^14.3.1",
     "tape": "^4.10.1",
-    "tempy": "^0.2.1"
+    "tempy": "^0.3.0"
   }
 }
