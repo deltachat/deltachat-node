@@ -10,4 +10,5 @@
 | **Karissa McKelvey**  |                                                  |
 | **Floris Bruynooghe** |                                                  |
 | **Simon Laux**        | [**@Simon-Laux**](https://github.com/Simon-Laux) |
+| **holger krekel**     |                                                  |
 | **Charles Paul**      |                                                  |

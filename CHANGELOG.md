@@ -2,6 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.6] - 2019-09-25
+
+**Note**: Between 1.0.0-alpha.3 and this version alpha.4 and alpha.5 versions happend but were pre releases. Changelog for core-rust updates (as they mainly were) are skipped, all other changes are condensed into this release
+
+### Changed
+
+- Upgrade `deltachat-core-rust` submodule to `efc563f5fff808e968e8672d1654223f03613dca` [**@jikstra**](https://github.com/jikstra)
+- Change License to GPL-3.0-or-later ([#375](https://github.com/deltachat/deltachat-node/issues/375)) [**@ralphtheninja**](https://github.com/ralphtheninja) 	
+- Refactor test/index.js, use default tape coding style ([#368](https://github.com/deltachat/deltachat-node/issues/368)) [**@jikstra**](https://github.com/jikstra)
+
 ## [1.0.0-alpha.3] - 2019-07-22
 
 ### Changed
@@ -767,7 +777,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.6...HEAD
+
+[1.0.0-alpha.6]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.3...v1.0.0-alpha.6
 
 [1.0.0-alpha.3]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
 
