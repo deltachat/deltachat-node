@@ -66,12 +66,12 @@
 
 #define NAPI_ASYNC_CALL_AND_DELETE_CB() \
   napi_value global; \
-  napi_get_global(env, &global); \
+  NAPI_STATUS_THROWS(napi_get_global(env, &global)); \
   napi_value callback; \
-  napi_get_reference_value(env, carrier->callback_ref, &callback); \
-  napi_call_function(env, global, callback, argc, argv, NULL); \
-  napi_delete_reference(env, carrier->callback_ref); \
-  napi_delete_async_work(env, carrier->async_work);
+  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback)); \
+  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL)); \
+  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref)); \
+  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
 
 #define NAPI_ASYNC_NEW_CARRIER(name) \
   name##_carrier_t* carrier = calloc(1, sizeof(name##_carrier_t)); \
