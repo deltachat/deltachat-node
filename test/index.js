@@ -54,39 +54,16 @@ test('dc.getInfo()', t => {
   const info = dc.getInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
-    'blobdir',
-    'configured_mvbox_folder',
-    'configured_sentbox_folder',
-    'database_dir',
-    'database_version',
     'deltachat_core_version',
-    'display_name',
-    'e2ee_enabled',
-    'entered_account_settings',
-    'fingerprint',
-    'folders_configured',
-    'inbox_watch',
-    'is_configured',
     'level',
-    'mdns_enabled',
-    'messages_in_contact_requests',
-    'mvbox_move',
-    'mvbox_watch',
-    'number_of_chat_messages',
-    'number_of_chats',
-    'number_of_contacts',
-    'private_key_count',
-    'public_key_count',
-    'sentbox_watch',
     'sqlite_thread_safe',
-    'sqlite_version',
-    'used_account_settings'
+    'sqlite_version'
   ])
 
   t.is(Object.values(info).every(v => {
     return typeof v === 'string'
   }), true, 'all values are strings')
-  t.is(info.fingerprint, '<Not yet calculated>', 'fingerprint')
+  // t.is(info.fingerprint, '<Not yet calculated>', 'fingerprint')
 
   dc.close()
   t.end()
@@ -185,11 +162,10 @@ test('test setting profile image', dc((t, dc) => {
   const blobs = dc.getBlobdir()
 
   dc.setChatProfileImage(chatId, imagePath)
-  t.is(
-    dc.getChat(chatId).getProfileImage(),
-    `${blobs}/${image}`,
-    'image in blobdir'
-  )
+  const blobPath = dc.getChat(chatId).getProfileImage()
+  t.is(blobPath.startsWith(blobs), true)
+  t.is(blobPath.endsWith(image), true)
+
   dc.setChatProfileImage(chatId)
   t.same(
     dc.getChat(chatId).getProfileImage(),
