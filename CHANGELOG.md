@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.7] - 2019-09-26
+
+### Changed
+
+- Update deltachat-core-rust to commit `1ed543b0e8535d5d1004b77e0d2a1475123bb18a` [**@jikstra**](https://github.com/jikstra) [#379](https://github.com/deltachat/deltachat-node/issues/379)
+- Fix tests by adjusting them to minor rust core changes [**@jikstra**](https://github.com/jikstra) [#379](https://github.com/deltachat/deltachat-node/issues/379)
+- Upgrade napi-macros [**@ralphtheninja**](https://github.com/ralphtheninja) [#378](https://github.com/deltachat/deltachat-node/issues/378)
+
 ## [1.0.0-alpha.6] - 2019-09-25
 
 **Note**: Between 1.0.0-alpha.3 and this version alpha.4 and alpha.5 versions happend but were pre releases. Changelog for core-rust updates (as they mainly were) are skipped, all other changes are condensed into this release
@@ -142,6 +150,14 @@
 - Fix Jenkins vs Travis race ([**@ralptheninja**](https://github.com/ralphtheninja))
 
 ## [0.40.1] - 2019-02-12
+
+### Changed
+
+- Upgrade core to v0.40.0 ([#240](https://github.com/deltachat/deltachat-node/issues/240)) ([`29bb00c`](https://github.com/deltachat/deltachat-node/commit/29bb00c)) (jikstra)
+
+### Uncategorized
+
+- Update CHANGELOG ([#240](https://github.com/deltachat/deltachat-node/issues/240)) ([`ffc4ed9`](https://github.com/deltachat/deltachat-node/commit/ffc4ed9)) (jikstra)
 
 ## [0.40.0] - 2019-02-12
 
@@ -777,7 +793,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.6...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.7...HEAD
+
+[1.0.0-alpha.7]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.6...v1.0.0-alpha.7
 
 [1.0.0-alpha.6]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.3...v1.0.0-alpha.6
 
