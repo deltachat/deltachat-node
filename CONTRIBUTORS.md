@@ -10,6 +10,6 @@
 | **Karissa McKelvey**  | [**@karissa**](https://github.com/karissa) |
 | **Floris Bruynooghe** |                                            |
 | **Simon Laux**        |                                            |
-| **Charles Paul**      |                                            |
-| **bb**                |                                            |
 | **holger krekel**     |                                            |
+| **bb**                |                                            |
+| **Charles Paul**      |                                            |

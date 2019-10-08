@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.10] - 2019-10-08
+
+### Changed
+
+- Updated deltachat-core-rust to `c23e98ff83e02f8d53d21ab42c5be952fcd19fbc` [**@Simon-Laux**](https://github.com/Simon-Laux) [**@Jikstra**](https://github.com/Jikstra)
+- Update node-gyp [**@ralphtheninja**](https://github.com/ralphtheninja) [#383](https://github.com/deltachat/deltachat-node/issues/383)
+- Implement new introduced core constants [**@hpk42**](https://github.com/hpk42) [#385](https://github.com/deltachat/deltachat-node/issues/385)
+
 ## [1.0.0-alpha.9] - 2019-10-01
 
 ### Changed
@@ -799,7 +807,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.9...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.10...HEAD
+
+[1.0.0-alpha.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.9...v1.0.0-alpha.10
 
 [1.0.0-alpha.9]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.7...v1.0.0-alpha.9
 
