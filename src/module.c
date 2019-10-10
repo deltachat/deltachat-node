@@ -202,6 +202,7 @@ static void mvbox_thread_func(void* arg)
 
   TRACE("thread starting");
   while (dcn_context->loop_thread) {
+    dc_perform_mvbox_jobs(dc_context);
     dc_perform_mvbox_fetch(dc_context);
     dc_perform_mvbox_idle(dc_context);
   }
@@ -219,6 +220,7 @@ static void sentbox_thread_func(void* arg)
 
   TRACE("thread starting");
   while (dcn_context->loop_thread) {
+    dc_perform_sentbox_jobs(dc_context);
     dc_perform_sentbox_fetch(dc_context);
     dc_perform_sentbox_idle(dc_context);
   }
