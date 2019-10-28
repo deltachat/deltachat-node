@@ -375,14 +375,13 @@ test('ChatList methods', dc((t, dc) => {
   t.ok(lot.getTimestamp() > 0, 'timestamp set')
 
   const text = 'Custom new group message, yo!'
-  dc.setStringTable(c.DC_STR_NEWGROUPDRAFT, text)
+  dc.setStockTranslation(c.DC_STR_NEWGROUPDRAFT, text)
   dc.createUnverifiedGroupChat('groupchat1111')
   chatList = dc.getChatList(0, 'groupchat1111')
   t.is(
     chatList.getSummary(0).getText2(), text,
     'custom new group message'
   )
-  dc.clearStringTable()
 
   dc.archiveChat(ids[0], true)
   chatList = dc.getChatList(c.DC_GCL_ARCHIVED_ONLY, 'groupchat1')

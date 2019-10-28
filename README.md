@@ -145,10 +145,6 @@ Block or unblock a contact. Corresponds to `dc_block_contact()`.
 
 Check a scanned QR code. Corresponds to `dc_check_qr()`.
 
-#### `dc.clearStringTable()`
-
-Clears the string table for handling `DC_EVENT_GET_STR` events from core.
-
 #### `dc.close([cb])`
 
 Stops the threads and closes down the `DeltaChat` instance. Calls back when underlying context has been fully closed.
@@ -484,13 +480,13 @@ Set group profile image. Corresponds to `dc_set_chat_profile_image()`.
 
 Configure the context. Corresponds to `dc_set_config()`.
 
+#### `dc.setStockTranslation(index, text)`
+
+Set stock string.  Corresponds to `dc_set_stock_translation()`.
+
 #### `dc.setDraft(chatId, message)`
 
 Save a draft for a chat in the database. Corresponds to `dc_set_draft()`.
-
-#### `dc.setStringTable(index, str)`
-
-Allows the caller to define custom strings for `DC_EVENT_GET_STR` events, e.g. when letting core know about a different language. The first parameter `index` is an integer corresponding to a `DC_STR_*` in `constants.js` and `str` is the new value.
 
 #### `dc.starMessages(messageIds, star)`
 

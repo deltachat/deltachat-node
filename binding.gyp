@@ -10,7 +10,6 @@
         "target_name": "deltachat",
         "sources": [
             "./src/module.c",
-            "./src/strtable.c",
         ],
         "include_dirs": [
             "<!(node -e \"require('napi-macros')\")",
