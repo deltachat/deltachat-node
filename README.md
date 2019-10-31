@@ -160,10 +160,12 @@ The `options` object takes the following properties:
 - `options.mail_user` _(string, optional)_: IMAP-username, guessed if left out.
 - `options.mail_pw` _(string, required)_: IMAP-password of the chat user.
 - `options.mail_port` _(string | integer, optional)_: IMAP-port, guessed if left out.
+- `options.imap_certificate_checks` _(string | integer, optional)_: IMAP certificate checks configuration.
 - `options.send_server` _(string, optional)_: SMTP-server, guessed if left out.
 - `options.send_user` _(string, optional)_: SMTP-user, guessed if left out.
 - `options.send_pw` _(string, optional)_: SMTP-password, guessed if left out.
 - `options.send_port` _(string | integer, optional)_: SMTP-port, guessed if left out.
+- `options.smtp_certificate_checks` _(string | integer, optional)_: SMTP certificate checks configuration.
 - `options.server_flags` _(integer, optional)_: IMAP-/SMTP-flags as a combination of DC_LP flags, guessed if left out.
 - `options.displayname` _(string, optional)_: Own name to use when sending messages. MUAs are allowed to spread this way e.g. using CC, defaults to empty.
 - `options.selfstatus` _(string, optional)_: Own status to display e.g. in email footers, defaults to a standard text.
