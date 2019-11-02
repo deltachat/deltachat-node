@@ -17,6 +17,8 @@ if (typeof process.env.DC_MAIL_PW !== 'string') {
 
 const ADDR = process.env.DC_ADDR
 const SERVER = ADDR.split('@')[1]
+const STARTTLS_FLAGS = '65792' // IMAP_SOCKET_STARTTLS & SMTP_SOCKET_STARTTLS
+const SSL_FLAGS = '131584' // IMAP_SOCKET_SSL & SMTP_SOCKET_SSL
 
 function configureDefaultDC (dc) {
   dc.configure({
@@ -30,7 +32,32 @@ function configureDefaultDC (dc) {
     send_user: ADDR,
     send_pw: process.env.DC_MAIL_PW,
 
+    server_flags: STARTTLS_FLAGS,
+
     displayname: 'Delta One',
+    selfstatus: 'From Delta One with <3',
+    selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
+
+    e2ee_enabled: true,
+    save_mime_headers: true
+  })
+}
+
+function updateConfigurationDC (dc) {
+  dc.configure({
+    addr: ADDR,
+
+    mail_server: SERVER,
+    mail_user: ADDR,
+    mail_pw: process.env.DC_MAIL_PW,
+
+    send_server: SERVER,
+    send_user: ADDR,
+    send_pw: process.env.DC_MAIL_PW,
+
+    server_flags: SSL_FLAGS,
+
+    displayname: 'Delta Two',
     selfstatus: 'From Delta One with <3',
     selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
@@ -46,7 +73,7 @@ function configureDefaultDC (dc) {
 // 4. test opening an already configured account (re-open above)
 
 test('setUp dc context', t => {
-  t.plan(17)
+  t.plan(21)
   const cwd = tempy.directory()
   dc = new DeltaChat()
   dc.once('ready', () => {
@@ -57,6 +84,7 @@ test('setUp dc context', t => {
     t.is(dc.getConfig('send_user'), ADDR, 'sendUser correct')
     t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
     t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
+    t.is(dc.getConfig('server_flags'), STARTTLS_FLAGS, 'server flags correct')
     // TODO comment back in once fixed in core
     // t.is(
     //   dc.getConfig('selfavatar'),
@@ -76,6 +104,13 @@ test('setUp dc context', t => {
       path.join(cwd, 'db.sqlite-blobs'),
       'correct blobdir'
     )
+    t.is(dc.isConfigured(), true, 'is configured')
+
+    dc.once('ready', () => {
+      t.is(dc.getConfig('displayname'), 'Delta Two', 'updated displayName correct')
+      t.is(dc.getConfig('server_flags'), SSL_FLAGS, 'updated server flags correct')
+    })
+    updateConfigurationDC(dc)
   })
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
     t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
