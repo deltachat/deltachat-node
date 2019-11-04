@@ -2,6 +2,15 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-alpha.11] - 2019-11-04
+
+### Changed
+
+- Update deltachat-core-rust to Update deltachat-core-rust to `67e2e4d415824f7698488abf609ae9f91c7c92b9` [**@jikstra**](https://github.com/jikstra) [**@simon-laux**](https://github.com/simon-laux)
+- Replace setStringTable with setStockTranslation ([#389](https://github.com/deltachat/deltachat-node/issues/389)) [**@link2xt**](https://github.com/link2xt)
+- Make it possible to configure {imap,smtp}\_certificate_checks ([#388](https://github.com/deltachat/deltachat-node/issues/388)) [**@link2xt**](https://github.com/link2xt)
+- Enable update of DC configurations [**@nicodh**](https://github.com/nicodh)
+
 ## [1.0.0-alpha.10] - 2019-10-08
 
 ### Changed
@@ -807,7 +816,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.10...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.11...HEAD
+
+[1.0.0-alpha.11]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.10...v1.0.0-alpha.11
 
 [1.0.0-alpha.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.9...v1.0.0-alpha.10
 
