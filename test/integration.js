@@ -180,6 +180,11 @@ test('initiate key transfer', t => {
   })
 })
 
+test.only('device chat', t => {
+  let chatsBefore = dc.getChats()
+  console.log(chatsBefore)
+})
+
 test('tearDown dc context', t => {
   console.time('dc.close')
   dc.close(() => {

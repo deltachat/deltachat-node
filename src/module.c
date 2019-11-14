@@ -806,6 +806,17 @@ NAPI_METHOD(dcn_get_chat) {
   return result;
 }
 
+NAPI_METHOD(dcn_chat_get_info_json) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+
+  //TRACE("calling..");
+  char* json = dc_chat_get_info_json(dcn_context->dc_context, chat_id);
+
+  NAPI_RETURN_AND_UNREF_STRING(json);
+}
+
 NAPI_METHOD(dcn_get_chat_contacts) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2650,6 +2661,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat);
+  NAPI_EXPORT_FUNCTION(dcn_chat_get_info_json);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_contacts);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_id_by_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_media);
