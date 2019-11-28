@@ -39,7 +39,9 @@ function configureDefaultDC (dc) {
     selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
     e2ee_enabled: true,
-    save_mime_headers: true
+    save_mime_headers: true,
+    imap_certificate_checks: 3,
+    smtp_certificate_checks: 3
   })
 }
 
@@ -62,7 +64,9 @@ function updateConfigurationDC (dc) {
     selfavatar: path.join(__dirname, 'fixtures', 'avatar.png'),
 
     e2ee_enabled: true,
-    save_mime_headers: true
+    save_mime_headers: true,
+    imap_certificate_checks: 3,
+    smtp_certificate_checks: 3
   })
 }
 
