@@ -390,6 +390,29 @@ test('ChatList methods', dc((t, dc) => {
   t.end()
 }))
 
+test('Device Chat', dc((t, dc) => {
+  const deviceChatMessageText = 'test234'
+
+  t.is(dc.getChatList(0).getCount(), 0, 'no device chat after setup')
+
+  dc.addDeviceMessage('test', deviceChatMessageText)
+
+  const chatList = dc.getChatList(0)
+  t.is(chatList.getCount(), 1, 'device chat after adding device msg')
+  const deviceChatId = chatList.getChatId(0)
+  const deviceChat = dc.getChat(deviceChatId)
+  t.is(deviceChat.isDeviceTalk(), true, 'device chat is device chat')
+  t.is(deviceChat.toJson().isDeviceTalk, true, 'toJson contains isDeviceTalk key')
+
+  const deviceChatMessages = dc.getChatMessages(deviceChatId, 0, 0)
+  t.is(deviceChatMessages.length, 1, 'device chat has added message')
+
+  const deviceChatMessage = dc.getMessage(deviceChatMessages[0])
+  t.is(deviceChatMessage.getText(), deviceChatMessageText, 'device chat message has the inserted text')
+
+  t.end()
+}))
+
 function dc (fn) {
   return t => {
     const dc = new DeltaChat()

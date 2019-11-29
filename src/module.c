@@ -383,6 +383,24 @@ NAPI_METHOD(dcn_add_contact_to_chat) {
   NAPI_RETURN_INT32(result);
 }
 
+NAPI_METHOD(dcn_add_device_msg) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+
+  NAPI_ARGV_UTF8_MALLOC(label, 1);
+
+  //TRACE("calling..");
+  dc_msg_t* dc_msg = NULL;
+  napi_get_value_external(env, argv[2], (void**)&dc_msg);
+
+  uint32_t msg_id = dc_add_device_msg(dcn_context->dc_context, label, dc_msg);
+
+  free(label);
+  //TRACE("done");
+
+  NAPI_RETURN_UINT32(msg_id);
+}
+
 NAPI_METHOD(dcn_archive_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -603,7 +621,7 @@ NAPI_METHOD(dcn_continue_key_transfer) {
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UINT32(msg_id, 1);
   NAPI_ARGV_UTF8_MALLOC(setup_code, 2);
-  NAPI_ASYNC_NEW_CARRIER(dcn_continue_key_transfer)
+  NAPI_ASYNC_NEW_CARRIER(dcn_continue_key_transfer);
   carrier->msg_id = msg_id;
   carrier->setup_code = setup_code;
 
@@ -1684,6 +1702,17 @@ NAPI_METHOD(dcn_chat_is_verified) {
   NAPI_RETURN_INT32(is_verified);
 }
 
+NAPI_METHOD(dcn_chat_is_device_talk) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  //TRACE("calling..");
+  int is_device_talk = dc_chat_is_device_talk(dc_chat);
+  //TRACE("result %d", is_device_talk);
+
+  NAPI_RETURN_INT32(is_device_talk);
+}
+
 /**
  * dc_chatlist_t
  */
@@ -2589,6 +2618,7 @@ NAPI_INIT() {
 
   NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
+  NAPI_EXPORT_FUNCTION(dcn_add_device_msg);
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
@@ -2632,6 +2662,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
   NAPI_EXPORT_FUNCTION(dcn_is_open);
+
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
@@ -2668,6 +2699,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_verified);
+  NAPI_EXPORT_FUNCTION(dcn_chat_is_device_talk);
 
   /**
    * dc_chatlist_t
