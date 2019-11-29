@@ -390,7 +390,7 @@ test('ChatList methods', dc((t, dc) => {
   t.end()
 }))
 
-test.only('Device Chat', dc((t, dc) => {
+test('Device Chat', dc((t, dc) => {
   const deviceChatMessageText = 'test234'
 
   t.is(dc.getChatList(0).getCount(), 0, 'no device chat after setup')
