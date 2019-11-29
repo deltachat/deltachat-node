@@ -402,7 +402,7 @@ test('Device Chat', dc((t, dc) => {
   const deviceChatId = chatList.getChatId(0)
   const deviceChat = dc.getChat(deviceChatId)
   t.is(deviceChat.isDeviceTalk(), true, 'device chat is device chat')
-  t.is(deviceChat.toJson()['isDeviceTalk'], true, 'toJson contains isDeviceTalk key')
+  t.is(deviceChat.toJson().isDeviceTalk, true, 'toJson contains isDeviceTalk key')
 
   const deviceChatMessages = dc.getChatMessages(deviceChatId, 0, 0)
   t.is(deviceChatMessages.length, 1, 'device chat has added message')
