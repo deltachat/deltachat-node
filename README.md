@@ -133,6 +133,10 @@ Add a number of contacts. Corresponds to `dc_add_address_book()`.
 
 Add a member to a group. Corresponds to `dc_add_contact_to_chat()`.
 
+#### `dc.addDeviceMessage(label, msg)`
+
+Add a message to the device chat. Corresponds to `dc_add_device_msg()`.
+
 #### `dc.archiveChat(chatId, archive)`
 
 Archive or unarchive a chat. Corresponds to `dc_archive_chat()`.
@@ -541,6 +545,10 @@ Check if a chat is still unpromoted. Corresponds to `dc_chat_is_unpromoted()`.
 #### `chat.isVerified()`
 
 Check if a chat is verified. Corresponds to `dc_chat_is_verified()`.
+
+#### `chat.isDeviceTalk()`
+
+Check if a chat is a device talk. Corresponds to `dc_chat_is_device_talk()`.
 
 #### `chat.toJson()`
 
