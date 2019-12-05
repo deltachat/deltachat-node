@@ -2,12 +2,20 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.10] - 2019-12-05
+
+### Changed
+
+- Update deltachat-core-rust to `1.0.0-beta.10`
+
 ## [1.0.0-alpha.12] - 2019-11-29
 
 ### Changed
+
 - Update deltachat-core-rust to `430d4e5f6ebddacac24f4cceebda769a8f367af7`
 
 ### Added
+
 - Add `addDeviceMessage(label, msg)` and `chat.isDeviceTalk()` methods
 
 ## [1.0.0-alpha.11] - 2019-11-04
@@ -824,7 +832,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.12...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.10...HEAD
+
+[1.0.0-beta.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.12...v1.0.0-beta.10
 
 [1.0.0-alpha.12]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.11...v1.0.0-alpha.12
 
