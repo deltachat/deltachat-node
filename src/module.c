@@ -964,6 +964,33 @@ NAPI_METHOD(dcn_get_contacts) {
   return js_array;
 }
 
+NAPI_METHOD(dcn_update_device_chats) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  //TRACE("calling..");
+  dc_update_device_chats(dcn_context->dc_context);
+  //TRACE("done");
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_was_device_msg_ever_added) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+
+  NAPI_ARGV_UTF8_MALLOC(label, 1);
+
+  //TRACE("calling..");
+
+  uint32_t added = dc_was_device_msg_ever_added(dcn_context->dc_context, label);
+
+  free(label);
+  //TRACE("done");
+
+  NAPI_RETURN_UINT32(added);
+}
+
 NAPI_METHOD(dcn_get_draft) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2647,6 +2674,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   NAPI_EXPORT_FUNCTION(dcn_get_contacts);
+  NAPI_EXPORT_FUNCTION(dcn_update_device_chats);
+  NAPI_EXPORT_FUNCTION(dcn_was_device_msg_ever_added);
   NAPI_EXPORT_FUNCTION(dcn_get_draft);
   NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_fresh_msgs);
