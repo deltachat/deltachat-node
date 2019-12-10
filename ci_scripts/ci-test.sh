@@ -22,6 +22,6 @@ fi
 
 npm test;
 
-if [ $TRAVIS_PULL_REQUEST = false ]; then
-    npm run test-integration;
-fi
+#if [ $TRAVIS_PULL_REQUEST = false ]; then
+#    npm run test-integration;
+#fi
