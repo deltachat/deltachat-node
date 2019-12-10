@@ -1,12 +1,25 @@
 # Changelog
 
 ## [Unreleased][unreleased]
+
+## [1.0.0-beta.15] - 2019-12-10
+
+### Changed
+
+- Update deltachat-core-rust to `1.0.0-beta.15`
+
+### Added
+
+- Implement message dimensions [**@Simon-Laux**](https://github.com/Simon-Laux)
+
 ## [1.0.0-beta.11] - 2019-12-10
 
 ### Changed
+
 - Update deltachat-core-rust `301852fd87140790f606f12280064ee9db80d978`
 
 ### Added
+
 - Implement new device chat methods
 
 ## [1.0.0-beta.10] - 2019-12-05
@@ -839,11 +852,13 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.11...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.15...HEAD
 
-[1.0.0-beta.11]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.10...v1.0.0-beta.11
+[1.0.0-beta.15]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.11...v1.0.0-beta.15
 
-[1.0.0-beta.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.12...v1.0.0-beta.10
+[1.0.0-beta.11]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.10...1.0.0-beta.11
+
+[1.0.0-beta.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.12...1.0.0-beta.10
 
 [1.0.0-alpha.12]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.11...v1.0.0-alpha.12
 
