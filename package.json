@@ -38,7 +38,7 @@
     "coveralls": "^3.0.3",
     "hallmark": "^2.0.0",
     "node-gyp": "^6.0.0",
-    "nyc": "^14.1.0",
+    "nyc": "^15.0.0",
     "opn-cli": "^5.0.0",
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
