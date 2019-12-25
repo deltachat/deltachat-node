@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.22] - 2019-12-25
+
+### Changed
+
+- Update deltachat-core-rust to `1.0.0-beta.22`
+
 ## [1.0.0-beta.21] - 2019-12-20
 
 ### Changed
@@ -864,9 +870,11 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22...HEAD
 
-[1.0.0-beta.21]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.18...v1.0.0-beta.21
+[1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...v1.0.0-beta.22
+
+[1.0.0-beta.21]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.20...v1.0.0-beta.21
 
 [1.0.0-beta.20]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.18...1.0.0-beta.20
 
