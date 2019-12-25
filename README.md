@@ -976,8 +976,8 @@ We have the following scripts for building, testing and coverage:
 The following steps are needed to make a release:
 
 1. Update `CHANGELOG.md` (and run `npm run hallmark` to adjust markdown)
-2. Bump version number, e.g. `npm version minor`, which will update version number in `package.json`, commit the changes and tag the commit
-3. Push to github, e.g. `git push origin master && git push origin --tags`
+2. Bump version number, e.g. `npm version minor`, which will update version number in `package.json`, commit the changes and tag the commit. Alternatively you can change it manually, e.g. if it's a beta version like `v1.0.0-beta.22`
+3. Push to github, e.g. `git push origin master --tags`
 4. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
 5. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
 6. `npm publish`
