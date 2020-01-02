@@ -16,11 +16,6 @@
 #endif
 
 /**
- * TODO remove once upgrading core to new version
- */
-int dc_msg_has_deviating_timestamp(const dc_msg_t*);
-
-/**
  * Custom context
  */
 typedef struct dcn_context_t {
