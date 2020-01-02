@@ -742,6 +742,25 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
+  getChatEphemeralTimer(chatId: number) {
+    debug(`getChatEphemeralTimer ${chatId}`)
+    return binding.dcn_get_chat_ephemeral_timer(
+      this.dcn_context,
+      Number(chatId)
+    )
+  }
+
+  setChatEphemeralTimer(chatId: number, timer: number) {
+    debug(`setChatEphemeralTimer ${chatId} ${timer}`)
+    return Boolean(
+      binding.dcn_set_chat_ephemeral_timer(
+        this.dcn_context,
+        Number(chatId),
+        Number(timer)
+      )
+    )
+  }
+
   setChatProfileImage(chatId: number, image: string) {
     debug(`setChatProfileImage ${chatId} ${image}`)
     return Boolean(

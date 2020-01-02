@@ -207,6 +207,20 @@ test('test setting profile image', dc((t, dc) => {
   t.end()
 }))
 
+test('test setting ephemeral timer', dc((t, dc) => {
+  const chatId = dc.createUnverifiedGroupChat('testing ephemeral timer')
+
+  t.is(dc.getChatEphemeralTimer(chatId), 0, 'ephemeral timer is not set by default')
+
+  dc.setChatEphemeralTimer(chatId, 60)
+  t.is(dc.getChatEphemeralTimer(chatId), 60, 'ephemeral timer is set to 1 minute')
+
+  dc.setChatEphemeralTimer(chatId, 0)
+  t.is(dc.getChatEphemeralTimer(chatId), 0, 'ephemeral timer is reset')
+
+  t.end()
+}))
+
 test('create and delete chat', dc((t, dc) => {
   const chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
   const chat = dc.getChat(chatId)
