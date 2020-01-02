@@ -173,6 +173,19 @@ test('test setting profile image', dc((t, dc) => {
   t.end()
 }))
 
+test('test setting autodelete timer', dc((t, dc) => {
+  const chatId = dc.createUnverifiedGroupChat('testing autodelete timer')
+
+  t.is(dc.getChatAutodeleteTimer(chatId), 0, 'autodelete timer is not set by default')
+
+  dc.setChatAutodeleteTimer(chatId, 60)
+  t.is(dc.getChatAutodeleteTimer(chatId), 60, 'autodelete timer is set to 1 minute')
+
+  t.is(dc.getChatAutodeleteTimer(chatId), 0, 'autodelete timer is reset')
+
+  t.end()
+}))
+
 test('create and delete chat', dc((t, dc) => {
   const chatId = dc.createUnverifiedGroupChat('GROUPCHAT')
   const chat = dc.getChat(chatId)

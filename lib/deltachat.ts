@@ -29,6 +29,7 @@ interface NativeContext {}
  */
 export class DeltaChat extends EventEmitter {
   dcn_context: NativeContext
+  delete_timeout: NodeJS.Timeout
   constructor() {
     debug('DeltaChat constructor')
     super()
@@ -759,6 +760,25 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
+  getChatAutodeleteTimer(chatId: number) {
+    debug(`getChatAutodeleteTimerName ${chatId}`)
+    return binding.dcn_get_chat_autodelete_timer(
+      this.dcn_context,
+      Number(chatId)
+    )
+  }
+
+  setChatAutodeleteTimer(chatId: number, timer: number) {
+    debug(`setChatAutodeleteTimerName ${chatId} ${timer}`)
+    return Boolean(
+      binding.dcn_set_chat_autodelete_timer(
+        this.dcn_context,
+        Number(chatId),
+        Number(timer)
+      )
+    )
+  }
+
   setChatProfileImage(chatId: number, image: string) {
     debug(`setChatProfileImage ${chatId} ${image}`)
     return Boolean(
@@ -937,6 +957,15 @@ function handleEvent(self: DeltaChat, event: number, data1, data2) {
       break
     case C.DC_EVENT_IMEX_FILE_WRITTEN:
       self.emit(eventStr, data1)
+      break
+    case C.DC_EVENT_MSG_DELETE_TIMEOUT_CHANGED:
+      clearTimeout(self.delete_timeout)
+      if (data1 > 0) {
+        self.delete_timeout = setTimeout(() => {
+          // Emulate DC_EVENT_MSGS_CHANGED to trigger reload and message deletion
+          handleEvent(self, C.DC_EVENT_MSGS_CHANGED, 0, 0)
+        }, data1 * 1000)
+      }
       break
     default:
       self.emit(eventStr, data1, data2)
