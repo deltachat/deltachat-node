@@ -116,7 +116,7 @@ export interface Lot {
   getTimestamp (): number;
 }
 
-export interface DeltaChat {
+export class DeltaChat {
   markSeenMessages(messagIds: any): void;
   getChatList(listFlags: number, queryStr: any, queryContactId: any): ChatList;
   getFreshMessageCount(chatId: any): number;
@@ -146,4 +146,5 @@ export interface DeltaChat {
   getContacts(listFlags: number, queryStr: string): Array<Contact>;
   initiateKeyTransfer(cb: any): boolean;
   continueKeyTransfer(messageId: number, setupCode: string, cb: any): boolean;
+  static getSystemInfo(): string;
 }
