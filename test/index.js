@@ -56,7 +56,6 @@ test('dc.getInfo()', t => {
     'arch',
     'deltachat_core_version',
     'level',
-    'sqlite_thread_safe',
     'sqlite_version'
   ])
 
@@ -74,7 +73,6 @@ test('static getSystemInfo()', t => {
   t.same(Object.keys(info).sort(), [
     'arch',
     'deltachat_core_version',
-    'sqlite_thread_safe',
     'sqlite_version'
   ])
   t.is(Object.values(info).every(v => {
