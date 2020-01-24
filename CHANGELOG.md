@@ -2,6 +2,23 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.23] - 2019-01-24
+
+### Added
+
+- Add typescript support @nicodh #406
+
+### Changed
+
+- Update deltachat-core-rust to `1.0.0-beta.23` @jikstra
+- Update release instructions @lefherz @jikstra
+- Run node-gyp and node-gyp build via npx @link2xt
+
+## Removed
+
+- Remove `dc_msg_has_deviating_timestamp` prototype @link2xt
+
+
 ## [1.0.0-beta.22] - 2019-12-25
 
 ### Changed
@@ -870,7 +887,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...HEAD
+
+[1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22.1...v1.0.0-beta.23
 
 [1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...v1.0.0-beta.22
 
