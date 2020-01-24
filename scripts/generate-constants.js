@@ -30,6 +30,11 @@ fs.createReadStream(header)
       `// Generated!\n\nmodule.exports = {\n${constants}\n}\n`
     )
 
+    fs.writeFileSync(
+      path.resolve(__dirname, '../constants.enum.ts'),
+      `// Generated!\n\n export default enum C {\n${constants.replace(/:/g, '=')}\n}\n`
+    )
+
     const events = data.sort((lhs, rhs) => {
       if (lhs.value < rhs.value) return -1
       else if (lhs.value > rhs.value) return 1
