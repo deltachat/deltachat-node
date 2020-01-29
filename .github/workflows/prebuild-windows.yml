@@ -70,6 +70,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
-          asset_name: v1.0.0-beta.23-test1
+          asset_name: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
           tag: ${{ github.ref }}
           overwrite: true
