@@ -51,17 +51,21 @@ jobs:
         run: |
           npm run test
 
+      - name: Prebuild Filename
+        id: prebuild-filename
+        run: echo "::set-output name=ARCHIVE_NAME::${{ github.ref }}-win32-x64.tar.gz"
+
       - name: Build Prebuild
         run: |
-          SET ARCHIVE_NAME=%GITHUB_REF%-win32-x64.tar.gz
+          echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
           npm run prebuild
-          tar -zcvf "%ARCHIVE_NAME%" -C prebuilds .
+          tar -zcvf "${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}" -C prebuilds .
 
       - name: Upload Prebuild
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.ARCHIVE_NAME }}
-          asset_name: ${{ env.ARCHIVE_NAME }}
+          file: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+          asset_name: v1.0.0-beta.23-test1
           tag: ${{ github.ref }}
           overwrite: true
