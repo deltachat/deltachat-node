@@ -53,7 +53,6 @@ jobs:
         run: |
           SET ARCHIVE_NAME=%GITHUB_REF%-win32-x64.tar.gz
           echo $ARCHIVE_NAME
-          echo ${{ env:ARCHIVE_NAME }}
           echo ${{ env.ARCHIVE_NAME }}
           echo ${{ github.ref }}
           npm run prebuild
@@ -63,7 +62,7 @@ jobs:
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env:ARCHIVE_NAME }}
+          file: ${{ env.ARCHIVE_NAME }}
           asset_name: v1.0.0-beta.23-test1
           tag: ${{ github.ref }}
           overwrite: true
