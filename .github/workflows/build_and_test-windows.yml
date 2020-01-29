@@ -44,6 +44,26 @@ jobs:
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --verbose
+
       - name: Test
         run: |
           npm run test
+
+      - name: Build Prebuild
+        run: |
+          SET ARCHIVE_NAME=%GITHUB_REF%-win32-x64.tar.gz
+          echo $ARCHIVE_NAME
+          echo ${{ env:ARCHIVE_NAME }}
+          echo ${{ env.ARCHIVE_NAME }}
+          echo ${{ github.ref }}
+          npm run prebuild
+          tar -zcvf "%ARCHIVE_NAME%" -C prebuilds .
+
+      - name: Upload Prebuild
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env:ARCHIVE_NAME }}
+          asset_name: v1.0.0-beta.23-test1
+          tag: ${{ github.ref }}
+          overwrite: true
