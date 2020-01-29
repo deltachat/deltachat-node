@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Prebuild Filename
         id: prebuild-filename
-        run: echo "::set-output ARCHIVE_NAME=date::$github.ref-win32-x64.tar.gz"
+        run: echo "::set-output ARCHIVE_NAME::$github.ref-win32-x64.tar.gz"
 
       - name: Build Prebuild
         run: |
