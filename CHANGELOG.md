@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.23.1] - 2019-01-29
+
+### Changed
+- Fix windows bug where invoking node-gyp-build on install step failed
+
 ## [1.0.0-beta.23] - 2019-01-24
 
 ### Added
@@ -887,9 +892,11 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23.1...HEAD
 
-[1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22.1...v1.0.0-beta.23
+[1.0.0-beta.23.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...v1.0.0-beta.23.1
+
+[1.0.0-beta.23]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22.1...v1.0.0-beta.23
 
 [1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...v1.0.0-beta.22
 
