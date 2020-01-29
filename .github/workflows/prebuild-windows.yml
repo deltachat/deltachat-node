@@ -53,8 +53,11 @@ jobs:
 
       - name: Prebuild Filename
         id: prebuild-filename
-        run: echo "::set-output name=ARCHIVE_NAME::${{ github.ref }}-win32-x64.tar.gz"
-
+        
+        run: |
+          Set-Variable -Name "tag" -Value ("${{ github.ref }}").replace("refs/tags/", "")        
+          echo "::set-output name=ARCHIVE_NAME::$tag-win32-x64.tar.gz"
+ 
       - name: Build Prebuild
         run: |
           echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
