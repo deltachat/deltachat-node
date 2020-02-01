@@ -146,5 +146,10 @@ export class DeltaChat {
   getContacts(listFlags: number, queryStr: string): Array<Contact>;
   initiateKeyTransfer(cb: any): boolean;
   continueKeyTransfer(messageId: number, setupCode: string, cb: any): boolean;
+  getProviderFromEmail (email: string): {
+    before_login_hint: string,
+    overview_page: string,
+    status: number,
+  };
   static getSystemInfo(): string;
 }

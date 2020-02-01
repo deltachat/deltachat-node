@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Add provider db
+
 ## [1.0.0-beta.23.1] - 2019-01-29
 
 ### Changed
