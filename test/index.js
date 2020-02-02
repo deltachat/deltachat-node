@@ -439,8 +439,7 @@ function dc (fn) {
 }
 
 test('dc.getProviderFromEmail("example@example.com")', t => {
-  const dc = new DeltaChat()
-  const provider = dc.getProviderFromEmail('example@example.com')
+  const provider = DeltaChat.getProviderFromEmail('example@example.com')
 
   t.same(provider, {
     before_login_hint: 'Hush this provider doesn\'t exist!',
