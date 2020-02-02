@@ -267,6 +267,14 @@ static void finalize_msg(napi_env env, void* data, void* hint) {
   }
 }
 
+static void finalize_provider(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_provider_t* provider = (dc_provider_t*)data;
+    //TRACE("cleaning up provider");
+    dc_provider_unref(provider);
+  }
+}
+
 /**
  * Helpers.
  */
@@ -2620,6 +2628,59 @@ NAPI_METHOD(dcn_perform_imap_jobs) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_provider_new_from_email) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(email, 1)
+
+  //TRACE("calling..");
+  napi_value result;
+  dc_provider_t* provider = dc_provider_new_from_email(dcn_context->dc_context, email);
+
+  if (provider == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, provider, finalize_provider,
+                                            NULL, &result));
+  }
+  //TRACE("done");
+
+  return result;
+}
+
+NAPI_METHOD(dcn_provider_get_overview_page) {
+  NAPI_ARGV(1);
+  NAPI_DC_PROVIDER();
+
+  //TRACE("calling..");
+  char* overview_page = dc_provider_get_overview_page(dc_provider);
+  //TRACE("result %s", overview_page);
+
+  NAPI_RETURN_AND_UNREF_STRING(overview_page);
+}
+
+NAPI_METHOD(dcn_provider_get_before_login_hint) {
+  NAPI_ARGV(1);
+  NAPI_DC_PROVIDER();
+
+  //TRACE("calling..");
+  char* before_login_hint = dc_provider_get_overview_page(dc_provider);
+  //TRACE("result %s", before_login_hint);
+
+  NAPI_RETURN_AND_UNREF_STRING(before_login_hint);
+}
+
+NAPI_METHOD(dcn_provider_get_status) {
+  NAPI_ARGV(1);
+  NAPI_DC_PROVIDER();
+
+  //TRACE("calling..");
+  int status = dc_provider_get_status(dc_provider);
+  //TRACE("result %s", status);
+
+  NAPI_RETURN_INT32(status)
+}
+
 NAPI_INIT() {
   /**
    * Main context
@@ -2804,6 +2865,14 @@ NAPI_INIT() {
    */
   NAPI_EXPORT_FUNCTION(dcn_set_location);
   NAPI_EXPORT_FUNCTION(dcn_get_locations);
+
+  /**
+   * dc_provider
+   */
+  NAPI_EXPORT_FUNCTION(dcn_provider_new_from_email);
+  NAPI_EXPORT_FUNCTION(dcn_provider_get_overview_page);
+  NAPI_EXPORT_FUNCTION(dcn_provider_get_before_login_hint);
+  NAPI_EXPORT_FUNCTION(dcn_provider_get_status);
 
   /**
    * dc_array
