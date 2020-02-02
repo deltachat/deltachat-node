@@ -32,7 +32,7 @@ fs.createReadStream(header)
 
     fs.writeFileSync(
       path.resolve(__dirname, '../constants.enum.ts'),
-      `// Generated!\n\n export default enum C {\n${constants.replace(/:/g, '=')}\n}\n`
+      `// Generated!\n\n export const enum C {\n${constants.replace(/:/g, '=')}\n}\n`
     )
 
     const events = data.sort((lhs, rhs) => {
