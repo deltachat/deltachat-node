@@ -2664,7 +2664,7 @@ NAPI_METHOD(dcn_provider_get_before_login_hint) {
   NAPI_DC_PROVIDER();
 
   //TRACE("calling..");
-  char* before_login_hint = dc_provider_get_overview_page(dc_provider);
+  char* before_login_hint = dc_provider_get_before_login_hint(dc_provider);
   //TRACE("result %s", before_login_hint);
 
   NAPI_RETURN_AND_UNREF_STRING(before_login_hint);
