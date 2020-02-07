@@ -2,8 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.25] - 2019-02-07
+
 ### Added
 - Add provider db
+
+### Changed
+- Update deltachat-core-rust to fc0292bf8ac1af59aaee97cd0c0e286db3a7e4f1
+
 
 ## [1.0.0-beta.23.1] - 2019-01-29
 
@@ -895,7 +901,9 @@
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.25...HEAD
+
+[1.0.0-beta.25]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23.1...v1.0.0-beta.25
 
 [1.0.0-beta.23.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...v1.0.0-beta.23.1
 
