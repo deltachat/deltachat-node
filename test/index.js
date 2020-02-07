@@ -447,6 +447,5 @@ test('dc.getProviderFromEmail("example@example.com")', t => {
     status: 3
   })
 
-  dc.close()
   t.end()
 })
