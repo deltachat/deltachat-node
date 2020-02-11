@@ -1,34 +1,34 @@
 /* eslint-disable camelcase */
 
 const binding = require('../binding')
-const Lot = require('./lot')
+import Lot from './lot'
+import Chat from './chat'
 const debug = require('debug')('deltachat:node:chatlist')
 
 /**
  * Wrapper around dc_chatlist_t*
  */
-class ChatList {
-  constructor (dc_chatlist) {
+export default class ChatList {
+  constructor (private dc_chatlist) {
     debug('ChatList constructor')
-    this.dc_chatlist = dc_chatlist
   }
 
-  getChatId (index) {
+  getChatId (index: number): number {
     debug(`getChatId ${index}`)
     return binding.dcn_chatlist_get_chat_id(this.dc_chatlist, index)
   }
 
-  getCount () {
+  getCount ():number {
     debug('getCount')
     return binding.dcn_chatlist_get_cnt(this.dc_chatlist)
   }
 
-  getMessageId (index) {
+  getMessageId (index:number):number {
     debug(`getMessageId ${index}`)
     return binding.dcn_chatlist_get_msg_id(this.dc_chatlist, index)
   }
 
-  getSummary (index, chat) {
+  getSummary (index: number, chat?: Chat): Lot {
     debug(`getSummary ${index}`)
     const dc_chat = (chat && chat.dc_chat) || null
     return new Lot(

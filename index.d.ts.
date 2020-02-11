@@ -27,45 +27,6 @@ export interface Message {
   }
 }
 
-export interface Contact{
-  getProfileImage(): string;
-  address: string;
-  color: string;
-  displayName: string;
-  firstName: string;
-  id: number;
-  name: string;
-  profileImage: string;
-  nameAndAddr: string;
-  isBlocked: boolean;
-  isVerified: boolean;
-  toJson(): Contact;
-}
-
-export interface Chat  {
-  toJson?(): Chat;
-  archived: boolean;
-  color: string;
-  id: number;
-  name: string;
-  profileImage: string;
-  getProfileImage?(): string;
-  subtitle: string;
-  type: number;
-  isSelfTalk: boolean;
-  isUnpromoted: boolean;
-  isVerified: boolean;
-  isDeviceTalk?: boolean;
-}
-
-export interface ChatList {
-  getChatId (index: number): number;
-  getCount (): number;
-  getMessageId (index: number): number;
-  getSummary (index: number, chat?: Chat): Lot;
-}
-
-
 export interface LocaleData {
   locale: string;
   messages: {
@@ -73,50 +34,6 @@ export interface LocaleData {
   }
 } 
 
-export interface Location {
-  accuracy: number;
-  latitude: number;
-  longitude: number;
-  timestamp: number;
-  contactId: number;
-  msgId: number;
-  chatId: number;
-  isIndependent: boolean;
-  marker: string;
-}
-
-export interface Locations {
-  locationToJson (index: number): Location;
-  toJson (): Array<Location>;
-  getCount (): number;
-  getAccuracy (index: number): number;
-  getLatitude (index: number): number;
-  getLongitude (index: number): number;
-  getTimestamp (index: number): number;
-  getMsgId (index: number): number;
-  getContactId (index: number): number;
-  getChatId (index: number): number;
-  isIndependent (index: number): boolean;
-  getMarker (index: number): string;
-}
-
-export interface Summary {
-  state: number;
-  text1: string;
-  text1Meaning: string;
-  text2: string;
-  timestamp: number;
-}
-
-export interface Lot {
-  toJson (): Summary;
-  getId (): number;
-  getState (): number;
-  getText1 (): string;
-  getText1Meaning (): string;
-  getText2 (): string;
-  getTimestamp (): number;
-}
 
 export class DeltaChat extends EventEmitter {
   markSeenMessages(messagIds: any): void;

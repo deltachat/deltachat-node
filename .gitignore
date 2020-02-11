@@ -8,3 +8,4 @@ db.sqlite-journal
 coverage/
 prebuilds/
 *.tar.gz
+dist/

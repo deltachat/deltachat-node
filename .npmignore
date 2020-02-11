@@ -20,3 +20,4 @@ scripts/generate-constants.js
 test/
 windows.md
 *.tar.gz
+lib/

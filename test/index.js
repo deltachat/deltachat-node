@@ -1,14 +1,13 @@
-const DeltaChat = require('..')
+const DeltaChat = require('../dist/index').default
 const test = require('tape')
 const tempy = require('tempy')
 const path = require('path')
 const fs = require('fs')
-const events = require('../events')
-const c = require('../constants')
+const { EventId2EventName, C: c } = require('../dist/constants')
 
 test('reverse lookup of events', t => {
-  const eventKeys = Object.keys(events).map(k => Number(k))
-  const eventValues = Object.values(events)
+  const eventKeys = Object.keys(EventId2EventName).map(k => Number(k))
+  const eventValues = Object.values(EventId2EventName)
   const reverse = eventValues.map(v => c[v])
   t.same(reverse, eventKeys, 'reverse lookup ok')
   t.end()
@@ -16,7 +15,7 @@ test('reverse lookup of events', t => {
 
 test('event constants are consistent', t => {
   const eventKeys = Object.keys(c).filter(k => k.startsWith('DC_EVENT_')).sort()
-  const eventValues = Object.values(events).sort()
+  const eventValues = Object.values(EventId2EventName).sort()
   t.same(eventKeys, eventValues, 'identical')
   t.end()
 })

@@ -1,18 +1,17 @@
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
-const C = require('../constants')
-const events = require('../events')
-const Chat = require('./chat')
-const ChatList = require('./chatlist')
-const Contact = require('./contact')
-const Message = require('./message')
-const Lot = require('./lot')
-const EventEmitter = require('events').EventEmitter
-const mkdirp = require('mkdirp')
-const path = require('path')
-const Locations = require('./locations')
-const pick = require('lodash.pick')
+import binding from '../binding'
+import {C, EventId2EventName} from './constants'
+import { EventEmitter } from 'events'
+import Chat from './chat'
+import ChatList from './chatlist'
+import Contact from './contact'
+import Message from './message'
+import Lot from './lot'
+import mkdirp from 'mkdirp'
+import path from 'path'
+import Locations from './locations'
+import pick from 'lodash.pick'
 const debug = require('debug')('deltachat:node:index')
 
 const noop = function () {}
@@ -22,10 +21,13 @@ const DC_SHOW_EMAILS = [
   C.DC_SHOW_EMAILS_OFF
 ]
 
+interface NativeContext {}
+
 /**
  * Wrapper around dcn_context_t*
  */
-class DeltaChat extends EventEmitter {
+export default class DeltaChat extends EventEmitter {
+  dcn_context: NativeContext
   constructor () {
     debug('DeltaChat constructor')
     super()
@@ -152,7 +154,7 @@ class DeltaChat extends EventEmitter {
     this.setConfig('selfstatus', opts.selfstatus)
     this.setConfig('selfavatar', opts.selfavatar)
 
-    if (DC_SHOW_EMAILS.includes(opts.show_emails)) {
+    if (DC_SHOW_EMAILS.indexOf(opts.show_emails) !== -1) {
       this.setConfig('show_emails', String(opts.show_emails))
     }
 
@@ -329,7 +331,7 @@ class DeltaChat extends EventEmitter {
       cb(err, result)
     }
     binding.dcn_open(dcn_context, db, '', err => {
-      if (err) return done(err)
+      if (err) return done(err, null)
       if (binding.dcn_is_configured(dcn_context)) {
         const addr = binding.dcn_get_config(dcn_context, 'addr')
         return done(null, { addr })
@@ -758,93 +760,73 @@ class DeltaChat extends EventEmitter {
   }
 }
 
-function handleEvent (self, event, data1, data2) {
+function handleEvent (self, event:number, data1, data2) {
   debug('event', event, 'data1', data1, 'data2', data2)
 
   self.emit('ALL', event, data1, data2)
 
-  const eventStr = events[event]
+  const eventStr = EventId2EventName[event]
 
-  switch (eventStr) {
-    case 'DC_EVENT_INFO': // 100
+  if(typeof eventStr === "undefined") {
+    debug(`Unknown event ${eventStr}`)
+    return;
+  }
+
+  switch (event) {
+    case C.DC_EVENT_INFO:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_CONNECTED': // 101
+    case C.DC_EVENT_SMTP_CONNECTED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_CONNECTED': // 102
+    case C.DC_EVENT_IMAP_CONNECTED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_MESSAGE_SENT': // 103
+    case C.DC_EVENT_SMTP_MESSAGE_SENT:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_MESSAGE_DELETED': // 104
+    case C.DC_EVENT_IMAP_MESSAGE_DELETED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_MESSAGE_MOVED': // 105
+    case C.DC_EVENT_IMAP_MESSAGE_MOVED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_NEW_BLOB_FILE': // 150
+    case C.DC_EVENT_NEW_BLOB_FILE:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_DELETED_BLOB_FILE': // 151
+    case C.DC_EVENT_DELETED_BLOB_FILE:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_WARNING': // 300
+    case C.DC_EVENT_WARNING:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_ERROR': // 400
+    case C.DC_EVENT_ERROR:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_ERROR_NETWORK': // 401
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_ERROR_SELF_NOT_IN_GROUP': // 410
+    case C.DC_EVENT_ERROR_SELF_NOT_IN_GROUP:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_MSGS_CHANGED': // 2000
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_INCOMING_MSG': // 2005
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_DELIVERED': // 2010
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_FAILED': // 2012
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_READ': // 2015
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_CHAT_MODIFIED': // 2020
+    case C.DC_EVENT_CHAT_MODIFIED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONTACTS_CHANGED': // 2030
+    case C.DC_EVENT_CONTACTS_CHANGED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_LOCATION_CHANGED': // 2035
+    case C.DC_EVENT_LOCATION_CHANGED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONFIGURE_PROGRESS': // 2041
+    case C.DC_EVENT_CONFIGURE_PROGRESS:
       if (data1 === 1000) self.emit('_configured')
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_PROGRESS': // 2051
+    case C.DC_EVENT_IMEX_PROGRESS:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_FILE_WRITTEN': // 2052
+    case C.DC_EVENT_IMEX_FILE_WRITTEN:
       self.emit(eventStr, data1)
-      break
-    case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS': // 2060
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS': // 2061
-      self.emit(eventStr, data1, data2)
       break
     default:
-      debug(`Unknown event ${eventStr}`)
+      self.emit(eventStr, data1, data2)
+      break
   }
 }
-
-module.exports = DeltaChat
