@@ -3,11 +3,12 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:locations')
 
+interface NativeLocations {}
 /**
  * Wrapper around dc_location_t*
  */
 export default class Locations {
-  constructor (public dc_locations) {
+  constructor (public dc_locations:NativeLocations) {
     debug('Locations constructor')
   }
 

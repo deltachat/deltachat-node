@@ -5,11 +5,12 @@ import Lot from './lot'
 import Chat from './chat'
 const debug = require('debug')('deltachat:node:chatlist')
 
+interface NativeChatList {}
 /**
  * Wrapper around dc_chatlist_t*
  */
 export default class ChatList {
-  constructor (private dc_chatlist) {
+  constructor (private dc_chatlist:NativeChatList) {
     debug('ChatList constructor')
   }
 

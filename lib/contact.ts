@@ -3,11 +3,12 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:contact')
 
+interface NativeContact {}
 /**
  * Wrapper around dc_contact_t*
  */
 export default class Contact {
-  constructor (public dc_contact) {
+  constructor (public dc_contact:NativeContact) {
     debug('Contact constructor')
   }
 

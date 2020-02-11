@@ -43,14 +43,14 @@ fs.createReadStream(header)
     // backwards compat
     fs.writeFileSync(
       path.resolve(__dirname, '../events.js'),
-      `// Generated!\n\nmodule.exports = {\n${events}\n}\n`
+      `/* eslint-disable quotes */\n// Generated!\n\nmodule.exports = {\n${events}\n}\n`
     )
 
     fs.writeFileSync(
       path.resolve(__dirname, '../lib/constants.ts'),
       `
 // Generated!\n\nexport enum C {\n${constants.replace(/:/g, '=')}\n}\n
-// Generated!\n\nexport const EventId2EventName = {\n${events}\n}\n      
+// Generated!\n\nexport const EventId2EventName: {[key:number]:string} = {\n${events}\n}\n      
       `
     )
   })

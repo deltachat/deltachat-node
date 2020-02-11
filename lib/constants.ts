@@ -165,7 +165,7 @@ export enum C {
 
 // Generated!
 
-export const EventId2EventName = {
+export const EventId2EventName: {[key:number]:string} = {
   100: "DC_EVENT_INFO",
   101: "DC_EVENT_SMTP_CONNECTED",
   102: "DC_EVENT_IMAP_CONNECTED",

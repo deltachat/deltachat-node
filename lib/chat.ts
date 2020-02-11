@@ -3,11 +3,12 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:chat')
 
+interface NativeChat {}
 /**
  * Wrapper around dc_chat_t*
  */
 export default class Chat {
-  constructor (public dc_chat) {
+  constructor (public dc_chat:NativeChat) {
     debug('Chat constructor')
   }
 

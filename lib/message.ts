@@ -90,11 +90,12 @@ export class MessageViewType {
   }
 }
 
+interface NativeMessage {}
 /**
  * Wrapper around dc_msg_t*
  */
 export default class Message {
-  constructor (public dc_msg) {
+  constructor (public dc_msg:NativeMessage) {
     debug('Message constructor')
   }
 
@@ -187,7 +188,7 @@ export default class Message {
     return new Lot(binding.dcn_msg_get_summary(this.dc_msg, dc_chat))
   }
 
-  getSummarytext (approxCharacters):string {
+  getSummarytext (approxCharacters:number):string {
     approxCharacters = approxCharacters || 0
     return binding.dcn_msg_get_summarytext(this.dc_msg, approxCharacters)
   }
@@ -258,7 +259,7 @@ export default class Message {
     return this
   }
 
-  setFile (file:string, mime) {
+  setFile (file:string, mime:string) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
     return this

@@ -3,11 +3,12 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:lot')
 
+interface NativeLot {}
 /**
  * Wrapper around dc_lot_t*
  */
 export default class Lot {
-  constructor (public dc_lot) {
+  constructor (public dc_lot:NativeLot) {
     debug('Lot constructor')
   }
 
