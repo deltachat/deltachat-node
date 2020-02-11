@@ -7,7 +7,7 @@ interface NativeLocations {}
 /**
  * Wrapper around dc_location_t*
  */
-export default class Locations {
+export class Locations {
   constructor (public dc_locations:NativeLocations) {
     debug('Locations constructor')
   }

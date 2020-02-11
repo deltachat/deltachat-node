@@ -2,8 +2,8 @@
 
 import binding from '../binding'
 import {C} from './constants'
-import Lot from './lot'
-import Chat from './chat'
+import {Lot} from './lot'
+import {Chat} from './chat'
 const debug = require('debug')('deltachat:node:message')
 
 /**
@@ -94,7 +94,7 @@ interface NativeMessage {}
 /**
  * Wrapper around dc_msg_t*
  */
-export default class Message {
+export class Message {
   constructor (public dc_msg:NativeMessage) {
     debug('Message constructor')
   }

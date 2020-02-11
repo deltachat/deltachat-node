@@ -3,14 +3,14 @@
 import binding from '../binding'
 import {C, EventId2EventName} from './constants'
 import { EventEmitter } from 'events'
-import Chat from './chat'
-import ChatList from './chatlist'
-import Contact from './contact'
-import Message from './message'
-import Lot from './lot'
+import {Chat} from './chat'
+import {ChatList} from './chatlist'
+import {Contact} from './contact'
+import {Message} from './message'
+import {Lot} from './lot'
 import mkdirp from 'mkdirp'
 import path from 'path'
-import Locations from './locations'
+import {Locations} from './locations'
 import pick from 'lodash.pick'
 const debug = require('debug')('deltachat:node:index')
 
@@ -26,7 +26,7 @@ interface NativeContext {}
 /**
  * Wrapper around dcn_context_t*
  */
-export default class DeltaChat extends EventEmitter {
+export class DeltaChat extends EventEmitter {
   dcn_context: NativeContext
   constructor () {
     debug('DeltaChat constructor')

@@ -7,7 +7,7 @@ interface NativeLot {}
 /**
  * Wrapper around dc_lot_t*
  */
-export default class Lot {
+export class Lot {
   constructor (public dc_lot:NativeLot) {
     debug('Lot constructor')
   }

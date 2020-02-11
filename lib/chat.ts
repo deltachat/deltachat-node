@@ -7,7 +7,7 @@ interface NativeChat {}
 /**
  * Wrapper around dc_chat_t*
  */
-export default class Chat {
+export class Chat {
   constructor (public dc_chat:NativeChat) {
     debug('Chat constructor')
   }

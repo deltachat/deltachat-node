@@ -7,7 +7,7 @@ interface NativeContact {}
 /**
  * Wrapper around dc_contact_t*
  */
-export default class Contact {
+export class Contact {
   constructor (public dc_contact:NativeContact) {
     debug('Contact constructor')
   }
