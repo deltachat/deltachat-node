@@ -42,4 +42,3 @@ export class ChatList {
   }
 }
 
-module.exports = ChatList
