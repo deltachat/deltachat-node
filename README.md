@@ -58,7 +58,7 @@ node-gyp rebuild -- -Dsystem_dc_core=true
 ## Usage
 
 ```js
-const DeltaChat = require('deltachat-node')
+const DeltaChat = require('deltachat-node').default
 const dc = new DeltaChat()
 
 const opts = {
