@@ -35,6 +35,17 @@ fs.createReadStream(header)
       return `  ${i.value}: "${i.key}"`
     }).join(',\n')
 
+    // backwards compat
+    fs.writeFileSync(
+      path.resolve(__dirname, '../constants.js'),
+      `// Generated!\n\nmodule.exports = {\n${constants}\n}\n`
+    )
+    // backwards compat
+    fs.writeFileSync(
+      path.resolve(__dirname, '../events.js'),
+      `// Generated!\n\nmodule.exports = {\n${events}\n}\n`
+    )
+
     fs.writeFileSync(
       path.resolve(__dirname, '../lib/constants.ts'),
       `
