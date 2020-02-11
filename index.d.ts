@@ -1,3 +1,5 @@
+import { EventEmitter } from "events";
+
 export interface Message {
   getText(): string;
   getFromId(): number;
@@ -116,7 +118,7 @@ export interface Lot {
   getTimestamp (): number;
 }
 
-export class DeltaChat {
+export class DeltaChat extends EventEmitter {
   markSeenMessages(messagIds: any): void;
   getChatList(listFlags: number, queryStr: any, queryContactId: any): ChatList;
   getFreshMessageCount(chatId: any): number;
