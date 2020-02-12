@@ -920,7 +920,9 @@ const { C } = require('deltachat-node')
 
 :seedling: Initial release.
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.25...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.26...HEAD
+
+[1.0.0-beta.26]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.25...v1.0.0-beta.26
 
 [1.0.0-beta.25]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23.1...v1.0.0-beta.25
 
