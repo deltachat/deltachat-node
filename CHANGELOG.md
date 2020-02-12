@@ -11,11 +11,14 @@
 ### Breaking changes:
 
 You need to change your imports from 
+
 ```js
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 ```
+
 to
+
 ```js
 const DeltaChat = require('deltachat-node').default
 const { C } = require('deltachat-node')
@@ -24,33 +27,30 @@ const { C } = require('deltachat-node')
 ## [1.0.0-beta.25] - 2019-02-07
 
 ### Added
+
 - Add provider db
 
 ### Changed
-- Update deltachat-core-rust to fc0292bf8ac1af59aaee97cd0c0e286db3a7e4f1
 
+- Update deltachat-core-rust to [`fc0292b`](https://github.com/deltachat/deltachat-node/commit/fc0292bf8ac1af59aaee97cd0c0e286db3a7e4f1)
 
 ## [1.0.0-beta.23.1] - 2019-01-29
 
 ### Changed
+
 - Fix windows bug where invoking node-gyp-build on install step failed
 
 ## [1.0.0-beta.23] - 2019-01-24
 
 ### Added
 
-- Add typescript support @nicodh #406
+- Add typescript support [**@nicodh**](https://github.com/nicodh) [#406](https://github.com/deltachat/deltachat-node/issues/406)
 
 ### Changed
 
-- Update deltachat-core-rust to `1.0.0-beta.23` @jikstra
-- Update release instructions @lefherz @jikstra
-- Run node-gyp and node-gyp build via npx @link2xt
-
-## Removed
-
-- Remove `dc_msg_has_deviating_timestamp` prototype @link2xt
-
+- Update deltachat-core-rust to `1.0.0-beta.23` [**@jikstra**](https://github.com/jikstra)
+- Update release instructions [**@lefherz**](https://github.com/lefherz) [**@jikstra**](https://github.com/jikstra)
+- Run node-gyp and node-gyp build via npx [**@link2xt**](https://github.com/link2xt)
 
 ## [1.0.0-beta.22] - 2019-12-25
 
@@ -916,9 +916,13 @@ const { C } = require('deltachat-node')
 
 - Fix issues when installing from npm ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-## 0.1.0 - 2018-08-01
+## [0.1.0] - 2018-08-01
 
 :seedling: Initial release.
+
+## Removed
+
+- Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
 [unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.26...HEAD
 
@@ -928,11 +932,11 @@ const { C } = require('deltachat-node')
 
 [1.0.0-beta.23.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...v1.0.0-beta.23.1
 
-[1.0.0-beta.23]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22.1...v1.0.0-beta.23
+[1.0.0-beta.23]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22...v1.0.0-beta.23
 
 [1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...v1.0.0-beta.22
 
-[1.0.0-beta.21]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.20...v1.0.0-beta.21
+[1.0.0-beta.21]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.18...v1.0.0-beta.21
 
 [1.0.0-beta.20]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.18...1.0.0-beta.20
 
@@ -1083,3 +1087,5 @@ const { C } = require('deltachat-node')
 [0.2.0]: https://github.com/deltachat/deltachat-node/compare/v0.1.1...v0.2.0
 
 [0.1.1]: https://github.com/deltachat/deltachat-node/compare/v0.1.0...v0.1.1
+
+[0.1.0]: https://github.com/deltachat/deltachat-node/compare/vRemoved...v0.1.0

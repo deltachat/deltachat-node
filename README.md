@@ -976,15 +976,19 @@ We have the following scripts for building, testing and coverage:
 The following steps are needed to make a release:
 
 1. Update `CHANGELOG.md` (and run `npm run hallmark` to adjust markdown)
-  - Add release changelog in top section
-  - Also adjust links to github prepare links at the end of the file
+
+- Add release changelog in top section
+- Also adjust links to github prepare links at the end of the file
+
 2. Bump version number in package.json
 3. Commit the changed files, commit message should be similiar to `Prepare for v1.0.0-foo.number`
 4. Tag the release with `git tag v1.0.0-foo.number`
 5. Push to github with `git push origin master --tags`
 6. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
 7. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
-  - In case this fails, you can also manually download the prebuilts from github and extract them. It's only important that it extracts to the target folder.
+
+- In case this fails, you can also manually download the prebuilts from github and extract them. It's only important that it extracts to the target folder.
+
 8. `npx tsc` to build the typescript.
 9. `npm publish` publishes it to npm. You probably need write rights to npm.
 
