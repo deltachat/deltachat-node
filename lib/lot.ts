@@ -3,13 +3,13 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:lot')
 
+interface NativeLot {}
 /**
  * Wrapper around dc_lot_t*
  */
-class Lot {
-  constructor (dc_lot) {
+export class Lot {
+  constructor (public dc_lot:NativeLot) {
     debug('Lot constructor')
-    this.dc_lot = dc_lot
   }
 
   toJson () {
@@ -23,29 +23,27 @@ class Lot {
     }
   }
 
-  getId () {
+  getId ():number {
     return binding.dcn_lot_get_id(this.dc_lot)
   }
 
-  getState () {
+  getState ():number {
     return binding.dcn_lot_get_state(this.dc_lot)
   }
 
-  getText1 () {
+  getText1 ():string {
     return binding.dcn_lot_get_text1(this.dc_lot)
   }
 
-  getText1Meaning () {
+  getText1Meaning ():string {
     return binding.dcn_lot_get_text1_meaning(this.dc_lot)
   }
 
-  getText2 () {
+  getText2 ():string {
     return binding.dcn_lot_get_text2(this.dc_lot)
   }
 
-  getTimestamp () {
+  getTimestamp ():number {
     return binding.dcn_lot_get_timestamp(this.dc_lot)
   }
 }
-
-module.exports = Lot

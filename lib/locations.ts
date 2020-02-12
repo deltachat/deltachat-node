@@ -3,16 +3,16 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:locations')
 
+interface NativeLocations {}
 /**
  * Wrapper around dc_location_t*
  */
-class Locations {
-  constructor (dc_locations) {
+export class Locations {
+  constructor (public dc_locations:NativeLocations) {
     debug('Locations constructor')
-    this.dc_locations = dc_locations
   }
 
-  locationToJson (index) {
+  locationToJson (index:number) {
     debug('locationToJson')
     return {
       accuracy: this.getAccuracy(index),
@@ -37,45 +37,43 @@ class Locations {
     return locations
   }
 
-  getCount () {
+  getCount ():number {
     return binding.dcn_array_get_cnt(this.dc_locations)
   }
 
-  getAccuracy (index) {
+  getAccuracy (index:number):number {
     return binding.dcn_array_get_accuracy(this.dc_locations, index)
   }
 
-  getLatitude (index) {
+  getLatitude (index:number):number {
     return binding.dcn_array_get_latitude(this.dc_locations, index)
   }
 
-  getLongitude (index) {
+  getLongitude (index:number):number {
     return binding.dcn_array_get_longitude(this.dc_locations, index)
   }
 
-  getTimestamp (index) {
+  getTimestamp (index:number):number {
     return binding.dcn_array_get_timestamp(this.dc_locations, index)
   }
 
-  getMsgId (index) {
+  getMsgId (index:number):number {
     return binding.dcn_array_get_msg_id(this.dc_locations, index)
   }
 
-  getContactId (index) {
+  getContactId (index:number):number {
     return binding.dcn_array_get_contact_id(this.dc_locations, index)
   }
 
-  getChatId (index) {
+  getChatId (index:number):number {
     return binding.dcn_array_get_chat_id(this.dc_locations, index)
   }
 
-  isIndependent (index) {
+  isIndependent (index:number):boolean {
     return binding.dcn_array_is_independent(this.dc_locations, index)
   }
 
-  getMarker (index) {
+  getMarker (index:number):string {
     return binding.dcn_array_get_marker(this.dc_locations, index)
   }
 }
-
-module.exports = Locations

@@ -1,4 +1,4 @@
-const DeltaChat = require('../')
+const DeltaChat = require('../').default
 const test = require('tape')
 const tempy = require('tempy')
 

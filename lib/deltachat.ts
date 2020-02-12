@@ -1,18 +1,17 @@
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
-const C = require('../constants')
-const events = require('../events')
-const Chat = require('./chat')
-const ChatList = require('./chatlist')
-const Contact = require('./contact')
-const Message = require('./message')
-const Lot = require('./lot')
-const EventEmitter = require('events').EventEmitter
-const mkdirp = require('mkdirp')
-const path = require('path')
-const Locations = require('./locations')
-const pick = require('lodash.pick')
+import binding from '../binding'
+import {C, EventId2EventName} from './constants'
+import { EventEmitter } from 'events'
+import {Chat} from './chat'
+import {ChatList} from './chatlist'
+import {Contact} from './contact'
+import {Message} from './message'
+import {Lot} from './lot'
+import mkdirp from 'mkdirp'
+import path from 'path'
+import {Locations} from './locations'
+import pick from 'lodash.pick'
 const debug = require('debug')('deltachat:node:index')
 
 const noop = function () {}
@@ -22,10 +21,13 @@ const DC_SHOW_EMAILS = [
   C.DC_SHOW_EMAILS_OFF
 ]
 
+interface NativeContext {}
+
 /**
  * Wrapper around dcn_context_t*
  */
-class DeltaChat extends EventEmitter {
+export class DeltaChat extends EventEmitter {
+  dcn_context: NativeContext
   constructor () {
     debug('DeltaChat constructor')
     super()
@@ -36,12 +38,12 @@ class DeltaChat extends EventEmitter {
     })
   }
 
-  addAddressBook (addressBook) {
+  addAddressBook (addressBook:string) {
     debug(`addAddressBook ${addressBook}`)
     return binding.dcn_add_address_book(this.dcn_context, addressBook)
   }
 
-  addContactToChat (chatId, contactId) {
+  addContactToChat (chatId:number, contactId:number) {
     debug(`addContactToChat ${chatId} ${contactId}`)
     return Boolean(
       binding.dcn_add_contact_to_chat(
@@ -52,7 +54,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  addDeviceMessage (label, msg) {
+  addDeviceMessage (label:string, msg:Message) {
     debug(`addDeviceMessage ${label} ${msg}`)
     if (!msg) {
       throw new Error('invalid msg parameter')
@@ -71,7 +73,7 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_add_device_msg(this.dcn_context, label, msg.dc_msg)
   }
 
-  archiveChat (chatId, archive) {
+  archiveChat (chatId:number, archive:boolean) {
     debug(`archiveChat ${chatId} ${archive}`)
     binding.dcn_archive_chat(
       this.dcn_context,
@@ -80,7 +82,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  blockContact (contactId, block) {
+  blockContact (contactId:number, block:boolean) {
     debug(`blockContact ${contactId} ${block}`)
     binding.dcn_block_contact(
       this.dcn_context,
@@ -89,7 +91,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  checkQrCode (qrCode) {
+  checkQrCode (qrCode:string) {
     debug(`checkQrCode ${qrCode}`)
     const dc_lot = binding.dcn_check_qr(this.dcn_context, qrCode)
     return dc_lot ? new Lot(dc_lot) : null
@@ -101,7 +103,7 @@ class DeltaChat extends EventEmitter {
     binding.dcn_close(this.dcn_context, cb)
   }
 
-  configure (opts, cb) {
+  configure (opts, cb: () => void) {
     debug('configure')
     if (!opts) opts = {}
     const ready = () => {
@@ -152,7 +154,7 @@ class DeltaChat extends EventEmitter {
     this.setConfig('selfstatus', opts.selfstatus)
     this.setConfig('selfavatar', opts.selfavatar)
 
-    if (DC_SHOW_EMAILS.includes(opts.show_emails)) {
+    if (DC_SHOW_EMAILS.indexOf(opts.show_emails) !== -1) {
       this.setConfig('show_emails', String(opts.show_emails))
     }
 
@@ -161,7 +163,7 @@ class DeltaChat extends EventEmitter {
     binding.dcn_configure(this.dcn_context)
   }
 
-  continueKeyTransfer (messageId, setupCode, cb) {
+  continueKeyTransfer (messageId:number, setupCode:string, cb:(err:Error)=>void) {
     debug(`continueKeyTransfer ${messageId}`)
     binding.dcn_continue_key_transfer(this.dcn_context, Number(messageId), setupCode, result => {
       if (result === 0) {
@@ -170,16 +172,16 @@ class DeltaChat extends EventEmitter {
       cb(null)
     })
   }
-
-  createChatByContactId (contactId) {
+  /** @returns chatId */
+  createChatByContactId (contactId:number):number {
     debug(`createChatByContactId ${contactId}`)
     return binding.dcn_create_chat_by_contact_id(
       this.dcn_context,
       Number(contactId)
     )
   }
-
-  createChatByMessageId (messageId) {
+  /** @returns chatId */
+  createChatByMessageId (messageId:number):number {
     debug(`createChatByMessageId ${messageId}`)
     return binding.dcn_create_chat_by_msg_id(
       this.dcn_context,
@@ -187,27 +189,30 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  createContact (name, addr) {
+  /** @returns contactId */
+  createContact (name:string, addr:string):number {
     debug(`createContact ${name} ${addr}`)
     return binding.dcn_create_contact(this.dcn_context, name, addr)
   }
 
-  createUnverifiedGroupChat (chatName) {
+  /** @returns chatId */
+  createUnverifiedGroupChat (chatName:string):number {
     debug(`createUnverifiedGroupChat ${chatName}`)
     return binding.dcn_create_group_chat(this.dcn_context, 0, chatName)
   }
 
-  createVerifiedGroupChat (chatName) {
+  /** @returns chatId */
+  createVerifiedGroupChat (chatName:string):number {
     debug(`createVerifiedGroupChat ${chatName}`)
     return binding.dcn_create_group_chat(this.dcn_context, 1, chatName)
   }
 
-  deleteChat (chatId) {
+  deleteChat (chatId:number) {
     debug(`deleteChat ${chatId}`)
     binding.dcn_delete_chat(this.dcn_context, Number(chatId))
   }
 
-  deleteContact (contactId) {
+  deleteContact (contactId:number) {
     debug(`deleteContact ${contactId}`)
     return Boolean(
       binding.dcn_delete_contact(
@@ -217,7 +222,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  deleteMessages (messageIds) {
+  deleteMessages (messageIds:number[]) {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
@@ -226,7 +231,7 @@ class DeltaChat extends EventEmitter {
     binding.dcn_delete_msgs(this.dcn_context, messageIds)
   }
 
-  forwardMessages (messageIds, chatId) {
+  forwardMessages (messageIds:number[], chatId:number) {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
@@ -235,38 +240,38 @@ class DeltaChat extends EventEmitter {
     binding.dcn_forward_msgs(this.dcn_context, messageIds, chatId)
   }
 
-  getBlobdir () {
+  getBlobdir ():string {
     debug('getBlobdir')
     return binding.dcn_get_blobdir(this.dcn_context)
   }
 
-  getBlockedCount () {
+  getBlockedCount ():number {
     debug('getBlockedCount')
     return binding.dcn_get_blocked_cnt(this.dcn_context)
   }
 
-  getBlockedContacts () {
+  getBlockedContacts ():number[] {
     debug('getBlockedContacts')
     return binding.dcn_get_blocked_contacts(this.dcn_context)
   }
 
-  getChat (chatId) {
+  getChat (chatId:number) {
     debug(`getChat ${chatId}`)
     const dc_chat = binding.dcn_get_chat(this.dcn_context, Number(chatId))
     return dc_chat ? new Chat(dc_chat) : null
   }
 
-  getChatContacts (chatId) {
+  getChatContacts (chatId:number):number[] {
     debug(`getChatContacts ${chatId}`)
     return binding.dcn_get_chat_contacts(this.dcn_context, Number(chatId))
   }
 
-  getChatIdByContactId (contactId) {
+  getChatIdByContactId (contactId:number):number {
     debug(`getChatIdByContactId ${contactId}`)
     return binding.dcn_get_chat_id_by_contact_id(this.dcn_context, Number(contactId))
   }
 
-  getChatMedia (chatId, msgType1, msgType2, msgType3) {
+  getChatMedia (chatId:number, msgType1:number, msgType2:number, msgType3:number):number[] {
     debug(`getChatMedia ${chatId}`)
     return binding.dcn_get_chat_media(
       this.dcn_context,
@@ -277,12 +282,12 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  getMimeHeaders (messageId) {
+  getMimeHeaders (messageId:number):string {
     debug(`getMimeHeaders ${messageId}`)
     return binding.dcn_get_mime_headers(this.dcn_context, Number(messageId))
   }
 
-  getChatMessages (chatId, flags, marker1before) {
+  getChatMessages (chatId:number, flags, marker1before) {
     debug(`getChatMessages ${chatId} ${flags} ${marker1before}`)
     return binding.dcn_get_chat_msgs(
       this.dcn_context,
@@ -292,7 +297,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  getChats (listFlags, queryStr, queryContactId) {
+  getChats (listFlags:number, queryStr:string, queryContactId:number) {
     debug('getChats')
     const result = []
     const list = this.getChatList(listFlags, queryStr, queryContactId)
@@ -303,7 +308,7 @@ class DeltaChat extends EventEmitter {
     return result
   }
 
-  getChatList (listFlags, queryStr, queryContactId) {
+  getChatList (listFlags:number, queryStr:string, queryContactId:number) {
     listFlags = listFlags || 0
     queryStr = queryStr || ''
     queryContactId = queryContactId || 0
@@ -318,7 +323,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  static getConfig (dir, cb) {
+  static getConfig (dir:string, cb:(err:Error, result)=>void) {
     debug(`DeltaChat.getConfig ${dir}`)
     const dcn_context = binding.dcn_context_new()
     const db = dir.endsWith('db.sqlite') ? dir : path.join(dir, 'db.sqlite')
@@ -329,7 +334,7 @@ class DeltaChat extends EventEmitter {
       cb(err, result)
     }
     binding.dcn_open(dcn_context, db, '', err => {
-      if (err) return done(err)
+      if (err) return done(err, null)
       if (binding.dcn_is_configured(dcn_context)) {
         const addr = binding.dcn_get_config(dcn_context, 'addr')
         return done(null, { addr })
@@ -338,12 +343,12 @@ class DeltaChat extends EventEmitter {
     })
   }
 
-  getConfig (key) {
+  getConfig (key:string):string {
     debug(`getConfig ${key}`)
     return binding.dcn_get_config(this.dcn_context, key)
   }
 
-  getContact (contactId) {
+  getContact (contactId:number) {
     debug(`getContact ${contactId}`)
     const dc_contact = binding.dcn_get_contact(
       this.dcn_context,
@@ -352,12 +357,12 @@ class DeltaChat extends EventEmitter {
     return dc_contact ? new Contact(dc_contact) : null
   }
 
-  getContactEncryptionInfo (contactId) {
+  getContactEncryptionInfo (contactId:number) {
     debug(`getContactEncryptionInfo ${contactId}`)
     return binding.dcn_get_contact_encrinfo(this.dcn_context, Number(contactId))
   }
 
-  getContacts (listFlags, query) {
+  getContacts (listFlags:number, query:string) {
     listFlags = listFlags || 0
     query = query || ''
     debug(`getContacts ${listFlags} ${query}`)
@@ -369,19 +374,19 @@ class DeltaChat extends EventEmitter {
     binding.dcn_update_device_chats(this.dcn_context)
   }
 
-  wasDeviceMessageEverAdded (label) {
+  wasDeviceMessageEverAdded (label:string) {
     debug(`wasDeviceMessageEverAdded ${label}`)
     const added = binding.dcn_was_device_msg_ever_added(this.dcn_context, label)
     return added === 1
   }
 
-  getDraft (chatId) {
+  getDraft (chatId:number) {
     debug(`getDraft ${chatId}`)
     const dc_msg = binding.dcn_get_draft(this.dcn_context, Number(chatId))
     return dc_msg ? new Message(dc_msg) : null
   }
 
-  getFreshMessageCount (chatId) {
+  getFreshMessageCount (chatId:number):number {
     debug(`getFreshMessageCount ${chatId}`)
     return binding.dcn_get_fresh_msg_cnt(this.dcn_context, Number(chatId))
   }
@@ -396,7 +401,7 @@ class DeltaChat extends EventEmitter {
     return DeltaChat._getInfo(this.dcn_context)
   }
 
-  static _getInfo (dcn_context) {
+  static _getInfo (dcn_context:NativeContext) {
     debug('static _getInfo')
     const result = {}
 
@@ -414,23 +419,23 @@ class DeltaChat extends EventEmitter {
     return result
   }
 
-  getMessage (messageId) {
+  getMessage (messageId:number) {
     debug(`getMessage ${messageId}`)
     const dc_msg = binding.dcn_get_msg(this.dcn_context, Number(messageId))
     return dc_msg ? new Message(dc_msg) : null
   }
 
-  getMessageCount (chatId) {
+  getMessageCount (chatId:number):number {
     debug(`getMessageCount ${chatId}`)
     return binding.dcn_get_msg_cnt(this.dcn_context, Number(chatId))
   }
 
-  getMessageInfo (messageId) {
+  getMessageInfo (messageId:number):string {
     debug(`getMessageInfo ${messageId}`)
     return binding.dcn_get_msg_info(this.dcn_context, Number(messageId))
   }
 
-  getNextMediaMessage (messageId, msgType1, msgType2, msgType3) {
+  getNextMediaMessage (messageId:number, msgType1:number, msgType2:number, msgType3:number) {
     debug(`getNextMediaMessage ${messageId} ${msgType1} ${msgType2} ${msgType3}`)
     return this._getNextMedia(
       messageId,
@@ -441,7 +446,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  getPreviousMediaMessage (messageId, msgType1, msgType2, msgType3) {
+  getPreviousMediaMessage (messageId:number, msgType1:number, msgType2:number, msgType3:number) {
     debug(`getPreviousMediaMessage ${messageId} ${msgType1} ${msgType2} ${msgType3}`)
     return this._getNextMedia(
       messageId,
@@ -452,7 +457,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  _getNextMedia (messageId, dir, msgType1, msgType2, msgType3) {
+  _getNextMedia (messageId:number, dir:number, msgType1:number, msgType2:number, msgType3:number):number {
     return binding.dcn_get_next_media(
       this.dcn_context,
       Number(messageId),
@@ -463,7 +468,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  static getProviderFromEmail (email) {
+  static getProviderFromEmail (email:string) {
     debug('DeltaChat.getProviderFromEmail')
     const dcn_context = binding.dcn_context_new()
     const provider = binding.dcn_provider_new_from_email(dcn_context, email)
@@ -480,7 +485,7 @@ class DeltaChat extends EventEmitter {
     }
   }
 
-  getSecurejoinQrCode (chatId) {
+  getSecurejoinQrCode (chatId:number) {
     debug(`getSecurejoinQrCode ${chatId}`)
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
   }
@@ -519,13 +524,13 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_imex_has_backup(this.dcn_context, dir)
   }
 
-  initiateKeyTransfer (cb) {
+  initiateKeyTransfer (cb:(err:Error, statusCode:any)=>void) {
     debug('initiateKeyTransfer')
     return binding.dcn_initiate_key_transfer(this.dcn_context, statusCode => {
       if (typeof statusCode === 'string') {
         return cb(null, statusCode)
       }
-      cb(new Error('Could not initiate key transfer'))
+      cb(new Error('Could not initiate key transfer'), null)
     })
   }
 
@@ -534,7 +539,7 @@ class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_is_configured(this.dcn_context))
   }
 
-  isContactInChat (chatId, contactId) {
+  isContactInChat (chatId:number, contactId:number) {
     debug(`isContactInChat ${chatId} ${contactId}`)
     return Boolean(
       binding.dcn_is_contact_in_chat(
@@ -552,19 +557,19 @@ class DeltaChat extends EventEmitter {
 
   // TODO this should most likely be async, see
   // https://c.delta.chat/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7
-  joinSecurejoin (qrCode) {
+  joinSecurejoin (qrCode:string) {
     debug(`joinSecurejoin ${qrCode}`)
     return binding.dcn_join_securejoin(this.dcn_context, qrCode)
   }
 
-  lookupContactIdByAddr (addr) {
+  lookupContactIdByAddr (addr:string) {
     debug(`lookupContactIdByAddr ${addr}`)
     return Boolean(
       binding.dcn_lookup_contact_id_by_addr(this.dcn_context, addr)
     )
   }
 
-  markNoticedChat (chatId) {
+  markNoticedChat (chatId:number) {
     debug(`markNoticedChat ${chatId}`)
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
@@ -574,12 +579,12 @@ class DeltaChat extends EventEmitter {
     binding.dcn_marknoticed_all_chats(this.dcn_context)
   }
 
-  markNoticedContact (contactId) {
+  markNoticedContact (contactId:number) {
     debug(`markNoticedContact ${contactId}`)
     binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
   }
 
-  markSeenMessages (messageIds) {
+  markSeenMessages (messageIds:number[]) {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
@@ -588,7 +593,7 @@ class DeltaChat extends EventEmitter {
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
   }
 
-  static maybeValidAddr (addr) {
+  static maybeValidAddr (addr:string) {
     debug('DeltaChat.maybeValidAddr')
     if (addr === null) return false
     return Boolean(binding.dcn_maybe_valid_addr(addr))
@@ -604,7 +609,7 @@ class DeltaChat extends EventEmitter {
     return new Message(binding.dcn_msg_new(this.dcn_context, viewType))
   }
 
-  open (cwd, cb) {
+  open (cwd:string, cb:(err:Error)=>void) {
     debug(`open ${cwd}`)
     if (typeof cwd === 'function') {
       cb = cwd
@@ -619,12 +624,12 @@ class DeltaChat extends EventEmitter {
       binding.dcn_open(this.dcn_context, db, '', err => {
         if (err) return cb(err)
         binding.dcn_start_threads(this.dcn_context)
-        cb()
+        cb(null)
       })
     })
   }
 
-  removeContactFromChat (chatId, contactId) {
+  removeContactFromChat (chatId:number, contactId:number) {
     debug(`removeContactFromChat ${chatId} ${contactId}`)
     return Boolean(
       binding.dcn_remove_contact_from_chat(
@@ -635,12 +640,12 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  searchMessages (chatId, query) {
+  searchMessages (chatId:number, query:string):number[] {
     debug(`searchMessages ${chatId} ${query}`)
     return binding.dcn_search_msgs(this.dcn_context, Number(chatId), query)
   }
 
-  sendMessage (chatId, msg) {
+  sendMessage (chatId:number, msg:string|Message) {
     debug(`sendMessage ${chatId}`)
     if (!msg) {
       throw new Error('invalid msg parameter')
@@ -656,7 +661,7 @@ class DeltaChat extends EventEmitter {
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
   }
 
-  setChatName (chatId, name) {
+  setChatName (chatId:number, name:string) {
     debug(`setChatName ${chatId} ${name}`)
     return Boolean(
       binding.dcn_set_chat_name(
@@ -667,7 +672,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  setChatProfileImage (chatId, image) {
+  setChatProfileImage (chatId:number, image:string) {
     debug(`setChatProfileImage ${chatId} ${image}`)
     return Boolean(
       binding.dcn_set_chat_profile_image(
@@ -678,17 +683,17 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  setConfig (key, value) {
+  setConfig (key:string, value:string) {
     debug(`setConfig ${key} ${value}`)
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
-  setStockTranslation (stockId, stockMsg) {
+  setStockTranslation (stockId:number, stockMsg:string) {
     debug(`setStockTranslation ${stockId} ${stockMsg}`)
-    return binding.dcn_set_stock_translation(this.dcn_context, Number(stockId), stockMsg)
+    return Boolean(binding.dcn_set_stock_translation(this.dcn_context, Number(stockId), stockMsg))
   }
 
-  setDraft (chatId, msg) {
+  setDraft (chatId:number, msg:Message) {
     debug(`setDraft ${chatId}`)
     binding.dcn_set_draft(
       this.dcn_context,
@@ -697,7 +702,7 @@ class DeltaChat extends EventEmitter {
     )
   }
 
-  setLocation (latitude, longitude, accuracy) {
+  setLocation (latitude:number, longitude:number, accuracy:number) {
     debug(`setLocation ${latitude}`)
     binding.dcn_set_location(
       this.dcn_context,
@@ -737,7 +742,7 @@ class DeltaChat extends EventEmitter {
    * getLocations(chat_id, contact_id, 0, 0);
    */
 
-  getLocations (chatId, contactId, timestampFrom = 0, timestampTo = 0) {
+  getLocations (chatId:number, contactId:number, timestampFrom = 0, timestampTo = 0) {
     const locations = new Locations(binding.dcn_get_locations(
       this.dcn_context,
       Number(chatId),
@@ -748,7 +753,7 @@ class DeltaChat extends EventEmitter {
     return locations.toJson()
   }
 
-  starMessages (messageIds, star) {
+  starMessages (messageIds:number[], star:boolean) {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
@@ -758,93 +763,73 @@ class DeltaChat extends EventEmitter {
   }
 }
 
-function handleEvent (self, event, data1, data2) {
+function handleEvent (self:DeltaChat, event:number, data1, data2) {
   debug('event', event, 'data1', data1, 'data2', data2)
 
   self.emit('ALL', event, data1, data2)
 
-  const eventStr = events[event]
+  const eventStr = EventId2EventName[event]
 
-  switch (eventStr) {
-    case 'DC_EVENT_INFO': // 100
+  if(typeof eventStr === "undefined") {
+    debug(`Unknown event ${eventStr}`)
+    return;
+  }
+
+  switch (event) {
+    case C.DC_EVENT_INFO:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_CONNECTED': // 101
+    case C.DC_EVENT_SMTP_CONNECTED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_CONNECTED': // 102
+    case C.DC_EVENT_IMAP_CONNECTED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_SMTP_MESSAGE_SENT': // 103
+    case C.DC_EVENT_SMTP_MESSAGE_SENT:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_MESSAGE_DELETED': // 104
+    case C.DC_EVENT_IMAP_MESSAGE_DELETED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_IMAP_MESSAGE_MOVED': // 105
+    case C.DC_EVENT_IMAP_MESSAGE_MOVED:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_NEW_BLOB_FILE': // 150
+    case C.DC_EVENT_NEW_BLOB_FILE:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_DELETED_BLOB_FILE': // 151
+    case C.DC_EVENT_DELETED_BLOB_FILE:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_WARNING': // 300
+    case C.DC_EVENT_WARNING:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_ERROR': // 400
+    case C.DC_EVENT_ERROR:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_ERROR_NETWORK': // 401
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_ERROR_SELF_NOT_IN_GROUP': // 410
+    case C.DC_EVENT_ERROR_SELF_NOT_IN_GROUP:
       self.emit(eventStr, data2)
       break
-    case 'DC_EVENT_MSGS_CHANGED': // 2000
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_INCOMING_MSG': // 2005
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_DELIVERED': // 2010
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_FAILED': // 2012
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_MSG_READ': // 2015
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_CHAT_MODIFIED': // 2020
+    case C.DC_EVENT_CHAT_MODIFIED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONTACTS_CHANGED': // 2030
+    case C.DC_EVENT_CONTACTS_CHANGED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_LOCATION_CHANGED': // 2035
+    case C.DC_EVENT_LOCATION_CHANGED:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_CONFIGURE_PROGRESS': // 2041
+    case C.DC_EVENT_CONFIGURE_PROGRESS:
       if (data1 === 1000) self.emit('_configured')
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_PROGRESS': // 2051
+    case C.DC_EVENT_IMEX_PROGRESS:
       self.emit(eventStr, data1)
       break
-    case 'DC_EVENT_IMEX_FILE_WRITTEN': // 2052
+    case C.DC_EVENT_IMEX_FILE_WRITTEN:
       self.emit(eventStr, data1)
-      break
-    case 'DC_EVENT_SECUREJOIN_INVITER_PROGRESS': // 2060
-      self.emit(eventStr, data1, data2)
-      break
-    case 'DC_EVENT_SECUREJOIN_JOINER_PROGRESS': // 2061
-      self.emit(eventStr, data1, data2)
       break
     default:
-      debug(`Unknown event ${eventStr}`)
+      self.emit(eventStr, data1, data2)
+      break
   }
 }
-
-module.exports = DeltaChat

@@ -58,7 +58,7 @@ node-gyp rebuild -- -Dsystem_dc_core=true
 ## Usage
 
 ```js
-const DeltaChat = require('deltachat-node')
+const DeltaChat = require('deltachat-node').default
 const dc = new DeltaChat()
 
 const opts = {
@@ -985,7 +985,8 @@ The following steps are needed to make a release:
 6. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
 7. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
   - In case this fails, you can also manually download the prebuilts from github and extract them. It's only important that it extracts to the target folder.
-8. `npm publish` publishes it to npm. You probably need write rights to npm.
+8. `npx tsc` to build the typescript.
+9. `npm publish` publishes it to npm. You probably need write rights to npm.
 
 ## License
 

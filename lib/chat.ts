@@ -3,56 +3,56 @@
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:chat')
 
+interface NativeChat {}
 /**
  * Wrapper around dc_chat_t*
  */
-class Chat {
-  constructor (dc_chat) {
+export class Chat {
+  constructor (public dc_chat:NativeChat) {
     debug('Chat constructor')
-    this.dc_chat = dc_chat
   }
 
-  getArchived () {
+  getArchived ():boolean {
     return binding.dcn_chat_get_archived(this.dc_chat)
   }
 
-  getColor () {
+  getColor ():number {
     return binding.dcn_chat_get_color(this.dc_chat)
   }
 
-  getId () {
+  getId ():number {
     return binding.dcn_chat_get_id(this.dc_chat)
   }
 
-  getName () {
+  getName ():string {
     return binding.dcn_chat_get_name(this.dc_chat)
   }
 
-  getProfileImage () {
+  getProfileImage ():string {
     return binding.dcn_chat_get_profile_image(this.dc_chat)
   }
 
-  getSubtitle () {
+  getSubtitle ():string {
     return binding.dcn_chat_get_subtitle(this.dc_chat)
   }
 
-  getType () {
+  getType ():number {
     return binding.dcn_chat_get_type(this.dc_chat)
   }
 
-  isSelfTalk () {
+  isSelfTalk ():boolean {
     return Boolean(binding.dcn_chat_is_self_talk(this.dc_chat))
   }
 
-  isUnpromoted () {
+  isUnpromoted ():boolean {
     return Boolean(binding.dcn_chat_is_unpromoted(this.dc_chat))
   }
 
-  isVerified () {
+  isVerified ():boolean {
     return Boolean(binding.dcn_chat_is_verified(this.dc_chat))
   }
 
-  isDeviceTalk () {
+  isDeviceTalk ():boolean {
     return Boolean(binding.dcn_chat_is_device_talk(this.dc_chat))
   }
 
@@ -73,5 +73,3 @@ class Chat {
     }
   }
 }
-
-module.exports = Chat

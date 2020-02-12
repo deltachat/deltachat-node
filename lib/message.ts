@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
-const C = require('../constants')
-const Lot = require('./lot')
+import binding from '../binding'
+import {C} from './constants'
+import {Lot} from './lot'
+import {Chat} from './chat'
 const debug = require('debug')('deltachat:node:message')
 
 /**
@@ -11,10 +12,9 @@ const debug = require('debug')('deltachat:node:message')
  * if (msg.getState().isPending()) { .. }
  *
  */
-class MessageState {
-  constructor (state) {
+export class MessageState {
+  constructor (public state:number) {
     debug(`MessageState constructor ${state}`)
-    this.state = state
   }
 
   isUndefined () {
@@ -56,10 +56,9 @@ class MessageState {
  * if (msg.getViewType().isVideo()) { .. }
  *
  */
-class MessageViewType {
-  constructor (viewType) {
+export class MessageViewType {
+  constructor (public viewType:number) {
     debug(`MessageViewType constructor ${viewType}`)
-    this.viewType = viewType
   }
 
   isText () {
@@ -91,13 +90,13 @@ class MessageViewType {
   }
 }
 
+interface NativeMessage {}
 /**
  * Wrapper around dc_msg_t*
  */
-class Message {
-  constructor (dc_msg) {
+export class Message {
+  constructor (public dc_msg:NativeMessage) {
     debug('Message constructor')
-    this.dc_msg = dc_msg
   }
 
   toJson () {
@@ -128,43 +127,43 @@ class Message {
     }
   }
 
-  getChatId () {
+  getChatId ():number {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
 
-  getDuration () {
+  getDuration ():number {
     return binding.dcn_msg_get_duration(this.dc_msg)
   }
 
-  getFile () {
+  getFile ():string {
     return binding.dcn_msg_get_file(this.dc_msg)
   }
 
-  getFilebytes () {
+  getFilebytes ():number {
     return binding.dcn_msg_get_filebytes(this.dc_msg)
   }
 
-  getFilemime () {
+  getFilemime ():string {
     return binding.dcn_msg_get_filemime(this.dc_msg)
   }
 
-  getFilename () {
+  getFilename ():string {
     return binding.dcn_msg_get_filename(this.dc_msg)
   }
 
-  getFromId () {
+  getFromId ():number {
     return binding.dcn_msg_get_from_id(this.dc_msg)
   }
 
-  getHeight () {
+  getHeight ():number {
     return binding.dcn_msg_get_height(this.dc_msg)
   }
 
-  getId () {
+  getId ():number {
     return binding.dcn_msg_get_id(this.dc_msg)
   }
 
-  getReceivedTimestamp () {
+  getReceivedTimestamp ():number {
     return binding.dcn_msg_get_received_timestamp(this.dc_msg)
   }
 
@@ -176,7 +175,7 @@ class Message {
     return Boolean(binding.dcn_msg_get_showpadlock(this.dc_msg))
   }
 
-  getSortTimestamp () {
+  getSortTimestamp ():number {
     return binding.dcn_msg_get_sort_timestamp(this.dc_msg)
   }
 
@@ -184,21 +183,21 @@ class Message {
     return new MessageState(binding.dcn_msg_get_state(this.dc_msg))
   }
 
-  getSummary (chat) {
+  getSummary (chat?:Chat) {
     const dc_chat = (chat && chat.dc_chat) || null
     return new Lot(binding.dcn_msg_get_summary(this.dc_msg, dc_chat))
   }
 
-  getSummarytext (approxCharacters) {
+  getSummarytext (approxCharacters:number):string {
     approxCharacters = approxCharacters || 0
     return binding.dcn_msg_get_summarytext(this.dc_msg, approxCharacters)
   }
 
-  getText () {
+  getText ():string {
     return binding.dcn_msg_get_text(this.dc_msg)
   }
 
-  getTimestamp () {
+  getTimestamp ():number {
     return binding.dcn_msg_get_timestamp(this.dc_msg)
   }
 
@@ -206,7 +205,7 @@ class Message {
     return new MessageViewType(binding.dcn_msg_get_viewtype(this.dc_msg))
   }
 
-  getWidth () {
+  getWidth ():number {
     return binding.dcn_msg_get_width(this.dc_msg)
   }
 
@@ -246,35 +245,33 @@ class Message {
     return Boolean(binding.dcn_msg_is_starred(this.dc_msg))
   }
 
-  latefilingMediasize (width, height, duration) {
+  latefilingMediasize (width:number, height:number, duration:number) {
     binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
   }
 
-  setDimension (width, height) {
+  setDimension (width:number, height:number) {
     binding.dcn_msg_set_dimension(this.dc_msg, width, height)
     return this
   }
 
-  setDuration (duration) {
+  setDuration (duration:number) {
     binding.dcn_msg_set_duration(this.dc_msg, duration)
     return this
   }
 
-  setFile (file, mime) {
+  setFile (file:string, mime:string) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
     return this
   }
 
-  setLocation (longitude, latitude) {
+  setLocation (longitude:number, latitude:number) {
     binding.dcn_msg_set_location(this.dc_msg, longitude, latitude)
     return this
   }
 
-  setText (text) {
+  setText (text:string) {
     binding.dcn_msg_set_text(this.dc_msg, text)
     return this
   }
 }
-
-module.exports = Message

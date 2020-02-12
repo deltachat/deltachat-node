@@ -2,6 +2,25 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.0-beta.26] - 2019-02-07
+
+### Changed
+
+- Switched to Typescript
+
+### Breaking changes:
+
+You need to change your imports from 
+```js
+const DeltaChat = require('deltachat-node')
+const C = require('deltachat-node/constants')
+```
+to
+```js
+const DeltaChat = require('deltachat-node').default
+const { C } = require('deltachat-node')
+```
+
 ## [1.0.0-beta.25] - 2019-02-07
 
 ### Added

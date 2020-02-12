@@ -25,16 +25,6 @@ fs.createReadStream(header)
       return `  ${row.key}: ${row.value}`
     }).join(',\n')
 
-    fs.writeFileSync(
-      path.resolve(__dirname, '../constants.js'),
-      `// Generated!\n\nmodule.exports = {\n${constants}\n}\n`
-    )
-
-    fs.writeFileSync(
-      path.resolve(__dirname, '../constants.enum.ts'),
-      `// Generated!\n\n export const enum C {\n${constants.replace(/:/g, '=')}\n}\n`
-    )
-
     const events = data.sort((lhs, rhs) => {
       if (lhs.value < rhs.value) return -1
       else if (lhs.value > rhs.value) return 1
@@ -42,11 +32,25 @@ fs.createReadStream(header)
     }).filter(i => {
       return i.key.startsWith('DC_EVENT_')
     }).map(i => {
-      return `  ${i.value}: '${i.key}'`
+      return `  ${i.value}: "${i.key}"`
     }).join(',\n')
 
+    // backwards compat
+    fs.writeFileSync(
+      path.resolve(__dirname, '../constants.js'),
+      `// Generated!\n\nmodule.exports = {\n${constants}\n}\n`
+    )
+    // backwards compat
     fs.writeFileSync(
       path.resolve(__dirname, '../events.js'),
-      `// Generated!\n\nmodule.exports = {\n${events}\n}\n`
+      `/* eslint-disable quotes */\n// Generated!\n\nmodule.exports = {\n${events}\n}\n`
+    )
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../lib/constants.ts'),
+      `
+// Generated!\n\nexport enum C {\n${constants.replace(/:/g, '=')}\n}\n
+// Generated!\n\nexport const EventId2EventName: {[key:number]:string} = {\n${events}\n}\n      
+      `
     )
   })

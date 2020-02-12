@@ -1,15 +1,18 @@
 {
   "name": "deltachat-node",
-  "version": "1.0.0-beta.25",
+  "version": "1.0.0-beta.26",
   "description": "node.js bindings for deltachat-core",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && opn coverage/index.html",
     "generate-constants": "./scripts/generate-constants.js",
-    "install": "node-gyp-build \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
-    "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings",
+    "install": "tsc && node-gyp-build \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
+    "rebuild-all": "npm run rebuild-core && npm run rebuild-bindings && tsc",
     "rebuild-core": "node scripts/rebuild-core.js",
     "rebuild-bindings": "npx node-gyp rebuild && npm run generate-constants",
+    "build-typescript": "tsc",
     "prebuild": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
@@ -31,9 +34,11 @@
     "lodash.pick": "^4.4.0",
     "mkdirp": "^0.5.1",
     "napi-macros": "^2.0.0",
-    "node-gyp-build": "^4.1.0"
+    "node-gyp-build": "^4.1.0",
+    "typescript": "^3.7.5"
   },
   "devDependencies": {
+    "@types/node": "^13.7.0",
     "coveralls": "^3.0.3",
     "hallmark": "^2.0.0",
     "node-gyp": "^6.0.0",

@@ -2,6 +2,18 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
+## 1.0.0-beta.26 onwards
+You need to change your imports from 
+```js
+const DeltaChat = require('deltachat-node')
+const C = require('deltachat-node/constants')
+```
+to
+```js
+const DeltaChat = require('deltachat-node').default
+const { C } = require('deltachat-node')
+```
+
 ## v0.35.0
 
 More parameters were added to `dc.getChatMedia()`, `dc.getNextMediaMessage()` and `dc.getPreviousMediaMessage()`.
