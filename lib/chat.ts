@@ -2,6 +2,7 @@
 
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:chat')
+const { C } = require('./constants')
 
 interface NativeChat {}
 /**
@@ -54,6 +55,14 @@ export class Chat {
 
   isDeviceTalk ():boolean {
     return Boolean(binding.dcn_chat_is_device_talk(this.dc_chat))
+  }
+
+  isSingle ():boolean {
+    return this.getType() === C.DC_CHAT_TYPE_SINGLE
+  }
+
+  isGroup ():boolean {
+    return this.getType() === C.DC_CHAT_TYPE_GROUP
   }
 
   toJson () {
