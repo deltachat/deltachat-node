@@ -550,6 +550,14 @@ Check if a chat is verified. Corresponds to `dc_chat_is_verified()`.
 
 Check if a chat is a device talk. Corresponds to `dc_chat_is_device_talk()`.
 
+#### `chat.isSingle()`
+
+Check if a chat is a 1-on-1 chat (aka DM).
+
+#### `chat.isGroup()`
+
+Check if a chat is a group chat.
+
 #### `chat.toJson()`
 
 Returns the object state as a JavaScript serializable object.
