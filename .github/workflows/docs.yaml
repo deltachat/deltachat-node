@@ -13,8 +13,6 @@ jobs:
         node-version: 12.x
     - name: npm install and generate documentation
       run: |
-        npm ci
+        npm i --ignore-scripts
         npx typedoc
-      env:
-        CI: true
     # todo upload 
