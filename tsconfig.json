@@ -7,5 +7,12 @@
         "target": "es5",
         "esModuleInterop": true,
         "declaration": true
+    },
+    "typedocOptions": {
+        "mode": "file",
+        "out": "docs",
+        "excludeNotExported": true,
+        "defaultCategory": "index",
+        "includeVersion": true
     }
 }
