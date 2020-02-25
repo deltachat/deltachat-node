@@ -104,6 +104,7 @@ to generate the documentation, run:
 npx typedoc
 ```
 The resulting documentation can be found in the `docs/` folder.
+An online version can be found under [js.delta.chat](https://js.delta.chat).
 
 ## Developing
 
