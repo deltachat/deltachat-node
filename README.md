@@ -25,7 +25,6 @@
 
 - [Install](#install)
 - [Usage](#usage)
-- [API](#api)
 - [Developing](#developing)
 - [License](#license)
 
@@ -100,9 +99,11 @@ We are curently migrating to automaticaly generated documentation.
 You can find the old documentation at [old_docs](./old_docs).
 
 to generate the documentation, run:
+
 ```
 npx typedoc
 ```
+
 The resulting documentation can be found in the `docs/` folder.
 An online version can be found under [js.delta.chat](https://js.delta.chat).
 

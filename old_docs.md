@@ -1,4 +1,3 @@
-
 ## API
 
 The high level JavaScript API is a collection of classes wrapping most context types provided by `deltachat-core-rust`. Please see the [class list](https://c.delta.chat/annotated.html) for an overview of this.

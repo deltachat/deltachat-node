@@ -2,11 +2,21 @@
 
 ## [Unreleased][unreleased]
 
+## [1.26.0] - 2019-03-03
+
+### Added
+
+- Introduce typedoc
+
+### Changed
+
+- Update deltachat-core-rust to v1.26.0
+
 ## [1.25.0] - 2019-02-21
 
 ### Added
 
-- Added `chat.isSingle()` and `chat.isGroup()` methods @pabzm
+- Added `chat.isSingle()` and `chat.isGroup()` methods [**@pabzm**](https://github.com/pabzm)
 
 ### Changed
 
@@ -934,7 +944,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.25.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.26.0...HEAD
+
+[1.26.0]: https://github.com/deltachat/deltachat-node/compare/v1.25.0...v1.26.0
 
 [1.25.0]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.26...v1.25.0
 
