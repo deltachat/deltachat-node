@@ -9,3 +9,4 @@ coverage/
 prebuilds/
 *.tar.gz
 dist/
+docs/
