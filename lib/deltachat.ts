@@ -103,7 +103,7 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_close(this.dcn_context, cb)
   }
 
-  configure (opts, cb: () => void) {
+  configure (opts, cb?: () => void) {
     debug('configure')
     if (!opts) opts = {}
     const ready = () => {
