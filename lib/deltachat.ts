@@ -514,7 +514,7 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
-  importExport (what, param1, param2='') {
+  importExport (what:number, param1:string, param2='') {
     debug(`importExport ${what} ${param1} ${param2}`)
     binding.dcn_imex(this.dcn_context, what, param1, param2)
   }
