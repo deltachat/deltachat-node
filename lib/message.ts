@@ -259,7 +259,7 @@ export class Message {
     return this
   }
 
-  setFile (file:string, mime:string) {
+  setFile (file:string, mime?:string) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
     return this
