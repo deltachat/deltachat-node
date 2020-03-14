@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.27.0] - 2019-03-14
+
+### Changed
+
+- Update deltachat-core-rust to v1.27.0
+
 ## [1.26.0] - 2019-03-03
 
 ### Added
@@ -944,7 +950,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.26.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.27.0...HEAD
+
+[1.27.0]: https://github.com/deltachat/deltachat-node/compare/v1.26.0...v1.27.0
 
 [1.26.0]: https://github.com/deltachat/deltachat-node/compare/v1.25.0...v1.26.0
 
