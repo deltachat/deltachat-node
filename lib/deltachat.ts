@@ -54,7 +54,7 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  addDeviceMessage (label:string, msg:Message) {
+  addDeviceMessage (label:string, msg: Message | string) {
     debug(`addDeviceMessage ${label} ${msg}`)
     if (!msg) {
       throw new Error('invalid msg parameter')
