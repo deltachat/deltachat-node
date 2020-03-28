@@ -54,7 +54,7 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  addDeviceMessage (label:string, msg:Message) {
+  addDeviceMessage (label:string, msg:Message|string) {
     debug(`addDeviceMessage ${label} ${msg}`)
     if (!msg) {
       throw new Error('invalid msg parameter')
@@ -103,7 +103,7 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_close(this.dcn_context, cb)
   }
 
-  configure (opts, cb: () => void) {
+  configure (opts, cb?: () => void) {
     debug('configure')
     if (!opts) opts = {}
     const ready = () => {
@@ -514,9 +514,9 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
-  importExport (what, param1, param2) {
+  importExport (what:number, param1:string, param2='') {
     debug(`importExport ${what} ${param1} ${param2}`)
-    binding.dcn_imex(this.dcn_context, what, param1, param2 || '')
+    binding.dcn_imex(this.dcn_context, what, param1, param2)
   }
 
   importExportHasBackup (dir) {
