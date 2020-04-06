@@ -2,7 +2,7 @@
 
 const binding = require('../binding')
 const debug = require('debug')('deltachat:node:chat')
-const { C } = require('./constants')
+import { C } from './constants'
 
 interface NativeChat {}
 /**
@@ -13,6 +13,11 @@ export class Chat {
     debug('Chat constructor')
   }
 
+  getVisibility():C.DC_CHAT_VISIBILITY_NORMAL | C.DC_CHAT_VISIBILITY_ARCHIVED | C.DC_CHAT_VISIBILITY_PINNED {
+    return binding.dcn_chat_get_visibility(this.dc_chat)
+  }
+
+  /** @deprecated */
   getArchived ():boolean {
     return binding.dcn_chat_get_archived(this.dc_chat)
   }
@@ -67,8 +72,10 @@ export class Chat {
 
   toJson () {
     debug('toJson')
+    const visibility = this.getVisibility()
     return {
-      archived: this.getArchived(),
+      archived: visibility === C.DC_CHAT_VISIBILITY_ARCHIVED,
+      pinned: visibility === C.DC_CHAT_VISIBILITY_PINNED,
       color: this.getColor(),
       id: this.getId(),
       name: this.getName(),

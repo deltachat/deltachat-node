@@ -1115,6 +1115,19 @@ NAPI_METHOD(dcn_get_next_media) {
   NAPI_RETURN_UINT32(next_id);
 }
 
+NAPI_METHOD(dcn_set_chat_visibility) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_INT32(visibility, 2);
+  //TRACE("calling..");
+  dc_set_chat_visibility(dcn_context->dc_context,
+                                        chat_id,
+                                        visibility);
+  //TRACE("result %d", next_id);
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_get_securejoin_qr) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -1642,6 +1655,17 @@ NAPI_METHOD(dcn_chat_get_color) {
   //TRACE("result %d", color);
 
   NAPI_RETURN_UINT32(color);
+}
+
+NAPI_METHOD(dcn_chat_get_visibility) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  //TRACE("calling..");
+  uint32_t visibility = dc_chat_get_visibility(dc_chat);
+  //TRACE("result %d", color);
+
+  NAPI_RETURN_UINT32(visibility);
 }
 
 NAPI_METHOD(dcn_chat_get_id) {
@@ -2740,6 +2764,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_msg_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
   NAPI_EXPORT_FUNCTION(dcn_get_next_media);
+  NAPI_EXPORT_FUNCTION(dcn_set_chat_visibility);
   NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
   NAPI_EXPORT_FUNCTION(dcn_imex);
   NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
@@ -2776,6 +2801,7 @@ NAPI_INIT() {
 
   NAPI_EXPORT_FUNCTION(dcn_chat_get_archived);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_color);
+  NAPI_EXPORT_FUNCTION(dcn_chat_get_visibility);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_id);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
