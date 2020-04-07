@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
-const debug = require('debug')('deltachat:node:chat')
+import binding from '../binding'
+import rawDebug from 'debug'
+const debug = rawDebug('deltachat:node:chat')
 import { C } from './constants'
 
 interface NativeChat {}

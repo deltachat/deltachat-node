@@ -12,7 +12,8 @@ import mkdirp from 'mkdirp'
 import path from 'path'
 import {Locations} from './locations'
 import pick from 'lodash.pick'
-const debug = require('debug')('deltachat:node:index')
+import rawDebug from 'debug'
+const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
 const DC_SHOW_EMAILS = [
@@ -84,7 +85,7 @@ export class DeltaChat extends EventEmitter {
   }
 
   setChatVisibility(chatId:number, visibility: C.DC_CHAT_VISIBILITY_NORMAL | C.DC_CHAT_VISIBILITY_ARCHIVED | C.DC_CHAT_VISIBILITY_PINNED){
-    debug(`archiveChat ${chatId} ${visibility}`)
+    debug(`setChatVisibility ${chatId} ${visibility}`)
     binding.dcn_set_chat_visibility(
       this.dcn_context,
       Number(chatId),
