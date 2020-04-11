@@ -105,7 +105,11 @@ export class DeltaChat extends EventEmitter {
   checkQrCode (qrCode:string) {
     debug(`checkQrCode ${qrCode}`)
     const dc_lot = binding.dcn_check_qr(this.dcn_context, qrCode)
-    return dc_lot ? new Lot(dc_lot) : null
+    let result = dc_lot ? new Lot(dc_lot) : null
+    if (result) {
+      return {id: result.getId(), ...result.toJson()}
+    }
+    return result;
   }
 
   close (cb = noop) {
