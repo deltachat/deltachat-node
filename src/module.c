@@ -669,7 +669,7 @@ NAPI_ASYNC_COMPLETE(dcn_join_secure) {
 NAPI_METHOD(dcn_join_secure) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UTF8_MALLOC(setup_code, 1);
+  NAPI_ARGV_UTF8_MALLOC(qr_code, 1);
   NAPI_ASYNC_NEW_CARRIER(dcn_join_secure);
   carrier->qr_code = qr_code;
 
