@@ -632,6 +632,53 @@ NAPI_METHOD(dcn_continue_key_transfer) {
   NAPI_RETURN_UNDEFINED();
 }
 
+/**   new **/
+
+NAPI_ASYNC_CARRIER_BEGIN(dcn_join_secure)
+  char* qr_code;
+  int result;
+NAPI_ASYNC_CARRIER_END(dcn_join_secure)
+
+
+NAPI_ASYNC_EXECUTE(dcn_join_secure) {
+  NAPI_ASYNC_GET_CARRIER(dcn_join_secure)
+  carrier->result = dc_join_securejoin(
+    carrier->dcn_context->dc_context,
+    carrier->qr_code
+  );
+}
+
+NAPI_ASYNC_COMPLETE(dcn_join_secure) {
+  NAPI_ASYNC_GET_CARRIER(dcn_join_secure)
+  if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+#define DCN_JOIN_SECURE_CALLBACK_ARGC 1
+
+  const int argc = DCN_JOIN_SECURE_CALLBACK_ARGC;
+  napi_value argv[DCN_JOIN_SECURE_CALLBACK_ARGC];
+  NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
+
+  NAPI_ASYNC_CALL_AND_DELETE_CB()
+  dc_str_unref(carrier->qr_code);
+  free(carrier);
+}
+
+NAPI_METHOD(dcn_join_secure) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(setup_code, 1);
+  NAPI_ASYNC_NEW_CARRIER(dcn_join_secure);
+  carrier->qr_code = qr_code;
+
+  NAPI_ASYNC_QUEUE_WORK(dcn_join_secure, argv[2]);
+  NAPI_RETURN_UNDEFINED();
+}
+
+/*** end ***/
+
 NAPI_METHOD(dcn_create_chat_by_contact_id) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2732,6 +2779,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
+  NAPI_EXPORT_FUNCTION(dcn_join_secure);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_msg_id);
   NAPI_EXPORT_FUNCTION(dcn_create_contact);

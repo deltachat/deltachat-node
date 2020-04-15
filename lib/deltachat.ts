@@ -187,6 +187,8 @@ export class DeltaChat extends EventEmitter {
       cb(null)
     })
   }
+
+
   /** @returns chatId */
   createChatByContactId (contactId:number):number {
     debug(`createChatByContactId ${contactId}`)
@@ -574,7 +576,7 @@ export class DeltaChat extends EventEmitter {
   // https://c.delta.chat/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7
   joinSecurejoin (qrCode:string) {
     debug(`joinSecurejoin ${qrCode}`)
-    return binding.dcn_join_securejoin(this.dcn_context, qrCode)
+    return binding.dcn_join_secure(this.dcn_context, qrCode)
   }
 
   lookupContactIdByAddr (addr:string) {
