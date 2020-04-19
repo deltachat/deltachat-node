@@ -14,7 +14,7 @@
     "build:bindings:c": "npx node-gyp-build \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
     "build:bindings:ts": "tsc",
     "build:bindings:generate-constants": "./scripts/generate-constants.js",
-    "prebuild": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
+    "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
     "test": "standard && nyc node test/index.js",
