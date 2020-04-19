@@ -1,5 +1,5 @@
 name: Build & Test (Windows)
-on: [push, pull_request]
+on: push
 
 
 jobs:
