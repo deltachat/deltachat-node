@@ -47,7 +47,8 @@ jobs:
 
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm run build:bindings:generate-constants 
+        run: npm i --verbose 
+
       - name: Test
         run: |
           npm run test
@@ -62,7 +63,7 @@ jobs:
       - name: Build Prebuild
         run: |
           echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
-          npm run prebuild
+          npm run prebuildify
           tar -zcvf "${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}" -C prebuilds .
 
       - name: Upload Prebuild
