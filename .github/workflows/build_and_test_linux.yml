@@ -1,0 +1,26 @@
+name: Build & Test (Linux)
+
+on: push
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+ 
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - name: Fetch deltachat-core-rust submodule
+      run: npm run submodule
+    
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Run tests
+      run: npm test

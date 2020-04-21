@@ -1,8 +1,5 @@
 name: Build & Test (Windows)
-on: 
-  push:
-    tags-ignore: 
-      - '*'
+on: push
 
 
 jobs:
@@ -48,7 +45,7 @@ jobs:
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --verbose
+ 
       - name: Test
-        run: |
-          npm run test
+        run: npm run test
           
