@@ -1,4 +1,3 @@
-name: Build & upload prebuilds
 on: push
 
 jobs:
@@ -81,37 +80,37 @@ jobs:
         run: echo "$MATRIX_CONTEXT"
 
       - name: Prebuild Filename (Windows)
-        id: prebuild-filename
+        id: prebuild-filename-windows
         if: matrix.os == windows-latest
         run: |
           Set-Variable -Name "tag" -Value ("${{ github.ref }}").replace("refs/tags/", "")        
-          echo "::set-output name=ARCHIVE_NAME::$tag-windows-x64.tar.gz"
+          echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-windows-x64.tar.gz"
 
       - name: Prebuild Filename (Linux)
-        id: prebuild-filename
+        id: prebuild-filename-linux
         if: matrix.os == ubuntu-latest
         run: |
           export tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
-          echo "::set-output name=ARCHIVE_NAME::$tag-linux-x64.tar.gz"
+          echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-linux-x64.tar.gz"
 
       - name: Prebuild Filename (MacOS)
-        id: prebuild-filename
+        id: prebuild-filename-macos
         if: matrix.os == macos-latest
         run: |
           export tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
-          echo "::set-output name=ARCHIVE_NAME::$tag-darwin-x64.tar.gz"
+          echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-darwin-x64.tar.gz"
 
       - name: Build Prebuild
         run: |
-          echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+          echo ${{ env.PREBUILD_ARCHIVE_NAME }}
           npm run prebuildify
-          tar -zcvf "${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}" -C prebuilds .
+          tar -zcvf "${{ env.PREBUILD_ARCHIVE_NAME }}" -C prebuilds .
 
       - name: Upload Prebuild
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
-          asset_name: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+          file: ${{ env.PREBUILD_ARCHIVE_NAME }}
+          asset_name: ${{ env.PREBUILD_ARCHIVE_NAME }}
           tag: ${{ github.ref }}
           overwrite: true
