@@ -13,7 +13,7 @@
     "build:bindings": "npm run build:bindings:c && npm run build:bindings:generate-constants && npm run build:bindings:ts",
     "build:bindings:c": "npx node-gyp-build \"node scripts/rebuild-core.js\" \"node scripts/postinstall.js\"",
     "build:bindings:ts": "tsc",
-    "build:bindings:generate-constants": "node /scripts/generate-constants.js",
+    "build:bindings:generate-constants": "node scripts/generate-constants.js",
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",

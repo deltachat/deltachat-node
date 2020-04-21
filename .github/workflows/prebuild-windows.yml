@@ -47,7 +47,7 @@ jobs:
 
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --verbose
+        run: npm run build:bindings:generate-constants 
       - name: Test
         run: |
           npm run test
