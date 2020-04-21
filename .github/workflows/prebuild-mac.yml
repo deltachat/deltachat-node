@@ -1,10 +1,13 @@
-name: Build & Test (Linux)
-
-on: push
+name: Prebuild (Linux)
+on:
+  push:
+    tags:
+    - '*'
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+  prebuild:
+    runs-on: macos-latest
+
     steps:
     - uses: actions/checkout@v1
  
@@ -46,3 +49,25 @@ jobs:
 
     - name: Run tests
       run: npm test
+
+    - name: Prebuild Filename
+      id: prebuild-filename
+      
+      run: |
+        Set-Variable -Name "tag" -Value ("${{ github.ref }}").replace("refs/tags/", "")        
+        echo "::set-output name=ARCHIVE_NAME::$tag-darwin-x64.tar.gz"
+ 
+    - name: Build Prebuild
+      run: |
+        echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+        npm run prebuildify
+        tar -zcvf "${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}" -C prebuilds .
+
+    - name: Upload Prebuild
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+        asset_name: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+        tag: ${{ github.ref }}
+        overwrite: true
