@@ -81,21 +81,21 @@ jobs:
 
       - name: Prebuild Filename (Windows)
         id: prebuild-filename-windows
-        if: matrix.os == windows-latest
+        if: matrix.os == 'windows-latest'
         run: |
           Set-Variable -Name "tag" -Value ("${{ github.ref }}").replace("refs/tags/", "")        
           echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-windows-x64.tar.gz"
 
       - name: Prebuild Filename (Linux)
         id: prebuild-filename-linux
-        if: matrix.os == ubuntu-latest
+        if: matrix.os == 'ubuntu-latest'
         run: |
           export tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
           echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-linux-x64.tar.gz"
 
       - name: Prebuild Filename (MacOS)
         id: prebuild-filename-macos
-        if: matrix.os == macos-latest
+        if: matrix.os == 'macos-latest'
         run: |
           export tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
           echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-darwin-x64.tar.gz"
