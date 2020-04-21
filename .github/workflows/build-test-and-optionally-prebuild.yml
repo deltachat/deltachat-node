@@ -1,8 +1,5 @@
 name: Build & upload prebuilds
-on:
-  push:
-    tags:
-    - '*'
+on: push
 
 jobs:
   build-and-test:
