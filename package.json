@@ -39,7 +39,7 @@
     "@types/node": "^13.7.0"
   },
   "devDependencies": {
-    "coveralls": "^3.0.3",
+    "coveralls": "^3.0.13",
     "hallmark": "^2.0.0",
     "node-gyp": "^6.0.0",
     "nyc": "^15.0.0",
