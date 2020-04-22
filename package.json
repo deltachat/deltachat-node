@@ -30,13 +30,13 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@types/node": "^13.13.0",
     "debug": "^4.1.1",
     "lodash.pick": "^4.4.0",
     "mkdirp": "^0.5.1",
     "napi-macros": "^2.0.0",
     "node-gyp-build": "^4.1.0",
-    "typescript": "^3.7.5",
-    "@types/node": "^13.7.0"
+    "typescript": "^3.7.5"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
