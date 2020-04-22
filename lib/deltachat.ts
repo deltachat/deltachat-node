@@ -776,6 +776,31 @@ export class DeltaChat extends EventEmitter {
     debug('starMessages', messageIds)
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
+
+  /**
+   * Creates a temporary email. This is mostly for internal/debug/test
+   * usage but most likely also helpful in deltachat-node consuming
+   * projects. Currently there are no specifications available on how
+   * the server side is implemented or specified. If you're interested,
+   * ask us on irc :)
+   * @param url 
+   */
+  async _createTemporaryEmail(url: string) {
+    const fetch = await import('node-fetch')
+    
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'cache-control': 'no-cache'
+      },
+      referrerPolicy: 'no-referrer' // no-referrer, *client
+    })
+
+    return response.json() // parses JSON response into native JavaScript objects
+  }
 }
 
 function handleEvent (self:DeltaChat, event:number, data1, data2) {
