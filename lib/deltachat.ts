@@ -187,6 +187,8 @@ export class DeltaChat extends EventEmitter {
       cb(null)
     })
   }
+
+
   /** @returns chatId */
   createChatByContactId (contactId:number):number {
     debug(`createChatByContactId ${contactId}`)
@@ -570,11 +572,12 @@ export class DeltaChat extends EventEmitter {
     return Boolean(binding.dcn_is_open(this.dcn_context))
   }
 
-  // TODO this should most likely be async, see
-  // https://c.delta.chat/classdc__context__t.html#ae49176cbc26d4d40d52de4f5301d1fa7
-  joinSecurejoin (qrCode:string) {
+  joinSecurejoin (qrCode:string, callback: (result: number) => void) {
     debug(`joinSecurejoin ${qrCode}`)
-    return binding.dcn_join_securejoin(this.dcn_context, qrCode)
+    if (!callback || typeof callback !== 'function') {
+      throw new Error('callback required')
+    }
+    binding.dcn_join_securejoin(this.dcn_context, qrCode, callback)
   }
 
   lookupContactIdByAddr (addr:string) {

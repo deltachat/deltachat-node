@@ -448,3 +448,10 @@ test('dc.getProviderFromEmail("example@example.com")', t => {
 
   t.end()
 })
+
+test.only('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
+  dc.joinSecurejoin('test', (chatId) => {
+    t.is(chatId, 0, 'chatId should be zero as we didn\'t pass a valid qrString')
+    t.end()
+  })
+}))
