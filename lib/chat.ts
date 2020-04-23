@@ -39,10 +39,6 @@ export class Chat {
     return binding.dcn_chat_get_profile_image(this.dc_chat)
   }
 
-  getSubtitle ():string {
-    return binding.dcn_chat_get_subtitle(this.dc_chat)
-  }
-
   getType ():number {
     return binding.dcn_chat_get_type(this.dc_chat)
   }
@@ -81,7 +77,6 @@ export class Chat {
       id: this.getId(),
       name: this.getName(),
       profileImage: this.getProfileImage(),
-      subtitle: this.getSubtitle(),
       type: this.getType(),
       isSelfTalk: this.isSelfTalk(),
       isUnpromoted: this.isUnpromoted(),
