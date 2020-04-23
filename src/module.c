@@ -1731,17 +1731,6 @@ NAPI_METHOD(dcn_chat_get_profile_image) {
   NAPI_RETURN_AND_UNREF_STRING(profile_image);
 }
 
-NAPI_METHOD(dcn_chat_get_subtitle) {
-  NAPI_ARGV(1);
-  NAPI_DC_CHAT();
-
-  //TRACE("calling..");
-  char* subtitle = dc_chat_get_subtitle(dc_chat);
-  //TRACE("result %s", subtitle);
-
-  NAPI_RETURN_AND_UNREF_STRING(subtitle);
-}
-
 NAPI_METHOD(dcn_chat_get_type) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -2835,7 +2824,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_get_id);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
-  NAPI_EXPORT_FUNCTION(dcn_chat_get_subtitle);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
