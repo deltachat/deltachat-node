@@ -1,17 +1,18 @@
-name: Prebuild (Windows)
+name: 'Windows'
 on:
   push:
     tags:
     - '*'
 
-jobs:
-  prebuild-windows:
-    runs-on: windows-latest
 
+jobs:
+  upload-prebuild:
+    name: "Upload Prebuild"
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Prepare
+      - name: System info
         run: |
           rustc -vV
           rustup -vV
@@ -26,50 +27,43 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.APPDATA }}/npm-cache # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-node-3-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
      
-      - name: Cache cargo registry
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-2-registry-${{ hashFiles('**/Cargo.lock') }}
       - name: Cache cargo index
         uses: actions/cache@v1
         with:
           path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-2-index-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Cache cargo build
         uses: actions/cache@v1
         with:
           path: deltachat-core-rust/target
-          key: ${{ runner.os }}-cargo-2-build-target-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Install
+      - name: Install dependencies & build
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --verbose
+ 
       - name: Test
-        run: |
-          npm run test
+        run: npm run test
 
       - name: Prebuild Filename
-        id: prebuild-filename
-        
         run: |
           Set-Variable -Name "tag" -Value ("${{ github.ref }}").replace("refs/tags/", "")        
-          echo "::set-output name=ARCHIVE_NAME::$tag-win32-x64.tar.gz"
- 
+          echo "::set-env name=PREBUILD_ARCHIVE_NAME::$tag-windows-x64.tar.gz"
+
       - name: Build Prebuild
         run: |
-          echo ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
-          npm run prebuild
-          tar -zcvf "${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}" -C prebuilds .
+          echo ${{ env.PREBUILD_ARCHIVE_NAME }}
+          npm run prebuildify
+          tar -zcvf "${{ env.PREBUILD_ARCHIVE_NAME }}" -C prebuilds .
 
       - name: Upload Prebuild
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
-          asset_name: ${{ steps.prebuild-filename.outputs.ARCHIVE_NAME }}
+          file: ${{ env.PREBUILD_ARCHIVE_NAME }}
+          asset_name: ${{ env.PREBUILD_ARCHIVE_NAME }}
           tag: ${{ github.ref }}
           overwrite: true
