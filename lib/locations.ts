@@ -27,7 +27,7 @@ export class Locations {
     }
   }
 
-  toJson () {
+  toJson(): ReturnType<Locations['locationToJson']>[] {
     debug('toJson')
     const locations = []
     const count = this.getCount()

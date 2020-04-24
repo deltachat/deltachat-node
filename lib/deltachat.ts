@@ -502,7 +502,7 @@ export class DeltaChat extends EventEmitter {
     }
   }
 
-  getSecurejoinQrCode (chatId:number) {
+  getSecurejoinQrCode(chatId: number):string {
     debug(`getSecurejoinQrCode ${chatId}`)
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
   }
@@ -701,7 +701,7 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  setConfig (key:string, value:string) {
+  setConfig(key: string, value: string): number {
     debug(`setConfig ${key} ${value}`)
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
