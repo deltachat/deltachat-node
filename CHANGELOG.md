@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased][unreleased]
+- switch from standard to prettier
 
 ## [1.29.1] - 2019-04-23
 
