@@ -10,64 +10,67 @@ interface NativeChat {}
  * Wrapper around dc_chat_t*
  */
 export class Chat {
-  constructor (public dc_chat:NativeChat) {
+  constructor(public dc_chat: NativeChat) {
     debug('Chat constructor')
   }
 
-  getVisibility():C.DC_CHAT_VISIBILITY_NORMAL | C.DC_CHAT_VISIBILITY_ARCHIVED | C.DC_CHAT_VISIBILITY_PINNED {
+  getVisibility():
+    | C.DC_CHAT_VISIBILITY_NORMAL
+    | C.DC_CHAT_VISIBILITY_ARCHIVED
+    | C.DC_CHAT_VISIBILITY_PINNED {
     return binding.dcn_chat_get_visibility(this.dc_chat)
   }
 
   /** @deprecated */
-  getArchived ():boolean {
+  getArchived(): boolean {
     return binding.dcn_chat_get_archived(this.dc_chat)
   }
 
-  getColor ():number {
+  getColor(): number {
     return binding.dcn_chat_get_color(this.dc_chat)
   }
 
-  getId ():number {
+  getId(): number {
     return binding.dcn_chat_get_id(this.dc_chat)
   }
 
-  getName ():string {
+  getName(): string {
     return binding.dcn_chat_get_name(this.dc_chat)
   }
 
-  getProfileImage ():string {
+  getProfileImage(): string {
     return binding.dcn_chat_get_profile_image(this.dc_chat)
   }
 
-  getType ():number {
+  getType(): number {
     return binding.dcn_chat_get_type(this.dc_chat)
   }
 
-  isSelfTalk ():boolean {
+  isSelfTalk(): boolean {
     return Boolean(binding.dcn_chat_is_self_talk(this.dc_chat))
   }
 
-  isUnpromoted ():boolean {
+  isUnpromoted(): boolean {
     return Boolean(binding.dcn_chat_is_unpromoted(this.dc_chat))
   }
 
-  isVerified ():boolean {
+  isVerified(): boolean {
     return Boolean(binding.dcn_chat_is_verified(this.dc_chat))
   }
 
-  isDeviceTalk ():boolean {
+  isDeviceTalk(): boolean {
     return Boolean(binding.dcn_chat_is_device_talk(this.dc_chat))
   }
 
-  isSingle ():boolean {
+  isSingle(): boolean {
     return this.getType() === C.DC_CHAT_TYPE_SINGLE
   }
 
-  isGroup ():boolean {
+  isGroup(): boolean {
     return this.getType() === C.DC_CHAT_TYPE_GROUP
   }
 
-  toJson () {
+  toJson() {
     debug('toJson')
     const visibility = this.getVisibility()
     return {
@@ -81,7 +84,7 @@ export class Chat {
       isSelfTalk: this.isSelfTalk(),
       isUnpromoted: this.isUnpromoted(),
       isVerified: this.isVerified(),
-      isDeviceTalk: this.isDeviceTalk()
+      isDeviceTalk: this.isDeviceTalk(),
     }
   }
 }

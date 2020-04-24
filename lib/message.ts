@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 
 import binding from '../binding'
-import {C} from './constants'
-import {Lot} from './lot'
-import {Chat} from './chat'
+import { C } from './constants'
+import { Lot } from './lot'
+import { Chat } from './chat'
 const debug = require('debug')('deltachat:node:message')
 
 /**
@@ -13,39 +13,39 @@ const debug = require('debug')('deltachat:node:message')
  *
  */
 export class MessageState {
-  constructor (public state:number) {
+  constructor(public state: number) {
     debug(`MessageState constructor ${state}`)
   }
 
-  isUndefined () {
+  isUndefined() {
     return this.state === C.DC_STATE_UNDEFINED
   }
 
-  isFresh () {
+  isFresh() {
     return this.state === C.DC_STATE_IN_FRESH
   }
 
-  isNoticed () {
+  isNoticed() {
     return this.state === C.DC_STATE_IN_NOTICED
   }
 
-  isSeen () {
+  isSeen() {
     return this.state === C.DC_STATE_IN_SEEN
   }
 
-  isPending () {
+  isPending() {
     return this.state === C.DC_STATE_OUT_PENDING
   }
 
-  isFailed () {
+  isFailed() {
     return this.state === C.DC_STATE_OUT_FAILED
   }
 
-  isDelivered () {
+  isDelivered() {
     return this.state === C.DC_STATE_OUT_DELIVERED
   }
 
-  isReceived () {
+  isReceived() {
     return this.state === C.DC_STATE_OUT_MDN_RCVD
   }
 }
@@ -57,35 +57,35 @@ export class MessageState {
  *
  */
 export class MessageViewType {
-  constructor (public viewType:number) {
+  constructor(public viewType: number) {
     debug(`MessageViewType constructor ${viewType}`)
   }
 
-  isText () {
+  isText() {
     return this.viewType === C.DC_MSG_TEXT
   }
 
-  isImage () {
+  isImage() {
     return this.viewType === C.DC_MSG_IMAGE || this.viewType === C.DC_MSG_GIF
   }
 
-  isGif () {
+  isGif() {
     return this.viewType === C.DC_MSG_GIF
   }
 
-  isAudio () {
+  isAudio() {
     return this.viewType === C.DC_MSG_AUDIO || this.viewType === C.DC_MSG_VOICE
   }
 
-  isVoice () {
+  isVoice() {
     return this.viewType === C.DC_MSG_VOICE
   }
 
-  isVideo () {
+  isVideo() {
     return this.viewType === C.DC_MSG_VIDEO
   }
 
-  isFile () {
+  isFile() {
     return this.viewType === C.DC_MSG_FILE
   }
 }
@@ -95,11 +95,11 @@ interface NativeMessage {}
  * Wrapper around dc_msg_t*
  */
 export class Message {
-  constructor (public dc_msg:NativeMessage) {
+  constructor(public dc_msg: NativeMessage) {
     debug('Message constructor')
   }
 
-  toJson () {
+  toJson() {
     debug('toJson')
     return {
       chatId: this.getChatId(),
@@ -122,155 +122,155 @@ export class Message {
       isForwarded: this.isForwarded(),
       dimensions: {
         height: this.getHeight(),
-        width: this.getWidth()
-      }
+        width: this.getWidth(),
+      },
     }
   }
 
-  getChatId ():number {
+  getChatId(): number {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
 
-  getDuration ():number {
+  getDuration(): number {
     return binding.dcn_msg_get_duration(this.dc_msg)
   }
 
-  getFile ():string {
+  getFile(): string {
     return binding.dcn_msg_get_file(this.dc_msg)
   }
 
-  getFilebytes ():number {
+  getFilebytes(): number {
     return binding.dcn_msg_get_filebytes(this.dc_msg)
   }
 
-  getFilemime ():string {
+  getFilemime(): string {
     return binding.dcn_msg_get_filemime(this.dc_msg)
   }
 
-  getFilename ():string {
+  getFilename(): string {
     return binding.dcn_msg_get_filename(this.dc_msg)
   }
 
-  getFromId ():number {
+  getFromId(): number {
     return binding.dcn_msg_get_from_id(this.dc_msg)
   }
 
-  getHeight ():number {
+  getHeight(): number {
     return binding.dcn_msg_get_height(this.dc_msg)
   }
 
-  getId ():number {
+  getId(): number {
     return binding.dcn_msg_get_id(this.dc_msg)
   }
 
-  getReceivedTimestamp ():number {
+  getReceivedTimestamp(): number {
     return binding.dcn_msg_get_received_timestamp(this.dc_msg)
   }
 
-  getSetupcodebegin () {
+  getSetupcodebegin() {
     return binding.dcn_msg_get_setupcodebegin(this.dc_msg)
   }
 
-  getShowpadlock () {
+  getShowpadlock() {
     return Boolean(binding.dcn_msg_get_showpadlock(this.dc_msg))
   }
 
-  getSortTimestamp ():number {
+  getSortTimestamp(): number {
     return binding.dcn_msg_get_sort_timestamp(this.dc_msg)
   }
 
-  getState () {
+  getState() {
     return new MessageState(binding.dcn_msg_get_state(this.dc_msg))
   }
 
-  getSummary (chat?:Chat) {
+  getSummary(chat?: Chat) {
     const dc_chat = (chat && chat.dc_chat) || null
     return new Lot(binding.dcn_msg_get_summary(this.dc_msg, dc_chat))
   }
 
-  getSummarytext (approxCharacters:number):string {
+  getSummarytext(approxCharacters: number): string {
     approxCharacters = approxCharacters || 0
     return binding.dcn_msg_get_summarytext(this.dc_msg, approxCharacters)
   }
 
-  getText ():string {
+  getText(): string {
     return binding.dcn_msg_get_text(this.dc_msg)
   }
 
-  getTimestamp ():number {
+  getTimestamp(): number {
     return binding.dcn_msg_get_timestamp(this.dc_msg)
   }
 
-  getViewType () {
+  getViewType() {
     return new MessageViewType(binding.dcn_msg_get_viewtype(this.dc_msg))
   }
 
-  getWidth ():number {
+  getWidth(): number {
     return binding.dcn_msg_get_width(this.dc_msg)
   }
 
-  hasDeviatingTimestamp () {
+  hasDeviatingTimestamp() {
     return binding.dcn_msg_has_deviating_timestamp(this.dc_msg)
   }
 
-  hasLocation () {
+  hasLocation() {
     return Boolean(binding.dcn_msg_has_location(this.dc_msg))
   }
 
-  isDeadDrop () {
+  isDeadDrop() {
     return this.getChatId() === C.DC_CHAT_ID_DEADDROP
   }
 
-  isForwarded () {
+  isForwarded() {
     return Boolean(binding.dcn_msg_is_forwarded(this.dc_msg))
   }
 
-  isIncreation () {
+  isIncreation() {
     return Boolean(binding.dcn_msg_is_increation(this.dc_msg))
   }
 
-  isInfo () {
+  isInfo() {
     return Boolean(binding.dcn_msg_is_info(this.dc_msg))
   }
 
-  isSent () {
+  isSent() {
     return Boolean(binding.dcn_msg_is_sent(this.dc_msg))
   }
 
-  isSetupmessage () {
+  isSetupmessage() {
     return Boolean(binding.dcn_msg_is_setupmessage(this.dc_msg))
   }
 
-  isStarred () {
+  isStarred() {
     return Boolean(binding.dcn_msg_is_starred(this.dc_msg))
   }
 
-  latefilingMediasize (width:number, height:number, duration:number) {
+  latefilingMediasize(width: number, height: number, duration: number) {
     binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
   }
 
-  setDimension (width:number, height:number) {
+  setDimension(width: number, height: number) {
     binding.dcn_msg_set_dimension(this.dc_msg, width, height)
     return this
   }
 
-  setDuration (duration:number) {
+  setDuration(duration: number) {
     binding.dcn_msg_set_duration(this.dc_msg, duration)
     return this
   }
 
-  setFile (file:string, mime?:string) {
+  setFile(file: string, mime?: string) {
     if (typeof file !== 'string') throw new Error('Missing filename')
     binding.dcn_msg_set_file(this.dc_msg, file, mime || '')
     return this
   }
 
-  setLocation (longitude:number, latitude:number) {
+  setLocation(longitude: number, latitude: number) {
     binding.dcn_msg_set_location(this.dc_msg, longitude, latitude)
     return this
   }
 
-  setText (text:string) {
+  setText(text: string) {
     binding.dcn_msg_set_text(this.dc_msg, text)
     return this
   }
