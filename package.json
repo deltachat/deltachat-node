@@ -16,11 +16,11 @@
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
-    "test": "npm run check-formatting && nyc node test/index.js",
+    "test": "npm run lint && nyc node test/index.js",
     "test-integration": "node test/integration.js",
     "hallmark": "hallmark --fix",
-    "check-formatting": "prettier --check \"lib/**/*.{ts,tsx}\"",
-    "fix-formatting": "prettier --write \"lib/**/*.{ts,tsx}\""
+    "lint": "prettier --check \"lib/**/*.{ts,tsx}\"",
+    "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\""
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {
