@@ -16,9 +16,11 @@
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
-    "test": "standard && nyc node test/index.js",
+    "test": "npm run lint && nyc node test/index.js",
     "test-integration": "node test/integration.js",
-    "hallmark": "hallmark --fix"
+    "hallmark": "hallmark --fix",
+    "lint": "prettier --check \"lib/**/*.{ts,tsx}\"",
+    "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\""
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {
@@ -39,6 +41,7 @@
     "typescript": "^3.7.5"
   },
   "devDependencies": {
+    "prettier": "^2.0.5",
     "coveralls": "^3.0.3",
     "hallmark": "^2.0.0",
     "node-gyp": "^6.0.0",
@@ -47,7 +50,6 @@
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
     "split2": "^3.1.1",
-    "standard": "^14.3.1",
     "tape": "^4.10.1",
     "tempy": "^0.3.0",
     "typedoc": "^0.17.0"
