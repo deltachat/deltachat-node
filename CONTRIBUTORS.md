@@ -10,8 +10,8 @@
 | **B. Petersen**       |                                                  |
 | **Karissa McKelvey**  | [**@karissa**](https://github.com/karissa)       |
 | **developer**         |                                                  |
-| **Floris Bruynooghe** |                                                  |
 | **Alexander Krotov**  |                                                  |
+| **Floris Bruynooghe** |                                                  |
 | **lefherz**           |                                                  |
 | **Pablo**             | [**@pabzm**](https://github.com/pabzm)           |
 | **pabzm**             |                                                  |

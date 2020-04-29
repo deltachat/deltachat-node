@@ -1,7 +1,13 @@
 # Changelog
 
 ## [Unreleased][unreleased]
+
+## [1.29.2] - 2019-04-28
+
+### Changed
+
 - switch from standard to prettier
+- Update deltachat-core-rust to 1.29.0
 
 ## [1.29.1] - 2019-04-23
 
@@ -13,18 +19,18 @@
 
 ### Added
 
-- Add chat visibility methods @Simon-Laux
-- Add method for join_secure @nicodh
+- Add chat visibility methods [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Add method for join_secure [**@nicodh**](https://github.com/nicodh)
 
 ### Changed
 
-- Update deltachat-core-rust to 979d7c562515da2a30983993048cd5184889059c @link2xt
-- Add id and convert the checkQrCode return to json @nicodh
-- Clean up building & ci @jikstra
+- Update deltachat-core-rust to [`979d7c5`](https://github.com/deltachat/deltachat-node/commit/979d7c562515da2a30983993048cd5184889059c) [**@link2xt**](https://github.com/link2xt)
+- Add id and convert the checkQrCode return to json [**@nicodh**](https://github.com/nicodh)
+- Clean up building & ci [**@jikstra**](https://github.com/jikstra)
 
-### Removed 
+### Removed
 
-- removed get_subtitle method @link2xt
+- removed get_subtitle method [**@link2xt**](https://github.com/link2xt)
 
 ## [1.28.0] - 2019-03-28
 
@@ -981,7 +987,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.29.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.29.2...HEAD
+
+[1.29.2]: https://github.com/deltachat/deltachat-node/compare/v1.29.1...v1.29.2
 
 [1.29.1]: https://github.com/deltachat/deltachat-node/compare/v1.29.0...v1.29.1
 
