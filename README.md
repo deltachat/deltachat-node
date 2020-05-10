@@ -10,7 +10,6 @@
 [![dependencies](https://david-dm.org/deltachat/deltachat-node.svg)](https://david-dm.org/deltachat/deltachat-node)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-**WORK IN PROGRESS** The API can change at any time and will not follow semver versioning until `v1.0.0` has been released.
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
@@ -32,27 +31,33 @@
 
 ## Install
 
-By default the installation will build `deltachat-core-rust` from the submodule using `scripts/rebuild-core.js`. Simply invoke npm:
+By default the installation will build try to use the bundled prebuilds in the
+npm package. If this fails it falls back to compile the bundled 
+`deltachat-core-rust` from the submodule using `scripts/rebuild-core.js`. 
+To install from npm use:
 
 ```
 npm install deltchat-node
 ```
 
-### Using system libdeltachat
+## Dependencies
 
-It is possible to use the system-wide installed `libdeltachat.so` library which will be located using `pkg-config`. You need to have installed `deltachat-core-rust` before installing this way.  Using this approach allows you to build `libdeltachat.so` with your own specific options.
+Node > v10.0.0
+rustup (optional if you can't use the prebuilds)
 
-Invoke npm with the extra arguments:
 
-```
-npm install deltachat-node --dc-system-lib=true
-```
+## Build from source
 
-When invoking `node-gyp` directly this can be achieved in a slightly different way:
+If you want to build from source, make sure that you have `rustup` installed.
+You can either use `npm install deltachat-node --build-from-source` to force
+building from source or clone this repository and follow this steps:
 
-```
-node-gyp rebuild -- -Dsystem_dc_core=true
-```
+1. `git clone https://github.com/deltachat/deltachat-node.git`
+2. `cd deltachat-node`
+3. `npm run submodule`
+4. `npm run build`
+
+
 
 ## Usage
 
@@ -135,11 +140,11 @@ We have the following scripts for building, testing and coverage:
 - `npm run coverage-html-report` Generates a html report from the coverage data and opens it in a browser on the local machine.
 - `npm run generate-constants` Generates `constants.js` and `events.js` based on the `deltachat-core-rust/deltachat-ffi/deltachat.h` header file.
 - `npm install` After dependencies are installed, runs `node-gyp-build` to see if the native code needs to be rebuilt.
-- `npm run rebuild-all` Rebuilds all code.
-- `npm run rebuild-core` Rebuilds code in `deltachat-core-rust`.
-- `npm run rebuild-bindings` Rebuilds the bindings and links with `deltachat-core-rust`.
-- `npm run node-gyp-build` Tries to load prebuilts and falls back to rebuilding the code.
-- `npm run prebuild` Builds prebuilt binary to `prebuilds/$PLATFORM-$ARCH`. Copies `deltachat.dll` from `deltachat-core-rust` for windows.
+- `npm run build` Rebuilds all code.
+- `npm run build:core` Rebuilds code in `deltachat-core-rust`.
+- `npm run build:bindings` Rebuilds the bindings and links with `deltachat-core-rust`.
+- `ǹpm run clean` Removes all built code
+- `npm run prebuildify` Builds prebuilt binary to `prebuilds/$PLATFORM-$ARCH`. Copies `deltachat.dll` from `deltachat-core-rust` for windows.
 - `npm run download-prebuilds` Downloads all prebuilt binaries from github before `npm publish`.
 - `npm run submodule` Updates the `deltachat-core-rust` submodule.
 - `npm test` Runs `standard` and then the tests in `test/index.js`.
@@ -157,14 +162,14 @@ The following steps are needed to make a release:
 
 2. Bump version number in package.json
 3. Commit the changed files, commit message should be similiar to `Prepare for v1.0.0-foo.number`
-4. Tag the release with `git tag v1.0.0-foo.number`
+4. Tag the release with `git tag -a v1.0.0-foo.number`
 5. Push to github with `git push origin master --tags`
 6. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
 7. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
 
 - In case this fails, you can also manually download the prebuilts from github and extract them. It's only important that it extracts to the target folder.
 
-8. `npx tsc` to build the typescript.
+8. `npm run build:bindings:ts` to build the typescript.
 9. `npm publish` publishes it to npm. You probably need write rights to npm.
 
 ## License
