@@ -7,10 +7,10 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && xdg-open coverage/index.html",
-    "install": "node-gyp-build \"npm run build:core\" && npm run build:bindings:ts",
+    "install": "node-gyp-build \"npm run build:core\" && npm run build:bindings:ts && node scripts/postinstall.js",
     "clean": "rm -rf ./dist ./build ./prebuilds ./deltachat-core-rust/target",
     "build": "npm run build:core && npm run build:bindings",
-    "build:core": "node scripts/rebuild-core.js && node scripts/postinstall.js",
+    "build:core": "node scripts/rebuild-core.js",
     "build:bindings": "npm run build:bindings:c && npm run build:bindings:ts",
     "build:bindings:c": "npx node-gyp rebuild",
     "build:bindings:ts": "tsc",
