@@ -15,7 +15,7 @@ import pick from 'lodash.pick'
 import rawDebug from 'debug'
 const debug = rawDebug('deltachat:node:index')
 
-const noop = function() {}
+const noop = function () {}
 const DC_SHOW_EMAILS = [
   C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS,
   C.DC_SHOW_EMAILS_ALL,
@@ -147,7 +147,7 @@ export class DeltaChat extends EventEmitter {
       'mvbox_watch',
       'mvbox_move',
     ]
-    defaultOptions.map(option => {
+    defaultOptions.map((option) => {
       if (typeof opts[option] === 'undefined') opts[option] = 1
       this.setConfig(option, String(opts[option] ? 1 : 0))
     })
@@ -201,7 +201,7 @@ export class DeltaChat extends EventEmitter {
       this.dcn_context,
       Number(messageId),
       setupCode,
-      result => {
+      (result) => {
         if (result === 0) {
           return cb(new Error('Key transfer failed due to bad setup code'))
         }
@@ -261,7 +261,7 @@ export class DeltaChat extends EventEmitter {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
-    messageIds = messageIds.map(id => Number(id))
+    messageIds = messageIds.map((id) => Number(id))
     debug('deleteMessages', messageIds)
     binding.dcn_delete_msgs(this.dcn_context, messageIds)
   }
@@ -270,7 +270,7 @@ export class DeltaChat extends EventEmitter {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
-    messageIds = messageIds.map(id => Number(id))
+    messageIds = messageIds.map((id) => Number(id))
     debug('forwardMessages', messageIds)
     binding.dcn_forward_msgs(this.dcn_context, messageIds, chatId)
   }
@@ -376,7 +376,7 @@ export class DeltaChat extends EventEmitter {
       })
       cb(err, result)
     }
-    binding.dcn_open(dcn_context, db, '', err => {
+    binding.dcn_open(dcn_context, db, '', (err) => {
       if (err) return done(err, null)
       if (binding.dcn_is_configured(dcn_context)) {
         const addr = binding.dcn_get_config(dcn_context, 'addr')
@@ -453,7 +453,7 @@ export class DeltaChat extends EventEmitter {
       .dcn_get_info(dcn_context)
       .split('\n')
       .filter(Boolean)
-      .forEach(line => {
+      .forEach((line) => {
         const match = regex.exec(line)
         if (match) {
           result[match[1]] = match[2]
@@ -578,7 +578,7 @@ export class DeltaChat extends EventEmitter {
 
   initiateKeyTransfer(cb: (err: Error, statusCode: any) => void) {
     debug('initiateKeyTransfer')
-    return binding.dcn_initiate_key_transfer(this.dcn_context, statusCode => {
+    return binding.dcn_initiate_key_transfer(this.dcn_context, (statusCode) => {
       if (typeof statusCode === 'string') {
         return cb(null, statusCode)
       }
@@ -641,7 +641,7 @@ export class DeltaChat extends EventEmitter {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
-    messageIds = messageIds.map(id => Number(id))
+    messageIds = messageIds.map((id) => Number(id))
     debug('markSeenMessages', messageIds)
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
   }
@@ -671,10 +671,10 @@ export class DeltaChat extends EventEmitter {
     if (typeof cb !== 'function') {
       throw new Error('open callback required')
     }
-    mkdirp(cwd, err => {
+    mkdirp(cwd, (err) => {
       if (err) return cb(err)
       const db = path.join(cwd, 'db.sqlite')
-      binding.dcn_open(this.dcn_context, db, '', err => {
+      binding.dcn_open(this.dcn_context, db, '', (err) => {
         if (err) return cb(err)
         binding.dcn_start_threads(this.dcn_context)
         cb(null)
@@ -819,7 +819,7 @@ export class DeltaChat extends EventEmitter {
     if (!Array.isArray(messageIds)) {
       messageIds = [messageIds]
     }
-    messageIds = messageIds.map(id => Number(id))
+    messageIds = messageIds.map((id) => Number(id))
     debug('starMessages', messageIds)
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
