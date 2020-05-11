@@ -823,6 +823,16 @@ export class DeltaChat extends EventEmitter {
     debug('starMessages', messageIds)
     binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
+
+  /**
+   *
+   * @param duration The duration (0 for no mute, -1 for forever mute, everything else is is the relative mute duration from now in seconds)
+   */
+  setChatMuteDuration(chatId: number, duration: number) {
+    return Boolean(
+      binding.dcn_set_chat_mute_duration(this.dcn_context, chatId, duration)
+    );
+  }
 }
 
 function handleEvent(self: DeltaChat, event: number, data1, data2) {

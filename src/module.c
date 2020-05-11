@@ -1549,6 +1549,21 @@ NAPI_METHOD(dcn_set_chat_profile_image) {
   NAPI_RETURN_INT32(result);
 }
 
+NAPI_METHOD(dcn_set_chat_mute_duration) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_INT32(duration, 2);
+  
+  //TRACE("calling..");
+  int result = dc_set_chat_mute_duration(dcn_context->dc_context,
+                                         chat_id,
+                                         duration);
+  //TRACE("result %d", result);
+
+  NAPI_RETURN_INT32(result);
+}
+
 NAPI_METHOD(dcn_set_config) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1784,6 +1799,17 @@ NAPI_METHOD(dcn_chat_is_device_talk) {
   //TRACE("result %d", is_device_talk);
 
   NAPI_RETURN_INT32(is_device_talk);
+}
+
+NAPI_METHOD(dcn_chat_is_muted) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  //TRACE("calling..");
+  int is_muted = dc_chat_is_muted(dc_chat);
+  //TRACE("result %d", is_muted);
+
+  NAPI_RETURN_INT32(is_muted);
 }
 
 /**
@@ -2806,6 +2832,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_send_msg);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
+  NAPI_EXPORT_FUNCTION(dcn_set_chat_mute_duration);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
@@ -2829,6 +2856,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_verified);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_device_talk);
+  NAPI_EXPORT_FUNCTION(dcn_chat_is_muted);
 
   /**
    * dc_chatlist_t
