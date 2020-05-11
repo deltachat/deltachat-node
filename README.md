@@ -10,7 +10,6 @@
 [![dependencies](https://david-dm.org/deltachat/deltachat-node.svg)](https://david-dm.org/deltachat/deltachat-node)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
 `deltachat-node` primarily aims to offer two things:
@@ -23,6 +22,8 @@
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
+- [Dependencies](#dependencies)
+- [Build from source](#build-from-source)
 - [Usage](#usage)
 - [Developing](#developing)
 - [License](#license)
@@ -45,7 +46,6 @@ npm install deltchat-node
 Node > v10.0.0
 rustup (optional if you can't use the prebuilds)
 
-
 ## Build from source
 
 If you want to build from source, make sure that you have `rustup` installed.
@@ -56,8 +56,6 @@ building from source or clone this repository and follow this steps:
 2. `cd deltachat-node`
 3. `npm run submodule`
 4. `npm run build`
-
-
 
 ## Usage
 
