@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Update deltachat-core-rust to 1.32.0
+
+### Fixed
+
+- Fixed `npm run build` not doing anything if a build or prebuild was present
+
 ## [1.29.2] - 2019-04-28
 
 ### Changed
