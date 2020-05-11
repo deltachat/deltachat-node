@@ -70,11 +70,11 @@ export class Chat {
     return this.getType() === C.DC_CHAT_TYPE_GROUP
   }
 
-  isMuted():boolean {
+  isMuted(): boolean {
     return Boolean(binding.dcn_chat_is_muted(this.dc_chat))
   }
 
-  toJson () {
+  toJson() {
     debug('toJson')
     const visibility = this.getVisibility()
     return {
@@ -89,7 +89,7 @@ export class Chat {
       isUnpromoted: this.isUnpromoted(),
       isVerified: this.isVerified(),
       isDeviceTalk: this.isDeviceTalk(),
-      muted: this.isMuted()
+      muted: this.isMuted(),
     }
   }
 }
