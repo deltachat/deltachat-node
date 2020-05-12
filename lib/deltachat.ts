@@ -693,6 +693,11 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
+  /**
+   *
+   * @param chatId 	ID of the chat to search messages in. Set this to 0 for a global search.
+   * @param query The query to search for.
+   */
   searchMessages(chatId: number, query: string): number[] {
     debug(`searchMessages ${chatId} ${query}`)
     return binding.dcn_search_msgs(this.dcn_context, Number(chatId), query)
