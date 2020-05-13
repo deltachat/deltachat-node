@@ -191,6 +191,10 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_configure(this.dcn_context)
   }
 
+  /**
+   * @deprecated Please use continueKeyTransfer2
+   * @param cb
+   */
   continueKeyTransfer(
     messageId: number,
     setupCode: string,
@@ -207,6 +211,20 @@ export class DeltaChat extends EventEmitter {
         }
         cb(null)
       }
+    )
+  }
+
+  continueKeyTransfer2(
+    messageId: number,
+    setupCode: string,
+    cb: (result: number) => void
+  ) {
+    debug(`continueKeyTransfer2 ${messageId}`)
+    binding.dcn_continue_key_transfer(
+      this.dcn_context,
+      Number(messageId),
+      setupCode,
+      cb
     )
   }
 
@@ -576,6 +594,11 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_imex_has_backup(this.dcn_context, dir)
   }
 
+  /**
+   * @deprecated Please use initiateKeyTransfer2
+   * @param cb
+   */
+
   initiateKeyTransfer(cb: (err: Error, statusCode: any) => void) {
     debug('initiateKeyTransfer')
     return binding.dcn_initiate_key_transfer(this.dcn_context, (statusCode) => {
@@ -584,6 +607,11 @@ export class DeltaChat extends EventEmitter {
       }
       cb(new Error('Could not initiate key transfer'), null)
     })
+  }
+
+  initiateKeyTransfer2(cb: (setup_code: string) => void) {
+    debug('initiateKeyTransfer2')
+    return binding.dcn_initiate_key_transfer(this.dcn_context, cb)
   }
 
   isConfigured() {
