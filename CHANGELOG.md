@@ -2,6 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+## [1.32.1] - 2019-05-16
+
+### Changed
+
+- Implement initiateKeyTransfer2 and continueKeyTransfer2 methods which just
+  pass through the result from the core. Deprecated initiateKeyTransfer and
+  continueKeyTransfer methods
+- Expose stopOngoingProcess
+- expose mute chat functions
+- add a docstring to searchMessages explaining it's parameters
+
 ## [1.32.0] - 2019-05-11
 
 ### Changed
@@ -997,7 +1008,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.32.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.32.1...HEAD
+
+[1.32.1]: https://github.com/deltachat/deltachat-node/compare/v1.32.0...v1.32.1
 
 [1.32.0]: https://github.com/deltachat/deltachat-node/compare/v1.29.2...v1.32.0
 
