@@ -542,6 +542,11 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
   }
 
+  stopOngoingProcess(): void {
+    debug(`stopOngoingProcess`)
+    binding.dcn_stop_ongoing_process(this.dcn_context)
+  }
+
   getStarredMessages() {
     debug('getStarredMessages')
     return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
