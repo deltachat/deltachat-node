@@ -11,6 +11,8 @@ const header = path.resolve(
   '../deltachat-core-rust/deltachat-ffi/deltachat.h'
 )
 
+console.log("Generating constants...")
+
 fs.createReadStream(header)
   .pipe(split())
   .on('data', (line) => {
