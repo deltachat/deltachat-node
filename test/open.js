@@ -5,31 +5,34 @@ const tempy = require('tempy')
 
 test('open', t => {
   const dc = new DeltaChat(tempy.directory())
+  dc.open(tempy.directory())
   t.is(dc.isConfigured(), false)
-  dc.unref()
+  dc.close()
   t.end()
 })
 test('> missing addr or mail_pw throws', t => {
-  const dc = new DeltaChat(tempy.directory())
+  const dc = new DeltaChat()
+  dc.open(tempy.directory())
   t.throws(function () {
     dc.configure({ addr: 'delta1@delta.localhost' })
   }, 'Missing .mailPw', 'missing mailPw throws')
   t.throws(function () {
     dc.configure({ mailPw: 'delta1' })
   }, /Missing \.addr/, 'missing addr throws')
-  dc.unref()
+  dc.close()
   t.end()
 })
 
 // TODO move to integration tests
 test('> autoconfigure (using invalid password)', t => {
-  const dc = new DeltaChat(tempy.directory())
+  const dc = new DeltaChat()
+  dc.open(tempy.directory())
 
   dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
     if(progress === 0) {
       t.pass('Login failed using invalid password')
-      dc.stop()
-      dc.unref()
+      dc.stopIO()
+      dc.close()
       t.end()
     }
   })
@@ -39,5 +42,5 @@ test('> autoconfigure (using invalid password)', t => {
     mail_pw: 'asd'
   })
 
-  dc.start()
+  dc.startIO()
 })
