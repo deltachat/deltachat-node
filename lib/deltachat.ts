@@ -31,7 +31,7 @@ interface NativeContext {}
 export class DeltaChat extends EventEmitter {
   dcn_context: NativeContext
   _isOpen: boolean
-  constructor(cwd: string) {
+  constructor() {
     debug('DeltaChat constructor')
     super()
     this._isOpen = false
