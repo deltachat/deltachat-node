@@ -16,7 +16,6 @@ deltachat-core-rust/examples/
 deltachat-core-rust/python/
 deltachat-core-rust/tests/
 images/
-scripts/generate-constants.js
 test/
 windows.md
 *.tar.gz
