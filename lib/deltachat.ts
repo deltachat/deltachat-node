@@ -13,6 +13,7 @@ import path from 'path'
 import { Locations } from './locations'
 import pick from 'lodash.pick'
 import rawDebug from 'debug'
+import tempy from 'tempy'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
@@ -29,25 +30,53 @@ interface NativeContext {}
  */
 export class DeltaChat extends EventEmitter {
   dcn_context: NativeContext
+  _isOpen: boolean
   constructor(cwd: string) {
     debug('DeltaChat constructor')
     super()
-
-    const dbFile = path.join(cwd, 'db.sqlite')
-    this.dcn_context = binding.dcn_context_new(dbFile)
-    binding.dcn_start_event_handler(this.dcn_context, this.handleCoreEvent.bind(this))
+    this._isOpen = false
+    this.dcn_context = null
   }
 
-  handleCoreEvent(eventId: number, data1: number, data2: number|string) {
-    if(eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
+  isOpen() {
+    return this._isOpen
+  }
+
+  open(cwd: string, cb?: any) {
+    if (cb) throw new Error('Giving a cb to open is deprecated')
+    if (this._isOpen === true) {
+      throw new Error("We're already open!")
+    }
+    const dbFile = path.join(cwd, 'db.sqlite')
+    this.dcn_context = binding.dcn_context_new(dbFile)
+    binding.dcn_start_event_handler(
+      this.dcn_context,
+      this.handleCoreEvent.bind(this)
+    )
+    this._isOpen = true
+  }
+
+  close() {
+    if (this._isOpen === false) {
+      throw new Error("We're already closed!")
+    }
+    debug('Unref start')
+    binding.dcn_stop_event_handler(this.dcn_context)
+    binding.dcn_context_unref(this.dcn_context)
+    debug('Unref end')
+    this._isOpen = false
+  }
+
+  handleCoreEvent(eventId: number, data1: number, data2: number | string) {
+    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
       this.emit('DCN_EVENT_CONFIGURE_SUCCESSFUL')
     }
-    if(eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
+    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
       this.emit('DCN_EVENT_CONFIGURE_FAILED')
     }
     const eventString = EventId2EventName[eventId]
     debug(eventString, data1, data2)
-    if(!this.emit) {
+    if (!this.emit) {
       console.log('Received an event but EventEmitter is already destroyed.')
       console.log(eventString, data1, data2)
       return
@@ -56,29 +85,22 @@ export class DeltaChat extends EventEmitter {
     this.emit(eventString, data1, data2)
   }
 
-  start(cb?: () => void) {
-    if(this.isConfigured()) {
+  startIO(cb?: () => void) {
+    if (this.isConfigured()) {
       binding.dcn_start_io(this.dcn_context)
       cb()
     } else {
-      debug('Can\'t start io unless context is configured.')
+      debug("Can't start io unless context is configured.")
       this.once('DCN_EVENT_CONFIGURED', () => {
-        debug('Now we\'re configured, starting io...')
+        debug("Now we're configured, starting io...")
         binding.dcn_start_io(this.dcn_context)
         cb()
       })
     }
   }
 
-  stop() {
+  stopIO() {
     binding.dcn_stop_io(this.dcn_context)
-  }
-
-  unref() {
-    debug('Unref start')
-    binding.dcn_stop_event_handler(this.dcn_context)
-    binding.dcn_context_unref(this.dcn_context)
-    debug('Unref end')
   }
 
   addAddressBook(addressBook: string) {
@@ -420,7 +442,6 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-
   getConfig(key: string): string {
     debug(`getConfig ${key}`)
     return binding.dcn_get_config(this.dcn_context, key)
@@ -557,11 +578,9 @@ export class DeltaChat extends EventEmitter {
 
   static getProviderFromEmail(email: string) {
     debug('DeltaChat.getProviderFromEmail')
-    const dcn_context = binding.dcn_context_new()
+    const dcn_context = DeltaChat.newTempContext()
     const provider = binding.dcn_provider_new_from_email(dcn_context, email)
-    binding.dcn_close(dcn_context, () => {
-      debug('closed context for getProviderFromEmail')
-    })
+    binding.dcn_context_unref(dcn_context)
     if (!provider) {
       return undefined
     }
@@ -587,9 +606,17 @@ export class DeltaChat extends EventEmitter {
     return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
   }
 
+  static newTempContext() {
+    const dcn_context = binding.dcn_context_new(
+      tempy.directory() + '/db.sqlite'
+    )
+    return dcn_context
+  }
+
   static getSystemInfo() {
     debug('DeltaChat.getSystemInfo')
-    const dcn_context = binding.dcn_context_new()
+
+    const dcn_context = DeltaChat.newTempContext()
     const info = DeltaChat._getInfo(dcn_context)
     const result = pick(info, [
       'deltachat_core_version',
@@ -600,9 +627,7 @@ export class DeltaChat extends EventEmitter {
       'compile_date',
       'arch',
     ])
-    binding.dcn_close(dcn_context, () => {
-      debug('closed context for getSystemInfo')
-    })
+    binding.dcn_context_unref(dcn_context)
     return result
   }
 
@@ -705,26 +730,6 @@ export class DeltaChat extends EventEmitter {
   messageNew(viewType = C.DC_MSG_TEXT) {
     debug(`messageNew ${viewType}`)
     return new Message(binding.dcn_msg_new(this.dcn_context, viewType))
-  }
-
-  open(cwd: string, cb: (err: Error) => void) {
-    debug(`open ${cwd}`)
-    if (typeof cwd === 'function') {
-      cb = cwd
-      cwd = process.cwd()
-    }
-    if (typeof cb !== 'function') {
-      throw new Error('open callback required')
-    }
-    mkdirp(cwd, (err) => {
-      if (err) return cb(err)
-      const db = path.join(cwd, 'db.sqlite')
-      binding.dcn_open(this.dcn_context, db, '', (err) => {
-        if (err) return cb(err)
-        binding.dcn_start_threads(this.dcn_context)
-        cb(null)
-      })
-    })
   }
 
   removeContactFromChat(chatId: number, contactId: number) {
@@ -884,4 +889,3 @@ export class DeltaChat extends EventEmitter {
     )
   }
 }
-
