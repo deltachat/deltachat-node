@@ -21,12 +21,8 @@
 typedef struct dcn_context_t {
   dc_context_t* dc_context;
   napi_threadsafe_function threadsafe_event_handler;
-  uv_thread_t imap_thread;
-  uv_thread_t smtp_thread;
-  uv_thread_t mvbox_thread;
-  uv_thread_t sentbox_thread;
+  uv_thread_t event_handler_thread;
   int gc;
-  int loop_thread;
 } dcn_context_t;
 
 /**
@@ -40,49 +36,50 @@ typedef struct dcn_event_t {
   char* data2_str;
 } dcn_event_t;
 
-static uintptr_t dc_event_handler(dc_context_t* dc_context, int event, uintptr_t data1, uintptr_t data2)
+
+static int event_handler_thread_func(void* arg)
 {
-  dcn_context_t* dcn_context = (dcn_context_t*)dc_get_userdata(dc_context);
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
 
-  if (!dcn_context->threadsafe_event_handler) {
-    TRACE("threadsafe_event_handler not set, bailing");
-    return 0;
+  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
+
+  TRACE("event_handler_thread_func starting");
+
+  dc_event_emitter_t* emitter = dc_get_event_emitter(dc_context);
+  dc_event_t* event;
+  while ((event = dc_get_next_event(emitter)) != NULL) {
+    if (!dcn_context->threadsafe_event_handler) {
+      TRACE("threadsafe_event_handler not set, bailing");
+      break;
+    }
+
+    // Don't process events if we're being garbage collected!
+    if (dcn_context->gc) {
+      TRACE("dc_context has been destroyed, bailing");
+      break;
+    }
+
+
+    napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, event, napi_tsfn_nonblocking);
+
+    if (status == napi_queue_full) {
+      TRACE("Queue is full, can't call callback");
+    }
   }
+  dc_event_emitter_unref(emitter);
 
-  // Don't process events if we're being garbage collected!
-  if (dcn_context->gc) {
-    TRACE("dc_context has been destroyed, bailing");
-    return 0;
-  }
+  TRACE("event_handler_thread_func ended");
 
-  // Start tracing events here. DC_EVENT_GET_STRING is just too spammy.
-#ifdef DEBUG
-  if (event == DC_EVENT_INFO) {
-    TRACE("event INFO %s", (char*)data2);
-  } else {
-    TRACE("event %d", event);
-  }
-#endif
-
-  dcn_event_t* dcn_event = calloc(1, sizeof(dcn_event_t));
-  dcn_event->event = event;
-  dcn_event->data1_int = data1;
-  dcn_event->data2_int = data2;
-  dcn_event->data1_str = (DC_EVENT_DATA1_IS_STRING(event) && data1) ? strdup((char*)data1) : NULL;
-  dcn_event->data2_str = (DC_EVENT_DATA2_IS_STRING(event) && data2) ? strdup((char*)data2) : NULL;
-
-  napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, dcn_event, napi_tsfn_nonblocking);
-
-  if (status == napi_queue_full) {
-    TRACE("Queue is full, can't call callback");
-  }
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
   
-  return 0;
+  return napi_closing;
+
 }
 
-static void call_js_event_handler(napi_env env, napi_value js_callback, void* context, void* data)
+static void call_js_event_handler(napi_env env, napi_value js_callback, void* _context, void* data)
 {
-  dcn_event_t* dcn_event = (dcn_event_t*)data;
+  dc_event_t* dc_event = (dc_event_t*)data;
 
   napi_value global;
   napi_status status = napi_get_global(env, &global);
@@ -96,41 +93,36 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   const int argc = CALL_JS_CALLBACK_ARGC;
   napi_value argv[CALL_JS_CALLBACK_ARGC];
 
-  status = napi_create_int32(env, dcn_event->event, &argv[0]);
+  const int event_id = dc_event_get_id(dc_event);
+
+  status = napi_create_int32(env, event_id, &argv[0]);
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
   }
 
-  if (dcn_event->data1_str) {
-    status = napi_create_string_utf8(env, dcn_event->data1_str, NAPI_AUTO_LENGTH, &argv[1]);
-    if (status != napi_ok) {
-      napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
-    }
-    free(dcn_event->data1_str);
-  } else {
-    status = napi_create_int32(env, dcn_event->data1_int, &argv[1]);
-    if (status != napi_ok) {
-      napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
-    }
+  status = napi_create_int32(env, dc_event_get_data1_int(dc_event), &argv[1]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
   }
 
-  if (dcn_event->data2_str) {
-    status = napi_create_string_utf8(env, dcn_event->data2_str, NAPI_AUTO_LENGTH, &argv[2]);
+  if DC_EVENT_DATA2_IS_STRING(event_id) {
+    char* data2_string = dc_event_get_data2_str(dc_event);
+    status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[2]);
     if (status != napi_ok) {
       napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
     }
-    free(dcn_event->data2_str);
+    free(data2_string);
   } else {
-    status = napi_create_int32(env, dcn_event->data2_int, &argv[2]);
+    status = napi_create_int32(env, dc_event_get_data2_int(dc_event), &argv[2]);
     if (status != napi_ok) {
       napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
     }
   }
 
-  free(dcn_event);
-  dcn_event = NULL;
+  dc_event_unref(dc_event);
+  dc_event = NULL;
 
-  //TRACE("calling back into js");
+  TRACE("calling back into js");
 
   napi_value result;
   status = napi_call_function(
@@ -144,76 +136,6 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* co
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to call event_handler callback");
   }
-}
-
-static void imap_thread_func(void* arg)
-{
-  dcn_context_t* dcn_context = (dcn_context_t*)arg;
-  dc_context_t* dc_context = dcn_context->dc_context;
-
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-
-  TRACE("thread starting");
-  while (dcn_context->loop_thread) {
-    dc_perform_imap_jobs(dc_context);
-    dc_perform_imap_fetch(dc_context);
-    dc_perform_imap_idle(dc_context);
-  }
-  TRACE("thread ended");
-
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
-}
-
-static void smtp_thread_func(void* arg)
-{
-  dcn_context_t* dcn_context = (dcn_context_t*)arg;
-  dc_context_t* dc_context = dcn_context->dc_context;
-
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-
-  TRACE("thread starting");
-  while (dcn_context->loop_thread) {
-    dc_perform_smtp_jobs(dc_context);
-    dc_perform_smtp_idle(dc_context);
-  }
-  TRACE("thread ended");
-
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
-}
-
-
-static void mvbox_thread_func(void* arg)
-{
-  dcn_context_t* dcn_context = (dcn_context_t*)arg;
-  dc_context_t* dc_context = dcn_context->dc_context;
-
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-
-  TRACE("thread starting");
-  while (dcn_context->loop_thread) {
-    dc_perform_mvbox_fetch(dc_context);
-    dc_perform_mvbox_idle(dc_context);
-  }
-  TRACE("thread ended");
-
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
-}
-
-static void sentbox_thread_func(void* arg)
-{
-  dcn_context_t* dcn_context = (dcn_context_t*)arg;
-  dc_context_t* dc_context = dcn_context->dc_context;
-
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-
-  TRACE("thread starting");
-  while (dcn_context->loop_thread) {
-    dc_perform_sentbox_fetch(dc_context);
-    dc_perform_sentbox_idle(dc_context);
-  }
-  TRACE("thread ended");
-
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 }
 
 
@@ -317,24 +239,71 @@ static napi_value dc_array_to_js_array(napi_env env, dc_array_t* array) {
  */
 
 NAPI_METHOD(dcn_context_new) {
+  NAPI_ARGV(1);
+
+  NAPI_ARGV_UTF8_MALLOC(db_file, 0);
+
   TRACE("creating new dc_context");
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
-  dcn_context->dc_context = dc_context_new(dc_event_handler, dcn_context, NULL);
-  dcn_context->threadsafe_event_handler = NULL;
+  dcn_context->dc_context = dc_context_new("deltachat-node", db_file, NULL);
 
-  dcn_context->imap_thread = 0;
-  dcn_context->smtp_thread = 0;
-  dcn_context->mvbox_thread = 0;
-  dcn_context->sentbox_thread = 0;
-
-  dcn_context->gc = 0;
-  dcn_context->loop_thread = 0;
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
                                           NULL, NULL, &result));
   return result;
+}
+
+
+NAPI_METHOD(dcn_start_event_handler) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  napi_value callback = argv[1];
+
+  //TRACE("calling..");
+  napi_value async_resource_name;
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
+
+  NAPI_STATUS_THROWS(napi_create_threadsafe_function(
+    env,
+    callback,
+    0,
+    async_resource_name,
+    0,
+    1,
+    NULL,
+    NULL,
+    dcn_context,
+    call_js_event_handler,
+    &dcn_context->threadsafe_event_handler));
+  //TRACE("done");
+
+  dcn_context->gc = 0;
+  uv_thread_create(&dcn_context->event_handler_thread, event_handler_thread_func, dcn_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_stop_event_handler) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+  
+  if(dcn_context->threadsafe_event_handler != NULL) {
+    napi_unref_threadsafe_function(env, dcn_context->threadsafe_event_handler);
+  }
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_context_unref) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_context_unref(dcn_context->dc_context);
+  dcn_context->dc_context = NULL;
+
+  NAPI_RETURN_UNDEFINED();
+
 }
 
 /**
@@ -451,130 +420,6 @@ NAPI_METHOD(dcn_check_qr) {
   //TRACE("done");
 
   return result;
-}
-
-typedef struct dcn_close_carrier_t {
-  dcn_context_t* dcn_context;
-  napi_ref callback_ref;
-  napi_async_work async_work;
-} dcn_close_carrier_t;
-
-static void dcn_close_execute(napi_env env, void* data) {
-  dcn_close_carrier_t* carrier = (dcn_close_carrier_t*)data;
-
-  TRACE("enter");
-  dcn_context_t* dcn_context = carrier->dcn_context;
-
-  if (dcn_context->threadsafe_event_handler) {
-    TRACE("event handler registered, releasing one reference");
-    napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
-
-    TRACE("setting loop_thread to 0");
-    dcn_context->loop_thread = 0;
-
-    if (dcn_context->imap_thread
-	&& dcn_context->smtp_thread
-	&& dcn_context->mvbox_thread
-	&& dcn_context->sentbox_thread) {
-
-      TRACE("> dc_interrupt_imap_idle..");
-      dc_interrupt_imap_idle(dcn_context->dc_context);
-      TRACE("> dc_interrupt_smtp_idle..");
-      dc_interrupt_smtp_idle(dcn_context->dc_context);
-      TRACE("> dc_interrupt_mvbox_idle..");
-      dc_interrupt_mvbox_idle(dcn_context->dc_context);
-      TRACE("> dc_interrupt_sentbox_idle..");
-      dc_interrupt_sentbox_idle(dcn_context->dc_context);
-
-      TRACE("< joining imap_thread..");
-      uv_thread_join(&dcn_context->imap_thread);
-      TRACE("< joining smtp_thread..");
-      uv_thread_join(&dcn_context->smtp_thread);
-      TRACE("< joining mvbox_thread..");
-      uv_thread_join(&dcn_context->mvbox_thread);
-      TRACE("< joining sentbox_thread..");
-      uv_thread_join(&dcn_context->sentbox_thread);
-
-      TRACE("ALL threads joined");
-
-      dcn_context->imap_thread = 0;
-      dcn_context->smtp_thread = 0;
-      dcn_context->mvbox_thread = 0;
-      dcn_context->sentbox_thread = 0;
-    }
-
-    dcn_context->threadsafe_event_handler = NULL;
-  }
-
-  TRACE("cleaning up dc_context..");
-  dcn_context->gc = 1;
-  dc_context_unref(dcn_context->dc_context);
-  dcn_context->dc_context = NULL;
-
-  TRACE("freeing dcn_context");
-  free(dcn_context);
-
-  TRACE("done");
-}
-
-static void dcn_close_complete(napi_env env, napi_status status, void* data) {
-  dcn_close_carrier_t* carrier = (dcn_close_carrier_t*)data;
-
-  TRACE("enter");
-
-  if (status != napi_ok) {
-    napi_throw_type_error(env, NULL, "Execute callback failed.");
-    return;
-  }
-
-#define DCN_CLOSE_CALLBACK_ARGC 1
-
-  const int argc = DCN_CLOSE_CALLBACK_ARGC;
-  napi_value argv[DCN_CLOSE_CALLBACK_ARGC];
-
-  NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
-
-  napi_value global;
-  NAPI_STATUS_THROWS(napi_get_global(env, &global));
-  napi_value callback;
-  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
-
-  TRACE("calling back to js");
-  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
-
-  TRACE("cleaning up carrier");
-  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
-
-  free(carrier);
-  TRACE("done");
-}
-
-NAPI_METHOD(dcn_close) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  napi_value callback = argv[1];
-
-  TRACE("enter");
-
-  dcn_close_carrier_t* carrier = calloc(1, sizeof(dcn_close_carrier_t));
-  carrier->dcn_context = dcn_context;
-
-  napi_value async_resource_name;
-  NAPI_STATUS_THROWS(napi_create_reference(env, callback, 1, &carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_close_callback",
-                                             NAPI_AUTO_LENGTH,
-                                             &async_resource_name));
-  NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name,
-                                            dcn_close_execute, dcn_close_complete,
-                                            carrier, &carrier->async_work));
-
-  TRACE("queueing async work");
-  NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work));
-
-  TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_configure) {
@@ -1285,18 +1130,6 @@ NAPI_METHOD(dcn_is_contact_in_chat) {
   NAPI_RETURN_INT32(result);
 }
 
-NAPI_METHOD(dcn_is_open) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  //TRACE("calling..");
-  int result = dc_is_open(dcn_context->dc_context);
-  //TRACE("result %d", result);
-
-  NAPI_RETURN_INT32(result);
-}
-
-
 NAPI_METHOD(dcn_lookup_contact_id_by_addr) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -1388,86 +1221,6 @@ NAPI_METHOD(dcn_msg_new) {
   return result;
 }
 
-typedef struct dcn_open_carrier_t {
-  dcn_context_t* dcn_context;
-  char* dbfile;
-  char* blobdir;
-  napi_ref callback_ref;
-  napi_async_work async_work;
-  int result;
-} dcn_open_carrier_t;
-
-static void dcn_open_execute(napi_env env, void* data) {
-  dcn_open_carrier_t* carrier = (dcn_open_carrier_t*)data;
-
-  carrier->result = dc_open(carrier->dcn_context->dc_context,
-                            carrier->dbfile,
-                            carrier->blobdir);
-}
-
-static void dcn_open_complete(napi_env env, napi_status status, void* data) {
-  dcn_open_carrier_t* carrier = (dcn_open_carrier_t*)data;
-
-  if (status != napi_ok) {
-    napi_throw_type_error(env, NULL, "Execute callback failed.");
-    return;
-  }
-
-#define DCN_OPEN_COMPLETE_CALLBACK_ARGC 1
-
-  const int argc = DCN_OPEN_COMPLETE_CALLBACK_ARGC;
-  napi_value argv[DCN_OPEN_COMPLETE_CALLBACK_ARGC];
-
-  if (carrier->result == 1) {
-    NAPI_STATUS_THROWS(napi_get_null(env, &argv[0]));
-  } else {
-    const char* err_string = "Failed to open";
-    napi_value msg;
-    NAPI_STATUS_THROWS(napi_create_string_utf8(env, err_string, strlen(err_string), &msg));
-    NAPI_STATUS_THROWS(napi_create_error(env, NULL, msg, &argv[0]));
-  }
-
-  napi_value global;
-  NAPI_STATUS_THROWS(napi_get_global(env, &global));
-  napi_value callback;
-  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
-  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
-
-  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
-
-  free(carrier->dbfile);
-  free(carrier->blobdir);
-  free(carrier);
-}
-
-NAPI_METHOD(dcn_open) {
-  NAPI_ARGV(4);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UTF8_MALLOC(dbfile, 1);
-  NAPI_ARGV_UTF8_MALLOC(blobdir, 2);
-  napi_value callback = argv[3];
-
-  dcn_open_carrier_t* carrier = calloc(1, sizeof(dcn_open_carrier_t));
-  carrier->dcn_context = dcn_context;
-  carrier->dbfile = strdup(dbfile);
-  carrier->blobdir = strdup(blobdir);
-
-  napi_value async_resource_name;
-  NAPI_STATUS_THROWS(napi_create_reference(env, callback, 1, &carrier->callback_ref));
-  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dcn_open_callback",
-                                             NAPI_AUTO_LENGTH,
-                                             &async_resource_name));
-  NAPI_STATUS_THROWS(napi_create_async_work(env, callback, async_resource_name,
-                                            dcn_open_execute, dcn_open_complete,
-                                            carrier, &carrier->async_work));
-  NAPI_STATUS_THROWS(napi_queue_async_work(env, carrier->async_work));
-
-  free(dbfile);
-  free(blobdir);
-
-  NAPI_RETURN_UNDEFINED();
-}
 
 NAPI_METHOD(dcn_remove_contact_from_chat) {
   NAPI_ARGV(3);
@@ -1596,33 +1349,6 @@ NAPI_METHOD(dcn_set_draft) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_set_event_handler) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-
-  napi_value callback = argv[1];
-
-  //TRACE("calling..");
-  napi_value async_resource_name;
-  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
-
-  NAPI_STATUS_THROWS(napi_create_threadsafe_function(
-    env,
-    callback,
-    0,
-    async_resource_name,
-    0,
-    1,
-    NULL,
-    NULL,
-    dcn_context,
-    call_js_event_handler,
-    &dcn_context->threadsafe_event_handler));
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_set_stock_translation) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1650,17 +1376,24 @@ NAPI_METHOD(dcn_star_msgs) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_start_threads) {
+
+NAPI_METHOD(dcn_start_io) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
   TRACE("calling..");
-  dcn_context->loop_thread = 1;
-  uv_thread_create(&dcn_context->imap_thread, imap_thread_func, dcn_context);
-  uv_thread_create(&dcn_context->smtp_thread, smtp_thread_func, dcn_context);
-  uv_thread_create(&dcn_context->mvbox_thread, mvbox_thread_func, dcn_context);
-  uv_thread_create(&dcn_context->sentbox_thread, sentbox_thread_func, dcn_context);
   TRACE("done");
+
+  dc_start_io(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_stop_io) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  dc_stop_io(dcn_context->dc_context);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -2687,16 +2420,6 @@ NAPI_METHOD(dcn_array_get_chat_id) {
   return napi_chat_id;
 }
 
-NAPI_METHOD(dcn_perform_imap_jobs) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  dc_perform_imap_jobs(dcn_context->dc_context);
-
-  //TRACE("calling..");
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_provider_new_from_email) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2756,7 +2479,9 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_context_new);
-  NAPI_EXPORT_FUNCTION(dcn_perform_imap_jobs);
+  NAPI_EXPORT_FUNCTION(dcn_context_unref);
+  NAPI_EXPORT_FUNCTION(dcn_start_event_handler);
+  NAPI_EXPORT_FUNCTION(dcn_stop_event_handler);
 
   /**
    * Static functions
@@ -2774,7 +2499,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
-  NAPI_EXPORT_FUNCTION(dcn_close);
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
@@ -2816,7 +2540,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
-  NAPI_EXPORT_FUNCTION(dcn_is_open);
 
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
@@ -2826,7 +2549,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_maybe_network);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
-  NAPI_EXPORT_FUNCTION(dcn_open);
   NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   NAPI_EXPORT_FUNCTION(dcn_send_msg);
@@ -2835,10 +2557,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_chat_mute_duration);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
-  NAPI_EXPORT_FUNCTION(dcn_set_event_handler);
   NAPI_EXPORT_FUNCTION(dcn_set_stock_translation);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
-  NAPI_EXPORT_FUNCTION(dcn_start_threads);
+  NAPI_EXPORT_FUNCTION(dcn_start_io);
+  NAPI_EXPORT_FUNCTION(dcn_stop_io);
   NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
 
   /**

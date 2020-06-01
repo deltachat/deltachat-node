@@ -29,14 +29,56 @@ interface NativeContext {}
  */
 export class DeltaChat extends EventEmitter {
   dcn_context: NativeContext
-  constructor() {
+  constructor(cwd: string) {
     debug('DeltaChat constructor')
     super()
 
-    this.dcn_context = binding.dcn_context_new()
-    binding.dcn_set_event_handler(this.dcn_context, (event, data1, data2) => {
-      handleEvent(this, event, data1, data2)
-    })
+    const dbFile = path.join(cwd, 'db.sqlite')
+    this.dcn_context = binding.dcn_context_new(dbFile)
+    binding.dcn_start_event_handler(this.dcn_context, this.handleCoreEvent.bind(this))
+  }
+
+  handleCoreEvent(eventId: number, data1: number, data2: number|string) {
+    if(eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
+      this.emit('DCN_EVENT_CONFIGURE_SUCCESSFUL')
+    }
+    if(eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
+      this.emit('DCN_EVENT_CONFIGURE_FAILED')
+    }
+    const eventString = EventId2EventName[eventId]
+    debug(eventString, data1, data2)
+    if(!this.emit) {
+      console.log('Received an event but EventEmitter is already destroyed.')
+      console.log(eventString, data1, data2)
+      return
+    }
+    this.emit('ALL', eventString, data1, data2)
+    this.emit(eventString, data1, data2)
+  }
+
+  start(cb?: () => void) {
+    if(this.isConfigured()) {
+      binding.dcn_start_io(this.dcn_context)
+      cb()
+    } else {
+      debug('Can\'t start io unless context is configured.')
+      this.once('DCN_EVENT_CONFIGURED', () => {
+        debug('Now we\'re configured, starting io...')
+        binding.dcn_start_io(this.dcn_context)
+        cb()
+      })
+    }
+  }
+
+  stop() {
+    binding.dcn_stop_io(this.dcn_context)
+  }
+
+  unref() {
+    debug('Unref start')
+    binding.dcn_stop_event_handler(this.dcn_context)
+    binding.dcn_context_unref(this.dcn_context)
+    debug('Unref end')
   }
 
   addAddressBook(addressBook: string) {
@@ -114,12 +156,6 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
-  close(cb = noop) {
-    debug('close')
-    this.removeAllListeners()
-    binding.dcn_close(this.dcn_context, cb)
-  }
-
   configure(opts, cb?: () => void) {
     debug('configure')
     if (!opts) opts = {}
@@ -136,7 +172,7 @@ export class DeltaChat extends EventEmitter {
       throw new Error('Missing .mail_pw')
     }
 
-    this.once('_configured', ready)
+    this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', ready)
 
     // set defaults
     const defaultOptions = [
@@ -384,25 +420,6 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  static getConfig(dir: string, cb: (err: Error, result) => void) {
-    debug(`DeltaChat.getConfig ${dir}`)
-    const dcn_context = binding.dcn_context_new()
-    const db = dir.endsWith('db.sqlite') ? dir : path.join(dir, 'db.sqlite')
-    const done = (err, result) => {
-      binding.dcn_close(dcn_context, () => {
-        debug(`closed context for getConfig ${dir}`)
-      })
-      cb(err, result)
-    }
-    binding.dcn_open(dcn_context, db, '', (err) => {
-      if (err) return done(err, null)
-      if (binding.dcn_is_configured(dcn_context)) {
-        const addr = binding.dcn_get_config(dcn_context, 'addr')
-        return done(null, { addr })
-      }
-      done(null, {})
-    })
-  }
 
   getConfig(key: string): string {
     debug(`getConfig ${key}`)
@@ -633,11 +650,6 @@ export class DeltaChat extends EventEmitter {
         Number(contactId)
       )
     )
-  }
-
-  isOpen() {
-    debug('isOpen')
-    return Boolean(binding.dcn_is_open(this.dcn_context))
   }
 
   joinSecurejoin(qrCode: string, callback: (result: number) => void) {
@@ -873,73 +885,3 @@ export class DeltaChat extends EventEmitter {
   }
 }
 
-function handleEvent(self: DeltaChat, event: number, data1, data2) {
-  debug('event', event, 'data1', data1, 'data2', data2)
-
-  self.emit('ALL', event, data1, data2)
-
-  const eventStr = EventId2EventName[event]
-
-  if (typeof eventStr === 'undefined') {
-    debug(`Unknown event ${eventStr}`)
-    return
-  }
-
-  switch (event) {
-    case C.DC_EVENT_INFO:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_SMTP_CONNECTED:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_IMAP_CONNECTED:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_SMTP_MESSAGE_SENT:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_IMAP_MESSAGE_DELETED:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_IMAP_MESSAGE_MOVED:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_NEW_BLOB_FILE:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_DELETED_BLOB_FILE:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_WARNING:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_ERROR:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_ERROR_SELF_NOT_IN_GROUP:
-      self.emit(eventStr, data2)
-      break
-    case C.DC_EVENT_CHAT_MODIFIED:
-      self.emit(eventStr, data1)
-      break
-    case C.DC_EVENT_CONTACTS_CHANGED:
-      self.emit(eventStr, data1)
-      break
-    case C.DC_EVENT_LOCATION_CHANGED:
-      self.emit(eventStr, data1)
-      break
-    case C.DC_EVENT_CONFIGURE_PROGRESS:
-      if (data1 === 1000) self.emit('_configured')
-      self.emit(eventStr, data1)
-      break
-    case C.DC_EVENT_IMEX_PROGRESS:
-      self.emit(eventStr, data1)
-      break
-    case C.DC_EVENT_IMEX_FILE_WRITTEN:
-      self.emit(eventStr, data1)
-      break
-    default:
-      self.emit(eventStr, data1, data2)
-      break
-  }
-}
