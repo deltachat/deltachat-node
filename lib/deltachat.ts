@@ -22,7 +22,6 @@ const DC_SHOW_EMAILS = [
   C.DC_SHOW_EMAILS_ALL,
   C.DC_SHOW_EMAILS_OFF,
 ]
-
 interface NativeContext {}
 
 /**
@@ -42,18 +41,25 @@ export class DeltaChat extends EventEmitter {
     return this._isOpen
   }
 
-  open(cwd: string, cb?: any) {
-    if (cb) throw new Error('Giving a cb to open is deprecated')
+  open(cwd: string) {
+    if (arguments.length > 1)
+      throw new Error('Giving a cb to open is deprecated')
+
     if (this._isOpen === true) {
       throw new Error("We're already open!")
     }
-    const dbFile = path.join(cwd, 'db.sqlite')
-    this.dcn_context = binding.dcn_context_new(dbFile)
-    binding.dcn_start_event_handler(
-      this.dcn_context,
-      this.handleCoreEvent.bind(this)
-    )
-    this._isOpen = true
+
+    mkdirp(cwd, (err) => {
+      if (err) throw err
+      const db = path.join(cwd, 'db.sqlite')
+      const dbFile = path.join(cwd, 'db.sqlite')
+      this.dcn_context = binding.dcn_context_new(dbFile)
+      binding.dcn_start_event_handler(
+        this.dcn_context,
+        this.handleCoreEvent.bind(this)
+      )
+      this._isOpen = true
+    })
   }
 
   close() {
