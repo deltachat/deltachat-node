@@ -78,21 +78,16 @@ dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
   dc.sendMessage(chatId, `Bot agrees to ${Math.random() * 100}%`)
 })
 
-dc.open(() => {
-  const onReady = () => {
-    const contactId = dc.createContact('Test', contact)
-    const chatId = dc.createChatByContactId(contactId)
-    dc.sendMessage(chatId, 'Hi!')
-    dc.close(() => {
-      console.log('Bye.')
-    })
-  }
-  if (!dc.isConfigured()) {
-    dc.once('ready', onReady)
-    dc.configure(opts)
-  } else {
-    onReady()
-  }
+dc.open('./account-folder')
+dc.startIO()
+
+const contactId = dc.createContact('Test', contact)
+const chatId = dc.createChatByContactId(contactId)
+dc.sendMessage(chatId, 'Hi!')
+
+dc.stopIO()
+dc.close(() => {
+  console.log('Bye.')
 })
 ```
 
