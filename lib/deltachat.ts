@@ -87,18 +87,20 @@ export class DeltaChat extends EventEmitter {
     this.emit(eventString, data1, data2)
   }
 
-  startIO(cb?: () => void) {
-    if (this.isConfigured()) {
-      binding.dcn_start_io(this.dcn_context)
-      cb()
-    } else {
-      debug("Can't start io unless context is configured.")
-      this.once('DCN_EVENT_CONFIGURED', () => {
-        debug("Now we're configured, starting io...")
+  startIO() {
+    return new Promise((resolve, reject) => {
+      if (this.isConfigured()) {
         binding.dcn_start_io(this.dcn_context)
-        cb()
-      })
-    }
+        resolve()
+      } else {
+        debug("Can't start io unless context is configured.")
+        this.once('DCN_EVENT_CONFIGURED', () => {
+          debug("Now we're configured, starting io...")
+          binding.dcn_start_io(this.dcn_context)
+          resolve()
+        })
+      }
+    })
   }
 
   stopIO() {
