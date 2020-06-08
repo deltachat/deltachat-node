@@ -433,24 +433,23 @@ test('Device Chat', dc((t, dc) => {
 }))
 
 function dc (fn) {
-  return t => {
+  return async t => {
     const dc = new DeltaChat()
     const cwd = tempy.directory()
     const end = t.end.bind(t)
 
     t.end = () => {
-      // TODO Here be dragons!
-      // This is to give threads time to enter idle so dc_interrupt_*_idle()
-      // functions can interrupt threads safely. Only doing this on the test
-      // side since it's an edge case when starting/stopping threads quickly.
-      setTimeout(() => {
-        dc.close()
-        end()
-      }, 50)
+      //dc.stopIO()
+      dc.close()
+      end()
     }
 
     t.is(dc.isOpen(), false, 'context database is not open')
-    dc.open(cwd)
+    dc.on('ALL', console.log)
+
+    await dc.open(cwd)
+
+    //dc.startIO()
     t.is(dc.isOpen(), true, 'context database is open')
     t.is(dc.isConfigured(), false, 'should not be configured')
     fn(t, dc, cwd)

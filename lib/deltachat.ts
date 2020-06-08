@@ -8,7 +8,7 @@ import { ChatList } from './chatlist'
 import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
-import mkdirp from 'mkdirp'
+import { mkdirp } from 'fs-extra'
 import path from 'path'
 import { Locations } from './locations'
 import pick from 'lodash.pick'
@@ -41,25 +41,21 @@ export class DeltaChat extends EventEmitter {
     return this._isOpen
   }
 
-  open(cwd: string) {
-    if (arguments.length > 1)
-      throw new Error('Giving a cb to open is deprecated')
-
+  async open(cwd: string) {
     if (this._isOpen === true) {
       throw new Error("We're already open!")
     }
 
-    mkdirp(cwd, (err) => {
-      if (err) throw err
-      const db = path.join(cwd, 'db.sqlite')
-      const dbFile = path.join(cwd, 'db.sqlite')
-      this.dcn_context = binding.dcn_context_new(dbFile)
-      binding.dcn_start_event_handler(
-        this.dcn_context,
-        this.handleCoreEvent.bind(this)
-      )
-      this._isOpen = true
-    })
+    await mkdirp(cwd)
+
+    const dbFile = path.join(cwd, 'db.sqlite')
+
+    this.dcn_context = binding.dcn_context_new(dbFile)
+    binding.dcn_start_event_handler(
+      this.dcn_context,
+      this.handleCoreEvent.bind(this)
+    )
+    this._isOpen = true
   }
 
   close() {
