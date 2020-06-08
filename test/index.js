@@ -36,26 +36,50 @@ test('static method maybeValidAddr()', t => {
   t.end()
 })
 
-test('invalid input to configure throws', t => {
-  const dc = new DeltaChat()
+test('invalid input to configure throws', dc((t, dc) => {
   t.throws(function () {
     dc.configure({ addr: 'delta1@delta.localhost' })
   }, /Missing \.mail_pw/, 'missing mail_pw throws')
   t.throws(function () {
     dc.configure({ mail_pw: 'delta1' })
   }, /Missing \.addr/, 'missing addr throws')
-  dc.close()
   t.end()
-})
+}))
 
-test('dc.getInfo()', t => {
-  const dc = new DeltaChat()
+test('dc.getInfo()', dc((t, dc) => {
   const info = dc.getInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
-    'deltachat_core_version',
-    'level',
-    'sqlite_version'
+    'bcc_self',
+    'blobdir', 
+    'configured_mvbox_folder', 
+    'configured_sentbox_folder', 
+    'database_dir', 
+    'database_version', 
+    'deltachat_core_version', 
+    'display_name', 
+    'e2ee_enabled', 
+    'entered_account_settings', 
+    'fingerprint', 
+    'folders_configured', 
+    'inbox_watch', 
+    'is_configured', 
+    'journal_mode', 
+    'level', 
+    'mdns_enabled', 
+    'messages_in_contact_requests', 
+    'mvbox_move', 
+    'mvbox_watch', 
+    'number_of_chat_messages', 
+    'number_of_chats', 
+    'number_of_contacts', 
+    'private_key_count', 
+    'public_key_count', 
+    'selfavatar', 
+    'sentbox_watch', 
+    'sqlite_version', 
+    'uptime', 
+    'used_account_settings'
   ])
 
   t.is(Object.values(info).every(v => {
@@ -63,11 +87,10 @@ test('dc.getInfo()', t => {
   }), true, 'all values are strings')
   // t.is(info.fingerprint, '<Not yet calculated>', 'fingerprint')
 
-  dc.close()
   t.end()
-})
+}))
 
-test('static getSystemInfo()', t => {
+test('static getSystemInfo()', dc((t, dc) => {
   const info = DeltaChat.getSystemInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
@@ -78,7 +101,7 @@ test('static getSystemInfo()', t => {
     return typeof v === 'string'
   }), true, 'all values are strings')
   t.end()
-})
+}))
 
 test('basic configuration', dc((t, dc, cwd) => {
   t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
@@ -103,7 +126,6 @@ test('create chat from contact and Chat methods', dc((t, dc) => {
   t.is(chat.getId(), chatId, 'chat id matches')
   t.is(chat.getName(), 'aaa', 'chat name matches')
   t.is(chat.getProfileImage(), null, 'no profile image')
-  t.is(chat.getSubtitle(), 'aaa@site.org', 'correct subtitle')
   t.is(chat.getType(), c.DC_CHAT_TYPE_SINGLE, 'single chat')
   t.is(chat.isSelfTalk(), false, 'no self talk')
   // TODO make sure this is really the case!
@@ -411,29 +433,26 @@ test('Device Chat', dc((t, dc) => {
 }))
 
 function dc (fn) {
-  return t => {
+  return async t => {
     const dc = new DeltaChat()
     const cwd = tempy.directory()
     const end = t.end.bind(t)
 
     t.end = () => {
-      // TODO Here be dragons!
-      // This is to give threads time to enter idle so dc_interrupt_*_idle()
-      // functions can interrupt threads safely. Only doing this on the test
-      // side since it's an edge case when starting/stopping threads quickly.
-      setTimeout(() => {
-        dc.close()
-        end()
-      }, 50)
+      //dc.stopIO()
+      dc.close()
+      end()
     }
 
     t.is(dc.isOpen(), false, 'context database is not open')
-    dc.open(cwd, err => {
-      t.error(err, 'no error during open')
-      t.is(dc.isOpen(), true, 'context database is open')
-      t.is(dc.isConfigured(), false, 'should not be configured')
-      fn(t, dc, cwd)
-    })
+    dc.on('ALL', console.log)
+
+    await dc.open(cwd)
+
+    //dc.startIO()
+    t.is(dc.isOpen(), true, 'context database is open')
+    t.is(dc.isConfigured(), false, 'should not be configured')
+    fn(t, dc, cwd)
   }
 }
 
@@ -449,7 +468,7 @@ test('dc.getProviderFromEmail("example@example.com")', t => {
   t.end()
 })
 
-test.only('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
+test('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
   dc.joinSecurejoin('test', (chatId) => {
     t.is(chatId, 0, 'chatId should be zero as we didn\'t pass a valid qrString')
     t.end()
