@@ -463,16 +463,16 @@ export class DeltaChat extends EventEmitter {
 
   getInfo() {
     debug('getInfo')
-    return DeltaChat._getInfo(this.dcn_context)
+    const info = binding.dcn_get_info(this.dcn_context)
+    return DeltaChat.parseGetInfo(info)
   }
 
-  static _getInfo(dcn_context: NativeContext) {
+  static parseGetInfo(info: string) {
     debug('static _getInfo')
     const result = {}
 
     const regex = /^(\w+)=(.*)$/i
-    binding
-      .dcn_get_info(dcn_context)
+    info
       .split('\n')
       .filter(Boolean)
       .forEach((line) => {
@@ -583,7 +583,7 @@ export class DeltaChat extends EventEmitter {
     debug('DeltaChat.getSystemInfo')
 
     const dcn_context = DeltaChat.newTempContext()
-    const info = DeltaChat._getInfo(dcn_context)
+    const info = DeltaChat.parseGetInfo(binding.dcn_get_info(dcn_context))
     const result = pick(info, [
       'deltachat_core_version',
       'sqlite_version',

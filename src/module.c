@@ -9,7 +9,7 @@
 #include <deltachat-ffi/deltachat.h>
 #include "napi-macros-extensions.h"
 
-
+#define DEBUG
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
 #else
@@ -295,7 +295,11 @@ NAPI_METHOD(dcn_stop_event_handler) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-
+  dcn_context->gc = 1;
+  if(&dcn_context->event_handler_thread != NULL) {
+    TRACE("Waiting for event handler thread to be stopped...");
+    uv_thread_join(&dcn_context->event_handler_thread);
+  }
   
   NAPI_RETURN_UNDEFINED();
 }
@@ -304,14 +308,9 @@ NAPI_METHOD(dcn_context_unref) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-
-  dcn_context->gc = 1;
-
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
-  TRACE("Waiting for event handler thread to be stopped...");
-  uv_thread_join(&dcn_context->event_handler_thread);
-
+  
   TRACE("Event handler thread stopped");
 
   dcn_context = NULL;

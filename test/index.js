@@ -102,7 +102,7 @@ test('dc.getInfo()', dc((t, dc) => {
   t.end()
 }))
 
-test.only('static getSystemInfo()', dc((t, dc) => {
+test('static getSystemInfo()', t => {
   const info = DeltaChat.getSystemInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
@@ -113,7 +113,7 @@ test.only('static getSystemInfo()', dc((t, dc) => {
     return typeof v === 'string'
   }), true, 'all values are strings')
   t.end()
-}))
+})
 
 test('basic configuration', dc((t, dc, cwd) => {
   t.is(dc.getConfig('e2ee_enabled'), '1', 'e2eeEnabled correct')
