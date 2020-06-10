@@ -94,8 +94,10 @@ async function main() {
 
   console.log('sent message')
 
-  dc.once('DC_EVENT_SMTP_MESSAGE_SENT', () => {
+  dc.once('DC_EVENT_SMTP_MESSAGE_SENT', async () => {
+    console.log('Message sent, shutting down...')
     dc.stopIO()
+    console.log('stopped io')
     dc.close()
   })
 }

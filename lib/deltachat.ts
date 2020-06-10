@@ -61,23 +61,20 @@ export class DeltaChat extends EventEmitter {
   }
 
   close() {
-    return new Promise((resolve, reject) => {
-      if (this._isOpen === false) {
-        throw new Error("We're already closed!")
-      }
+    if (this._isOpen === false) {
+      throw new Error("We're already closed!")
+    }
 
-      if (this.isIORunning() !== false) {
-        throw new Error("Can't close while IO is still running!")
-      }
-      debug('unrefing context')
-      binding.dcn_context_unref(this.dcn_context)
+    if (this.isIORunning() !== false) {
+      throw new Error("Can't close while IO is still running!")
+    }
+    debug('unrefing context')
+    binding.dcn_context_unref(this.dcn_context)
 
-      debug('Stopping event handler...')
-      this.dcn_context = null
-      debug('Unref end')
-      this._isOpen = false
-      resolve()
-    })
+    debug('Stopping event handler...')
+    this.dcn_context = null
+    debug('Unref end')
+    this._isOpen = false
   }
 
   handleCoreEvent(eventId: number, data1: number, data2: number | string) {
