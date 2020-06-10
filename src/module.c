@@ -161,7 +161,6 @@ static void event_handler_thread_func(void* arg)
   dcn_context_t* dcn_context = (dcn_context_t*)arg;
   dc_context_t* dc_context = dcn_context->dc_context;
 
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
 
   TRACE("event_handler_thread_func starting");
 
@@ -181,20 +180,19 @@ static void event_handler_thread_func(void* arg)
     }
 
 
-    napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, event, napi_tsfn_nonblocking);
+    napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, event, napi_tsfn_blocking);
 
-    if (status == napi_queue_full) {
-      TRACE("Queue is full, can't call callback");
-    } else if (status == napi_closing) {
+    if (status == napi_closing) {
       TRACE("JS function got released, bailing");
       break;
     }
   }
+
   dc_event_emitter_unref(emitter);
 
   TRACE("event_handler_thread_func ended");
 
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_abort);
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
 }
 
 static void call_js_event_handler(napi_env env, napi_value js_callback, void* _context, void* data)
@@ -275,7 +273,7 @@ NAPI_METHOD(dcn_start_event_handler) {
     callback,
     0,
     async_resource_name,
-    0,
+    1,
     1,
     NULL,
     NULL,
@@ -291,29 +289,67 @@ NAPI_METHOD(dcn_start_event_handler) {
   NAPI_RETURN_UNDEFINED();
 }
 
+// -----------
+
+
+NAPI_ASYNC_CARRIER_BEGIN(dcn_stop_event_handler)
+  char* result;
+NAPI_ASYNC_CARRIER_END(dcn_stop_event_handler)
+
+NAPI_ASYNC_EXECUTE(dcn_stop_event_handler) {
+  NAPI_ASYNC_GET_CARRIER(dcn_stop_event_handler);
+
+  carrier->dcn_context->gc = 1;
+  if(&carrier->dcn_context->event_handler_thread != NULL) {
+    TRACE("Waiting for event handler thread to be stopped...");
+    uv_thread_join(&carrier->dcn_context->event_handler_thread);
+  }
+
+  TRACE("Stopped event handler");
+}
+
+NAPI_ASYNC_COMPLETE(dcn_stop_event_handler) {
+  NAPI_ASYNC_GET_CARRIER(dcn_stop_event_handler);
+  if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+#define DCN_STOP_EVENT_HANDLER_ARGC 0
+
+  const int argc = DCN_STOP_EVENT_HANDLER_ARGC;
+  napi_value argv[DCN_STOP_EVENT_HANDLER_ARGC];
+
+  napi_value global;
+  NAPI_STATUS_THROWS(napi_get_global(env, &global));
+  napi_value callback;
+  NAPI_STATUS_THROWS(napi_get_reference_value(env, carrier->callback_ref, &callback));
+  NAPI_STATUS_THROWS(napi_call_function(env, global, callback, argc, argv, NULL));
+  NAPI_STATUS_THROWS(napi_delete_reference(env, carrier->callback_ref));
+  NAPI_STATUS_THROWS(napi_delete_async_work(env, carrier->async_work));
+
+  TRACE("stop_event_handler called back into js");
+  free(carrier);
+}
+
 NAPI_METHOD(dcn_stop_event_handler) {
-  NAPI_ARGV(1);
+  NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
 
-  dcn_context->gc = 1;
-  if(&dcn_context->event_handler_thread != NULL) {
-    TRACE("Waiting for event handler thread to be stopped...");
-    uv_thread_join(&dcn_context->event_handler_thread);
-  }
-  
+  NAPI_ASYNC_NEW_CARRIER(dcn_stop_event_handler);
+
+  NAPI_ASYNC_QUEUE_WORK(dcn_stop_event_handler, argv[1]);
   NAPI_RETURN_UNDEFINED();
 }
+
 
 NAPI_METHOD(dcn_context_unref) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
+  TRACE("Unrefing dc_context");
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
-  
-  TRACE("Event handler thread stopped");
-
-  dcn_context = NULL;
 
   NAPI_RETURN_UNDEFINED();
 
