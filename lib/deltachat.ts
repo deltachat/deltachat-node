@@ -51,10 +51,12 @@ export class DeltaChat extends EventEmitter {
     const dbFile = path.join(cwd, 'db.sqlite')
 
     this.dcn_context = binding.dcn_context_new(dbFile)
+    debug('Opened context')
     binding.dcn_start_event_handler(
       this.dcn_context,
       this.handleCoreEvent.bind(this)
     )
+    debug('Started event handler')
     this._isOpen = true
   }
 
@@ -62,9 +64,15 @@ export class DeltaChat extends EventEmitter {
     if (this._isOpen === false) {
       throw new Error("We're already closed!")
     }
+
+    if (this.isIORunning() !== false) {
+      throw new Error("Can't close while IO is still running!")
+    }
     debug('Unref start')
-    binding.dcn_stop_event_handler(this.dcn_context)
+
+    debug('unrefing context')
     binding.dcn_context_unref(this.dcn_context)
+    this.dcn_context = null
     debug('Unref end')
     this._isOpen = false
   }
@@ -88,23 +96,24 @@ export class DeltaChat extends EventEmitter {
   }
 
   startIO() {
-    return new Promise((resolve, reject) => {
-      if (this.isConfigured()) {
-        binding.dcn_start_io(this.dcn_context)
-        resolve()
-      } else {
-        debug("Can't start io unless context is configured.")
-        this.once('DCN_EVENT_CONFIGURED', () => {
-          debug("Now we're configured, starting io...")
-          binding.dcn_start_io(this.dcn_context)
-          resolve()
-        })
-      }
-    })
+    if (!this.isConfigured()) {
+      throw new Error("Can't start io unless context is configured.")
+    }
+    binding.dcn_start_io(this.dcn_context)
   }
 
   stopIO() {
+    debug('stopIO()')
+    if (this.isIORunning() === false) {
+      throw new Error("Can't stop io if io is not running.")
+    }
     binding.dcn_stop_io(this.dcn_context)
+  }
+
+  isIORunning() {
+    const is_running = binding.dcn_is_io_running(this.dcn_context)
+    debug('is_io_running', is_running)
+    return is_running === 1
   }
 
   addAddressBook(addressBook: string) {
@@ -182,112 +191,65 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
-  configure(opts, cb?: () => void) {
-    debug('configure')
-    if (!opts) opts = {}
-    const ready = () => {
-      this.emit('ready')
-      cb && cb()
-    }
-
-    if (typeof opts.addr !== 'string') {
-      throw new Error('Missing .addr')
-    }
-
-    if (typeof opts.mail_pw !== 'string') {
-      throw new Error('Missing .mail_pw')
-    }
-
-    this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', ready)
-
-    // set defaults
-    const defaultOptions = [
-      'e2ee_enabled',
-      'mdns_enabled',
-      'inbox_watch',
-      'sentbox_watch',
-      'mvbox_watch',
-      'mvbox_move',
-    ]
-    defaultOptions.map((option) => {
-      if (typeof opts[option] === 'undefined') opts[option] = 1
-      this.setConfig(option, String(opts[option] ? 1 : 0))
-    })
-
-    this.setConfig('addr', opts.addr)
-
-    this.setConfig('mail_server', opts.mail_server)
-    this.setConfig('mail_user', opts.mail_user)
-    this.setConfig('mail_pw', opts.mail_pw)
-    this.setConfig('mail_port', String(opts.mail_port))
-    if ('imap_certificate_checks' in opts) {
-      this.setConfig(
-        'imap_certificate_checks',
-        String(opts.imap_certificate_checks)
-      )
-    }
-
-    this.setConfig('send_server', opts.send_server)
-    this.setConfig('send_user', opts.send_user)
-    this.setConfig('send_pw', opts.send_pw)
-    this.setConfig('send_port', String(opts.send_port))
-    if ('smtp_certificate_checks' in opts) {
-      this.setConfig(
-        'smtp_certificate_checks',
-        String(opts.smtp_certificate_checks)
-      )
-    }
-
-    this.setConfig('server_flags', String(opts.server_flags))
-    this.setConfig('displayname', opts.displayname)
-
-    this.setConfig('selfstatus', opts.selfstatus)
-    this.setConfig('selfavatar', opts.selfavatar)
-
-    if (DC_SHOW_EMAILS.indexOf(opts.show_emails) !== -1) {
-      this.setConfig('show_emails', String(opts.show_emails))
-    }
-
-    this.setConfig('save_mime_headers', String(opts.save_mime_headers ? 1 : 0))
-
-    binding.dcn_configure(this.dcn_context)
-  }
-
-  /**
-   * @deprecated Please use continueKeyTransfer2
-   * @param cb
-   */
-  continueKeyTransfer(
-    messageId: number,
-    setupCode: string,
-    cb: (err: Error) => void
-  ) {
-    debug(`continueKeyTransfer ${messageId}`)
-    binding.dcn_continue_key_transfer(
-      this.dcn_context,
-      Number(messageId),
-      setupCode,
-      (result) => {
-        if (result === 0) {
-          return cb(new Error('Key transfer failed due to bad setup code'))
-        }
-        cb(null)
+  configure(opts: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      debug('configure')
+      if (this._isOpen !== true) {
+        throw new Error(
+          "Can't start configuring unless we have an open context"
+        )
       }
-    )
+
+      const onSuccess = () => {
+        removeListeners()
+        resolve()
+      }
+      const onFail = () => {
+        removeListeners()
+        reject(error)
+      }
+
+      let error = null
+      const onError = (data1, data2) => {
+        error = data2
+      }
+
+      const removeListeners = () => {
+        this.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
+        this.removeListener('DCN_EVENT_CONFIGURE_FAILED', onFail)
+        this.removeListener('DC_EVENT_ERROR', onError)
+        this.removeListener('DC_EVENT_ERROR_NETWORK', onError)
+      }
+
+      const registerListeners = () => {
+        this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
+        this.once('DCN_EVENT_CONFIGURE_FAILED', onFail)
+        this.on('DC_EVENT_ERROR', onError)
+        this.on('DC_EVENT_ERROR_NETWORK', onError)
+      }
+
+      registerListeners()
+
+      if (!opts) opts = {}
+      Object.keys(opts).forEach((key) => {
+        const value = opts[key]
+        this.setConfig(key, value)
+      })
+
+      binding.dcn_configure(this.dcn_context)
+    })
   }
 
-  continueKeyTransfer2(
-    messageId: number,
-    setupCode: string,
-    cb: (result: number) => void
-  ) {
+  continueKeyTransfer(messageId: number, setupCode: string) {
     debug(`continueKeyTransfer2 ${messageId}`)
-    binding.dcn_continue_key_transfer(
-      this.dcn_context,
-      Number(messageId),
-      setupCode,
-      cb
-    )
+    return new Promise((resolve, reject) => {
+      binding.dcn_continue_key_transfer(
+        this.dcn_context,
+        Number(messageId),
+        setupCode,
+        resolve
+      )
+    })
   }
 
   /** @returns chatId */
@@ -645,24 +607,11 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_imex_has_backup(this.dcn_context, dir)
   }
 
-  /**
-   * @deprecated Please use initiateKeyTransfer2
-   * @param cb
-   */
-
-  initiateKeyTransfer(cb: (err: Error, statusCode: any) => void) {
-    debug('initiateKeyTransfer')
-    return binding.dcn_initiate_key_transfer(this.dcn_context, (statusCode) => {
-      if (typeof statusCode === 'string') {
-        return cb(null, statusCode)
-      }
-      cb(new Error('Could not initiate key transfer'), null)
+  initiateKeyTransfer(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      debug('initiateKeyTransfer2')
+      return binding.dcn_initiate_key_transfer(this.dcn_context, resolve)
     })
-  }
-
-  initiateKeyTransfer2(cb: (setup_code: string) => void) {
-    debug('initiateKeyTransfer2')
-    return binding.dcn_initiate_key_transfer(this.dcn_context, cb)
   }
 
   isConfigured() {

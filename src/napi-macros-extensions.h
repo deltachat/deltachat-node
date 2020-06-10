@@ -9,7 +9,13 @@
 
 #define NAPI_DCN_CONTEXT() \
   dcn_context_t* dcn_context; \
-  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context));
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context)); \
+  if (dcn_context == NULL) { \
+    const char* code = "test"; \
+    const char* msg = "Provided dcn_context is null"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, code, msg)); \
+  }
+
 
 #define NAPI_DC_CHAT() \
   dc_chat_t* dc_chat; \

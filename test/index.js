@@ -36,13 +36,25 @@ test('static method maybeValidAddr()', t => {
   t.end()
 })
 
-test('invalid input to configure throws', dc((t, dc) => {
-  t.throws(function () {
-    dc.configure({ addr: 'delta1@delta.localhost' })
-  }, /Missing \.mail_pw/, 'missing mail_pw throws')
-  t.throws(function () {
-    dc.configure({ mail_pw: 'delta1' })
-  }, /Missing \.addr/, 'missing addr throws')
+test('invalid input to configure throws', dc(async (t, dc) => {
+  let configure_threw = false
+  try {
+    await dc.configure({ addr: 'delta1@delta.localhost' })
+  } catch (err) {
+    configure_threw = true
+  }
+
+  t.is(configure_threw, true, 'Threw error one')
+  
+  configure_threw = false
+  try {
+    await dc.configure({ mail_pw: 'delta1' })
+  } catch (err) {
+    configure_threw = true
+  }
+
+  t.is(configure_threw, true, 'Threw error two')
+
   t.end()
 }))
 
@@ -90,7 +102,7 @@ test('dc.getInfo()', dc((t, dc) => {
   t.end()
 }))
 
-test('static getSystemInfo()', dc((t, dc) => {
+test.only('static getSystemInfo()', dc((t, dc) => {
   const info = DeltaChat.getSystemInfo()
   t.same(Object.keys(info).sort(), [
     'arch',
@@ -449,7 +461,6 @@ function dc (fn) {
 
     await dc.open(cwd)
 
-    //dc.startIO()
     t.is(dc.isOpen(), true, 'context database is open')
     t.is(dc.isConfigured(), false, 'should not be configured')
     fn(t, dc, cwd)
