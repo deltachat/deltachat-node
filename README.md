@@ -70,25 +70,37 @@ const opts = {
 
 const contact = '[email]'
 
-dc.on('ALL', console.log.bind(null, 'core |'))
+async function main() {
+  const dc = new DeltaChat()
 
-dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-  const msg = dc.getMessage(msgId)
-  console.log(chatId, msg)
-  dc.sendMessage(chatId, `Bot agrees to ${Math.random() * 100}%`)
-})
+  dc.on('ALL', console.log.bind(null, 'core |'))
+  await dc.open('./')
+  
+  try {
+    await dc.configure(opts)
+  } catch (err) {
+    console.error("Failed to configure because of: ", err)
+    dc.close()
+    return
+  }
 
-dc.open('./account-folder')
-dc.startIO()
+  dc.startIO()
+  console.log('fully configured')
 
-const contactId = dc.createContact('Test', contact)
-const chatId = dc.createChatByContactId(contactId)
-dc.sendMessage(chatId, 'Hi!')
 
-dc.stopIO()
-dc.close(() => {
-  console.log('Bye.')
-})
+  const contactId = dc.createContact('Test', contact)
+  const chatId = dc.createChatByContactId(contactId)
+  dc.sendMessage(chatId, 'Hi!')
+
+  console.log('sent message')
+
+  dc.once('DC_EVENT_SMTP_MESSAGE_SENT', () => {
+    dc.stopIO()
+    dc.close()
+  })
+}
+
+main()
 ```
 
 ### Generating Docs

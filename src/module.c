@@ -9,6 +9,7 @@
 #include <deltachat-ffi/deltachat.h>
 #include "napi-macros-extensions.h"
 
+
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
 #else
@@ -25,118 +26,6 @@ typedef struct dcn_context_t {
   int gc;
 } dcn_context_t;
 
-/**
- * Event struct for calling back to JavaScript
- */
-typedef struct dcn_event_t {
-  int event;
-  uintptr_t data1_int;
-  uintptr_t data2_int;
-  char* data1_str;
-  char* data2_str;
-} dcn_event_t;
-
-
-static int event_handler_thread_func(void* arg)
-{
-  dcn_context_t* dcn_context = (dcn_context_t*)arg;
-  dc_context_t* dc_context = dcn_context->dc_context;
-
-  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
-
-  TRACE("event_handler_thread_func starting");
-
-  dc_event_emitter_t* emitter = dc_get_event_emitter(dc_context);
-  dc_event_t* event;
-  while ((event = dc_get_next_event(emitter)) != NULL) {
-    if (!dcn_context->threadsafe_event_handler) {
-      TRACE("threadsafe_event_handler not set, bailing");
-      break;
-    }
-
-    // Don't process events if we're being garbage collected!
-    if (dcn_context->gc) {
-      TRACE("dc_context has been destroyed, bailing");
-      break;
-    }
-
-
-    napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, event, napi_tsfn_nonblocking);
-
-    if (status == napi_queue_full) {
-      TRACE("Queue is full, can't call callback");
-    }
-  }
-  dc_event_emitter_unref(emitter);
-
-  TRACE("event_handler_thread_func ended");
-
-  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_release);
-  
-  return napi_closing;
-
-}
-
-static void call_js_event_handler(napi_env env, napi_value js_callback, void* _context, void* data)
-{
-  dc_event_t* dc_event = (dc_event_t*)data;
-
-  napi_value global;
-  napi_status status = napi_get_global(env, &global);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to get global");
-  }
-
-#define CALL_JS_CALLBACK_ARGC 3
-
-  const int argc = CALL_JS_CALLBACK_ARGC;
-  napi_value argv[CALL_JS_CALLBACK_ARGC];
-
-  const int event_id = dc_event_get_id(dc_event);
-
-  status = napi_create_int32(env, event_id, &argv[0]);
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
-  }
-
-  status = napi_create_int32(env, dc_event_get_data1_int(dc_event), &argv[1]);
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
-  }
-
-  if DC_EVENT_DATA2_IS_STRING(event_id) {
-    char* data2_string = dc_event_get_data2_str(dc_event);
-    status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[2]);
-    if (status != napi_ok) {
-      napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
-    }
-    free(data2_string);
-  } else {
-    status = napi_create_int32(env, dc_event_get_data2_int(dc_event), &argv[2]);
-    if (status != napi_ok) {
-      napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
-    }
-  }
-
-  dc_event_unref(dc_event);
-  dc_event = NULL;
-
-  TRACE("calling back into js");
-
-  napi_value result;
-  status = napi_call_function(
-    env,
-    global,
-    js_callback,
-    argc,
-    argv,
-    &result);
-
-  if (status != napi_ok) {
-    napi_throw_error(env, NULL, "Unable to call event_handler callback");
-  }
-}
 
 
 /**
@@ -255,15 +144,131 @@ NAPI_METHOD(dcn_context_new) {
   return result;
 }
 
+/**
+ * Event struct for calling back to JavaScript
+ */
+typedef struct dcn_event_t {
+  int event;
+  uintptr_t data1_int;
+  uintptr_t data2_int;
+  char* data1_str;
+  char* data2_str;
+} dcn_event_t;
+
+
+static void event_handler_thread_func(void* arg)
+{
+  dcn_context_t* dcn_context = (dcn_context_t*)arg;
+  dc_context_t* dc_context = dcn_context->dc_context;
+
+  napi_acquire_threadsafe_function(dcn_context->threadsafe_event_handler);
+
+  TRACE("event_handler_thread_func starting");
+
+
+  dc_event_emitter_t* emitter = dc_get_event_emitter(dc_context);
+  dc_event_t* event;
+  while ((event = dc_get_next_event(emitter)) != NULL) {
+    if (!dcn_context->threadsafe_event_handler) {
+      TRACE("threadsafe_event_handler not set, bailing");
+      break;
+    }
+
+    // Don't process events if we're being garbage collected!
+    if (dcn_context->gc == 1) {
+      TRACE("dc_context has been destroyed, bailing");
+      break;
+    }
+
+
+    napi_status status = napi_call_threadsafe_function(dcn_context->threadsafe_event_handler, event, napi_tsfn_nonblocking);
+
+    if (status == napi_queue_full) {
+      TRACE("Queue is full, can't call callback");
+    } else if (status == napi_closing) {
+      TRACE("JS function got released, bailing");
+      break;
+    }
+  }
+  dc_event_emitter_unref(emitter);
+
+  TRACE("event_handler_thread_func ended");
+
+  napi_release_threadsafe_function(dcn_context->threadsafe_event_handler, napi_tsfn_abort);
+}
+
+static void call_js_event_handler(napi_env env, napi_value js_callback, void* _context, void* data)
+{
+  dc_event_t* dc_event = (dc_event_t*)data;
+
+  napi_value global;
+  napi_status status = napi_get_global(env, &global);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to get global");
+  }
+
+#define CALL_JS_CALLBACK_ARGC 3
+
+  const int argc = CALL_JS_CALLBACK_ARGC;
+  napi_value argv[CALL_JS_CALLBACK_ARGC];
+
+  const int event_id = dc_event_get_id(dc_event);
+
+  status = napi_create_int32(env, event_id, &argv[0]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
+  }
+
+  status = napi_create_int32(env, dc_event_get_data1_int(dc_event), &argv[1]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
+  }
+
+  if DC_EVENT_DATA2_IS_STRING(event_id) {
+    char* data2_string = dc_event_get_data2_str(dc_event);
+    status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[2]);
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
+    }
+    free(data2_string);
+  } else {
+    status = napi_create_int32(env, dc_event_get_data2_int(dc_event), &argv[2]);
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
+    }
+  }
+
+  dc_event_unref(dc_event);
+  dc_event = NULL;
+
+  TRACE("calling back into js");
+
+  napi_value result;
+  status = napi_call_function(
+    env,
+    global,
+    js_callback,
+    argc,
+    argv,
+    &result);
+
+  if (status != napi_ok) {
+    TRACE("Unable to call event_handler callback");
+  }
+}
+
 
 NAPI_METHOD(dcn_start_event_handler) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
   napi_value callback = argv[1];
 
-  //TRACE("calling..");
+  TRACE("calling..");
   napi_value async_resource_name;
   NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
+
+  TRACE("creating threadsafe function..");
 
   NAPI_STATUS_THROWS(napi_create_threadsafe_function(
     env,
@@ -277,9 +282,10 @@ NAPI_METHOD(dcn_start_event_handler) {
     dcn_context,
     call_js_event_handler,
     &dcn_context->threadsafe_event_handler));
-  //TRACE("done");
+  TRACE("done");
 
   dcn_context->gc = 0;
+  TRACE("creating uv thread..");
   uv_thread_create(&dcn_context->event_handler_thread, event_handler_thread_func, dcn_context);
 
   NAPI_RETURN_UNDEFINED();
@@ -288,10 +294,9 @@ NAPI_METHOD(dcn_start_event_handler) {
 NAPI_METHOD(dcn_stop_event_handler) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
+
+
   
-  if(dcn_context->threadsafe_event_handler != NULL) {
-    napi_unref_threadsafe_function(env, dcn_context->threadsafe_event_handler);
-  }
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -299,8 +304,17 @@ NAPI_METHOD(dcn_context_unref) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
+
+  dcn_context->gc = 1;
+
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
+  TRACE("Waiting for event handler thread to be stopped...");
+  uv_thread_join(&dcn_context->event_handler_thread);
+
+  TRACE("Event handler thread stopped");
+
+  dcn_context = NULL;
 
   NAPI_RETURN_UNDEFINED();
 
@@ -1396,6 +1410,13 @@ NAPI_METHOD(dcn_stop_io) {
   dc_stop_io(dcn_context->dc_context);
 
   NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_is_io_running) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  NAPI_RETURN_INT32(dc_is_io_running(dcn_context->dc_context));
 }
 
 NAPI_METHOD(dcn_stop_ongoing_process) {
@@ -2561,6 +2582,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_io);
   NAPI_EXPORT_FUNCTION(dcn_stop_io);
+  NAPI_EXPORT_FUNCTION(dcn_is_io_running);
   NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
 
   /**
