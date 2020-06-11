@@ -10,10 +10,13 @@
 #define NAPI_DCN_CONTEXT() \
   dcn_context_t* dcn_context; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_context)); \
-  if (dcn_context == NULL) { \
-    const char* code = "test"; \
-    const char* msg = "Provided dcn_context is null"; \
-    NAPI_STATUS_THROWS(napi_throw_type_error(env, code, msg)); \
+  if (!dcn_context) { \
+    const char* msg = "Provided dnc_context is null"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
+  } \
+  if (!dcn_context->dc_context) { \
+    const char* msg = "Provided dc_context is null, did you close the context or not open it?"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
   }
 
 

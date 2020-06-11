@@ -455,6 +455,9 @@ function dc (fn) {
       dc.close()
       end()
     }
+    t.endWithoutClose = () => {
+      end()
+    }
 
     t.is(dc.isOpen(), false, 'context database is not open')
     dc.on('ALL', console.log)
@@ -485,3 +488,19 @@ test('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
     t.end()
   })
 }))
+
+test.only('calling a method without an open context should fail with an error', dc(async (t, dc) => {
+  await dc.close()
+  t.pass('successfully closed context')
+
+  let threw = false
+  try {
+    dc.getConfig('addr')
+  } catch(err) {
+    threw = true
+  }
+  t.ok(threw === true, "Call to dc method after context got unrefed failed")
+
+  t.pass('Yeyy no segmentation fault :)')
+  t.endWithoutClose()
+})) 
