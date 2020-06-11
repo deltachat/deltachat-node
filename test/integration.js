@@ -3,8 +3,6 @@ const test = require('tape')
 const tempy = require('tempy')
 const path = require('path')
 
-let dc = null
-
 if (typeof process.env.DC_ADDR !== 'string') {
   console.error('Missing DC_ADDR environment variable!')
   process.exit(1)
@@ -20,8 +18,34 @@ const SERVER = ADDR.split('@')[1]
 const STARTTLS_FLAGS = '65792' // IMAP_SOCKET_STARTTLS & SMTP_SOCKET_STARTTLS
 const SSL_FLAGS = '131584' // IMAP_SOCKET_SSL & SMTP_SOCKET_SSL
 
+function dc (fn) {
+  return async t => {
+    const dc = new DeltaChat()
+    const cwd = tempy.directory()
+    const end = t.end.bind(t)
+
+    t.end = () => {
+      //dc.stopIO()
+      dc.close()
+      end()
+    }
+    t.endWithoutClose = () => {
+      end()
+    }
+
+    t.is(dc.isOpen(), false, 'context database is not open')
+    dc.on('ALL', console.log)
+
+    await dc.open(cwd)
+
+    t.is(dc.isOpen(), true, 'context database is open')
+    t.is(dc.isConfigured(), false, 'should not be configured')
+    fn(t, dc, cwd)
+  }
+}
+
 function configureDefaultDC (dc) {
-  dc.configure({
+  return dc.configure({
     addr: ADDR,
 
     mail_server: SERVER,
@@ -46,7 +70,7 @@ function configureDefaultDC (dc) {
 }
 
 function updateConfigurationDC (dc) {
-  dc.configure({
+  return dc.configure({
     addr: ADDR,
 
     mail_server: SERVER,
@@ -76,11 +100,10 @@ function updateConfigurationDC (dc) {
 // 3. test setting up context with e2ee_enabled set to false + close
 // 4. test opening an already configured account (re-open above)
 
-test('setUp dc context', t => {
-  t.plan(21)
-  const cwd = tempy.directory()
-  dc = new DeltaChat()
-  dc.once('ready', () => {
+test('setUp dc context', dc(async (t, dc, cwd) => {
+  t.plan(23)
+  dc.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
+    t.ok(true, 'Received DCN_EVENT_CONFIGURE_SUCCESSFUL event')
     t.is(dc.getConfig('addr'), ADDR, 'addr correct')
     t.is(dc.getConfig('mail_server'), SERVER, 'mailServer correct')
     t.is(dc.getConfig('mail_user'), ADDR, 'mailUser correct')
@@ -110,12 +133,15 @@ test('setUp dc context', t => {
     )
     t.is(dc.isConfigured(), true, 'is configured')
 
-    dc.once('ready', () => {
+    dc.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
       t.is(dc.getConfig('displayname'), 'Delta Two', 'updated displayName correct')
       t.is(dc.getConfig('server_flags'), SSL_FLAGS, 'updated server flags correct')
+      t.end()
     })
-    updateConfigurationDC(dc)
+    t.comment('Updating configuration')
+    await updateConfigurationDC(dc)
   })
+  dc.on('DCN_EVENT_CONFIGURE_FAILED', () => t.fail('configure failed, probably the provided DC_ADDR & DC_MAIL_PW are not correct?'))
   dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
     t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
   })
@@ -127,67 +153,46 @@ test('setUp dc context', t => {
     console.error('DC_EVENT_ERROR_NETWORK', error)
     process.exit(1)
   })
-  dc.on('ALL', (event, data1, data2) => {
-    console.log('ALL', event, data1, data2)
-  })
-  dc.open(cwd, err => {
-    t.error(err, 'no error during open')
-    t.is(dc.isConfigured(), false, 'should not be configured')
-    configureDefaultDC(dc)
-  })
-})
+  // dc.on('ALL', (event, data1, data2) => console.log('ALL', event, data1, data2))
 
-test('static getConfig()', t => {
-  const info = dc.getInfo()
-  const dir = info.database_dir
-  DeltaChat.getConfig(dir, (err, config) => {
-    t.error(err, 'no error')
-    t.is(config.addr, ADDR)
-    t.end()
-  })
-})
+  t.comment('Opening context')
+  //t.is(dc.isConfigured(), false, 'should not be configured')
+  await configureDefaultDC(dc)
+}))
+
 
 // TODO send text message to chat, check message count and
 // delivered status etc
 // TODO test dc.createChatByMsgId()
 
-test.skip('key transfer', t => {
-  t.timeoutAfter(900)
+test.only('key transfer', dc(async (t, dc, cwd) => {
 
   // Spawn a second dc instance with same account
+  dc.on('ALL', (event, data1, data2) => console.log('ACC1', event, data1, data2))
+  await configureDefaultDC(dc)
+  dc.startIO()
   const dc2 = new DeltaChat()
-
-  dc2.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+  await dc2.open(tempy.directory())
+  let setupCode = null
+  dc.on('DC_EVENT_MSGS_CHANGED', async (chatId, msgId) => {
     t.comment('incoming msg')
+    const messages = dc.getChatMessages(chatId, 0, 0)
+    t.ok(messages.indexOf(msgId) !== -1, 'msgId is in chat messages')
+    const result = await dc.continueKeyTransfer(msgId, setupCode)
+    t.ok(result === true, 'continueKeyTransfer was successful')
+    dc2.stopIO()
     dc2.close()
+    dc.stopIO()
     t.end()
   })
 
-  dc2.once('ready', () => {
-    dc.initiateKeyTransfer((err, setupCode) => {
-      t.error(err, 'no err')
-      t.is(typeof setupCode, 'string', 'setupCode is string')
-    })
-  })
-
-  dc2.open(tempy.directory(), err => {
-    t.error(err, 'no err')
-    configureDefaultDC(dc2)
-  })
-})
-
-test('initiate key transfer', t => {
-  dc.initiateKeyTransfer((err, setupCode) => {
-    t.error(err, 'no err')
+  dc2.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
+    setupCode = await dc2.initiateKeyTransfer()
+    t.comment('setupCode is: ' + setupCode)
     t.is(typeof setupCode, 'string', 'setupCode is string')
-    t.end()
   })
-})
+  dc2.on('ALL', (event, data1, data2) => console.log('ACC2', event, data1, data2))
+  await configureDefaultDC(dc2)
+  dc2.startIO()
 
-test('tearDown dc context', t => {
-  console.time('dc.close')
-  dc.close(() => {
-    console.timeEnd('dc.close')
-    t.end()
-  })
-})
+}))

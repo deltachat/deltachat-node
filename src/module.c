@@ -9,7 +9,6 @@
 #include <deltachat-ffi/deltachat.h>
 #include "napi-macros-extensions.h"
 
-#define DEBUG
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
 #else

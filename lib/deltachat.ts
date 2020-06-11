@@ -70,20 +70,17 @@ export class DeltaChat extends EventEmitter {
     }
     debug('unrefing context')
     binding.dcn_context_unref(this.dcn_context)
-
-    debug('Stopping event handler...')
-    this.dcn_context = null
     debug('Unref end')
+
     this._isOpen = false
   }
 
+  emit(event: string | symbol, ...args: any[]): boolean {
+    super.emit('ALL', event, ...args)
+    return super.emit(event, ...args)
+  }
+
   handleCoreEvent(eventId: number, data1: number, data2: number | string) {
-    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
-      this.emit('DCN_EVENT_CONFIGURE_SUCCESSFUL')
-    }
-    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
-      this.emit('DCN_EVENT_CONFIGURE_FAILED')
-    }
     const eventString = EventId2EventName[eventId]
     debug(eventString, data1, data2)
     if (!this.emit) {
@@ -91,8 +88,13 @@ export class DeltaChat extends EventEmitter {
       console.log(eventString, data1, data2)
       return
     }
-    this.emit('ALL', eventString, data1, data2)
     this.emit(eventString, data1, data2)
+    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
+      this.emit('DCN_EVENT_CONFIGURE_SUCCESSFUL')
+    }
+    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
+      this.emit('DCN_EVENT_CONFIGURE_FAILED')
+    }
   }
 
   startIO() {
@@ -241,13 +243,13 @@ export class DeltaChat extends EventEmitter {
   }
 
   continueKeyTransfer(messageId: number, setupCode: string) {
-    debug(`continueKeyTransfer2 ${messageId}`)
+    debug(`continueKeyTransfer ${messageId}`)
     return new Promise((resolve, reject) => {
       binding.dcn_continue_key_transfer(
         this.dcn_context,
         Number(messageId),
         setupCode,
-        resolve
+        (result) => resolve(result === 1)
       )
     })
   }
@@ -610,7 +612,7 @@ export class DeltaChat extends EventEmitter {
   initiateKeyTransfer(): Promise<string> {
     return new Promise((resolve, reject) => {
       debug('initiateKeyTransfer2')
-      return binding.dcn_initiate_key_transfer(this.dcn_context, resolve)
+      binding.dcn_initiate_key_transfer(this.dcn_context, resolve)
     })
   }
 
@@ -740,8 +742,13 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  setConfig(key: string, value: string): number {
-    debug(`setConfig ${key} ${value}`)
+  setConfig(key: string, value: string | boolean | number): number {
+    debug(`setConfig (string) ${key} ${value}`)
+    if (typeof value === 'boolean') {
+      value = value === true ? '1' : '0'
+    } else if (typeof value === 'number') {
+      value = String(value)
+    }
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
