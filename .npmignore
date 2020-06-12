@@ -4,6 +4,9 @@
 .travis.yml
 appveyor.yml
 build/
+build2/
+node_modules
+.git
 ci_scripts/
 coverage/
 deltachat-core-rust/.circleci
