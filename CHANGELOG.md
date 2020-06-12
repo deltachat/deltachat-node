@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.35.0] - 2019-06-12
+- Update deltachat-core-rust
+- We changed the api quite a bit, all methods are now async/await. Please
+  check the typedocs for changes.
+
 ## [1.34.0] - 2019-06-08
 
 ### Changed
@@ -1023,7 +1028,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.34.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.35.0...HEAD
+
+[1.35.0]: https://github.com/deltachat/deltachat-node/compare/v1.34.0...v1.35.0
 
 [1.34.0]: https://github.com/deltachat/deltachat-node/compare/v1.33.0...v1.34.0
 
