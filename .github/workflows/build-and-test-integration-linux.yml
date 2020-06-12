@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build-and-test:
-    name: "Build & Test E2E"
+    name: "Build & Test integration"
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
         run: npm run test
 
       - name: Test integration
-        run: npm run test-e2e
+        run: npm run test-integration
         env:
           DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
 
