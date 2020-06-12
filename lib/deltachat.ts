@@ -852,7 +852,7 @@ export class DeltaChat extends EventEmitter {
   static async createTempUser(url: string) {
     const fetch = require('node-fetch')
 
-    async function postData (url = '') {
+    async function postData(url = '') {
       // Default options are marked with *
       const response = await fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -860,9 +860,9 @@ export class DeltaChat extends EventEmitter {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, *same-origin, omit
         headers: {
-          'cache-control': 'no-cache'
+          'cache-control': 'no-cache',
         },
-        referrerPolicy: 'no-referrer' // no-referrer, *client
+        referrerPolicy: 'no-referrer', // no-referrer, *client
       })
       return response.json() // parses JSON response into native JavaScript objects
     }
