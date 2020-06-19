@@ -90,9 +90,9 @@ jobs:
         run: |
           ls -lah
           mkdir prebuilds
-          tar -xvzf ubuntu-16.04.tar.gz -C prebuilds
-          tar -xvzf macos-latest.tar.gz -C prebuilds
-          tar -xvzf windows-latest.tar.gz -C prebuilds
+          tar -xvzf ubuntu-16.04/ubuntu-16.04.tar.gz -C prebuilds
+          tar -xvzf macos-latest/macos-latest.tar.gz -C prebuilds
+          tar -xvzf windows-latest/windows-latest.tar.gz -C prebuilds
           tree prebuilds
       - name: build typescript part
         run: npm run build:bindings:ts
