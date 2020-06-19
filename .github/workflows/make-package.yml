@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - name: install tree
-        run: apt install tree
+        run: sudo apt install tree
       - name: Checkout
         uses: actions/checkout@v2
       - name: System info
