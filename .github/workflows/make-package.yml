@@ -63,6 +63,8 @@ jobs:
     name: 'Package the node_module and upload as artifact for testing'
     runs-on: ubuntu-16.04
     steps:
+      - name: install tree
+        run: apt install tree
       - name: Checkout
         uses: actions/checkout@v2
       - name: System info
@@ -94,6 +96,8 @@ jobs:
           tar -xvzf macos-latest/macos-latest.tar.gz -C prebuilds
           tar -xvzf windows-latest/windows-latest.tar.gz -C prebuilds
           tree prebuilds
+      - name: install dependencies without running scripts
+        run: npm install --ignore-scripts
       - name: build typescript part
         run: npm run build:bindings:ts
       - name: package
