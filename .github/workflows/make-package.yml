@@ -59,6 +59,7 @@ jobs:
           path: ${{ matrix.os }}.tar.gz
 
   pack-module:
+    needs: prebuild
     name: 'Package the node_module and upload as artifact for testing'
     runs-on: ubuntu-16.04
     steps:
