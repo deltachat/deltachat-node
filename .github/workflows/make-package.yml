@@ -1,9 +1,9 @@
-name: 'Linux'
+name: 'Make Package'
 on: push
 
 jobs:
   prebuild:
-    name: 'Upload Prebuild'
+    name: 'Prebuild'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
