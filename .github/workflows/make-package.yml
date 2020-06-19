@@ -100,7 +100,8 @@ jobs:
         run: |
         npm pack .
         ls -lah
-        mv $(find deltachat-node-*) deltachat-node.tgz
+      - name: rename file
+        run: "mv $(find deltachat-node-*) deltachat-node.tgz"
       - name: Upload Prebuild
         uses: actions/upload-artifact@v1
         with:
