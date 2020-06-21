@@ -23,22 +23,23 @@ jobs:
         run: npm run submodule
 
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ${{ env.APPDATA }}/npm-cache # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: |
+            ${{ env.APPDATA }}/npm-cache
+            ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
 
       - name: Cache cargo index
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.cargo/git
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git
+            deltachat-core-rust/target
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Cache cargo build
-        uses: actions/cache@v1
-        with:
-          path: deltachat-core-rust/target
-          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install dependencies & build
         if: steps.cache.outputs.cache-hit != 'true'
