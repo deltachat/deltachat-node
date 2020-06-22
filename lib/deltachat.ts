@@ -752,6 +752,15 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
+  estimateDeletionCount(fromServer: boolean, seconds: number): number {
+    debug(`estimateDeletionCount fromServer: ${fromServer} seconds: ${seconds}`)
+    return binding.dcn_estimate_deletion_cnt(
+      this.dcn_context,
+      fromServer === true ? 1 : 0,
+      seconds
+    )
+  }
+
   setStockTranslation(stockId: number, stockMsg: string) {
     debug(`setStockTranslation ${stockId} ${stockMsg}`)
     return Boolean(
