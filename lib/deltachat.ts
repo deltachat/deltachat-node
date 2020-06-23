@@ -632,12 +632,11 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  joinSecurejoin(qrCode: string, callback: (result: number) => void) {
+  joinSecurejoin(qrCode: string) : Promise<number> {
     debug(`joinSecurejoin ${qrCode}`)
-    if (!callback || typeof callback !== 'function') {
-      throw new Error('callback required')
-    }
-    binding.dcn_join_securejoin(this.dcn_context, qrCode, callback)
+    return new Promise((resolve, reject) => {
+      binding.dcn_join_securejoin(this.dcn_context, qrCode, resolve)
+    })
   }
 
   lookupContactIdByAddr(addr: string) {
