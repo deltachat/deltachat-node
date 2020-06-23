@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- We asyncified the joinSecurejoin() function, it now returns a Promise
+
 ## [1.35.0] - 2019-06-12
 - Update deltachat-core-rust
 - We changed the api quite a bit, all methods are now async/await. Please
