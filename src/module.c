@@ -1329,6 +1329,18 @@ NAPI_METHOD(dcn_set_config) {
   NAPI_RETURN_INT32(status);
 }
 
+NAPI_METHOD(dcn_estimate_deletion_cnt) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_INT32(from_server, 1);
+  NAPI_ARGV_INT32(seconds, 2);
+
+  int result = dc_estimate_deletion_cnt (dcn_context->dc_context, from_server, seconds);
+
+  NAPI_RETURN_INT32(result);
+}
+
+
 NAPI_METHOD(dcn_set_draft) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -2557,6 +2569,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_mute_duration);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
+  NAPI_EXPORT_FUNCTION(dcn_estimate_deletion_cnt);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_stock_translation);
   NAPI_EXPORT_FUNCTION(dcn_star_msgs);

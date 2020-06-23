@@ -197,9 +197,14 @@ export class DeltaChat extends EventEmitter {
     return new Promise((resolve, reject) => {
       debug('configure')
       if (this._isOpen !== true) {
-        throw new Error(
-          "Can't start configuring unless we have an open context"
+        return reject(
+          new Error("Can't start configuring unless we have an open context")
         )
+      }
+
+      let error = null
+      const onError = (data1, data2) => {
+        error = data2
       }
 
       const onSuccess = () => {
@@ -211,23 +216,16 @@ export class DeltaChat extends EventEmitter {
         reject(error)
       }
 
-      let error = null
-      const onError = (data1, data2) => {
-        error = data2
-      }
-
       const removeListeners = () => {
         this.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
         this.removeListener('DCN_EVENT_CONFIGURE_FAILED', onFail)
         this.removeListener('DC_EVENT_ERROR', onError)
-        this.removeListener('DC_EVENT_ERROR_NETWORK', onError)
       }
 
       const registerListeners = () => {
         this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
         this.once('DCN_EVENT_CONFIGURE_FAILED', onFail)
         this.on('DC_EVENT_ERROR', onError)
-        this.on('DC_EVENT_ERROR_NETWORK', onError)
       }
 
       registerListeners()
@@ -632,12 +630,25 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  joinSecurejoin(qrCode: string, callback: (result: number) => void) {
+  /**
+   *
+   * @returns {Promise<number>} Promise that resolves into the resulting chat id
+   */
+  joinSecurejoin(qrCode: string): Promise<number> {
     debug(`joinSecurejoin ${qrCode}`)
-    if (!callback || typeof callback !== 'function') {
-      throw new Error('callback required')
-    }
-    binding.dcn_join_securejoin(this.dcn_context, qrCode, callback)
+    return new Promise((resolve, reject) => {
+      binding.dcn_join_securejoin(
+        this.dcn_context,
+        qrCode,
+        (result: number) => {
+          if (result !== 0) {
+            resolve(result)
+          } else {
+            reject('The out-of-band verification failed or was aborted')
+          }
+        }
+      )
+    })
   }
 
   lookupContactIdByAddr(addr: string) {
@@ -750,6 +761,15 @@ export class DeltaChat extends EventEmitter {
       value = String(value)
     }
     return binding.dcn_set_config(this.dcn_context, key, value || '')
+  }
+
+  estimateDeletionCount(fromServer: boolean, seconds: number): number {
+    debug(`estimateDeletionCount fromServer: ${fromServer} seconds: ${seconds}`)
+    return binding.dcn_estimate_deletion_cnt(
+      this.dcn_context,
+      fromServer === true ? 1 : 0,
+      seconds
+    )
   }
 
   setStockTranslation(stockId: number, stockMsg: string) {

@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - convert all colors to be hex-string instead of int (#450)
+- We asyncified the joinSecurejoin() function, it now returns a Promise
 
 ## [1.35.0] - 2019-06-12
 - Update deltachat-core-rust
