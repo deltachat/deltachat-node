@@ -633,19 +633,23 @@ export class DeltaChat extends EventEmitter {
   }
 
   /**
-   * 
+   *
    * @returns {Promise<number>} Promise that resolves into the resulting chat id
    */
-  joinSecurejoin(qrCode: string) : Promise<number> {
+  joinSecurejoin(qrCode: string): Promise<number> {
     debug(`joinSecurejoin ${qrCode}`)
     return new Promise((resolve, reject) => {
-      binding.dcn_join_securejoin(this.dcn_context, qrCode, (result:number)=>{
-        if(result !== 0){
-          resolve(result)
-        } else {
-          reject("The out-of-band verification failed or was aborted")
+      binding.dcn_join_securejoin(
+        this.dcn_context,
+        qrCode,
+        (result: number) => {
+          if (result !== 0) {
+            resolve(result)
+          } else {
+            reject('The out-of-band verification failed or was aborted')
+          }
         }
-      })
+      )
     })
   }
 
