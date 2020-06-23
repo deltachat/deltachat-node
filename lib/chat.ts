@@ -4,6 +4,7 @@ import binding from '../binding'
 import rawDebug from 'debug'
 const debug = rawDebug('deltachat:node:chat')
 import { C } from './constants'
+import { integerToHexColor } from './util'
 
 interface NativeChat {}
 /**
@@ -26,8 +27,8 @@ export class Chat {
     return binding.dcn_chat_get_archived(this.dc_chat)
   }
 
-  getColor(): number {
-    return binding.dcn_chat_get_color(this.dc_chat)
+  get color(): string {
+    return integerToHexColor(binding.dcn_chat_get_color(this.dc_chat))
   }
 
   getId(): number {
@@ -80,7 +81,7 @@ export class Chat {
     return {
       archived: visibility === C.DC_CHAT_VISIBILITY_ARCHIVED,
       pinned: visibility === C.DC_CHAT_VISIBILITY_PINNED,
-      color: this.getColor(),
+      color: this.color,
       id: this.getId(),
       name: this.getName(),
       profileImage: this.getProfileImage(),

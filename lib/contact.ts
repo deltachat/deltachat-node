@@ -1,3 +1,5 @@
+import { integerToHexColor } from './util'
+
 /* eslint-disable camelcase */
 
 const binding = require('../binding')
@@ -16,7 +18,7 @@ export class Contact {
     debug('toJson')
     return {
       address: this.getAddress(),
-      color: this.getColor(),
+      color: this.color,
       displayName: this.getDisplayName(),
       firstName: this.getFirstName(),
       id: this.getId(),
@@ -32,8 +34,8 @@ export class Contact {
     return binding.dcn_contact_get_addr(this.dc_contact)
   }
 
-  getColor(): number {
-    return binding.dcn_contact_get_color(this.dc_contact)
+  get color(): string {
+    return integerToHexColor(binding.dcn_contact_get_color(this.dc_contact))
   }
 
   getDisplayName(): string {

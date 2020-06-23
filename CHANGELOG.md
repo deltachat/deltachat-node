@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- convert all colors to be hex-string instead of int (#450)
+
 ## [1.35.0] - 2019-06-12
 - Update deltachat-core-rust
 - We changed the api quite a bit, all methods are now async/await. Please
