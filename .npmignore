@@ -11,6 +11,7 @@ ci_scripts/
 coverage/
 deltachat-core-rust/.circleci
 deltachat-core-rust/.git
+deltachat-core-rust/.github
 deltachat-core-rust/.gitattributes
 deltachat-core-rust/appveyor.yml
 deltachat-core-rust/ci/
@@ -22,3 +23,6 @@ images/
 test/
 windows.md
 *.tar.gz
+old_docs.md
+.vscode/
+.github/
