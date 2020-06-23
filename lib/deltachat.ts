@@ -197,9 +197,14 @@ export class DeltaChat extends EventEmitter {
     return new Promise((resolve, reject) => {
       debug('configure')
       if (this._isOpen !== true) {
-        throw new Error(
-          "Can't start configuring unless we have an open context"
+        return reject(
+          new Error("Can't start configuring unless we have an open context")
         )
+      }
+
+      let error = null
+      const onError = (data1, data2) => {
+        error = data2
       }
 
       const onSuccess = () => {
@@ -211,23 +216,16 @@ export class DeltaChat extends EventEmitter {
         reject(error)
       }
 
-      let error = null
-      const onError = (data1, data2) => {
-        error = data2
-      }
-
       const removeListeners = () => {
         this.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
         this.removeListener('DCN_EVENT_CONFIGURE_FAILED', onFail)
         this.removeListener('DC_EVENT_ERROR', onError)
-        this.removeListener('DC_EVENT_ERROR_NETWORK', onError)
       }
 
       const registerListeners = () => {
         this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
         this.once('DCN_EVENT_CONFIGURE_FAILED', onFail)
         this.on('DC_EVENT_ERROR', onError)
-        this.on('DC_EVENT_ERROR_NETWORK', onError)
       }
 
       registerListeners()
