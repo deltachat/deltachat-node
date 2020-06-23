@@ -2,10 +2,21 @@
 
 ## [Unreleased][unreleased]
 
+## [1.39.0] - 2019-06-24
+
+### Changed
+
+- Update deltachat-core-rust to v1.39.0
 - convert all colors to be hex-string instead of int (#450)
 - We asyncified the joinSecurejoin() function, it now returns a Promise
 
+### Fixed
+
+- Fix configure not throwing a real error on `DC_EVENT_ERROR`
+- Fixed postinstall script on windows (should now build on windows again)
+
 ## [1.35.0] - 2019-06-12
+
 - Update deltachat-core-rust
 - We changed the api quite a bit, all methods are now async/await. Please
   check the typedocs for changes.
@@ -14,7 +25,7 @@
 
 ### Changed
 
-- Update deltachat-core-rust to 2ad014faf41e530cecfe6020e7a548726b5ae699
+- Update deltachat-core-rust to [`2ad014f`](https://github.com/deltachat/deltachat-node/commit/2ad014faf41e530cecfe6020e7a548726b5ae699)
 - We're now using the async version of the core, this means that some api has
   changed. Please see the example in the README and the typescript function
   documentation on what has changed.
@@ -1031,7 +1042,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.35.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.39.0...HEAD
+
+[1.39.0]: https://github.com/deltachat/deltachat-node/compare/v1.35.0...v1.39.0
 
 [1.35.0]: https://github.com/deltachat/deltachat-node/compare/v1.34.0...v1.35.0
 

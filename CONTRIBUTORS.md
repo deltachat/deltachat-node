@@ -4,9 +4,9 @@
 | :-------------------- | :----------------------------------------------- |
 | **Lars-Magnus Skog**  |                                                  |
 | **jikstra**           |                                                  |
+| **Simon Laux**        | [**@Simon-Laux**](https://github.com/Simon-Laux) |
 | **Nico de Haen**      |                                                  |
 | **Jikstra**           | [**@Jikstra**](https://github.com/Jikstra)       |
-| **Simon Laux**        | [**@Simon-Laux**](https://github.com/Simon-Laux) |
 | **B. Petersen**       |                                                  |
 | **Karissa McKelvey**  | [**@karissa**](https://github.com/karissa)       |
 | **developer**         |                                                  |
