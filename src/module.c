@@ -759,6 +759,49 @@ NAPI_METHOD(dcn_get_chat_msgs) {
   return js_array;
 }
 
+NAPI_METHOD(dcn_get_chat_msgs2) {
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_UINT32(flags, 2);
+  NAPI_ARGV_UINT32(marker1before, 3);
+
+  //TRACE("calling..");
+  dc_array_t* msg_ids = dc_get_chat_msgs(dcn_context->dc_context,
+                                         chat_id,
+                                         flags,
+                                         marker1before);
+  napi_value js_array;
+
+  const int length = dc_array_get_cnt(msg_ids);
+  NAPI_STATUS_THROWS(napi_create_array_with_length(env, length, &js_array));
+
+  if (length > 0) {
+    for (int i = 0; i < length; i++) {
+      const uint32_t id = dc_array_get_id(msg_ids, i);
+      napi_value napi_id;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, id, &napi_id));
+      napi_value msgObject;
+      NAPI_STATUS_THROWS(napi_create_object(env, &msgObject));
+
+      napi_value id_uint32;
+      NAPI_STATUS_THROWS(napi_create_uint32(env, id, &id_uint32));
+      NAPI_STATUS_THROWS(napi_set_named_property(env, msgObject, "id", id_uint32));
+
+      if (id == DC_MSG_ID_DAYMARKER) {
+        const uint32_t timestamp = dc_array_get_timestamp(msg_ids, i);
+        napi_value timestamp_uint32;
+        NAPI_STATUS_THROWS(napi_create_uint32(env, timestamp, &timestamp_uint32));
+        NAPI_STATUS_THROWS(napi_set_named_property(env, msgObject, "timestamp", timestamp_uint32));
+      }
+
+      NAPI_STATUS_THROWS(napi_set_element(env, js_array, i, msgObject));
+    }
+  }
+
+  return js_array;
+}
+
 NAPI_METHOD(dcn_get_chatlist) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();

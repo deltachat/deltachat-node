@@ -382,6 +382,16 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
+  getChatMessages2(chatId: number, flags, marker1before) {
+    debug(`getChatMessages2 ${chatId} ${flags} ${marker1before}`)
+    return binding.dcn_get_chat_msgs2(
+      this.dcn_context,
+      Number(chatId),
+      flags,
+      marker1before
+    )
+  }
+
   getChats(listFlags: number, queryStr: string, queryContactId: number) {
     debug('getChats')
     const result = []
