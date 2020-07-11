@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+## [1.40.0] - 2019-07-11
+
+### Changed
+
+- Update deltachat-core-rust to v1.40.0
+- Implement ephermeral methods
+
 ## [1.39.0] - 2019-06-24
 
 ### Changed
