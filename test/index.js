@@ -1,4 +1,5 @@
 const DeltaChat = require('../dist/index').default
+const { C } = require('../dist/constants')
 const test = require('tape')
 const tempy = require('tempy')
 const path = require('path')
@@ -496,14 +497,15 @@ test('dc.getProviderFromEmail("example@example.com")', t => {
   t.end()
 })
 
-test('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
+test.skip('dc.getProviderFromEmail("example@example.com")', dc((t, dc) => {
   dc.joinSecurejoin('test', (chatId) => {
     t.is(chatId, 0, 'chatId should be zero as we didn\'t pass a valid qrString')
     t.end()
   })
 }))
 
-test.only('calling a method without an open context should fail with an error', dc(async (t, dc) => {
+
+test('calling a method without an open context should fail with an error', dc(async (t, dc) => {
   await dc.close()
   t.pass('successfully closed context')
 
@@ -518,3 +520,4 @@ test.only('calling a method without an open context should fail with an error', 
   t.pass('Yeyy no segmentation fault :)')
   t.endWithoutClose()
 })) 
+

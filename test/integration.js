@@ -1,4 +1,5 @@
 const DeltaChat = require('../').default
+const { C } = require('../dist/constants')
 const test = require('tape')
 const tempy = require('tempy')
 const path = require('path')
@@ -144,7 +145,7 @@ async function main() {
   // delivered status etc
   // TODO test dc.createChatByMsgId()
 
-  test.only('key transfer', dc(async (t, dc, cwd) => {
+  test('key transfer', dc(async (t, dc, cwd) => {
     // Spawn a second dc instance with same account
     dc.on('ALL', (event, data1, data2) => console.log('ACC1', event, data1, data2))
     await configureDefaultDC(dc)
@@ -172,6 +173,43 @@ async function main() {
     dc2.on('ALL', (event, data1, data2) => console.log('ACC2', event, data1, data2))
     await configureDefaultDC(dc2)
     dc2.startIO()
+  }))
+
+  test.only('exporting and reimporting private keys', dc(async (t, dc) => {
+    await configureDefaultDC(dc)
+    const cwd = tempy.directory()
+    const onError = (data1, data2) => {
+      t.fail('Catched error event: ' + data2)
+      t.end()
+    }
+
+    const onImexError = (data1, data2) => {
+      if(data1 === 0) {
+        t.fail('Error on imex')
+        t.end()
+      }
+    }
+    const onSuccessfulImport = (data1, data2) => {
+      if (data1 === 1000) {
+        t.commend('Successfully imported backup')
+        t.end()
+      }
+    }
+
+    const onSuccessfulExport = (data1, data2) => {
+      console.log(data1, data2)
+      if (data1 === 1000) {
+        t.comment('Successfully exported backup')
+	dc.removeListener('DC_EVENT_IMEX_PROGRESS', onSuccessfulExport)
+	dc.on('DC_EVENT_IMEX_PROGRESS', onSuccessfulImport)
+        dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, cwd)
+      }
+    }
+ 
+    dc.on('DC_EVENT_ERROR', onError)
+    dc.on('DC_EVENT_IMEX_PROGRESS', onImexError)
+    dc.on('DC_EVENT_IMEX_PROGRESS', onSuccessfulExport)
+    dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, cwd)
   }))
 
 }
