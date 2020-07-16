@@ -393,6 +393,10 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
+  getChatSummary(chat:Chat):Lot{
+      return new Lot(binding.dcn_chat_get_summary(this.dcn_context, chat.dc_chat))
+  }
+
   getChatList(listFlags: number, queryStr: string, queryContactId: number) {
     listFlags = listFlags || 0
     queryStr = queryStr || ''

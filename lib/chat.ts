@@ -5,6 +5,7 @@ import rawDebug from 'debug'
 const debug = rawDebug('deltachat:node:chat')
 import { C } from './constants'
 import { integerToHexColor } from './util'
+import { Lot } from './lot'
 
 interface NativeChat {}
 /**

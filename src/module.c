@@ -1526,6 +1526,29 @@ NAPI_METHOD(dcn_chat_get_type) {
   NAPI_RETURN_INT32(type);
 }
 
+NAPI_METHOD(dcn_chat_get_summary) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+
+  //TRACE("calling..");
+  dc_chat_t* dc_chat = NULL;
+  napi_get_value_external(env, argv[1], (void**)&dc_chat);
+
+  dc_lot_t* summary = dc_chat_get_summary(dcn_context->dc_context, dc_chat);
+
+  napi_value result;
+  if (summary == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, summary,
+                                            finalize_lot,
+                                            NULL, &result));
+  }
+  //TRACE("done");
+
+  return result;
+}
+
 NAPI_METHOD(dcn_chat_is_self_talk) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -2613,6 +2636,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_get_name);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_profile_image);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
+  NAPI_EXPORT_FUNCTION(dcn_chat_get_summary);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_verified);
