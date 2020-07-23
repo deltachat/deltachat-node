@@ -1263,6 +1263,47 @@ NAPI_METHOD(dcn_send_msg) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
+NAPI_ASYNC_CARRIER_BEGIN(dcn_send_videochat_invitation)
+  int chat_id;
+  int result;
+NAPI_ASYNC_CARRIER_END(dcn_send_videochat_invitation)
+
+NAPI_ASYNC_EXECUTE(dcn_send_videochat_invitation) {
+  NAPI_ASYNC_GET_CARRIER(dcn_send_videochat_invitation)
+  carrier->result = dc_send_videochat_invitation(
+    carrier->dcn_context->dc_context,
+    carrier->chat_id
+  );
+}
+
+NAPI_ASYNC_COMPLETE(dcn_send_videochat_invitation) {
+  NAPI_ASYNC_GET_CARRIER(dcn_send_videochat_invitation)
+  if (status != napi_ok) {
+    napi_throw_type_error(env, NULL, "Execute callback failed.");
+    return;
+  }
+
+#define DCN_SEND_VIDEO_CHAT_CALLBACK_ARGC 1
+
+  const int argc = DCN_SEND_VIDEO_CHAT_CALLBACK_ARGC;
+  napi_value argv[DCN_SEND_VIDEO_CHAT_CALLBACK_ARGC];
+  NAPI_STATUS_THROWS(napi_create_int32(env, carrier->result, &argv[0]));
+
+  NAPI_ASYNC_CALL_AND_DELETE_CB()
+  free(carrier);
+}
+
+NAPI_METHOD(dcn_send_videochat_invitation) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ASYNC_NEW_CARRIER(dcn_send_videochat_invitation);
+  carrier->chat_id = chat_id;
+
+  NAPI_ASYNC_QUEUE_WORK(dcn_send_videochat_invitation, argv[2]);
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_set_chat_name) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -2051,6 +2092,20 @@ NAPI_METHOD(dcn_msg_get_viewtype) {
   NAPI_RETURN_INT32(type);
 }
 
+NAPI_METHOD(dcn_msg_get_videochat_type) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+  int type = dc_msg_get_videochat_type(dc_msg);
+  NAPI_RETURN_INT32(type);
+}
+
+NAPI_METHOD(dcn_msg_get_videochat_url) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+  char* url = dc_msg_get_videochat_url(dc_msg);
+  NAPI_RETURN_AND_UNREF_STRING(url);
+}
+
 NAPI_METHOD(dcn_msg_get_width) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2587,6 +2642,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_remove_contact_from_chat);
   NAPI_EXPORT_FUNCTION(dcn_search_msgs);
   NAPI_EXPORT_FUNCTION(dcn_send_msg);
+  NAPI_EXPORT_FUNCTION(dcn_send_videochat_invitation);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_ephemeral_timer);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_ephemeral_timer);
@@ -2677,6 +2733,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_videochat_type);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_videochat_url);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_location);
