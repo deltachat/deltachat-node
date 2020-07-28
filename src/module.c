@@ -2649,6 +2649,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chatlist_get_cnt);
   NAPI_EXPORT_FUNCTION(dcn_chatlist_get_msg_id);
   NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary);
+  NAPI_EXPORT_FUNCTION(dcn_chatlist_get_summary2);
 
   /**
    * dc_contact_t
