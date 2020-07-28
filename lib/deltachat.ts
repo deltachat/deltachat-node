@@ -372,6 +372,15 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_get_mime_headers(this.dcn_context, Number(messageId))
   }
 
+  getChatlistItemSummary(chatId: number, messageId: number): Lot {
+    debug(`getChatlistItemSummary ${chatId} ${messageId}`)
+    return binding.dcn_chatlist_get_summary2(
+      this.dcn_context,
+      chatId,
+      messageId
+    )
+  }
+
   getChatMessages(chatId: number, flags, marker1before) {
     debug(`getChatMessages ${chatId} ${flags} ${marker1before}`)
     return binding.dcn_get_chat_msgs(
