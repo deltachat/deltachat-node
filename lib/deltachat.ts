@@ -742,6 +742,29 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
   }
 
+  /**
+   *
+   * @returns {Promise<number>} Promise that resolves into the resulting message id
+   */
+  sendVideochatInvitation(chatId: number): Promise<number> {
+    debug(`sendVideochatInvitation ${chatId}`)
+    return new Promise((resolve, reject) => {
+      binding.dcn_send_videochat_invitation(
+        this.dcn_context,
+        chatId,
+        (result: number) => {
+          if (result !== 0) {
+            resolve(result)
+          } else {
+            reject(
+              'Videochatinvitation failed to send, see error events for detailed info'
+            )
+          }
+        }
+      )
+    })
+  }
+
   setChatName(chatId: number, name: string) {
     debug(`setChatName ${chatId} ${name}`)
     return Boolean(

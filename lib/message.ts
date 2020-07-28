@@ -88,6 +88,10 @@ export class MessageViewType {
   isFile() {
     return this.viewType === C.DC_MSG_FILE
   }
+
+  isVideochatInvitation() {
+    return this.viewType === C.DC_MSG_VIDEOCHAT_INVITATION
+  }
 }
 
 interface NativeMessage {}
@@ -124,6 +128,8 @@ export class Message {
         height: this.getHeight(),
         width: this.getWidth(),
       },
+      videochatType: this.getVideochatType(),
+      videochatUrl: this.getVideochatUrl(),
     }
   }
 
@@ -203,6 +209,14 @@ export class Message {
 
   getViewType() {
     return new MessageViewType(binding.dcn_msg_get_viewtype(this.dc_msg))
+  }
+
+  getVideochatType(): number {
+    return binding.dcn_msg_get_videochat_type(this.dc_msg)
+  }
+
+  getVideochatUrl(): string {
+    return binding.dcn_msg_get_videochat_url(this.dc_msg)
   }
 
   getWidth(): number {
