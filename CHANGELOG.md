@@ -2,7 +2,14 @@
 
 ## [Unreleased][unreleased]
 
-## [1.40.0] - 2019-07-11
+## [1.41.0] - 2020-07-11
+
+### Changed
+- add invite call apis
+- add getChatlistItemSummary function
+- updated dcc to `1.41.0`
+
+## [1.40.0] - 2020-07-11
 
 ### Changed
 
@@ -1049,7 +1056,11 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.39.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.41.0...HEAD
+
+[1.41.0]: https://github.com/deltachat/deltachat-node/compare/v1.40.0...v1.41.0
+
+[1.40.0]: https://github.com/deltachat/deltachat-node/compare/v1.39.0...v1.40.0
 
 [1.39.0]: https://github.com/deltachat/deltachat-node/compare/v1.35.0...v1.39.0
 
