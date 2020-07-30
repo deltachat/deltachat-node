@@ -2,9 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Update deltachat-core-rust to 1.42.0
+
 ## [1.41.0] - 2020-07-11
 
 ### Changed
+
 - add invite call apis
 - add getChatlistItemSummary function
 - updated dcc to `1.41.0`
