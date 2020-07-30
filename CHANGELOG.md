@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.42.1] - 2020-07-30
+
+### Changed
+
+- Update deltachat-core-rust to 4e797037c48461284441d43a963ff7810c908f88
+
+## [1.42.0] - 2020-07-30
+
 ### Changed
 
 - Update deltachat-core-rust to 1.42.0
