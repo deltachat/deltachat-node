@@ -19,6 +19,10 @@ deltachat-core-rust/ci_scripts/
 deltachat-core-rust/examples/
 deltachat-core-rust/python/
 deltachat-core-rust/tests/
+deltachat-core-rust/target
+deltachat-core-rust/test-data
+deltachat-core-rust/proptest-regressions
+deltachat-core-rust/assets
 images/
 test/
 windows.md
