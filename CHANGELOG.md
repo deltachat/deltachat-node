@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.45.0] - 2020-03-10
 
 ### Changed
 
@@ -16,7 +16,7 @@
 
 ### Changed
 
-- Update deltachat-core-rust to 4e797037c48461284441d43a963ff7810c908f88
+- Update deltachat-core-rust to [`4e79703`](https://github.com/deltachat/deltachat-node/commit/4e797037c48461284441d43a963ff7810c908f88)
 
 ## [1.42.0] - 2020-07-30
 
@@ -44,7 +44,7 @@
 ### Changed
 
 - Update deltachat-core-rust to v1.39.0
-- convert all colors to be hex-string instead of int (#450)
+- convert all colors to be hex-string instead of int ([#450](https://github.com/deltachat/deltachat-node/issues/450))
 - We asyncified the joinSecurejoin() function, it now returns a Promise
 
 ### Fixed
@@ -1079,7 +1079,17 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.41.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...HEAD
+
+[1.45.0]: https://github.com/deltachat/deltachat-node/compare/v1.44.0...v1.45.0
+
+[1.44.0]: https://github.com/deltachat/deltachat-node/compare/v1.42.1...v1.44.0
+
+[1.43.0]: https://github.com/deltachat/deltachat-node/compare/v1.42.0...v1.43.0
+
+[1.42.1]: https://github.com/deltachat/deltachat-node/compare/v1.42.0...v1.42.1
+
+[1.42.0]: https://github.com/deltachat/deltachat-node/compare/v1.41.0...v1.42.0
 
 [1.41.0]: https://github.com/deltachat/deltachat-node/compare/v1.40.0...v1.41.0
 
