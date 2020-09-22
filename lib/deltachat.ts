@@ -772,7 +772,7 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
-  getChatEphemeralTimer(chatId: number) {
+  getChatEphemeralTimer(chatId: number): number {
     debug(`getChatEphemeralTimer ${chatId}`)
     return binding.dcn_get_chat_ephemeral_timer(
       this.dcn_context,
