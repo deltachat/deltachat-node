@@ -89,12 +89,6 @@ export class DeltaChat extends EventEmitter {
       return
     }
     this.emit(eventString, data1, data2)
-    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 1000) {
-      this.emit('DCN_EVENT_CONFIGURE_SUCCESSFUL')
-    }
-    if (eventId === C.DC_EVENT_CONFIGURE_PROGRESS && data1 === 0) {
-      this.emit('DCN_EVENT_CONFIGURE_FAILED')
-    }
   }
 
   startIO() {
@@ -202,30 +196,27 @@ export class DeltaChat extends EventEmitter {
         )
       }
 
-      let error = null
-      const onError = (data1, data2) => {
-        error = data2
-      }
-
       const onSuccess = () => {
         removeListeners()
         resolve()
       }
-      const onFail = () => {
+      const onFail = (error) => {
         removeListeners()
-        reject(error)
+        reject(new Error(error))
+      }
+
+      const onConfigure = (data1, data2) => {
+	console.log('teeeeeeeeeeeest', data1, data2)
+	if (data1 === 0) return onFail(data2)
+	else if (data1 === 1000) return onSuccess()
       }
 
       const removeListeners = () => {
-        this.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
-        this.removeListener('DCN_EVENT_CONFIGURE_FAILED', onFail)
-        this.removeListener('DC_EVENT_ERROR', onError)
+        this.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
       }
 
       const registerListeners = () => {
-        this.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', onSuccess)
-        this.once('DCN_EVENT_CONFIGURE_FAILED', onFail)
-        this.on('DC_EVENT_ERROR', onError)
+        this.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
       }
 
       registerListeners()
