@@ -224,7 +224,12 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* _c
 
   if DC_EVENT_DATA2_IS_STRING(event_id) {
     char* data2_string = dc_event_get_data2_str(dc_event);
-    status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[2]);
+    // Quick fix for https://github.com/deltachat/deltachat-core-rust/issues/1949
+    if (data2_string != 0) {
+      status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[2]);
+    } else {	
+      status = napi_create_string_utf8(env, "", NAPI_AUTO_LENGTH, &argv[2]);
+    }
     if (status != napi_ok) {
       napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
     }
