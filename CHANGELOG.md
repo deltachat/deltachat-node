@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [1.46.0] - 2020-01-10
 
 ### Changed
 
@@ -9,8 +9,7 @@
 - BREAKING: Remove `DCN_EVENT_CONFIGURE_FAILED` and `DCN_EVENT_CONFIGURE_SUCCESSFUL`
 - BREAKING: Removed deprecated dcn_chat_get_archived and dcn_archive_chat
 
-
-## [1.45.0] - 2020-03-10
+## [1.45.0] - 2020-10-09
 
 ### Changed
 
@@ -1090,6 +1089,8 @@ const { C } = require('deltachat-node')
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
 [unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...HEAD
+
+[1.46.0]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...v1.46.0
 
 [1.45.0]: https://github.com/deltachat/deltachat-node/compare/v1.44.0...v1.45.0
 
