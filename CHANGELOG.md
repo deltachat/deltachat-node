@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Update deltachat-core-rust to 1.46.0
+- BREAKING: There is no `serverFlags` option anymore, use `mail_security` and `send_security`
+- BREAKING: Remove `DCN_EVENT_CONFIGURE_FAILED` and `DCN_EVENT_CONFIGURE_SUCCESSFUL`
+
 ## [1.45.0] - 2020-03-10
 
 ### Changed
