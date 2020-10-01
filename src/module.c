@@ -373,19 +373,6 @@ NAPI_METHOD(dcn_add_device_msg) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
-NAPI_METHOD(dcn_archive_chat) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(chat_id, 1);
-  NAPI_ARGV_INT32(archive, 2);
-
-  //TRACE("calling..");
-  dc_archive_chat(dcn_context->dc_context, chat_id, archive);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_block_contact) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1495,17 +1482,6 @@ NAPI_METHOD(dcn_stop_ongoing_process) {
  * dc_chat_t
  */
 
-NAPI_METHOD(dcn_chat_get_archived) {
-  NAPI_ARGV(1);
-  NAPI_DC_CHAT();
-
-  //TRACE("calling..");
-  int archived = dc_chat_get_archived(dc_chat);
-  //TRACE("result %d", archived);
-
-  NAPI_RETURN_INT32(archived);
-}
-
 NAPI_METHOD(dcn_chat_get_color) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -2613,7 +2589,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
   NAPI_EXPORT_FUNCTION(dcn_add_device_msg);
-  NAPI_EXPORT_FUNCTION(dcn_archive_chat);
   NAPI_EXPORT_FUNCTION(dcn_block_contact);
   NAPI_EXPORT_FUNCTION(dcn_check_qr);
   NAPI_EXPORT_FUNCTION(dcn_configure);
@@ -2689,7 +2664,6 @@ NAPI_INIT() {
    * dc_chat_t
    */
 
-  NAPI_EXPORT_FUNCTION(dcn_chat_get_archived);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_color);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_visibility);
   NAPI_EXPORT_FUNCTION(dcn_chat_get_id);

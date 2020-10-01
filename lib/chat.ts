@@ -22,11 +22,6 @@ export class Chat {
     return binding.dcn_chat_get_visibility(this.dc_chat)
   }
 
-  /** @deprecated */
-  getArchived(): boolean {
-    return binding.dcn_chat_get_archived(this.dc_chat)
-  }
-
   get color(): string {
     return integerToHexColor(binding.dcn_chat_get_color(this.dc_chat))
   }

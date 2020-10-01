@@ -147,12 +147,6 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_add_device_msg(this.dcn_context, label, msg.dc_msg)
   }
 
-  /** @deprecated use setChatVisibility instead */
-  archiveChat(chatId: number, archive: boolean) {
-    debug(`archiveChat ${chatId} ${archive}`)
-    binding.dcn_archive_chat(this.dcn_context, Number(chatId), archive ? 1 : 0)
-  }
-
   setChatVisibility(
     chatId: number,
     visibility:
