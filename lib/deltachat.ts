@@ -206,9 +206,9 @@ export class DeltaChat extends EventEmitter {
       }
 
       const onConfigure = (data1, data2) => {
-	console.log('teeeeeeeeeeeest', data1, data2)
-	if (data1 === 0) return onFail(data2)
-	else if (data1 === 1000) return onSuccess()
+        console.log('teeeeeeeeeeeest', data1, data2)
+        if (data1 === 0) return onFail(data2)
+        else if (data1 === 1000) return onSuccess()
       }
 
       const removeListeners = () => {
