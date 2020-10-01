@@ -80,47 +80,7 @@ async function main() {
   // 4. test opening an already configured account (re-open above)
 
   test('setUp dc context', dc(async (t, dc, cwd) => {
-    t.plan(23)
-    dc.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
-      t.ok(true, 'Received DCN_EVENT_CONFIGURE_SUCCESSFUL event')
-      t.is(dc.getConfig('addr'), ADDR, 'addr correct')
-      t.is(dc.getConfig('mail_server'), SERVER, 'mailServer correct')
-      t.is(dc.getConfig('mail_user'), ADDR, 'mailUser correct')
-      t.is(dc.getConfig('send_server'), SERVER, 'sendServer correct')
-      t.is(dc.getConfig('send_user'), ADDR, 'sendUser correct')
-      t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
-      t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
-      t.is(dc.getConfig('server_flags'), STARTTLS_FLAGS, 'server flags correct')
-      // TODO comment back in once fixed in core
-      // t.is(
-      //   dc.getConfig('selfavatar'),
-      //   path.join(cwd,
-      //             'db.sqlite-blobs',
-      //             'avatar.png'),
-      //   'selfavatar correct'
-      // )
-      t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
-      t.is(dc.getConfig('inbox_watch'), '1', 'inbox_watch')
-      t.is(dc.getConfig('sentbox_watch'), '1', 'sentbox_watch')
-      t.is(dc.getConfig('mvbox_watch'), '1', 'mvbox_watch')
-      t.is(dc.getConfig('mvbox_move'), '1', 'mvbox_move')
-      t.is(dc.getConfig('save_mime_headers'), '1', 'save_mime_headers correct')
-      t.is(
-        dc.getBlobdir(),
-        path.join(cwd, 'db.sqlite-blobs'),
-        'correct blobdir'
-      )
-      t.is(dc.isConfigured(), true, 'is configured')
-
-      dc.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
-        t.is(dc.getConfig('displayname'), 'Delta Two', 'updated displayName correct')
-        t.is(dc.getConfig('server_flags'), SSL_FLAGS, 'updated server flags correct')
-        t.end()
-      })
-      t.comment('Updating configuration')
-      await updateConfigurationDC(dc)
-    })
-    dc.on('DCN_EVENT_CONFIGURE_FAILED', () => t.fail('configure failed, probably the provided DC_ADDR & DC_MAIL_PW are not correct?'))
+    t.plan(17)
     dc.once('DC_EVENT_CONFIGURE_PROGRESS', data => {
       t.pass('DC_EVENT_CONFIGURE_PROGRESS called at least once')
     })
@@ -136,7 +96,40 @@ async function main() {
 
     t.comment('Opening context')
     //t.is(dc.isConfigured(), false, 'should not be configured')
-    await configureDefaultDC(dc)
+    try {
+      await configureDefaultDC(dc)
+    } catch(err) {
+      t.fail('configure failed, probably the provided DC_ADDR & DC_MAIL_PW are not correct?', err)
+    }
+    t.ok(true, 'configure didn\'t throw an error')
+    t.is(dc.getConfig('addr'), ADDR, 'addr correct')
+    t.is(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
+    t.is(dc.getConfig('selfstatus'), 'From Delta One with <3', 'selfStatus correct')
+    // TODO comment back in once fixed in core
+    // t.is(
+    //   dc.getConfig('selfavatar'),
+    //   path.join(cwd,
+    //             'db.sqlite-blobs',
+    //             'avatar.png'),
+    //   'selfavatar correct'
+    // )
+    t.is(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
+    t.is(dc.getConfig('inbox_watch'), '1', 'inbox_watch')
+    t.is(dc.getConfig('sentbox_watch'), '0', 'sentbox_watch')
+    t.is(dc.getConfig('mvbox_watch'), '0', 'mvbox_watch')
+    t.is(dc.getConfig('mvbox_move'), '0', 'mvbox_move')
+    t.is(dc.getConfig('save_mime_headers'), '', 'save_mime_headers correct')
+    t.is(
+      dc.getBlobdir(),
+      path.join(cwd, 'db.sqlite-blobs'),
+      'correct blobdir'
+    )
+    t.is(dc.isConfigured(), true, 'is configured')
+
+      t.comment('Updating configuration')
+      await updateConfigurationDC(dc)
+      t.is(dc.getConfig('displayname'), 'Delta Two', 'updated displayName correct')
+      t.end()
   }))
 
 
@@ -144,7 +137,7 @@ async function main() {
   // delivered status etc
   // TODO test dc.createChatByMsgId()
 
-  test.only('key transfer', dc(async (t, dc, cwd) => {
+  test('key transfer', dc(async (t, dc, cwd) => {
     // Spawn a second dc instance with same account
     dc.on('ALL', (event, data1, data2) => console.log('ACC1', event, data1, data2))
     await configureDefaultDC(dc)
@@ -164,14 +157,12 @@ async function main() {
       t.end()
     })
 
-    dc2.once('DCN_EVENT_CONFIGURE_SUCCESSFUL', async () => {
-      setupCode = await dc2.initiateKeyTransfer()
-      t.comment('setupCode is: ' + setupCode)
-      t.is(typeof setupCode, 'string', 'setupCode is string')
-    })
     dc2.on('ALL', (event, data1, data2) => console.log('ACC2', event, data1, data2))
     await configureDefaultDC(dc2)
     dc2.startIO()
+    setupCode = await dc2.initiateKeyTransfer()
+    t.comment('setupCode is: ' + setupCode)
+    t.is(typeof setupCode, 'string', 'setupCode is string')
   }))
 
 }
