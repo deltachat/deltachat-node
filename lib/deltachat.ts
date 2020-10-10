@@ -558,11 +558,6 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 
-  getStarredMessages() {
-    debug('getStarredMessages')
-    return this.getChatMessages(C.DC_CHAT_ID_STARRED, 0, 0)
-  }
-
   static newTempContext() {
     const dcn_context = binding.dcn_context_new(
       tempy.directory() + '/db.sqlite'

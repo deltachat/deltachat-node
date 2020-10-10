@@ -1422,22 +1422,6 @@ NAPI_METHOD(dcn_set_stock_translation) {
   NAPI_RETURN_INT32(result);
 }
 
-NAPI_METHOD(dcn_star_msgs) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  napi_value js_array = argv[1];
-  NAPI_ARGV_INT32(star, 2);
-
-  //TRACE("calling..");
-  uint32_t length;
-  uint32_t* msg_ids = js_array_to_uint32(env, js_array, &length);
-  dc_star_msgs(dcn_context->dc_context, msg_ids, length, star);
-  free(msg_ids);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 
 NAPI_METHOD(dcn_start_io) {
   NAPI_ARGV(1);
@@ -2197,17 +2181,6 @@ NAPI_METHOD(dcn_msg_is_setupmessage) {
   NAPI_RETURN_INT32(is_setupmessage);
 }
 
-NAPI_METHOD(dcn_msg_is_starred) {
-  NAPI_ARGV(1);
-  NAPI_DC_MSG();
-
-  //TRACE("calling..");
-  int is_starred = dc_msg_is_starred(dc_msg);
-  //TRACE("result %d", is_starred);
-
-  NAPI_RETURN_INT32(is_starred);
-}
-
 NAPI_METHOD(dcn_msg_latefiling_mediasize) {
   NAPI_ARGV(4);
   NAPI_DC_MSG();
@@ -2654,7 +2627,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_estimate_deletion_cnt);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_stock_translation);
-  NAPI_EXPORT_FUNCTION(dcn_star_msgs);
   NAPI_EXPORT_FUNCTION(dcn_start_io);
   NAPI_EXPORT_FUNCTION(dcn_stop_io);
   NAPI_EXPORT_FUNCTION(dcn_is_io_running);
@@ -2745,7 +2717,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_is_info);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_sent);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_setupmessage);
-  NAPI_EXPORT_FUNCTION(dcn_msg_is_starred);
   NAPI_EXPORT_FUNCTION(dcn_msg_latefiling_mediasize);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
