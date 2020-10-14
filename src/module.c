@@ -1559,7 +1559,7 @@ NAPI_METHOD(dcn_chat_is_verified) {
   NAPI_DC_CHAT();
 
   //TRACE("calling..");
-  int is_verified = dc_chat_is_verified(dc_chat);
+  int is_verified = dc_chat_is_protected(dc_chat);
   //TRACE("result %d", is_verified);
 
   NAPI_RETURN_INT32(is_verified);
