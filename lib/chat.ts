@@ -50,8 +50,8 @@ export class Chat {
     return Boolean(binding.dcn_chat_is_unpromoted(this.dc_chat))
   }
 
-  isVerified(): boolean {
-    return Boolean(binding.dcn_chat_is_verified(this.dc_chat))
+  isProtected(): boolean {
+    return Boolean(binding.dcn_chat_is_protected(this.dc_chat))
   }
 
   isDeviceTalk(): boolean {
@@ -83,7 +83,7 @@ export class Chat {
       type: this.getType(),
       isSelfTalk: this.isSelfTalk(),
       isUnpromoted: this.isUnpromoted(),
-      isVerified: this.isVerified(),
+      isProtected: this.isProtected(),
       isDeviceTalk: this.isDeviceTalk(),
       muted: this.isMuted(),
     }

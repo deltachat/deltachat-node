@@ -7,6 +7,12 @@ Breaking changes:
   this is now done automatically during configure
   unless the new config-option `bot` is set deltachat-core-rust/#1957
 - `deltachat.markNoticedAllChats()` removed
+- `chat.isVerified()` is replaced by `chat.isProtected()`
+- `deltachat.createUnverifiedGroupChat(chatName)` and `deltachat.createVerifiedGroupChat(chatName)` are replaced by a single function `deltachat.createGroupChat(chatName, is_protected)`
+- 
+
+New:
+- `deltachat.setChatProtection(chatId:number, protect:boolean)`
 
 ## [1.46.0] - 2020-01-10
 
