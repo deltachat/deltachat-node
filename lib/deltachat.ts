@@ -425,11 +425,6 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_get_contacts(this.dcn_context, listFlags, query)
   }
 
-  updateDeviceChats() {
-    debug('updateDeviceChats')
-    binding.dcn_update_device_chats(this.dcn_context)
-  }
-
   wasDeviceMessageEverAdded(label: string) {
     debug(`wasDeviceMessageEverAdded ${label}`)
     const added = binding.dcn_was_device_msg_ever_added(this.dcn_context, label)
@@ -647,11 +642,6 @@ export class DeltaChat extends EventEmitter {
   markNoticedChat(chatId: number) {
     debug(`markNoticedChat ${chatId}`)
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
-  }
-
-  markNoticedAllChats() {
-    debug('markNoticedAllChats')
-    binding.dcn_marknoticed_all_chats(this.dcn_context)
   }
 
   markNoticedContact(contactId: number) {
@@ -876,15 +866,6 @@ export class DeltaChat extends EventEmitter {
       )
     )
     return locations.toJson()
-  }
-
-  starMessages(messageIds: number[], star: boolean) {
-    if (!Array.isArray(messageIds)) {
-      messageIds = [messageIds]
-    }
-    messageIds = messageIds.map((id) => Number(id))
-    debug('starMessages', messageIds)
-    binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
 
   /**

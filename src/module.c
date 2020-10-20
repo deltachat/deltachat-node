@@ -842,17 +842,6 @@ NAPI_METHOD(dcn_get_contacts) {
   return js_array;
 }
 
-NAPI_METHOD(dcn_update_device_chats) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  //TRACE("calling..");
-  dc_update_device_chats(dcn_context->dc_context);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_was_device_msg_ever_added) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -1138,17 +1127,6 @@ NAPI_METHOD(dcn_marknoticed_chat) {
 
   //TRACE("calling..");
   dc_marknoticed_chat(dcn_context->dc_context, chat_id);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
-NAPI_METHOD(dcn_marknoticed_all_chats) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  //TRACE("calling..");
-  dc_marknoticed_all_chats(dcn_context->dc_context);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -2588,7 +2566,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   NAPI_EXPORT_FUNCTION(dcn_get_contacts);
-  NAPI_EXPORT_FUNCTION(dcn_update_device_chats);
   NAPI_EXPORT_FUNCTION(dcn_was_device_msg_ever_added);
   NAPI_EXPORT_FUNCTION(dcn_get_draft);
   NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
@@ -2609,7 +2586,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
-  NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_maybe_network);

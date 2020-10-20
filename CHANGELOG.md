@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.46.0] - 2020-21-10
+
+Breaking changes:
+- `deltachat.updateDeviceChats()` removed
+  this is now done automatically during configure
+  unless the new config-option `bot` is set deltachat-core-rust/#1957
+- `deltachat.markNoticedAllChats()` removed
+
 ## [1.46.0] - 2020-01-10
 
 ### Changed

@@ -255,10 +255,6 @@ export class Message {
     return Boolean(binding.dcn_msg_is_setupmessage(this.dc_msg))
   }
 
-  isStarred() {
-    return Boolean(binding.dcn_msg_is_starred(this.dc_msg))
-  }
-
   latefilingMediasize(width: number, height: number, duration: number) {
     binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
   }
