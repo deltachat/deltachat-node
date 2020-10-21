@@ -1949,6 +1949,34 @@ NAPI_METHOD(dcn_msg_get_id) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
+NAPI_METHOD(dcn_msg_get_quoted_text) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  char* text = dc_msg_get_quoted_text(dc_msg);
+  //TRACE("result %s", text);
+
+  NAPI_RETURN_AND_UNREF_STRING(text);
+}
+
+NAPI_METHOD(dcn_msg_get_quoted_msg) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  napi_value result;
+  dc_msg_t* msg = dc_msg_get_quoted_msg(dc_msg);
+
+  if (msg == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
+                                            NULL, &result));
+  }
+
+  return result;
+}
+
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2223,6 +2251,17 @@ NAPI_METHOD(dcn_msg_set_file) {
   free(file);
   free(filemime);
 
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_quote) {
+  NAPI_ARGV(2);
+  dc_msg_t* dc_msg;
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg));
+  dc_msg_t* dc_msg_qoute;
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg_qoute));
+
+  dc_msg_set_quote(dc_msg, dc_msg_qoute);
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -2686,6 +2725,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_text);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_msg);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
@@ -2710,6 +2751,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_location);
 

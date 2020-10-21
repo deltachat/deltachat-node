@@ -9,10 +9,13 @@ Breaking changes:
 - `deltachat.markNoticedAllChats()` removed
 - `chat.isVerified()` is replaced by `chat.isProtected()`
 - `deltachat.createUnverifiedGroupChat(chatName)` and `deltachat.createVerifiedGroupChat(chatName)` are replaced by a single function `deltachat.createGroupChat(chatName, is_protected)`
-- 
+- if an message has a qoute to another message you need to use `message.getQuotedText()` to get the quoted message
 
 New:
 - `deltachat.setChatProtection(chatId:number, protect:boolean)`
+- `message.setQoute(qoutedMessage:Message)`
+- `message.getQuotedText():string`
+- `message.getQuotedMessage():Message`
 
 ## [1.46.0] - 2020-01-10
 
