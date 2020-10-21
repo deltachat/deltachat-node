@@ -172,13 +172,13 @@ export class Message {
     return binding.dcn_msg_get_id(this.dc_msg)
   }
 
-  getQuotedText(): string{
+  getQuotedText(): string {
     return binding.dcn_msg_get_quoted_text(this.dc_msg)
   }
 
-  getQuotedMessage(): Message|null{
+  getQuotedMessage(): Message | null {
     const dc_msg = binding.dcn_msg_get_quoted_msg(this.dc_msg)
-    return dc_msg ? new Message(dc_msg): null
+    return dc_msg ? new Message(dc_msg) : null
   }
 
   getReceivedTimestamp(): number {

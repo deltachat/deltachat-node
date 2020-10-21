@@ -260,14 +260,18 @@ export class DeltaChat extends EventEmitter {
   }
 
   /**
-   * 
+   *
    * @param chatName The name of the chat that should be created
    * @param is_protected Whether the chat should be protected at creation time
    * @returns chatId
    */
-  createGroupChat(chatName: string, is_protected:boolean = false): number {
+  createGroupChat(chatName: string, is_protected: boolean = false): number {
     debug(`createGroupChat ${chatName} [protected:${is_protected}]`)
-    return binding.dcn_create_group_chat(this.dcn_context, is_protected?1:0, chatName)
+    return binding.dcn_create_group_chat(
+      this.dcn_context,
+      is_protected ? 1 : 0,
+      chatName
+    )
   }
 
   deleteChat(chatId: number) {
@@ -741,14 +745,20 @@ export class DeltaChat extends EventEmitter {
   }
 
   /**
-   * 
-   * @param chatId 
-   * @param protect 
+   *
+   * @param chatId
+   * @param protect
    * @returns success boolean
    */
-  setChatProtection(chatId:number, protect:boolean) {
+  setChatProtection(chatId: number, protect: boolean) {
     debug(`setChatProtection ${chatId} ${protect}`)
-    return Boolean(binding.dcn_set_chat_protection(this.dcn_context, Number(chatId), protect?1:0))
+    return Boolean(
+      binding.dcn_set_chat_protection(
+        this.dcn_context,
+        Number(chatId),
+        protect ? 1 : 0
+      )
+    )
   }
 
   getChatEphemeralTimer(chatId: number): number {
