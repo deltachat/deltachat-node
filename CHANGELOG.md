@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.46.0] - 2020-21-10
+## [1.47.0] - 2020-26-10
 
 Breaking changes:
 - `deltachat.updateDeviceChats()` removed
