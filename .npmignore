@@ -22,7 +22,7 @@ deltachat-core-rust/tests/
 deltachat-core-rust/target
 deltachat-core-rust/test-data
 deltachat-core-rust/proptest-regressions
-deltachat-core-rust/assets
+# deltachat-core-rust/assets # don't exclude assets, otherwise it won't build
 images/
 test/
 windows.md
