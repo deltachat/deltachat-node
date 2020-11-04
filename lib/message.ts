@@ -293,7 +293,7 @@ export class Message {
   }
 
   setQuote(qoutedMessage: Message) {
-    binding.dcn_msg_set_quote(this.dc_msg, qoutedMessage)
+    binding.dcn_msg_set_quote(this.dc_msg, qoutedMessage.dc_msg)
   }
 
   setText(text: string) {
