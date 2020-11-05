@@ -1,6 +1,14 @@
 # Changelog
 
-## [1.47.0] - 2020-26-10
+## [unreleased] - 2020-5-11
+
+### Changed
+- Update deltachat-core-rust to 1.48.0
+
+## [1.47.0] - 2020-5-11
+
+### Changed
+- Update deltachat-core-rust to 1.47.0
 
 Breaking changes:
 - `deltachat.updateDeviceChats()` removed
@@ -1105,7 +1113,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.47.0...HEAD
+
+[1.47.0]: https://github.com/deltachat/deltachat-node/compare/v1.46.0...v1.47.0
 
 [1.46.0]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...v1.46.0
 
