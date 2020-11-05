@@ -2256,10 +2256,8 @@ NAPI_METHOD(dcn_msg_set_file) {
 
 NAPI_METHOD(dcn_msg_set_quote) {
   NAPI_ARGV(2);
-  dc_msg_t* dc_msg;
-  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg));
-  dc_msg_t* dc_msg_quote;
-  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[1], (void**)&dc_msg_quote));
+  NAPI_ARGV_DC_MSG(dc_msg, 0)
+  NAPI_ARGV_DC_MSG(dc_msg_quote, 1)
 
   dc_msg_set_quote(dc_msg, dc_msg_quote);
   NAPI_RETURN_UNDEFINED();
