@@ -40,6 +40,10 @@
   dc_msg_t* dc_msg; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg));
 
+#define NAPI_ARGV_DC_MSG(name, position) \
+  dc_msg_t* name; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[position], (void**)&name));
+
 #define NAPI_DC_PROVIDER() \
   dc_provider_t* dc_provider; \
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_provider));

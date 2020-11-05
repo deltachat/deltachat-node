@@ -105,12 +105,15 @@ export class Message {
 
   toJson() {
     debug('toJson')
+    const quotedMessage = this.getQuotedMessage()
     return {
       chatId: this.getChatId(),
       duration: this.getDuration(),
       file: this.getFile(),
       fromId: this.getFromId(),
       id: this.getId(),
+      quotedText: this.getQuotedText(),
+      quotedMessageId: quotedMessage ? quotedMessage.getId() : null,
       receivedTimestamp: this.getReceivedTimestamp(),
       sortTimestamp: this.getSortTimestamp(),
       text: this.getText(),
@@ -167,6 +170,15 @@ export class Message {
 
   getId(): number {
     return binding.dcn_msg_get_id(this.dc_msg)
+  }
+
+  getQuotedText(): string {
+    return binding.dcn_msg_get_quoted_text(this.dc_msg)
+  }
+
+  getQuotedMessage(): Message | null {
+    const dc_msg = binding.dcn_msg_get_quoted_msg(this.dc_msg)
+    return dc_msg ? new Message(dc_msg) : null
   }
 
   getReceivedTimestamp(): number {
@@ -255,10 +267,6 @@ export class Message {
     return Boolean(binding.dcn_msg_is_setupmessage(this.dc_msg))
   }
 
-  isStarred() {
-    return Boolean(binding.dcn_msg_is_starred(this.dc_msg))
-  }
-
   latefilingMediasize(width: number, height: number, duration: number) {
     binding.dcn_msg_latefiling_mediasize(this.dc_msg, width, height, duration)
   }
@@ -282,6 +290,10 @@ export class Message {
   setLocation(longitude: number, latitude: number) {
     binding.dcn_msg_set_location(this.dc_msg, longitude, latitude)
     return this
+  }
+
+  setQuote(quotedMessage: Message) {
+    binding.dcn_msg_set_quote(this.dc_msg, quotedMessage.dc_msg)
   }
 
   setText(text: string) {

@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.47.0] - 2020-26-10
+
+Breaking changes:
+- `deltachat.updateDeviceChats()` removed
+  this is now done automatically during configure
+  unless the new config-option `bot` is set deltachat-core-rust/#1957
+- `deltachat.markNoticedAllChats()` removed
+- `chat.isVerified()` is replaced by `chat.isProtected()`
+- `deltachat.createUnverifiedGroupChat(chatName)` and `deltachat.createVerifiedGroupChat(chatName)` are replaced by a single function `deltachat.createGroupChat(chatName, is_protected)`
+- if an message has a quote to another message you need to use `message.getQuotedText()` to get the quoted message
+
+New:
+- `deltachat.setChatProtection(chatId:number, protect:boolean)`
+- `message.setQuote(quotedMessage:Message)`
+- `message.getQuotedText():string`
+- `message.getQuotedMessage():Message`
+
 ## [1.46.0] - 2020-01-10
 
 ### Changed

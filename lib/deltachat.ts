@@ -259,16 +259,19 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_create_contact(this.dcn_context, name, addr)
   }
 
-  /** @returns chatId */
-  createUnverifiedGroupChat(chatName: string): number {
-    debug(`createUnverifiedGroupChat ${chatName}`)
-    return binding.dcn_create_group_chat(this.dcn_context, 0, chatName)
-  }
-
-  /** @returns chatId */
-  createVerifiedGroupChat(chatName: string): number {
-    debug(`createVerifiedGroupChat ${chatName}`)
-    return binding.dcn_create_group_chat(this.dcn_context, 1, chatName)
+  /**
+   *
+   * @param chatName The name of the chat that should be created
+   * @param is_protected Whether the chat should be protected at creation time
+   * @returns chatId
+   */
+  createGroupChat(chatName: string, is_protected: boolean = false): number {
+    debug(`createGroupChat ${chatName} [protected:${is_protected}]`)
+    return binding.dcn_create_group_chat(
+      this.dcn_context,
+      is_protected ? 1 : 0,
+      chatName
+    )
   }
 
   deleteChat(chatId: number) {
@@ -423,11 +426,6 @@ export class DeltaChat extends EventEmitter {
     query = query || ''
     debug(`getContacts ${listFlags} ${query}`)
     return binding.dcn_get_contacts(this.dcn_context, listFlags, query)
-  }
-
-  updateDeviceChats() {
-    debug('updateDeviceChats')
-    binding.dcn_update_device_chats(this.dcn_context)
   }
 
   wasDeviceMessageEverAdded(label: string) {
@@ -649,11 +647,6 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
 
-  markNoticedAllChats() {
-    debug('markNoticedAllChats')
-    binding.dcn_marknoticed_all_chats(this.dcn_context)
-  }
-
   markNoticedContact(contactId: number) {
     debug(`markNoticedContact ${contactId}`)
     binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
@@ -748,6 +741,23 @@ export class DeltaChat extends EventEmitter {
     debug(`setChatName ${chatId} ${name}`)
     return Boolean(
       binding.dcn_set_chat_name(this.dcn_context, Number(chatId), name)
+    )
+  }
+
+  /**
+   *
+   * @param chatId
+   * @param protect
+   * @returns success boolean
+   */
+  setChatProtection(chatId: number, protect: boolean) {
+    debug(`setChatProtection ${chatId} ${protect}`)
+    return Boolean(
+      binding.dcn_set_chat_protection(
+        this.dcn_context,
+        Number(chatId),
+        protect ? 1 : 0
+      )
     )
   }
 
@@ -876,15 +886,6 @@ export class DeltaChat extends EventEmitter {
       )
     )
     return locations.toJson()
-  }
-
-  starMessages(messageIds: number[], star: boolean) {
-    if (!Array.isArray(messageIds)) {
-      messageIds = [messageIds]
-    }
-    messageIds = messageIds.map((id) => Number(id))
-    debug('starMessages', messageIds)
-    binding.dcn_star_msgs(this.dcn_context, messageIds, star ? 1 : 0)
   }
 
   /**

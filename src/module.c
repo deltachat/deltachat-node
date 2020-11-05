@@ -550,11 +550,11 @@ NAPI_METHOD(dcn_create_contact) {
 NAPI_METHOD(dcn_create_group_chat) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
-  NAPI_ARGV_INT32(verified, 1);
+  NAPI_ARGV_INT32(protect, 1);
   NAPI_ARGV_UTF8_MALLOC(chat_name, 2);
 
   //TRACE("calling..");
-  uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, verified, chat_name);
+  uint32_t chat_id = dc_create_group_chat(dcn_context->dc_context, protect, chat_name);
   //TRACE("result %d", chat_id);
 
   free(chat_name);
@@ -840,17 +840,6 @@ NAPI_METHOD(dcn_get_contacts) {
   //TRACE("done");
 
   return js_array;
-}
-
-NAPI_METHOD(dcn_update_device_chats) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  //TRACE("calling..");
-  dc_update_device_chats(dcn_context->dc_context);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
 }
 
 NAPI_METHOD(dcn_was_device_msg_ever_added) {
@@ -1143,17 +1132,6 @@ NAPI_METHOD(dcn_marknoticed_chat) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_marknoticed_all_chats) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  //TRACE("calling..");
-  dc_marknoticed_all_chats(dcn_context->dc_context);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
 NAPI_METHOD(dcn_marknoticed_contact) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -1310,6 +1288,18 @@ NAPI_METHOD(dcn_set_chat_name) {
 
   free(name);
 
+  NAPI_RETURN_INT32(result);
+}
+
+NAPI_METHOD(dcn_set_chat_protection) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  NAPI_ARGV_INT32(protect, 1);
+
+  int result = dc_set_chat_protection(dcn_context->dc_context,
+                                      chat_id,
+                                      protect);
   NAPI_RETURN_INT32(result);
 }
 
@@ -1554,15 +1544,15 @@ NAPI_METHOD(dcn_chat_is_unpromoted) {
   NAPI_RETURN_INT32(is_unpromoted);
 }
 
-NAPI_METHOD(dcn_chat_is_verified) {
+NAPI_METHOD(dcn_chat_is_protected) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
 
   //TRACE("calling..");
-  int is_verified = dc_chat_is_verified(dc_chat);
-  //TRACE("result %d", is_verified);
+  int is_protected = dc_chat_is_protected(dc_chat);
+  //TRACE("result %d", is_protected);
 
-  NAPI_RETURN_INT32(is_verified);
+  NAPI_RETURN_INT32(is_protected);
 }
 
 NAPI_METHOD(dcn_chat_is_device_talk) {
@@ -1959,6 +1949,34 @@ NAPI_METHOD(dcn_msg_get_id) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
+NAPI_METHOD(dcn_msg_get_quoted_text) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  char* text = dc_msg_get_quoted_text(dc_msg);
+  //TRACE("result %s", text);
+
+  NAPI_RETURN_AND_UNREF_STRING(text);
+}
+
+NAPI_METHOD(dcn_msg_get_quoted_msg) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  napi_value result;
+  dc_msg_t* msg = dc_msg_get_quoted_msg(dc_msg);
+
+  if (msg == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
+                                            NULL, &result));
+  }
+
+  return result;
+}
+
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2233,6 +2251,15 @@ NAPI_METHOD(dcn_msg_set_file) {
   free(file);
   free(filemime);
 
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_quote) {
+  NAPI_ARGV(2);
+  NAPI_ARGV_DC_MSG(dc_msg, 0)
+  NAPI_ARGV_DC_MSG(dc_msg_quote, 1)
+
+  dc_msg_set_quote(dc_msg, dc_msg_quote);
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -2588,7 +2615,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   NAPI_EXPORT_FUNCTION(dcn_get_contacts);
-  NAPI_EXPORT_FUNCTION(dcn_update_device_chats);
   NAPI_EXPORT_FUNCTION(dcn_was_device_msg_ever_added);
   NAPI_EXPORT_FUNCTION(dcn_get_draft);
   NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);
@@ -2609,7 +2635,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
-  NAPI_EXPORT_FUNCTION(dcn_marknoticed_all_chats);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_maybe_network);
@@ -2619,6 +2644,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_send_msg);
   NAPI_EXPORT_FUNCTION(dcn_send_videochat_invitation);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_name);
+  NAPI_EXPORT_FUNCTION(dcn_set_chat_protection);
   NAPI_EXPORT_FUNCTION(dcn_get_chat_ephemeral_timer);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_ephemeral_timer);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_profile_image);
@@ -2644,7 +2670,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
-  NAPI_EXPORT_FUNCTION(dcn_chat_is_verified);
+  NAPI_EXPORT_FUNCTION(dcn_chat_is_protected);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_device_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_muted);
 
@@ -2697,6 +2723,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_text);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_msg);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
@@ -2721,6 +2749,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_location);
 
