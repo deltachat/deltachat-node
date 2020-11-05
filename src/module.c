@@ -2259,7 +2259,7 @@ NAPI_METHOD(dcn_msg_set_quote) {
   dc_msg_t* dc_msg;
   NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg));
   dc_msg_t* dc_msg_qoute;
-  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dc_msg_qoute));
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[1], (void**)&dc_msg_qoute));
 
   dc_msg_set_quote(dc_msg, dc_msg_qoute);
   NAPI_RETURN_UNDEFINED();
