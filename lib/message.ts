@@ -292,8 +292,8 @@ export class Message {
     return this
   }
 
-  setQuote(qoutedMessage: Message) {
-    binding.dcn_msg_set_quote(this.dc_msg, qoutedMessage.dc_msg)
+  setQuote(quotedMessage: Message) {
+    binding.dcn_msg_set_quote(this.dc_msg, quotedMessage.dc_msg)
   }
 
   setText(text: string) {
