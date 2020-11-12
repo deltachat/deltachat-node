@@ -41,11 +41,8 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --verbose
  
-      - name: Test
+      - name: Tests (+ Integration tests)
         run: npm run test
-
-      - name: Test integration
-        run: npm run test-integration
         env:
           DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
 
