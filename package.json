@@ -20,7 +20,8 @@
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
-    "test": "npm run lint && nyc mocha -r esm test/test.js --growl --reporter=spec",
+    "test": "npm run lint && mocha -r esm test/test.js --growl --reporter=spec",
+    "testCoverage": "nyc mocha -r esm test/test.js --growl --reporter=spec",
     "hallmark": "hallmark --fix",
     "lint": "prettier --check \"lib/**/*.{ts,tsx}\"",
     "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\""
