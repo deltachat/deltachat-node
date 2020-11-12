@@ -572,6 +572,12 @@ describe('Integration tests', function () {
     }
 
     account = await DeltaChat.createTempUser(process.env.DCC_NEW_TMP_EMAIL)
+    if (!account || !account.email || !account.password){
+      console.log(
+        'We didn\'t got back an account from the api, skip intergration tests'
+      )
+      this.skip()
+    }
   })
 
   // TODO 1. to 4. below would cover dc.open() completely
