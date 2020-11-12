@@ -4,6 +4,7 @@
 
 ### Changed
 - Update deltachat-core-rust to 1.48.0
+- changed tests to use mocha and fixed them
 
 ## [1.47.0] - 2020-5-11
 

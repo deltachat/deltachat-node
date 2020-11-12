@@ -59,7 +59,6 @@
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
     "prettier": "^2.0.5",
-    "tape": "^4.10.1",
     "typedoc": "^0.17.0"
   }
 }
