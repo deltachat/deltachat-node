@@ -20,8 +20,8 @@
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
-    "test": "npm run lint && nyc node test/index.js",
-    "test-integration": "node test/integration.js",
+    "test": "npm run lint && mocha -r esm test/test.js --growl --reporter=spec",
+    "testCoverage": "nyc mocha -r esm test/test.js --growl --reporter=spec",
     "hallmark": "hallmark --fix",
     "lint": "prettier --check \"lib/**/*.{ts,tsx}\"",
     "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\""
@@ -48,15 +48,18 @@
     "typescript": "^3.7.5"
   },
   "devDependencies": {
-    "prettier": "^2.0.5",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
+    "esm": "^3.2.25",
     "hallmark": "^2.0.0",
+    "mocha": "^8.2.1",
     "node-gyp": "^6.0.0",
     "nyc": "^15.0.0",
     "opn-cli": "^5.0.0",
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
-    "tape": "^4.10.1",
+    "prettier": "^2.0.5",
     "typedoc": "^0.17.0"
   }
 }

@@ -2,8 +2,6 @@
 
 > node.js bindings for [`deltachat-core-rust`][deltachat-core-rust]
 
-[![Appveyor build status][appveyor-shield]][appveyor]
-[![Build Status](https://travis-ci.org/deltachat/deltachat-node.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-node)
 [![npm](https://img.shields.io/npm/v/deltachat-node.svg)](https://www.npmjs.com/package/deltachat-node)
 ![Node version](https://img.shields.io/node/v/deltachat-node.svg)
 [![Coverage Status](https://coveralls.io/repos/github/deltachat/deltachat-node/badge.svg)](https://coveralls.io/github/deltachat/deltachat-node)
@@ -129,14 +127,11 @@ Running `npm test` ends with showing a code coverage report, which is produced b
 
 The coverage report from `nyc` in the console is rather limited. To get a more detailed coverage report you can run `npm run coverage-html-report`. This will produce a html report from the `nyc` data and display it in a browser on your local machine.
 
-On `Travis` the coverage report is also passed to [`coveralls`](https://coveralls.io/github/deltachat/deltachat-node).
-
-To run the integration tests you need to set the `DC_ADDR` and `DC_MAIL_PW` environment variables. E.g.:
+To run the integration tests you need to set the `DCC_NEW_TMP_EMAIL` environment variables. E.g.:
 
 ```
-$ export DC_ADDR=user@site.org
-$ export DC_MAIL_PW=myp4ssw0rD
-$ npm run test-integration
+$ export DCC_NEW_TMP_EMAIL=https://testrun.org/new_email?t=[token]
+$ npm run test
 ```
 
 ### Scripts
