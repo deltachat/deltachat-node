@@ -167,7 +167,7 @@ The following steps are needed to make a release:
 4. Tag the release with `git tag -a v1.0.0-foo.number`
 5. Push to github with `git push origin master --tags`
 6. Wait until `Make Package` github action is completed
-7. Download `deltachat-node.tgz` and run `npm publish deltachat-node.tgz` to publish it to npm. You probably need write rights to npm.
+7. Download `deltachat-node.tgz` from the github release and run `npm publish deltachat-node.tgz` to publish it to npm. You probably need write rights to npm.
 
 ## License
 
