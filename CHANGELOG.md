@@ -1,9 +1,9 @@
 # Changelog
 
-## [unreleased] - 2020-5-11
+## [unreleased] - 2020-15-11
 
 ### Changed
-- Update deltachat-core-rust to 1.48.0
+- Update deltachat-core-rust to 1.49.0
 - changed tests to use mocha and fixed them
 
 ## [1.47.0] - 2020-5-11
