@@ -113,6 +113,7 @@ jobs:
           name: deltachat-node.tgz
           path: deltachat-node.tgz
       - name: Upload to release
+        if: contains(github.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
