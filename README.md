@@ -166,13 +166,8 @@ The following steps are needed to make a release:
 3. Commit the changed files, commit message should be similiar to `Prepare for v1.0.0-foo.number`
 4. Tag the release with `git tag -a v1.0.0-foo.number`
 5. Push to github with `git push origin master --tags`
-6. Wait until Travis and AppVeyor have finished and uploaded prebuilt binaries to GitHub
-7. `npm run download-prebuilds` to download prebuilt binaries from GitHub.
-
-- In case this fails, you can also manually download the prebuilts from github and extract them. It's only important that it extracts to the target folder.
-
-8. `npm run build:bindings:ts` to build the typescript.
-9. `npm publish` publishes it to npm. You probably need write rights to npm.
+6. Wait until `Make Package` github action is completed
+7. Download `deltachat-node.tgz` and run `npm publish deltachat-node.tgz` to publish it to npm. You probably need write rights to npm.
 
 ## License
 
