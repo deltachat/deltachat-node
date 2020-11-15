@@ -112,6 +112,14 @@ jobs:
         with:
           name: deltachat-node.tgz
           path: deltachat-node.tgz
+      - name: Upload to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: deltachat-node.tgz
+          asset_name: deltachat-node.tgz
+          tag: ${{ github.ref }}
+          overwrite: true
       
       
         
