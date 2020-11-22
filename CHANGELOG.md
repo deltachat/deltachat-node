@@ -1,32 +1,36 @@
 # Changelog
 
-## Unreleased
+## [1.50.0] - 2020-22-11
 
 ### Changed
-- Update deltachat-core-rust to 1.50.0
 
+- Update deltachat-core-rust to 1.50.0
 
 ## [1.49.0] - 2020-15-11
 
 ### Changed
+
 - Update deltachat-core-rust to 1.49.0
 - changed tests to use mocha and fixed them
 
 ## [1.47.0] - 2020-5-11
 
 ### Changed
+
 - Update deltachat-core-rust to 1.47.0
 
 Breaking changes:
+
 - `deltachat.updateDeviceChats()` removed
   this is now done automatically during configure
-  unless the new config-option `bot` is set deltachat-core-rust/#1957
+  unless the new config-option `bot` is set deltachat-core-rust/[#1957](https://github.com/deltachat/deltachat-node/issues/1957)
 - `deltachat.markNoticedAllChats()` removed
 - `chat.isVerified()` is replaced by `chat.isProtected()`
 - `deltachat.createUnverifiedGroupChat(chatName)` and `deltachat.createVerifiedGroupChat(chatName)` are replaced by a single function `deltachat.createGroupChat(chatName, is_protected)`
 - if an message has a quote to another message you need to use `message.getQuotedText()` to get the quoted message
 
 New:
+
 - `deltachat.setChatProtection(chatId:number, protect:boolean)`
 - `message.setQuote(quotedMessage:Message)`
 - `message.getQuotedText():string`
@@ -1120,9 +1124,11 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.49.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.50.0...HEAD
 
-[1.47.0]: https://github.com/deltachat/deltachat-node/compare/v1.47.0...v1.49.0
+[1.50.0]: https://github.com/deltachat/deltachat-node/compare/v1.49.0...v1.50.0
+
+[1.49.0]: https://github.com/deltachat/deltachat-node/compare/v1.47.0...v1.49.0
 
 [1.47.0]: https://github.com/deltachat/deltachat-node/compare/v1.46.0...v1.47.0
 
