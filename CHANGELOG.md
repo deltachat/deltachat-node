@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- Update deltachat-core-rust to 1.50.0
+
+
 ## [1.49.0] - 2020-15-11
 
 ### Changed
