@@ -11,7 +11,7 @@ const header = path.resolve(
   '../deltachat-core-rust/deltachat-ffi/deltachat.h'
 )
 
-console.log("Generating constants...")
+console.log('Generating constants...')
 
 fs.createReadStream(header)
   .pipe(split())
@@ -23,6 +23,9 @@ fs.createReadStream(header)
   })
   .on('end', () => {
     const constants = data
+      .filter(
+        ({ key }) => key.toUpperCase()[0] === key[0] // check if define name is uppercase
+      )
       .sort((lhs, rhs) => {
         if (lhs.key < rhs.key) return -1
         else if (lhs.key > rhs.key) return 1
