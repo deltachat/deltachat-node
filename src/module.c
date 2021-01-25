@@ -1434,13 +1434,6 @@ NAPI_METHOD(dcn_stop_io) {
   NAPI_RETURN_UNDEFINED();
 }
 
-NAPI_METHOD(dcn_is_io_running) {
-  NAPI_ARGV(1);
-  NAPI_DCN_CONTEXT();
-
-  NAPI_RETURN_INT32(dc_is_io_running(dcn_context->dc_context));
-}
-
 NAPI_METHOD(dcn_stop_ongoing_process) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
@@ -2655,7 +2648,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_stock_translation);
   NAPI_EXPORT_FUNCTION(dcn_start_io);
   NAPI_EXPORT_FUNCTION(dcn_stop_io);
-  NAPI_EXPORT_FUNCTION(dcn_is_io_running);
   NAPI_EXPORT_FUNCTION(dcn_stop_ongoing_process);
 
   /**

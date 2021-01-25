@@ -65,9 +65,6 @@ export class DeltaChat extends EventEmitter {
       throw new Error("We're already closed!")
     }
 
-    if (this.isIORunning() !== false) {
-      throw new Error("Can't close while IO is still running!")
-    }
     debug('unrefing context')
     binding.dcn_context_unref(this.dcn_context)
     debug('Unref end')
@@ -100,16 +97,7 @@ export class DeltaChat extends EventEmitter {
 
   stopIO() {
     debug('stopIO()')
-    if (this.isIORunning() === false) {
-      throw new Error("Can't stop io if io is not running.")
-    }
     binding.dcn_stop_io(this.dcn_context)
-  }
-
-  isIORunning() {
-    const is_running = binding.dcn_is_io_running(this.dcn_context)
-    debug('is_io_running', is_running)
-    return is_running === 1
   }
 
   addAddressBook(addressBook: string) {
