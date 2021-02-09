@@ -18,7 +18,11 @@ fs.createReadStream(header)
   .on('data', (line) => {
     const match = regex.exec(line)
     if (match) {
-      data.push({ key: match[1], value: parseInt(match[2]) })
+      const key = match[1]
+      const value = parseInt(match[2])
+      if (isNaN(value)) return
+
+      data.push({ key, value })
     }
   })
   .on('end', () => {
