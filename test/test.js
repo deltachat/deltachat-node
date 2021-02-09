@@ -417,7 +417,6 @@ describe('Offline Tests with unconfigured account', function () {
     strictEqual(contact.getAddress(), 'first.last@site.org', 'correct address')
     strictEqual(typeof contact.color, 'string', 'color is a string')
     strictEqual(contact.getDisplayName(), 'First Last', 'correct display name')
-    strictEqual(contact.getFirstName(), 'First', 'correct first name')
     strictEqual(contact.getId(), contactId, 'contact id matches')
     strictEqual(contact.getName(), 'First Last', 'correct name')
     strictEqual(contact.getNameAndAddress(), 'First Last (first.last@site.org)')
