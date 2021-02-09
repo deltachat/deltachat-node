@@ -1692,17 +1692,6 @@ NAPI_METHOD(dcn_contact_get_display_name) {
   NAPI_RETURN_AND_UNREF_STRING(display_name);
 }
 
-NAPI_METHOD(dcn_contact_get_first_name) {
-  NAPI_ARGV(1);
-  NAPI_DC_CONTACT();
-
-  //TRACE("calling..");
-  char* first_name = dc_contact_get_first_name(dc_contact);
-  //TRACE("result %s", first_name);
-
-  NAPI_RETURN_AND_UNREF_STRING(first_name);
-}
-
 NAPI_METHOD(dcn_contact_get_id) {
   NAPI_ARGV(1);
   NAPI_DC_CONTACT();
@@ -2683,7 +2672,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_contact_get_addr);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_color);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
-  NAPI_EXPORT_FUNCTION(dcn_contact_get_first_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_id);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name_n_addr);

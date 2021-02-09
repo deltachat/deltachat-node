@@ -20,7 +20,6 @@ export class Contact {
       address: this.getAddress(),
       color: this.color,
       displayName: this.getDisplayName(),
-      firstName: this.getFirstName(),
       id: this.getId(),
       name: this.getName(),
       profileImage: this.getProfileImage(),
@@ -40,10 +39,6 @@ export class Contact {
 
   getDisplayName(): string {
     return binding.dcn_contact_get_display_name(this.dc_contact)
-  }
-
-  getFirstName(): string {
-    return binding.dcn_contact_get_first_name(this.dc_contact)
   }
 
   getId(): number {
