@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- Update deltachat-core-rust to ?
+
+Breaking changes:
+- `deltachat.isIORunning()` removed
+- `contact.getFirstName()` removed
+
+
 ## [1.50.0] - 2020-22-11
 
 ### Changed
