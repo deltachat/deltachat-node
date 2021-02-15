@@ -364,6 +364,18 @@ export class DeltaChat extends EventEmitter {
     )
   }
 
+  /**
+   * Get encryption info for a chat.
+   * Get a multi-line encryption info, containing encryption preferences of all members.
+   * Can be used to find out why messages sent to group are not encrypted.
+   *
+   * @param chatId ID of the chat to get the encryption info for.
+   * @return Multi-line text, must be released using dc_str_unref() after usage.
+   */
+  getChatEncrytionInfo(chatId: number): string {
+    return binding.dcn_get_chat_encrinfo(this.dcn_context, chatId)
+  }
+
   getChats(listFlags: number, queryStr: string, queryContactId: number) {
     debug('getChats')
     const result = []
