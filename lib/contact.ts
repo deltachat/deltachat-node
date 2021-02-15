@@ -19,6 +19,8 @@ export class Contact {
     return {
       address: this.getAddress(),
       color: this.color,
+      authName: this.authName,
+      status: this.status,
       displayName: this.getDisplayName(),
       id: this.getId(),
       name: this.getName(),
@@ -33,8 +35,25 @@ export class Contact {
     return binding.dcn_contact_get_addr(this.dc_contact)
   }
 
+  /** Get original contact name.
+   * This is the name of the contact as defined by the contact themself.
+   * If the contact themself does not define such a name,
+   * an empty string is returned. */
+  get authName(): string {
+    return binding.dcn_contact_get_auth_name(this.dc_contact)
+  }
+
   get color(): string {
     return integerToHexColor(binding.dcn_contact_get_color(this.dc_contact))
+  }
+
+  /**
+   * contact's status
+   * 
+   * Status is the last signature received in a message from this contact.
+   */
+  get status(): string {
+    return binding.dcn_contact_get_status(this.dc_contact)
   }
 
   getDisplayName(): string {
