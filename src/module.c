@@ -601,6 +601,17 @@ NAPI_METHOD(dcn_delete_msgs) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_decide_on_contact_request) {
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+  NAPI_ARGV_INT32(decision, 2);
+
+  uint32_t chat_id = dc_decide_on_contact_request(dcn_context->dc_context, msg_id, decision);
+
+  NAPI_RETURN_UINT32(chat_id);
+}
+
 NAPI_METHOD(dcn_forward_msgs) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -2606,6 +2617,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_delete_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
+  NAPI_EXPORT_FUNCTION(dcn_decide_on_contact_request);
   NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);

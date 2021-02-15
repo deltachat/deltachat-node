@@ -232,7 +232,8 @@ export class DeltaChat extends EventEmitter {
       Number(contactId)
     )
   }
-  /** @returns chatId */
+  /** @deprecated
+   * @returns chatId */
   createChatByMessageId(messageId: number): number {
     debug(`createChatByMessageId ${messageId}`)
     return binding.dcn_create_chat_by_msg_id(
@@ -259,6 +260,27 @@ export class DeltaChat extends EventEmitter {
       this.dcn_context,
       is_protected ? 1 : 0,
       chatName
+    )
+  }
+
+  /**
+   * @param messageId ID of Message to decide on.
+   * @param decision One of the DC_DECISION_* values.
+   * @return The chat id of the created chat, if any.
+   */
+  decideOnContactRequest(
+    messageId: number,
+    decision:
+      | C.DC_DECISION_START_CHAT
+      | C.DC_DECISION_NOT_NOW
+      | C.DC_DECISION_BLOCK
+  ) {
+    return Number(
+      binding.dcn_decide_on_contact_request(
+        this.dcn_context,
+        Number(messageId),
+        Number(decision)
+      )
     )
   }
 
@@ -647,6 +669,7 @@ export class DeltaChat extends EventEmitter {
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
   }
 
+  /** @deprecated */
   markNoticedContact(contactId: number) {
     debug(`markNoticedContact ${contactId}`)
     binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
