@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- `deltachat.getChatEncrytionInfo(chatId:number)`
+
 ### Changed
 - Update deltachat-core-rust to ?
 
