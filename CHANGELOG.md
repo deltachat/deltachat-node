@@ -4,6 +4,7 @@
 
 ### Added
 - `deltachat.getChatEncrytionInfo(chatId:number)`
+- `Contact.authName` and `Contact.status`
 
 ### Changed
 - Update deltachat-core-rust to ?

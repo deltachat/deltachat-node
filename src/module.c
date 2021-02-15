@@ -1678,6 +1678,15 @@ NAPI_METHOD(dcn_contact_get_addr) {
   NAPI_RETURN_AND_UNREF_STRING(addr);
 }
 
+NAPI_METHOD(dcn_contact_get_auth_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+
+  char* auth_name = dc_contact_get_auth_name(dc_contact);
+
+  NAPI_RETURN_AND_UNREF_STRING(auth_name);
+}
+
 NAPI_METHOD(dcn_contact_get_color) {
   NAPI_ARGV(1);
   NAPI_DC_CONTACT();
@@ -1742,6 +1751,13 @@ NAPI_METHOD(dcn_contact_get_profile_image) {
   //TRACE("result %s", profile_image);
 
   NAPI_RETURN_AND_UNREF_STRING(profile_image);
+}
+
+NAPI_METHOD(dcn_contact_get_status) {
+  NAPI_ARGV(1);
+  NAPI_DC_CONTACT();
+  char* status = dc_contact_get_status(dc_contact);
+  NAPI_RETURN_AND_UNREF_STRING(status);
 }
 
 NAPI_METHOD(dcn_contact_is_blocked) {
@@ -2679,12 +2695,14 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_contact_get_addr);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_auth_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_color);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_display_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_id);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_name_n_addr);
   NAPI_EXPORT_FUNCTION(dcn_contact_get_profile_image);
+  NAPI_EXPORT_FUNCTION(dcn_contact_get_status);
   NAPI_EXPORT_FUNCTION(dcn_contact_is_blocked);
   NAPI_EXPORT_FUNCTION(dcn_contact_is_verified);
 
