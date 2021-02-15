@@ -12,6 +12,9 @@ Breaking changes:
 - `deltachat.isIORunning()` removed
 - `contact.getFirstName()` removed
 
+### Fixed
+
+- Fix `integerToHexColor(colorInt)` function to work correctly with new color generation.
 
 ## [1.50.0] - 2020-22-11
 
