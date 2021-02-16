@@ -119,6 +119,7 @@ export class Message {
       text: this.getText(),
       timestamp: this.getTimestamp(),
       hasLocation: this.hasLocation(),
+      hasHTML: this.hasHTML,
       viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
       state: binding.dcn_msg_get_state(this.dc_msg),
       hasDeviatingTimestamp: this.hasDeviatingTimestamp(),
@@ -243,6 +244,10 @@ export class Message {
     return Boolean(binding.dcn_msg_has_location(this.dc_msg))
   }
 
+  get hasHTML() {
+    return Boolean(binding.dcn_msg_has_html(this.dc_msg))
+  }
+
   isDeadDrop() {
     return this.getChatId() === C.DC_CHAT_ID_DEADDROP
   }
@@ -294,10 +299,16 @@ export class Message {
 
   setQuote(quotedMessage: Message) {
     binding.dcn_msg_set_quote(this.dc_msg, quotedMessage.dc_msg)
+    return this
   }
 
   setText(text: string) {
     binding.dcn_msg_set_text(this.dc_msg, text)
+    return this
+  }
+
+  setHTML(html: string) {
+    binding.dcn_msg_set_html(this.dc_msg, html)
     return this
   }
 }

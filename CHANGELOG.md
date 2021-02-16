@@ -3,9 +3,10 @@
 ## Unreleased
 
 ### Added
-- `deltachat.getChatEncrytionInfo(chatId:number)`
+- `deltachat.getChatEncrytionInfo(chatId: number)`
 - `Contact.authName` and `Contact.status`
 - `deltachat.decideOnContactRequest(messageId, decision)`
+- `Message.hasHTML`, `Message.setHTML(html: string)` and `deltachat.getMessageHTML(messageId: number)`
 
 ### Changed
 - Update deltachat-core-rust to ?
