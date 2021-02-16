@@ -977,6 +977,19 @@ NAPI_METHOD(dcn_get_msg_info) {
   NAPI_RETURN_AND_UNREF_STRING(msg_info);
 }
 
+
+NAPI_METHOD(dcn_get_msg_html) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+
+  //TRACE("calling..");
+  char* msg_html = dc_get_msg_html(dcn_context->dc_context, msg_id);
+  //TRACE("result %s", msg_html);
+
+  NAPI_RETURN_AND_UNREF_STRING(msg_html);
+}
+
 NAPI_METHOD(dcn_get_next_media) {
   NAPI_ARGV(6);
   NAPI_DCN_CONTEXT();
@@ -2161,6 +2174,17 @@ NAPI_METHOD(dcn_msg_has_location) {
   NAPI_RETURN_INT32(has_location);
 }
 
+NAPI_METHOD(dcn_msg_has_html) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  int has_html = dc_msg_has_html(dc_msg);
+  //TRACE("result %d", has_html);
+
+  NAPI_RETURN_INT32(has_html);
+}
+
 NAPI_METHOD(dcn_msg_is_forwarded) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2267,6 +2291,20 @@ NAPI_METHOD(dcn_msg_set_file) {
 
   free(file);
   free(filemime);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_html) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_ARGV_UTF8_MALLOC(html, 1);
+
+  //TRACE("calling..");
+  dc_msg_set_html(dc_msg, html);
+  //TRACE("done");
+
+  free(html);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -2642,6 +2680,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_msg);
   NAPI_EXPORT_FUNCTION(dcn_get_msg_cnt);
   NAPI_EXPORT_FUNCTION(dcn_get_msg_info);
+  NAPI_EXPORT_FUNCTION(dcn_get_msg_html);
   NAPI_EXPORT_FUNCTION(dcn_get_next_media);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_visibility);
   NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
@@ -2759,6 +2798,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_location);
+  NAPI_EXPORT_FUNCTION(dcn_msg_has_html);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_forwarded);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_increation);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_info);
@@ -2768,6 +2808,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_html);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_location);

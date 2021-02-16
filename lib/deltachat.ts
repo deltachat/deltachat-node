@@ -512,6 +512,11 @@ export class DeltaChat extends EventEmitter {
     return binding.dcn_get_msg_info(this.dcn_context, Number(messageId))
   }
 
+  getMessageHTML(messageId: number): string {
+    debug(`getMessageHTML ${messageId}`)
+    return binding.dcn_get_msg_html(this.dcn_context, Number(messageId))
+  }
+
   getNextMediaMessage(
     messageId: number,
     msgType1: number,
