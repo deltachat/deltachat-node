@@ -7,6 +7,8 @@
 - `Contact.authName` and `Contact.status`
 - `deltachat.decideOnContactRequest(messageId, decision)`
 - `Message.hasHTML`, `Message.setHTML(html: string)` and `deltachat.getMessageHTML(messageId: number)`
+- `Message.realChatId`
+- `Message.overrideSenderName` and `Message.setOverrideSenderName(senderName: string)`
 
 ### Changed
 - Update deltachat-core-rust to ?
