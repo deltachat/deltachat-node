@@ -1979,6 +1979,17 @@ NAPI_METHOD(dcn_msg_get_id) {
   NAPI_RETURN_UINT32(msg_id);
 }
 
+NAPI_METHOD(dcn_msg_get_override_sender_name) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  char* override_sender_name = dc_msg_get_override_sender_name(dc_msg);
+  //TRACE("result %s", override_sender_name);
+
+  NAPI_RETURN_AND_UNREF_STRING(override_sender_name);
+}
+
 NAPI_METHOD(dcn_msg_get_quoted_text) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2005,6 +2016,17 @@ NAPI_METHOD(dcn_msg_get_quoted_msg) {
   }
 
   return result;
+}
+
+NAPI_METHOD(dcn_msg_get_real_chat_id) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  int id = dc_msg_get_real_chat_id(dc_msg);
+  //TRACE("result %d", id);
+
+  NAPI_RETURN_INT32(id);
 }
 
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
@@ -2275,6 +2297,20 @@ NAPI_METHOD(dcn_msg_set_duration) {
   //TRACE("calling..");
   dc_msg_set_duration(dc_msg, duration);
   //TRACE("done");
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_set_override_sender_name) {
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_ARGV_UTF8_MALLOC(override_sender_name, 1);
+
+  //TRACE("calling..");
+  dc_msg_set_override_sender_name(dc_msg, override_sender_name);
+  //TRACE("done");
+
+  free(override_sender_name);
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -2781,8 +2817,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_from_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_height);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_id);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_override_sender_name);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_msg);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_real_chat_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);
@@ -2807,6 +2845,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_latefiling_mediasize);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
+  NAPI_EXPORT_FUNCTION(dcn_msg_set_override_sender_name);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_html);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);

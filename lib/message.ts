@@ -108,6 +108,7 @@ export class Message {
     const quotedMessage = this.getQuotedMessage()
     return {
       chatId: this.getChatId(),
+      realChatId: this.realChatId,
       duration: this.getDuration(),
       file: this.getFile(),
       fromId: this.getFromId(),
@@ -134,11 +135,24 @@ export class Message {
       },
       videochatType: this.getVideochatType(),
       videochatUrl: this.getVideochatUrl(),
+      overrideSenderName: this.overrideSenderName,
     }
   }
 
   getChatId(): number {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
+  }
+
+  /**
+   * The ID of chat the message belongs to.
+   * To get details about the chat, pass the returned ID to dc_get_chat().
+   * In contrast to Message.getChatId(), this property contains the chat-id also
+   * for messages in the deaddrop.
+   *
+   * @return The ID of the chat the message belongs to, 0 on errors.
+   */
+  get realChatId(): number {
+    return binding.dcn_msg_get_real_chat_id(this.dc_msg)
   }
 
   getDuration(): number {
@@ -236,6 +250,10 @@ export class Message {
     return binding.dcn_msg_get_width(this.dc_msg)
   }
 
+  get overrideSenderName(): string {
+    return binding.dcn_msg_get_override_sender_name(this.dc_msg)
+  }
+
   hasDeviatingTimestamp() {
     return binding.dcn_msg_has_deviating_timestamp(this.dc_msg)
   }
@@ -309,6 +327,11 @@ export class Message {
 
   setHTML(html: string) {
     binding.dcn_msg_set_html(this.dc_msg, html)
+    return this
+  }
+
+  setOverrideSenderName(senderName: string) {
+    binding.dcn_msg_set_override_sender_name(this.dc_msg, senderName)
     return this
   }
 }
