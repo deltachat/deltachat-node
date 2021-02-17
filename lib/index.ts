@@ -10,3 +10,5 @@ export { DeltaChat }
 export { Locations } from './locations'
 export { Lot } from './lot'
 export { Message, MessageState, MessageViewType } from './message'
+
+export * from './types'
