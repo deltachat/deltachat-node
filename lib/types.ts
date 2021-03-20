@@ -1,4 +1,4 @@
-import { C } from "./constants";
+import { C } from './constants'
 
 export type ChatTypes =
   | C.DC_CHAT_TYPE_GROUP
