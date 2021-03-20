@@ -49,7 +49,7 @@ export class Contact {
 
   /**
    * contact's status
-   * 
+   *
    * Status is the last signature received in a message from this contact.
    */
   get status(): string {
