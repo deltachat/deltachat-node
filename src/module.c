@@ -2116,6 +2116,17 @@ NAPI_METHOD(dcn_msg_get_summarytext) {
   NAPI_RETURN_AND_UNREF_STRING(summarytext);
 }
 
+NAPI_METHOD(dcn_msg_get_subject) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  char* subject = dc_msg_get_subject(dc_msg, approx_characters);
+  //TRACE("result %s", subject);
+
+  NAPI_RETURN_AND_UNREF_STRING(subject);
+}
+
 NAPI_METHOD(dcn_msg_get_text) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2828,6 +2839,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_state);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_summary);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_summarytext);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_subject);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_viewtype);
