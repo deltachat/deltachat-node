@@ -2121,7 +2121,7 @@ NAPI_METHOD(dcn_msg_get_subject) {
   NAPI_DC_MSG();
 
   //TRACE("calling..");
-  char* subject = dc_msg_get_subject(dc_msg, approx_characters);
+  char* subject = dc_msg_get_subject(dc_msg);
   //TRACE("result %s", subject);
 
   NAPI_RETURN_AND_UNREF_STRING(subject);
