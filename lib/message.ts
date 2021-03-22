@@ -126,6 +126,7 @@ export class Message {
       hasDeviatingTimestamp: this.hasDeviatingTimestamp(),
       showPadlock: this.getShowpadlock(),
       summary: this.getSummary().toJson(),
+      subject: this.subject,
       isSetupmessage: this.isSetupmessage(),
       isInfo: this.isInfo(),
       isForwarded: this.isForwarded(),
@@ -219,6 +220,10 @@ export class Message {
   getSummary(chat?: Chat) {
     const dc_chat = (chat && chat.dc_chat) || null
     return new Lot(binding.dcn_msg_get_summary(this.dc_msg, dc_chat))
+  }
+
+  get subject(): string {
+    return binding.dcn_msg_get_subject(this.dc_msg)
   }
 
   getSummarytext(approxCharacters: number): string {
