@@ -9,6 +9,7 @@
 - `Message.hasHTML`, `Message.setHTML(html: string)` and `deltachat.getMessageHTML(messageId: number)`
 - `Message.realChatId`
 - `Message.overrideSenderName` and `Message.setOverrideSenderName(senderName: string)`
+- `Message.subject`
 
 ### Changed
 - Update deltachat-core-rust to ?
