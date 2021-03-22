@@ -12,7 +12,7 @@
 - `Message.subject`
 
 ### Changed
-- Update deltachat-core-rust to ?
+- Update deltachat-core-rust to `1.51.0-alpha.0 c8fea9c57708a103c360d0aca4cb447629dcf87b`
 
 Breaking changes:
 - `deltachat.isIORunning()` removed
