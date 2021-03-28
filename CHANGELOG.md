@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.51.1] - 2021-28-03
+
+### Fixed
+
+- Fix package.json version
+
 ## [1.51.0] - 2021-28-03
 
 ### Added
