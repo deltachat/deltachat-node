@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [1.51.0] - 2021-28-03
+
 ### Added
 - `deltachat.getChatEncrytionInfo(chatId: number)`
 - `Contact.authName` and `Contact.status`
@@ -12,7 +14,7 @@
 - `Message.subject`
 
 ### Changed
-- Update deltachat-core-rust to `1.51.0-alpha.0 c8fea9c57708a103c360d0aca4cb447629dcf87b`
+- Update deltachat-core-rust to `1.51.0`
 
 Breaking changes:
 - `deltachat.isIORunning()` removed
