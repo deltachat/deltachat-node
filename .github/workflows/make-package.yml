@@ -34,12 +34,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cargo/bin
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
+            ~/.cargo/registry/
             ~/.cargo/git
             deltachat-core-rust/target
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-2
 
       - name: Install dependencies & build
         if: steps.cache.outputs.cache-hit != 'true'
