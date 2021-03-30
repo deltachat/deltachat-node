@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - name: System info
         run: |
           rustc -vV
@@ -66,6 +69,9 @@ jobs:
         run: sudo apt install tree
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - name: System info
         run: |
           rustc -vV
