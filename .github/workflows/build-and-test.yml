@@ -1,13 +1,19 @@
-name: 'MacOS'
+name: 'Build & Test'
 on: push
 
 jobs:
   build-and-test:
-    name: "Build & Test"
-    runs-on: macos-latest
+    name: 'Build & Test'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, macos-latest, windows-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - name: System info
         run: |
           rustc -vV
@@ -15,7 +21,7 @@ jobs:
           cargo -vV
           npm --version
           node --version
-      
+
       - name: Pull submodule
         run: npm run submodule
 
@@ -24,22 +30,19 @@ jobs:
         with:
           path: ${{ env.APPDATA }}/npm-cache # npm cache files are stored in `~/.npm` on Linux/macOS
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
-     
-      - name: Cache cargo index
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Cache cargo build
-        uses: actions/cache@v1
+      - name: Cache cargo index
+        uses: actions/cache@v2
         with:
-          path: deltachat-core-rust/target
-          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry/
+            ~/.cargo/git
+            deltachat-core-rust/target
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-2
 
       - name: Install dependencies & build
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --verbose
- 
+
       - name: Test
         run: npm run test
