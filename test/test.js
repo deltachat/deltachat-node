@@ -208,8 +208,8 @@ describe('Offline Tests with unconfigured account', function () {
   it('should create chat from contact and Chat methods', async function () {
     const contactId = dc.createContact('aaa', 'aaa@site.org')
 
-    strictEqual(dc.lookupContactIdByAddr('aaa@site.org'), true)
-    strictEqual(dc.lookupContactIdByAddr('nope@site.net'), false)
+    strictEqual(dc.lookupContactIdByAddr('aaa@site.org'), contactId)
+    strictEqual(dc.lookupContactIdByAddr('nope@site.net'), 0)
 
     let chatId = dc.createChatByContactId(contactId)
     let chat = dc.getChat(chatId)
