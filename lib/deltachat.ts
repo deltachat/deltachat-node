@@ -662,11 +662,9 @@ export class DeltaChat extends EventEmitter {
     })
   }
 
-  lookupContactIdByAddr(addr: string) {
+  lookupContactIdByAddr(addr: string): number {
     debug(`lookupContactIdByAddr ${addr}`)
-    return Boolean(
-      binding.dcn_lookup_contact_id_by_addr(this.dcn_context, addr)
-    )
+    return binding.dcn_lookup_contact_id_by_addr(this.dcn_context, addr)
   }
 
   markNoticedChat(chatId: number) {
