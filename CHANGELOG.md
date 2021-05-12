@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- fix return type of deltchat.lookupContactIdByAddr (returned a boolean instead of the chatId)
+
 ## [1.54.0] - 2021-06-05
 
 ### Changed
