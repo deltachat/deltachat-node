@@ -299,6 +299,7 @@ NAPI_METHOD(dcn_context_unref) {
   NAPI_DCN_CONTEXT();
 
   TRACE("Unrefing dc_context");
+  dcn_context->gc = 1;
   dc_context_unref(dcn_context->dc_context);
   dcn_context->dc_context = NULL;
 
