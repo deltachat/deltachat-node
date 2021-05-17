@@ -41,7 +41,7 @@ export class DeltaChat extends EventEmitter {
     return this._isOpen
   }
 
-  async open(cwd: string) {
+  async open(cwd: string, start_event_handler = true) {
     if (this._isOpen === true) {
       throw new Error("We're already open!")
     }
@@ -52,11 +52,13 @@ export class DeltaChat extends EventEmitter {
 
     this.dcn_context = binding.dcn_context_new(dbFile)
     debug('Opened context')
-    binding.dcn_start_event_handler(
-      this.dcn_context,
-      this.handleCoreEvent.bind(this)
-    )
-    debug('Started event handler')
+    if (start_event_handler) {
+      binding.dcn_start_event_handler(
+        this.dcn_context,
+        this.handleCoreEvent.bind(this)
+      )
+      debug('Started event handler')
+    }
     this._isOpen = true
   }
 
