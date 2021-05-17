@@ -5,6 +5,7 @@
 ### Fixed
 
 - fix return type of deltchat.lookupContactIdByAddr (returned a boolean instead of the chatId)
+- fix closing of context -> this should solve the event emitter problem leading to crashs
 
 ## [1.54.0] - 2021-06-05
 
