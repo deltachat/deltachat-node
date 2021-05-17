@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- add option to open context without event handler: `async open(cwd: string, start_event_handler:boolean = true)`
+
 ### Fixed
 
 - fix return type of deltchat.lookupContactIdByAddr (returned a boolean instead of the chatId)
