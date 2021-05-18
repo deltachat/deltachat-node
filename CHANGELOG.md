@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## [Unreleased][unreleased]
+
+## [1.55.0] - 2021-18-05
 
 ### Added
+
 - add option to open context without event handler: `async open(cwd: string, start_event_handler:boolean = true)`
 
 ### Fixed
@@ -10,9 +13,14 @@
 - fix return type of deltchat.lookupContactIdByAddr (returned a boolean instead of the chatId)
 - fix closing of context -> this should solve the event emitter problem leading to crashs
 
+### Changed
+
+- Update deltachat-core-rust to `1.55.0`
+
 ## [1.54.0] - 2021-06-05
 
 ### Changed
+
 - Update deltachat-core-rust to `1.54.0`
 
 ## [1.51.1] - 2021-28-03
@@ -24,6 +32,7 @@
 ## [1.51.0] - 2021-28-03
 
 ### Added
+
 - `deltachat.getChatEncrytionInfo(chatId: number)`
 - `Contact.authName` and `Contact.status`
 - `deltachat.decideOnContactRequest(messageId, decision)`
@@ -33,9 +42,11 @@
 - `Message.subject`
 
 ### Changed
+
 - Update deltachat-core-rust to `1.51.0`
 
 Breaking changes:
+
 - `deltachat.isIORunning()` removed
 - `contact.getFirstName()` removed
 
@@ -1167,9 +1178,15 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.54.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.55.0...HEAD
 
-[1.54.0]: https://github.com/deltachat/deltachat-node/compare/v1.50.0...v1.54.0
+[1.55.0]: https://github.com/deltachat/deltachat-node/compare/v1.54.0...v1.55.0
+
+[1.54.0]: https://github.com/deltachat/deltachat-node/compare/v1.51.1...v1.54.0
+
+[1.51.1]: https://github.com/deltachat/deltachat-node/compare/v1.51.0...v1.51.1
+
+[1.51.0]: https://github.com/deltachat/deltachat-node/compare/v1.50.0...v1.51.0
 
 [1.50.0]: https://github.com/deltachat/deltachat-node/compare/v1.49.0...v1.50.0
 
