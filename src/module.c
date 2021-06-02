@@ -328,6 +328,15 @@ NAPI_METHOD(dcn_maybe_valid_addr) {
  * dcn_context_t
  */
 
+NAPI_METHOD(dcn_request_quota_report) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+  dc_request_quota_report(dcn_context->dc_context);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+
 NAPI_METHOD(dcn_add_address_book) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -2689,6 +2698,7 @@ NAPI_INIT() {
    * dcn_context_t
    */
 
+  NAPI_EXPORT_FUNCTION(dcn_request_quota_report)
   NAPI_EXPORT_FUNCTION(dcn_add_address_book);
   NAPI_EXPORT_FUNCTION(dcn_add_contact_to_chat);
   NAPI_EXPORT_FUNCTION(dcn_add_device_msg);
