@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.56.0] - 2021-27-06
+
+### Changed
+
+- Update deltachat-core-rust to `1.56.0`
+
 ## [1.55.0] - 2021-18-05
 
 ### Added
