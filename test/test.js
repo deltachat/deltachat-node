@@ -69,6 +69,43 @@ describe('Basic offline Tests', function () {
     dc.close()
   })
 
+  it('set config', async function () {
+    const dc = new DeltaChat()
+    await dc.open(tempy.directory())
+
+    dc.setConfig('bot', true)
+    strictEqual(dc.getConfig('bot'), '1')
+    dc.setConfig('bot', false)
+    strictEqual(dc.getConfig('bot'), '0')
+    dc.setConfig('bot', '1')
+    strictEqual(dc.getConfig('bot'), '1')
+    dc.setConfig('bot', '0')
+    strictEqual(dc.getConfig('bot'), '0')
+    dc.setConfig('bot', 1)
+    strictEqual(dc.getConfig('bot'), '1')
+    dc.setConfig('bot', 0)
+    strictEqual(dc.getConfig('bot'), '0')
+
+    dc.setConfig('bot', null)
+    strictEqual(dc.getConfig('bot'), '')
+
+    strictEqual(
+      dc.getConfig('selfstatus'),
+      'Sent with my Delta Chat Messenger: https://delta.chat'
+    )
+    dc.setConfig('selfstatus', 'hello')
+    strictEqual(dc.getConfig('selfstatus'), 'hello')
+    dc.setConfig('selfstatus', '')
+    strictEqual(dc.getConfig('selfstatus'), '')
+    dc.setConfig('selfstatus', null)
+    strictEqual(
+      dc.getConfig('selfstatus'),
+      'Sent with my Delta Chat Messenger: https://delta.chat'
+    )
+
+    dc.close()
+  })
+
   it('configure with either missing addr or missing mail_pw throws', async function () {
     const dc = new DeltaChat()
     await dc.open(tempy.directory())
@@ -571,9 +608,9 @@ describe('Integration tests', function () {
     }
 
     account = await DeltaChat.createTempUser(process.env.DCC_NEW_TMP_EMAIL)
-    if (!account || !account.email || !account.password){
+    if (!account || !account.email || !account.password) {
       console.log(
-        'We didn\'t got back an account from the api, skip intergration tests'
+        "We didn't got back an account from the api, skip intergration tests"
       )
       this.skip()
     }
@@ -735,11 +772,13 @@ describe('Integration tests', function () {
     await waitForEnd.promise
   })
 
-  it('configure using invalid password should fail', async function (){  
-    await expect(dc.configure({
-      addr: 'hpk5@testrun.org',
-      mail_pw: 'asd'
-    })).to.be.eventually.rejected
+  it('configure using invalid password should fail', async function () {
+    await expect(
+      dc.configure({
+        addr: 'hpk5@testrun.org',
+        mail_pw: 'asd',
+      })
+    ).to.be.eventually.rejected
   })
 })
 
