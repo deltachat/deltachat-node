@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Fixed
+- fix set_config null handling: empty string "" value can now be saved (fixes #505)
+
 ## [1.55.0] - 2021-18-05
 
 ### Added
