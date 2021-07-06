@@ -947,7 +947,7 @@ export class DeltaChat extends EventEmitter {
     return await postData(url)
   }
 
-  requestQuotaReport(){
+  requestQuotaReport() {
     binding.dcn_request_quota_report(this.dcn_context)
   }
 }
