@@ -30,38 +30,14 @@
                 "cflags": [
                     "-std=gnu99",
                 ],
-                "conditions": [
-                    [ "system_dc_core == 'false'", {
-                        "include_dirs": [
-                            "deltachat-core-rust",
-                        ],
-                        "libraries": [
-                            "../deltachat-core-rust/target/release/libdeltachat.a",
-                            "-ldl",
-                        ],
-                        "conditions": [
-                            [ "OS == 'mac'", {
-                                "libraries": [
-                                    "-framework CoreFoundation",
-                                    "-framework CoreServices",
-                                    "-framework Security",
-                                    "-lresolv",
-                                ],
-                            }, { # OS == 'linux'
-                                 "libraries": [
-                                     "-lm",
-                                     "-lrt",
-                                 ]
-                            }],
-                        ],
-                    }, { "system_dc_core == 'true'"
-                        "cflags": [
-                            "<!(pkg-config --cflags deltachat)"
-                        ],
-                        "libraries": [
-                            "<!(pkg-config --libs deltachat)",
-                        ],
-                    }],
+
+		"libraries": [
+		    "/opt/libdeltachat/lib/libdeltachat.so",
+		    "-lm",
+		    "-lrt",
+		],
+		"include_dirs": [
+		    "/opt/libdeltachat/include",
                 ],
             }],
         ],
