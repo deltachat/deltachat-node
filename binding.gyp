@@ -17,7 +17,7 @@
         "conditions": [
             [ "OS == 'win'", {
                 "include_dirs": [
-                    "deltachat-core-rust",
+                    "deltachat-core-rust/deltachat-ffi",
                 ],
                 "libraries": [
                     "../deltachat-core-rust/target/release/deltachat.dll.lib"
@@ -33,7 +33,7 @@
                 "conditions": [
                     [ "system_dc_core == 'false'", {
                         "include_dirs": [
-                            "deltachat-core-rust",
+                            "deltachat-core-rust/deltachat-ffi",
                         ],
                         "libraries": [
                             "../deltachat-core-rust/target/release/libdeltachat.a",
