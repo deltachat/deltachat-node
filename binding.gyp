@@ -4,7 +4,7 @@
     "variables": {
         # Whether to use a system-wide installation of deltachat-core
         # using pkg-config.  Set to either "true" or "false".
-        "system_dc_core%": "false"
+        "system_dc_core%": "<!(echo $SYSTEM_DC_CORE)"
     },
     "targets": [{
         "target_name": "deltachat",
@@ -54,7 +54,7 @@
                                  ]
                             }],
                         ],
-                    }, { # system_dc_core == 'true'
+                    }, { "system_dc_core == 'true'"
                         "cflags": [
                             "<!(pkg-config --cflags deltachat)"
                         ],
