@@ -4,7 +4,7 @@
     "variables": {
         # Whether to use a system-wide installation of deltachat-core
         # using pkg-config.  Set to either "true" or "false".
-        "LIBDELTACHAT_DIR%": "<!(echo $LIBDELTACHAT_DIR)"
+        "USE_SYSTEM_LIBDELTACHAT%": "<!(echo $USE_SYSTEM_LIBDELTACHAT)"
     },
     "targets": [{
         "target_name": "deltachat",
@@ -23,12 +23,12 @@
                     "../deltachat-core-rust/target/release/deltachat.dll.lib"
                 ],
 		"conditions": [
-			["LIBDELTACHAT_DIR != ''", {
-				"libraries": [
-				    "<!(echo $LIBDELTACHAT_DIR/lib/deltachat.dll.lib)",
+			["USE_SYSTEM_LIBDELTACHAT != ''", {
+				"cflags": [
+				    "<!(pkg-config --cflags deltachat)"
 				],
-				"include_dirs": [
-				    "<!(echo $LIBDELTACHAT_DIR/include)",
+				"libraries": [
+				    "<!(pkg-config --libs deltachat)",
 				],
 			}]
 		],
@@ -41,7 +41,7 @@
                     "-std=gnu99",
                 ],
                 "conditions": [
-                    [ "LIBDELTACHAT_DIR == ''", {
+                    [ "USE_SYSTEM_LIBDELTACHAT != 'true'", {
                         "include_dirs": [
                             "deltachat-core-rust/deltachat-ffi",
                         ],
@@ -51,12 +51,12 @@
                         ],
                         "conditions": [
                         ],
-                    }, { # LIBDELTACHAT_DIR != ''
-			"libraries": [
-			    "<!(echo $LIBDELTACHAT_DIR/lib/libdeltachat.so)",
+                    }, { # USE_SYSTEM_LIBDELTACHAT == 'true'
+			"cflags": [
+			    "<!(pkg-config --cflags deltachat)"
 			],
-			"include_dirs": [
-			    "<!(echo $LIBDELTACHAT_DIR/include)",
+			"libraries": [
+			    "<!(pkg-config --libs deltachat)",
 			],
                     }],
 		    [ "OS == 'mac'", {
