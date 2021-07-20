@@ -6,7 +6,7 @@
 #include <string.h>
 #include <node_api.h>
 #include <uv.h>
-#include <deltachat-ffi/deltachat.h>
+#include <deltachat.h>
 #include "napi-macros-extensions.h"
 
 #ifdef DEBUG
