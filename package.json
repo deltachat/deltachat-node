@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && xdg-open coverage/index.html",
     "install": "node scripts/install.js",
-    "install:system": "npm run build:bindings:c",
+    "install:system": "node-gyp-build \"npm run build:bindings:c:postinstall\" && npm run build:bindings:ts",
     "install:vendored": "node-gyp-build \"npm run build:core\" \"npm run build:bindings:c:postinstall\" && npm run build:bindings:ts",
     "clean": "rm -rf ./dist ./build ./prebuilds ./deltachat-core-rust/target",
     "build": "npm run build:core && npm run build:bindings",
