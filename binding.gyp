@@ -2,9 +2,9 @@
     # Variables can be specified when calling node-gyp as so:
     #   node-gyp configure -- -Dvarname=value
     "variables": {
-        # Whether to use a system-wide installation of deltachat-core
-        # using pkg-config.  Set to either "true" or "false".
-        "system_dc_core%": "false"
+        # Whether to use a system-wide installation of libdeltachat using
+        # pkg-config.  Set $SYSTEM_DC_CORE to something non-empty to do so.
+        "system_dc_core%": "<!(echo $SYSTEM_DC_CORE)"
     },
     "targets": [{
         "target_name": "deltachat",
@@ -17,7 +17,7 @@
         "conditions": [
             [ "OS == 'win'", {
                 "include_dirs": [
-                    "deltachat-core-rust",
+                    "deltachat-core-rust/deltachat-ffi",
                 ],
                 "libraries": [
                     "../deltachat-core-rust/target/release/deltachat.dll.lib"
@@ -31,9 +31,9 @@
                     "-std=gnu99",
                 ],
                 "conditions": [
-                    [ "system_dc_core == 'false'", {
+                    [ "system_dc_core == ''", {
                         "include_dirs": [
-                            "deltachat-core-rust",
+                            "deltachat-core-rust/deltachat-ffi",
                         ],
                         "libraries": [
                             "../deltachat-core-rust/target/release/libdeltachat.a",
@@ -54,7 +54,7 @@
                                  ]
                             }],
                         ],
-                    }, { # system_dc_core == 'true'
+                    }, { # "system_dc_core != ''"
                         "cflags": [
                             "<!(pkg-config --cflags deltachat)"
                         ],
