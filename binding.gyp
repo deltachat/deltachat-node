@@ -4,7 +4,7 @@
     "variables": {
         # Whether to use a system-wide installation of deltachat-core
         # using pkg-config.  Set to either "true" or "false".
-        "system_dc_core%": "<!(echo $SYSTEM_DC_CORE)"
+        "LIBDELTACHAT_DIR%": "<!(echo $LIBDELTACHAT_DIR)"
     },
     "targets": [{
         "target_name": "deltachat",
@@ -24,20 +24,17 @@
                 ],
             }],
             [ "OS == 'linux' or OS == 'mac'", {
-                "libraries": [
-                    "-lpthread",
-                ],
-                "cflags": [
-                    "-std=gnu99",
-                ],
-
 		"libraries": [
-		    "/opt/libdeltachat/lib/libdeltachat.so",
+		    "<!(echo $LIBDELTACHAT_DIR/lib/libdeltachat.so)",
+                    "-lpthread",
 		    "-lm",
 		    "-lrt",
 		],
 		"include_dirs": [
-		    "/opt/libdeltachat/include",
+		    "<!(echo $LIBDELTACHAT_DIR/include)",
+                ],
+                "cflags": [
+                    "-std=gnu99",
                 ],
             }],
         ],
