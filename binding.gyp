@@ -17,24 +17,62 @@
         "conditions": [
             [ "OS == 'win'", {
                 "include_dirs": [
-                    "deltachat-core-rust",
+                    "deltachat-core-rust/deltachat-ffi",
                 ],
                 "libraries": [
                     "../deltachat-core-rust/target/release/deltachat.dll.lib"
                 ],
+		"conditions": [
+			["LIBDELTACHAT_DIR != ''", {
+				"libraries": [
+				    "<!(echo $LIBDELTACHAT_DIR/lib/deltachat.dll.lib)",
+				],
+				"include_dirs": [
+				    "<!(echo $LIBDELTACHAT_DIR/include)",
+				],
+			}]
+		],
             }],
             [ "OS == 'linux' or OS == 'mac'", {
-		"libraries": [
-		    "<!(echo $LIBDELTACHAT_DIR/lib/libdeltachat.so)",
+                "libraries": [
                     "-lpthread",
-		    "-lm",
-		    "-lrt",
-		],
-		"include_dirs": [
-		    "<!(echo $LIBDELTACHAT_DIR/include)",
                 ],
                 "cflags": [
                     "-std=gnu99",
+                ],
+                "conditions": [
+                    [ "LIBDELTACHAT_DIR == ''", {
+                        "include_dirs": [
+                            "deltachat-core-rust/deltachat-ffi",
+                        ],
+                        "libraries": [
+                            "../deltachat-core-rust/target/release/libdeltachat.a",
+                            "-ldl",
+                        ],
+                        "conditions": [
+                        ],
+                    }, { # LIBDELTACHAT_DIR != ''
+			"libraries": [
+			    "<!(echo $LIBDELTACHAT_DIR/lib/libdeltachat.so)",
+			],
+			"include_dirs": [
+			    "<!(echo $LIBDELTACHAT_DIR/include)",
+			],
+                    }],
+		    [ "OS == 'mac'", {
+			"libraries": [
+			    "-framework CoreFoundation",
+			    "-framework CoreServices",
+			    "-framework Security",
+			    "-lresolv",
+			],
+		    }, { # OS == 'linux'
+			 "libraries": [
+			     "-lm",
+			     "-lrt",
+			 ]
+		    }],
+
                 ],
             }],
         ],
