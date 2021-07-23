@@ -23,7 +23,7 @@
                     "../deltachat-core-rust/target/release/deltachat.dll.lib"
                 ],
 		"conditions": [
-                    	[ "USE_SYSTEM_LIBDELTACHAT != 'true'", {
+                    	[ "USE_SYSTEM_LIBDELTACHAT == 'true'", {
 				"cflags": [
 				    "<!(pkg-config --cflags deltachat)"
 				],
