@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.56.2] - 2021-23-07
+
+### Fixed
+
+- Fix tsc and tests
+
 ## [1.56.1] - 2021-23-07
 
 ### Fixed
