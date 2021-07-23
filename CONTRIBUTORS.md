@@ -5,8 +5,8 @@
 | **Lars-Magnus Skog**  |                                                  |
 | **jikstra**           |                                                  |
 | **Simon Laux**        | [**@Simon-Laux**](https://github.com/Simon-Laux) |
-| **Nico de Haen**      |                                                  |
 | **Jikstra**           | [**@Jikstra**](https://github.com/Jikstra)       |
+| **Nico de Haen**      |                                                  |
 | **B. Petersen**       |                                                  |
 | **Karissa McKelvey**  | [**@karissa**](https://github.com/karissa)       |
 | **developer**         |                                                  |
@@ -16,5 +16,6 @@
 | **Pablo**             | [**@pabzm**](https://github.com/pabzm)           |
 | **pabzm**             |                                                  |
 | **holger krekel**     |                                                  |
+| **Robert Schütz**     |                                                  |
 | **bb**                |                                                  |
 | **Charles Paul**      |                                                  |
