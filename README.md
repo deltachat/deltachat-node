@@ -52,9 +52,7 @@ building from source or clone this repository and follow this steps:
 
 1. `git clone https://github.com/deltachat/deltachat-node.git`
 2. `cd deltachat-node`
-3. `npm i --ignore-scripts`
-4. `npm run submodule`
-5. `npm run build`
+3. `npm i`
 
 ## Usage
 
