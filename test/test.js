@@ -1,13 +1,13 @@
 // @ts-check
 import DeltaChat from '../dist'
-import tempy from 'tempy'
 
 import { strictEqual } from 'assert'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { EventId2EventName, C } from '../dist/constants'
 import { join } from 'path'
-import { statSync } from 'fs'
+import { mkdtempSync, statSync } from 'fs'
+import { tmpdir } from 'os'
 chai.use(chaiAsPromised)
 
 describe('static tests', function () {
@@ -64,14 +64,14 @@ describe('static tests', function () {
 describe('Basic offline Tests', function () {
   it('opens a context', async function () {
     const dc = new DeltaChat()
-    await dc.open(tempy.directory())
+    await dc.open(mkTempDir())
     strictEqual(dc.isConfigured(), false)
     dc.close()
   })
 
   it('configure with either missing addr or missing mail_pw throws', async function () {
     const dc = new DeltaChat()
-    await dc.open(tempy.directory())
+    await dc.open(mkTempDir())
 
     await expect(
       dc.configure({ addr: 'delta1@delta.localhost' })
@@ -83,7 +83,7 @@ describe('Basic offline Tests', function () {
 
   it('dc.getInfo()', async function () {
     const dc = new DeltaChat()
-    await dc.open(tempy.directory())
+    await dc.open(mkTempDir())
 
     const info = await dc.getInfo()
     expect(typeof info).to.be.equal('object')
@@ -132,7 +132,7 @@ describe('Offline Tests with unconfigured account', function () {
 
   this.beforeEach(async function () {
     dc = new DeltaChat()
-    directory = tempy.directory()
+    directory = mkTempDir()
     await dc.open(directory)
   })
 
@@ -536,7 +536,7 @@ describe('Integration tests', function () {
 
   this.beforeEach(async function () {
     dc = new DeltaChat()
-    directory = tempy.directory()
+    directory = mkTempDir()
     await dc.open(directory)
   })
 
@@ -691,7 +691,7 @@ describe('Integration tests', function () {
     ).to.be.eventually.fulfilled
     dc.startIO()
     dc2 = new DeltaChat()
-    await dc2.open(tempy.directory())
+    await dc2.open(mkTempDir())
     let setupCode = null
     const waitForSetupCode = waitForSomething()
     const waitForEnd = waitForSomething()
@@ -755,4 +755,11 @@ function waitForSomething() {
     done: resolvePromise,
     promise,
   }
+}
+
+/**
+ * @returns string
+ */
+function mkTempDir() {
+  return mkdtempSync(join(tmpdir(), 'deltachat-'))
 }
