@@ -71,7 +71,7 @@ describe('Basic offline Tests', function () {
 
   it('set config', async function () {
     const dc = new DeltaChat()
-    await dc.open(tempy.directory())
+    await dc.open(mkTempDir())
 
     dc.setConfig('bot', true)
     strictEqual(dc.getConfig('bot'), '1')
