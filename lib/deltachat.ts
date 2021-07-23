@@ -823,12 +823,16 @@ export class DeltaChat extends EventEmitter {
 
   setConfig(key: string, value: string | boolean | number): number {
     debug(`setConfig (string) ${key} ${value}`)
-    if (typeof value === 'boolean') {
-      value = value === true ? '1' : '0'
-    } else if (typeof value === 'number') {
-      value = String(value)
+    if (value === null) {
+      return binding.dcn_set_config_null(this.dcn_context, key)
+    } else {
+      if (typeof value === 'boolean') {
+        value = value === true ? '1' : '0'
+      } else if (typeof value === 'number') {
+        value = String(value)
+      }
+      return binding.dcn_set_config(this.dcn_context, key, value)
     }
-    return binding.dcn_set_config(this.dcn_context, key, value || '')
   }
 
   estimateDeletionCount(fromServer: boolean, seconds: number): number {
