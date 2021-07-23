@@ -2,8 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [1.56.1] - 2021-23-07
+
 ### Fixed
 - fix set_config null handling: empty string "" value can now be saved (fixes #505)
+- env variable `USE_SYSTEM_LIBDELTACHAT="true"`allows to use system wide libdeltachat
+
+### Changed
+- drop fs-extra and tempy @dotlambda
+- update to node 14 @dotlambda
+
 
 ## [1.56.0] - 2021-27-06
 
@@ -1187,7 +1195,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.55.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.55.1...HEAD
+
+[1.55.1]: https://github.com/deltachat/deltachat-node/compare/v1.55.0...v1.55.1
 
 [1.55.0]: https://github.com/deltachat/deltachat-node/compare/v1.54.0...v1.55.0
 
