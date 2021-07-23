@@ -8,12 +8,14 @@ import { ChatList } from './chatlist'
 import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
-import { mkdirp } from 'fs-extra'
+import { mkdtempSync } from 'fs'
+import { mkdir } from 'fs/promises'
 import path from 'path'
 import { Locations } from './locations'
 import pick from 'lodash.pick'
 import rawDebug from 'debug'
-import tempy from 'tempy'
+import { tmpdir } from 'os'
+import { join } from 'path'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
@@ -46,7 +48,7 @@ export class DeltaChat extends EventEmitter {
       throw new Error("We're already open!")
     }
 
-    await mkdirp(cwd)
+    await mkdir(cwd, { recursive: true })
 
     const dbFile = path.join(cwd, 'db.sqlite')
 
@@ -587,7 +589,7 @@ export class DeltaChat extends EventEmitter {
 
   static newTempContext() {
     const dcn_context = binding.dcn_context_new(
-      tempy.directory() + '/db.sqlite'
+      join(mkdtempSync(join(tmpdir(), 'deltachat-')), 'db.sqlite')
     )
     return dcn_context
   }
