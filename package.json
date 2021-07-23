@@ -1,20 +1,22 @@
 {
   "name": "deltachat-node",
-  "version": "1.55.0",
+  "version": "1.56.0",
   "description": "node.js bindings for deltachat-core",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage-html-report": "rm -rf coverage/ && nyc report --reporter=html && xdg-open coverage/index.html",
-    "install": "node-gyp-build \"npm run build:core\" \"npm run build:bindings:c:postinstall\" && npm run build:bindings:ts ",
+    "install": "node scripts/install.js",
+    "install:prebuilds": "node-gyp-build \"npm run build:core\" \"npm run build:bindings:c:postinstall\"",
     "clean": "rm -rf ./dist ./build ./prebuilds ./deltachat-core-rust/target",
     "build": "npm run build:core && npm run build:bindings",
     "build:core": "npm run build:core:rust && npm run build:core:constants",
     "build:core:rust": "node scripts/rebuild-core.js",
     "build:core:constants": "node scripts/generate-constants.js",
     "build:bindings": "npm run build:bindings:c && npm run build:bindings:ts",
-    "build:bindings:c": "npx node-gyp rebuild && npm run build:bindings:c:postinstall",
+    "build:bindings:c": "npm run build:bindings:c:c && npm run build:bindings:c:postinstall",
+    "build:bindings:c:c": "npx node-gyp rebuild",
     "build:bindings:c:postinstall": "node scripts/postinstall.js",
     "build:bindings:ts": "tsc",
     "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
@@ -36,7 +38,6 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@types/node": "^13.13.0",
     "debug": "^4.1.1",
     "fs-extra": "^9.0.1",
     "lodash.pick": "^4.4.0",
@@ -44,8 +45,7 @@
     "node-fetch": "^2.6.0",
     "node-gyp-build": "^4.1.0",
     "split2": "^3.1.1",
-    "tempy": "^0.3.0",
-    "typescript": "^3.7.5"
+    "tempy": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -60,6 +60,8 @@
     "prebuildify": "^3.0.0",
     "prebuildify-ci": "^1.0.4",
     "prettier": "^2.0.5",
-    "typedoc": "^0.17.0"
+    "typedoc": "^0.17.0",
+    "typescript": "^3.7.5",
+    "@types/node": "^13.13.0"
   }
 }
