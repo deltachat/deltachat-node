@@ -46,7 +46,7 @@
     "split2": "^3.1.1"
   },
   "devDependencies": {
-    "@types/node": "^16.4.1",
+    "@types/node": "^14.0.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
