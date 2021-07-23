@@ -40,9 +40,13 @@ jobs:
             deltachat-core-rust/target
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-2
 
-      - name: Install dependencies & build
+      - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --verbose
+        run: npm install --ignore-scripts --verbose
+
+      - name: Build deltachat-core-rust & bindings
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm run build
 
       - name: Test
         run: npm run test
