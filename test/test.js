@@ -568,15 +568,34 @@ describe('Offline Tests with unconfigured account', function () {
 
 describe('Accounts api tests', function () {
   it('account api bindings', function () {
-    let account = binding.dcn_accounts_new("Desktop/Linux", "/dev/null");
-    expect(account).to.equal(null)
+    
+    let accounts = binding.dcn_accounts_new("Desktop/Linux", "/dev/null");
+    expect(accounts).to.equal(null)
 
 
-    account = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
-    expect(account).to.not.equal(null)
+    accounts = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
+    expect(accounts).to.not.equal(null)
 
-    account = binding.dcn_accounts_unref(account);
-    expect(account).to.equal(undefined)
+    accounts = binding.dcn_accounts_unref(accounts);
+    expect(accounts).to.equal(undefined)
+
+    accounts = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
+    expect(accounts).to.not.equal(null)
+    let account_id_a = binding.dcn_accounts_add_account(accounts)
+    expect(accounts).to.not.equal(0)
+
+    let account_id_b = binding.dcn_accounts_add_account(accounts)
+    expect(accounts).to.not.equal(0)
+
+    let all_accounts = binding.dcn_accounts_get_all(accounts)
+
+    expect(all_accounts).to.be.deep.equal([account_id_a, account_id_b])
+
+    let result = binding.dcn_accounts_remove_account(accounts, account_id_a)
+    expect(result).to.equal(1)
+    
+    all_accounts = binding.dcn_accounts_get_all(accounts)
+    expect(all_accounts).to.be.deep.equal([account_id_b])
   })
 })
 

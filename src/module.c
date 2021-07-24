@@ -2713,6 +2713,64 @@ NAPI_METHOD(dcn_accounts_unref) {
   NAPI_RETURN_UNDEFINED();
 }
 
+NAPI_METHOD(dcn_accounts_add_account) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  int account_id = dc_accounts_add_account(dcn_accounts);
+  
+  NAPI_RETURN_UINT32(account_id);
+}
+
+
+NAPI_METHOD(dcn_accounts_migrate_account) {
+  NAPI_ARGV(2);
+  NAPI_DCN_ACCOUNTS();
+  NAPI_ARGV_UTF8_MALLOC(dbfile, 1);
+
+  uint32_t account_id = dc_accounts_migrate_account(dcn_accounts, dbfile);
+
+  NAPI_RETURN_UINT32(account_id);
+}
+
+NAPI_METHOD(dcn_accounts_remove_account) {
+  NAPI_ARGV(2);
+  NAPI_DCN_ACCOUNTS();
+  NAPI_ARGV_UINT32(account_id, 1);
+
+  int result = dc_accounts_remove_account(dcn_accounts, account_id);
+  
+  NAPI_RETURN_INT32(result);
+}
+
+NAPI_METHOD(dcn_accounts_get_all) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_array_t* accounts = dc_accounts_get_all(dcn_accounts);
+  napi_value js_array = dc_array_to_js_array(env, accounts);
+  dc_array_unref(accounts);
+  
+  return js_array;
+}
+
+NAPI_METHOD(dcn_accounts_get_account) {
+  NAPI_ARGV(2);
+  NAPI_DCN_ACCOUNTS();
+  NAPI_ARGV_UINT32(account_id, 1);
+
+  dc_context_t* account_context = dc_accounts_get_context(dcn_accounts, account_id);
+
+
+  napi_value result;
+  if (account_context == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, account_context,
+                                            NULL, NULL, &result));
+  }
+  return result;
+}
 
 NAPI_INIT() {
   /**
@@ -2721,6 +2779,11 @@ NAPI_INIT() {
 
   NAPI_EXPORT_FUNCTION(dcn_accounts_new);
   NAPI_EXPORT_FUNCTION(dcn_accounts_unref);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_add_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_migrate_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_remove_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_get_all);
+  NAPI_EXPORT_FUNCTION(dcn_acocunts_get_account);
 
   /**
    * Main context
