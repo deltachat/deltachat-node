@@ -19,6 +19,14 @@
     NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
   }
 
+#define NAPI_DCN_ACCOUNTS() \
+  dc_accounts_t* dcn_accounts; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_accounts)); \
+  if (!dcn_accounts) { \
+    const char* msg = "Provided accounts object is null"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
+  }
+
 
 #define NAPI_DC_CHAT() \
   dc_chat_t* dc_chat; \

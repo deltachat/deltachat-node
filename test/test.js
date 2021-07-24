@@ -1,5 +1,6 @@
 // @ts-check
 import DeltaChat from '../dist'
+import binding from '../binding'
 
 import { strictEqual } from 'assert'
 import chai, { expect } from 'chai'
@@ -10,6 +11,7 @@ import { mkdtempSync, statSync } from 'fs'
 import { tmpdir } from 'os'
 chai.use(chaiAsPromised)
 
+/*
 describe('static tests', function () {
   it('reverse lookup of events', function () {
     const eventKeys = Object.keys(EventId2EventName).map((k) => Number(k))
@@ -163,7 +165,6 @@ describe('Basic offline Tests', function () {
 })
 
 describe('Offline Tests with unconfigured account', function () {
-  /** @type {DeltaChat} */
   let dc = null
   let directory = ''
 
@@ -563,7 +564,24 @@ describe('Offline Tests with unconfigured account', function () {
   })
 })
 
+*/
+
+describe('Accounts api tests', function () {
+  it('account api bindings', function () {
+    let account = binding.dcn_accounts_new("Desktop/Linux", "/dev/null");
+    expect(account).to.equal(null)
+
+
+    account = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
+    expect(account).to.not.equal(null)
+
+    account = binding.dcn_accounts_unref(account);
+    expect(account).to.equal(undefined)
+  })
+})
+
 describe('Integration tests', function () {
+  return
   this.timeout(60 * 1000) // increase timeout to 1min
   /** @type {DeltaChat} */
   let dc = null
@@ -801,4 +819,12 @@ function waitForSomething() {
  */
 function mkTempDir() {
   return mkdtempSync(join(tmpdir(), 'deltachat-'))
+}
+
+
+const MKTEMPDIR_CHARS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
+function mkTempDirPath() {
+  const temp_path = join(tmpdir(), 'deltachat-' + [null, null, null, null, null].map(() => MKTEMPDIR_CHARS[parseInt(Math.random() * MKTEMPDIR_CHARS.length)]).join(''))
+  // if temp_path exists() { return mkTempDirPath() }
+  return temp_path
 }

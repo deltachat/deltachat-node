@@ -2681,9 +2681,47 @@ NAPI_METHOD(dcn_provider_get_status) {
   //TRACE("result %s", status);
 
   NAPI_RETURN_INT32(status)
+} 
+
+// dc_accounts_*
+
+NAPI_METHOD(dcn_accounts_new) {
+  NAPI_ARGV(2);
+  NAPI_ARGV_UTF8_MALLOC(os_name, 0);
+  NAPI_ARGV_UTF8_MALLOC(dir, 1);
+
+  dc_accounts_t* accounts = dc_accounts_new(os_name, dir);
+
+  napi_value result;
+  if (accounts == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, accounts,
+                                            NULL, NULL, &result));
+  }
+  return result;
 }
 
+
+NAPI_METHOD(dcn_accounts_unref) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_accounts_unref(dcn_accounts);
+  dcn_accounts = NULL;
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+
 NAPI_INIT() {
+  /**
+   * Accounts
+   */
+
+  NAPI_EXPORT_FUNCTION(dcn_accounts_new);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_unref);
+
   /**
    * Main context
    */
