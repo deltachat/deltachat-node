@@ -41,8 +41,8 @@ npm install deltchat-node
 
 ## Dependencies
 
-Node > v10.0.0
-rustup (optional if you can't use the prebuilds)
+- Nodejs >= `v14.0.0`
+- rustup (optional if you can't use the prebuilds)
 
 ## Build from source
 
