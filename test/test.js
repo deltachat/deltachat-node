@@ -581,10 +581,10 @@ describe('Accounts api tests', function () {
 
     accounts = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
     expect(accounts).to.not.equal(null)
-    let account_id_a = binding.dcn_accounts_add_account(accounts)
+    const account_id_a = binding.dcn_accounts_add_account(accounts)
     expect(accounts).to.not.equal(0)
 
-    let account_id_b = binding.dcn_accounts_add_account(accounts)
+    const account_id_b = binding.dcn_accounts_add_account(accounts)
     expect(accounts).to.not.equal(0)
 
     let all_accounts = binding.dcn_accounts_get_all(accounts)
@@ -596,6 +596,28 @@ describe('Accounts api tests', function () {
     
     all_accounts = binding.dcn_accounts_get_all(accounts)
     expect(all_accounts).to.be.deep.equal([account_id_b])
+
+    const account_id_c = binding.dcn_accounts_add_account(accounts)
+    expect(result).to.not.equal(0)
+
+    result = binding.dcn_accounts_select_account(accounts, account_id_c)
+    expect(result).to.equal(1)
+ 
+    let dcn_context = binding.dcn_accounts_get_selected_account(accounts)
+    expect(result).to.not.equal(null)
+
+    result = binding.dcn_accounts_select_account(accounts, account_id_a)
+    expect(result).to.equal(0)
+    
+    dcn_context = binding.dcn_accounts_get_selected_account(accounts)
+    expect(result).to.equal(0)
+
+    result = binding.dcn_accounts_select_account(accounts, account_id_b)
+    expect(result).to.equal(1)
+    
+    dcn_context = binding.dcn_accounts_get_selected_account(accounts)
+    expect(result).to.not.equal(null)
+    
   })
 })
 

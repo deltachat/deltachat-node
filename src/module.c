@@ -2759,18 +2759,54 @@ NAPI_METHOD(dcn_accounts_get_account) {
   NAPI_DCN_ACCOUNTS();
   NAPI_ARGV_UINT32(account_id, 1);
 
-  dc_context_t* account_context = dc_accounts_get_context(dcn_accounts, account_id);
+  dc_context_t* account_context = dc_accounts_get_account(dcn_accounts, account_id);
 
 
   napi_value result;
   if (account_context == NULL) {
     NAPI_STATUS_THROWS(napi_get_null(env, &result));
   } else {
-    NAPI_STATUS_THROWS(napi_create_external(env, account_context,
+    dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+    dcn_context->dc_context = account_context;
+
+    NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
                                             NULL, NULL, &result));
   }
+
   return result;
 }
+
+NAPI_METHOD(dcn_accounts_get_selected_account) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_context_t* account_context = dc_accounts_get_selected_account(dcn_accounts);
+
+
+  napi_value result;
+  if (account_context == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+    dcn_context->dc_context = account_context;
+
+    NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
+                                            NULL, NULL, &result));
+  }
+
+  return result;
+}
+
+NAPI_METHOD(dcn_accounts_select_account) {
+  NAPI_ARGV(2);
+  NAPI_DCN_ACCOUNTS();
+  NAPI_ARGV_UINT32(account_id, 1);
+
+  int result = dc_accounts_select_account(dcn_accounts, account_id);
+  NAPI_RETURN_UINT32(result);
+}
+
+
 
 NAPI_INIT() {
   /**
@@ -2783,7 +2819,9 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_accounts_migrate_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_remove_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_get_all);
-  NAPI_EXPORT_FUNCTION(dcn_acocunts_get_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_get_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_get_selected_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_select_account);
 
   /**
    * Main context
