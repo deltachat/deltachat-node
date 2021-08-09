@@ -622,7 +622,6 @@ describe('Accounts api tests', function () {
 })
 
 describe('Integration tests', function () {
-  return
   this.timeout(60 * 1000) // increase timeout to 1min
   /** @type {DeltaChat} */
   let dc = null

@@ -25,6 +25,17 @@ typedef struct dcn_context_t {
   int gc;
 } dcn_context_t;
 
+/**
+ * Custom accounts
+ */
+typedef struct dcn_accounts_t {
+  dc_accounts_t* dc_accounts;
+  napi_threadsafe_function threadsafe_event_handler;
+  uv_thread_t event_handler_thread;
+  int gc;
+} dcn_accounts_t;
+
+
 
 
 /**
@@ -82,6 +93,14 @@ static void finalize_provider(napi_env env, void* data, void* hint) {
     dc_provider_t* provider = (dc_provider_t*)data;
     //TRACE("cleaning up provider");
     dc_provider_unref(provider);
+  }
+}
+
+static void finalize_account(napi_env env, void* data, void* hint) {
+  if (data) {
+    dc_accounts_t* dcn_accounts = (dc_accounts_t*)data;
+    //TRACE("cleaning up provider");
+    dc_accounts_unref(dcn_accounts);
   }
 }
 
@@ -2690,15 +2709,12 @@ NAPI_METHOD(dcn_accounts_new) {
   NAPI_ARGV_UTF8_MALLOC(os_name, 0);
   NAPI_ARGV_UTF8_MALLOC(dir, 1);
 
-  dc_accounts_t* accounts = dc_accounts_new(os_name, dir);
+  dcn_accounts_t* dcn_accounts = calloc(1, sizeof(dcn_accounts_t));
+  dcn_accounts->dc_accounts = dc_accounts_new(os_name, dir);
 
   napi_value result;
-  if (accounts == NULL) {
-    NAPI_STATUS_THROWS(napi_get_null(env, &result));
-  } else {
-    NAPI_STATUS_THROWS(napi_create_external(env, accounts,
-                                            NULL, NULL, &result));
-  }
+  NAPI_STATUS_THROWS(napi_create_external(env, dcn_accounts,
+                                          NULL, NULL, &result));
   return result;
 }
 
@@ -2707,8 +2723,11 @@ NAPI_METHOD(dcn_accounts_unref) {
   NAPI_ARGV(1);
   NAPI_DCN_ACCOUNTS();
 
-  dc_accounts_unref(dcn_accounts);
-  dcn_accounts = NULL;
+
+  TRACE("Unrefing dc_accounts");
+  dcn_accounts->gc = 1;
+  dc_accounts_unref(dcn_accounts->dc_accounts);
+  dcn_accounts->dc_accounts = NULL; 
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -2717,7 +2736,7 @@ NAPI_METHOD(dcn_accounts_add_account) {
   NAPI_ARGV(1);
   NAPI_DCN_ACCOUNTS();
 
-  int account_id = dc_accounts_add_account(dcn_accounts);
+  int account_id = dc_accounts_add_account(dcn_accounts->dc_accounts);
   
   NAPI_RETURN_UINT32(account_id);
 }
@@ -2728,7 +2747,7 @@ NAPI_METHOD(dcn_accounts_migrate_account) {
   NAPI_DCN_ACCOUNTS();
   NAPI_ARGV_UTF8_MALLOC(dbfile, 1);
 
-  uint32_t account_id = dc_accounts_migrate_account(dcn_accounts, dbfile);
+  uint32_t account_id = dc_accounts_migrate_account(dcn_accounts->dc_accounts, dbfile);
 
   NAPI_RETURN_UINT32(account_id);
 }
@@ -2738,7 +2757,7 @@ NAPI_METHOD(dcn_accounts_remove_account) {
   NAPI_DCN_ACCOUNTS();
   NAPI_ARGV_UINT32(account_id, 1);
 
-  int result = dc_accounts_remove_account(dcn_accounts, account_id);
+  int result = dc_accounts_remove_account(dcn_accounts->dc_accounts, account_id);
   
   NAPI_RETURN_INT32(result);
 }
@@ -2747,7 +2766,7 @@ NAPI_METHOD(dcn_accounts_get_all) {
   NAPI_ARGV(1);
   NAPI_DCN_ACCOUNTS();
 
-  dc_array_t* accounts = dc_accounts_get_all(dcn_accounts);
+  dc_array_t* accounts = dc_accounts_get_all(dcn_accounts->dc_accounts);
   napi_value js_array = dc_array_to_js_array(env, accounts);
   dc_array_unref(accounts);
   
@@ -2759,7 +2778,7 @@ NAPI_METHOD(dcn_accounts_get_account) {
   NAPI_DCN_ACCOUNTS();
   NAPI_ARGV_UINT32(account_id, 1);
 
-  dc_context_t* account_context = dc_accounts_get_account(dcn_accounts, account_id);
+  dc_context_t* account_context = dc_accounts_get_account(dcn_accounts->dc_accounts, account_id);
 
 
   napi_value result;
@@ -2780,7 +2799,7 @@ NAPI_METHOD(dcn_accounts_get_selected_account) {
   NAPI_ARGV(1);
   NAPI_DCN_ACCOUNTS();
 
-  dc_context_t* account_context = dc_accounts_get_selected_account(dcn_accounts);
+  dc_context_t* account_context = dc_accounts_get_selected_account(dcn_accounts->dc_accounts);
 
 
   napi_value result;
@@ -2802,10 +2821,198 @@ NAPI_METHOD(dcn_accounts_select_account) {
   NAPI_DCN_ACCOUNTS();
   NAPI_ARGV_UINT32(account_id, 1);
 
-  int result = dc_accounts_select_account(dcn_accounts, account_id);
+  int result = dc_accounts_select_account(dcn_accounts->dc_accounts, account_id);
   NAPI_RETURN_UINT32(result);
 }
 
+NAPI_METHOD(dcn_accounts_all_work_done) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  int result = dc_accounts_all_work_done(dcn_accounts->dc_accounts);
+  NAPI_RETURN_INT32(result);
+}
+
+NAPI_METHOD(dcn_accounts_start_io) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_accounts_start_io(dcn_accounts->dc_accounts);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_accounts_stop_io) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_accounts_stop_io(dcn_accounts->dc_accounts);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+
+NAPI_METHOD(dcn_accounts_maybe_network) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_accounts_maybe_network(dcn_accounts->dc_accounts);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+
+NAPI_METHOD(dcn_accounts_maybe_network_lost) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  dc_accounts_maybe_network_lost(dcn_accounts->dc_accounts);
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+static void accounts_event_handler_thread_func(void* arg)
+{
+  dcn_accounts_t* dcn_accounts = (dcn_accounts_t*)arg;
+
+  
+
+  TRACE("event_handler_thread_func starting");
+
+  dc_accounts_event_emitter_t * dc_accounts_event_emitter = dc_accounts_get_event_emitter(dcn_accounts->dc_accounts);
+  dc_event_t* event;
+  while ((event = dc_accounts_get_next_event(dc_accounts_event_emitter)) != NULL) {
+    if (!dcn_accounts->threadsafe_event_handler) {
+      TRACE("threadsafe_event_handler not set, bailing");
+      break;
+    }
+
+    // Don't process events if we're being garbage collected!
+    if (dcn_accounts->gc == 1) {
+      TRACE("dc_accounts has been destroyed, bailing");
+      break;
+    }
+
+
+    napi_status status = napi_call_threadsafe_function(dcn_accounts->threadsafe_event_handler, event, napi_tsfn_blocking);
+
+    if (status == napi_closing) {
+      TRACE("JS function got released, bailing");
+      break;
+    }
+  }
+
+  dc_accounts_event_emitter_unref(dc_accounts_event_emitter);
+
+  TRACE("event_handler_thread_func ended");
+
+  napi_release_threadsafe_function(dcn_accounts->threadsafe_event_handler, napi_tsfn_release);
+}
+
+static void call_accounts_js_event_handler(napi_env env, napi_value js_callback, void* _context, void* data)
+{
+  dc_event_t* dc_event = (dc_event_t*)data;
+
+  napi_value global;
+  napi_status status = napi_get_global(env, &global);
+
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to get global");
+  }
+
+#define CALL_JS_CALLBACK_ARGC 4
+
+  const int argc = CALL_JS_CALLBACK_ARGC;
+  napi_value argv[CALL_JS_CALLBACK_ARGC];
+
+  const int event_id = dc_event_get_id(dc_event);
+
+  status = napi_create_int32(env, event_id, &argv[0]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
+  }
+
+  const int account_id = dc_event_get_account_id(dc_event);
+  status = napi_create_int32(env, event_id, &argv[1]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
+  }
+
+
+  status = napi_create_int32(env, dc_event_get_data1_int(dc_event), &argv[2]);
+  if (status != napi_ok) {
+    napi_throw_error(env, NULL, "Unable to create argv[2] for event_handler arguments");
+  }
+
+  if DC_EVENT_DATA2_IS_STRING(event_id) {
+    char* data2_string = dc_event_get_data2_str(dc_event);
+    // Quick fix for https://github.com/deltachat/deltachat-core-rust/issues/1949
+    if (data2_string != 0) {
+      status = napi_create_string_utf8(env, data2_string, NAPI_AUTO_LENGTH, &argv[3]);
+    } else {	
+      status = napi_create_string_utf8(env, "", NAPI_AUTO_LENGTH, &argv[3]);
+    }
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[3] for event_handler arguments");
+    }
+    free(data2_string);
+  } else {
+    status = napi_create_int32(env, dc_event_get_data2_int(dc_event), &argv[3]);
+    if (status != napi_ok) {
+      napi_throw_error(env, NULL, "Unable to create argv[3] for event_handler arguments");
+    }
+  }
+
+  dc_event_unref(dc_event);
+  dc_event = NULL;
+
+  TRACE("calling back into js");
+
+  napi_value result;
+  status = napi_call_function(
+    env,
+    global,
+    js_callback,
+    argc,
+    argv,
+    &result);
+
+  if (status != napi_ok) {
+    TRACE("Unable to call event_handler callback");
+  }
+}
+
+NAPI_METHOD(dcn_accounts_start_event_handler) {
+  NAPI_ARGV(2);
+  NAPI_DCN_ACCOUNTS();
+  napi_value callback = argv[1];
+
+  TRACE("calling..");
+  napi_value async_resource_name;
+  NAPI_STATUS_THROWS(napi_create_string_utf8(env, "dc_accounts_event_callback", NAPI_AUTO_LENGTH, &async_resource_name));
+
+  TRACE("creating threadsafe function..");
+
+  NAPI_STATUS_THROWS(napi_create_threadsafe_function(
+    env,
+    callback,
+    0,
+    async_resource_name,
+    1,
+    1,
+    NULL,
+    NULL,
+    dcn_accounts,
+    call_accounts_js_event_handler,
+    &dcn_accounts->threadsafe_event_handler));
+  TRACE("done");
+
+  dcn_accounts->gc = 0;
+  TRACE("creating uv thread..");
+  uv_thread_create(&dcn_accounts->event_handler_thread, accounts_event_handler_thread_func, dcn_accounts);
+
+  NAPI_RETURN_UNDEFINED();
+}
 
 
 NAPI_INIT() {
@@ -2822,6 +3029,12 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_accounts_get_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_get_selected_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_select_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_all_work_done);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_start_io);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_stop_io);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_maybe_network);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_maybe_network_lost);
+
 
   /**
    * Main context
