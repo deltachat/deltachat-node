@@ -9,6 +9,8 @@
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
 
+#define DEBUG
+
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
 #else
@@ -2836,7 +2838,7 @@ NAPI_METHOD(dcn_accounts_all_work_done) {
 NAPI_METHOD(dcn_accounts_start_io) {
   NAPI_ARGV(1);
   NAPI_DCN_ACCOUNTS();
-
+  TRACE("calling...");
   dc_accounts_start_io(dcn_accounts->dc_accounts);
 
   NAPI_RETURN_UNDEFINED();
@@ -2881,7 +2883,13 @@ static void accounts_event_handler_thread_func(void* arg)
 
   dc_accounts_event_emitter_t * dc_accounts_event_emitter = dc_accounts_get_event_emitter(dcn_accounts->dc_accounts);
   dc_event_t* event;
-  while ((event = dc_accounts_get_next_event(dc_accounts_event_emitter)) != NULL) {
+  while (true) {
+    event = dc_accounts_get_next_event(dc_accounts_event_emitter);
+    if (event == NULL) {
+      TRACE("received NULL event, skipping");
+      continue;
+    }
+
     if (!dcn_accounts->threadsafe_event_handler) {
       TRACE("threadsafe_event_handler not set, bailing");
       break;
@@ -2920,20 +2928,21 @@ static void call_accounts_js_event_handler(napi_env env, napi_value js_callback,
     napi_throw_error(env, NULL, "Unable to get global");
   }
 
-#define CALL_JS_CALLBACK_ARGC 4
 
-  const int argc = CALL_JS_CALLBACK_ARGC;
-  napi_value argv[CALL_JS_CALLBACK_ARGC];
+#define CALL_JS_CALLBACK_ACCOUNTS_ARGC 4
+
+  const int argc = CALL_JS_CALLBACK_ACCOUNTS_ARGC;
+  napi_value argv[CALL_JS_CALLBACK_ACCOUNTS_ARGC];
 
   const int event_id = dc_event_get_id(dc_event);
 
-  status = napi_create_int32(env, event_id, &argv[0]);
+  status = napi_create_uint32(env, event_id, &argv[0]);
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[0] for event_handler arguments");
   }
 
   const int account_id = dc_event_get_account_id(dc_event);
-  status = napi_create_int32(env, event_id, &argv[1]);
+  status = napi_create_uint32(env, account_id, &argv[1]);
   if (status != napi_ok) {
     napi_throw_error(env, NULL, "Unable to create argv[1] for event_handler arguments");
   }
@@ -3034,6 +3043,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_accounts_stop_io);
   NAPI_EXPORT_FUNCTION(dcn_accounts_maybe_network);
   NAPI_EXPORT_FUNCTION(dcn_accounts_maybe_network_lost);
+
+  NAPI_EXPORT_FUNCTION(dcn_accounts_start_event_handler);
 
 
   /**
