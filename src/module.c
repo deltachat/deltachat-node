@@ -2886,7 +2886,7 @@ static void accounts_event_handler_thread_func(void* arg)
   while (true) {
     event = dc_accounts_get_next_event(dc_accounts_event_emitter);
     if (event == NULL) {
-      TRACE("received NULL event, skipping");
+      //TRACE("received NULL event, skipping");
       continue;
     }
 

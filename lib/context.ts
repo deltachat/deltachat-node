@@ -16,6 +16,7 @@ import pick from 'lodash.pick'
 import rawDebug from 'debug'
 import { tmpdir } from 'os'
 import { join } from 'path'
+import { DeltaChat } from './deltachat'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
@@ -369,25 +370,7 @@ export class Context {
   getInfo() {
     debug('getInfo')
     const info = binding.dcn_get_info(this.dcn_context)
-    return Context.parseGetInfo(info)
-  }
-
-  static parseGetInfo(info: string) {
-    debug('static _getInfo')
-    const result = {}
-
-    const regex = /^(\w+)=(.*)$/i
-    info
-      .split('\n')
-      .filter(Boolean)
-      .forEach((line) => {
-        const match = regex.exec(line)
-        if (match) {
-          result[match[1]] = match[2]
-        }
-      })
-
-    return result
+    return DeltaChat.parseGetInfo(info)
   }
 
   getMessage(messageId: number) {
@@ -452,21 +435,6 @@ export class Context {
     )
   }
 
-  static getProviderFromEmail(email: string) {
-    debug('DeltaChat.getProviderFromEmail')
-    const dcn_context = Context.newTempContext()
-    const provider = binding.dcn_provider_new_from_email(dcn_context, email)
-    binding.dcn_context_unref(dcn_context)
-    if (!provider) {
-      return undefined
-    }
-    return {
-      before_login_hint: binding.dcn_provider_get_before_login_hint(provider),
-      overview_page: binding.dcn_provider_get_overview_page(provider),
-      status: binding.dcn_provider_get_status(provider),
-    }
-  }
-
   getSecurejoinQrCode(chatId: number): string {
     debug(`getSecurejoinQrCode ${chatId}`)
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
@@ -477,18 +445,13 @@ export class Context {
     binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 
-  static newTempContext() {
-    const dcn_context = binding.dcn_context_new(
-      join(mkdtempSync(join(tmpdir(), 'deltachat-')), 'db.sqlite')
-    )
-    return dcn_context
-  }
-
   static getSystemInfo() {
     debug('DeltaChat.getSystemInfo')
 
-    const dcn_context = Context.newTempContext()
-    const info = Context.parseGetInfo(binding.dcn_get_info(dcn_context))
+    const { dc, context } = DeltaChat.newTemp()
+    const info = DeltaChat.parseGetInfo(
+      binding.dcn_get_info(context.dcn_context)
+    )
     const result = pick(info, [
       'deltachat_core_version',
       'sqlite_version',
@@ -498,7 +461,8 @@ export class Context {
       'compile_date',
       'arch',
     ])
-    binding.dcn_context_unref(dcn_context)
+    context.unref()
+    dc.close()
     return result
   }
 
@@ -579,12 +543,6 @@ export class Context {
     messageIds = messageIds.map((id) => Number(id))
     debug('markSeenMessages', messageIds)
     binding.dcn_markseen_msgs(this.dcn_context, messageIds)
-  }
-
-  static maybeValidAddr(addr: string) {
-    debug('DeltaChat.maybeValidAddr')
-    if (addr === null) return false
-    return Boolean(binding.dcn_maybe_valid_addr(addr))
   }
 
   maybeNetwork() {

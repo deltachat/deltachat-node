@@ -32,40 +32,19 @@ interface NativeAccount {}
  * Wrapper around dcn_context_t*
  */
 export class DeltaChat extends EventEmitter {
-  dcn_context: NativeContext
   dcn_account: NativeAccount
-  _isOpen: boolean
-  constructor() {
+  constructor(cwd: string, os = 'deltachat-node') {
     debug('DeltaChat constructor')
     super()
-    this._isOpen = false
-    this.dcn_account = null
-    this.dcn_context = null
+    this.dcn_account = binding.dcn_accounts_new(os, cwd)
   }
 
-  isOpen() {
-    return this._isOpen
-  }
-
-  async open(cwd: string, start_event_handler = true, os = 'deltachat-node') {
-    if (this._isOpen === true) {
-      throw new Error("We're already open!")
-    }
-
-    await mkdir(cwd, { recursive: true })
-
-    const dbFile = path.join(cwd, 'db.sqlite')
-
-    this.dcn_account = binding.dcn_account_new(os, cwd)
-    debug('Opened account')
-    if (start_event_handler) {
-      binding.dcn_account_start_event_handler(
-        this.dcn_account,
-        this.handleCoreEvent.bind(this)
-      )
-      debug('Started event handler')
-    }
-    this._isOpen = true
+  start_event_handler() {
+    binding.dcn_accounts_start_event_handler(
+      this.dcn_account,
+      this.handleCoreEvent.bind(this)
+    )
+    debug('Started event handler')
   }
 
   accounts() {
@@ -81,7 +60,7 @@ export class DeltaChat extends EventEmitter {
   }
 
   add_account(): number {
-    return binding.dc_accounts_add_account(this.dcn_account)
+    return binding.dcn_accounts_add_account(this.dcn_account)
   }
 
   remove_account(account_id: number) {
@@ -97,20 +76,14 @@ export class DeltaChat extends EventEmitter {
   }
 
   close() {
-    if (this._isOpen === false) {
-      throw new Error("We're already closed!")
-    }
-
     debug('unrefing context')
-    binding.dcn_account_unref(this.dcn_account)
+    binding.dcn_accounts_unref(this.dcn_account)
     debug('Unref end')
-
-    this._isOpen = false
   }
 
   emit(event: string | symbol, account_id: number, ...args: any[]): boolean {
-    super.emit('ALL', event, ...args)
-    return super.emit(event, ...args)
+    super.emit('ALL', event, account_id, ...args)
+    return super.emit(event, account_id, ...args)
   }
 
   handleCoreEvent(
@@ -130,11 +103,11 @@ export class DeltaChat extends EventEmitter {
   }
 
   startIO() {
-    binding.dcn_account_start_io(this.dcn_account)
+    binding.dcn_accounts_start_io(this.dcn_account)
   }
 
   stopIO() {
-    binding.dcn_account_stop_io(this.dcn_account)
+    binding.dcn_accounts_stop_io(this.dcn_account)
   }
 
   static async createTempUser(url: string) {
@@ -156,5 +129,56 @@ export class DeltaChat extends EventEmitter {
     }
 
     return await postData(url)
+  }
+
+  static maybeValidAddr(addr: string) {
+    debug('DeltaChat.maybeValidAddr')
+    if (addr === null) return false
+    return Boolean(binding.dcn_maybe_valid_addr(addr))
+  }
+
+  static parseGetInfo(info: string) {
+    debug('static _getInfo')
+    const result = {}
+
+    const regex = /^(\w+)=(.*)$/i
+    info
+      .split('\n')
+      .filter(Boolean)
+      .forEach((line) => {
+        const match = regex.exec(line)
+        if (match) {
+          result[match[1]] = match[2]
+        }
+      })
+
+    return result
+  }
+
+  static newTemp() {
+    const tmp_path = join(tmpdir(), 'deltachat-')
+    const dc = new DeltaChat(tmp_path)
+    const accountId = dc.add_account()
+    const context = dc.account_context(accountId)
+    return { dc, context, accountId }
+  }
+
+  static getProviderFromEmail(email: string) {
+    debug('DeltaChat.getProviderFromEmail')
+    const { dc, context } = DeltaChat.newTemp()
+    const provider = binding.dcn_provider_new_from_email(
+      context.dcn_context,
+      email
+    )
+    context.unref()
+    dc.close()
+    if (!provider) {
+      return undefined
+    }
+    return {
+      before_login_hint: binding.dcn_provider_get_before_login_hint(provider),
+      overview_page: binding.dcn_provider_get_overview_page(provider),
+      status: binding.dcn_provider_get_status(provider),
+    }
   }
 }
