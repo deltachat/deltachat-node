@@ -272,7 +272,9 @@ export class Message {
   }
 
   isDeadDrop() {
-    return this.getChatId() === C.DC_CHAT_ID_DEADDROP
+    // TODO: Fix
+    //return this.getChatId() === C.DC_CHAT_ID_DEADDROP
+    return false
   }
 
   isForwarded() {
