@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## Removed
+- dc_create_chat_by_msg_id
+- dc_decide_on_contact_request
+- dc_marknoticed_contact
+- dc_msg_get_real_chat_id
+
 ## [1.56.2] - 2021-23-07
 
 ### Fixed

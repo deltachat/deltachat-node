@@ -148,15 +148,6 @@ export class Context {
       Number(contactId)
     )
   }
-  /** @deprecated
-   * @returns chatId */
-  createChatByMessageId(messageId: number): number {
-    debug(`createChatByMessageId ${messageId}`)
-    return binding.dcn_create_chat_by_msg_id(
-      this.dcn_context,
-      Number(messageId)
-    )
-  }
 
   /** @returns contactId */
   createContact(name: string, addr: string): number {
@@ -528,12 +519,6 @@ export class Context {
   markNoticedChat(chatId: number) {
     debug(`markNoticedChat ${chatId}`)
     binding.dcn_marknoticed_chat(this.dcn_context, Number(chatId))
-  }
-
-  /** @deprecated */
-  markNoticedContact(contactId: number) {
-    debug(`markNoticedContact ${contactId}`)
-    binding.dcn_marknoticed_contact(this.dcn_context, Number(contactId))
   }
 
   markSeenMessages(messageIds: number[]) {

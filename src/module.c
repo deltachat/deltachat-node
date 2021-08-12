@@ -541,18 +541,6 @@ NAPI_METHOD(dcn_create_chat_by_contact_id) {
   NAPI_RETURN_UINT32(chat_id);
 }
 
-NAPI_METHOD(dcn_create_chat_by_msg_id) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_INT32(msg_id, 1);
-
-  //TRACE("calling..");
-  uint32_t chat_id = dc_create_chat_by_msg_id(dcn_context->dc_context, msg_id);
-  //TRACE("result %d", chat_id);
-
-  NAPI_RETURN_UINT32(chat_id);
-}
-
 NAPI_METHOD(dcn_create_contact) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -621,17 +609,6 @@ NAPI_METHOD(dcn_delete_msgs) {
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
-}
-
-NAPI_METHOD(dcn_decide_on_contact_request) {
-  NAPI_ARGV(3);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(msg_id, 1);
-  NAPI_ARGV_INT32(decision, 2);
-
-  uint32_t chat_id = dc_decide_on_contact_request(dcn_context->dc_context, msg_id, decision);
-
-  NAPI_RETURN_UINT32(chat_id);
 }
 
 NAPI_METHOD(dcn_forward_msgs) {
@@ -1181,18 +1158,6 @@ NAPI_METHOD(dcn_marknoticed_chat) {
 
   //TRACE("calling..");
   dc_marknoticed_chat(dcn_context->dc_context, chat_id);
-  //TRACE("done");
-
-  NAPI_RETURN_UNDEFINED();
-}
-
-NAPI_METHOD(dcn_marknoticed_contact) {
-  NAPI_ARGV(2);
-  NAPI_DCN_CONTEXT();
-  NAPI_ARGV_UINT32(contact_id, 1);
-
-  //TRACE("calling..");
-  dc_marknoticed_contact(dcn_context->dc_context, contact_id);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -2051,17 +2016,6 @@ NAPI_METHOD(dcn_msg_get_quoted_msg) {
   }
 
   return result;
-}
-
-NAPI_METHOD(dcn_msg_get_real_chat_id) {
-  NAPI_ARGV(1);
-  NAPI_DC_MSG();
-
-  //TRACE("calling..");
-  int id = dc_msg_get_real_chat_id(dc_msg);
-  //TRACE("result %d", id);
-
-  NAPI_RETURN_INT32(id);
 }
 
 NAPI_METHOD(dcn_msg_get_received_timestamp) {
@@ -3073,13 +3027,11 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
-  NAPI_EXPORT_FUNCTION(dcn_create_chat_by_msg_id);
   NAPI_EXPORT_FUNCTION(dcn_create_contact);
   NAPI_EXPORT_FUNCTION(dcn_create_group_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_contact);
   NAPI_EXPORT_FUNCTION(dcn_delete_msgs);
-  NAPI_EXPORT_FUNCTION(dcn_decide_on_contact_request);
   NAPI_EXPORT_FUNCTION(dcn_forward_msgs);
   NAPI_EXPORT_FUNCTION(dcn_get_blobdir);
   NAPI_EXPORT_FUNCTION(dcn_get_blocked_cnt);
@@ -3117,7 +3069,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
-  NAPI_EXPORT_FUNCTION(dcn_marknoticed_contact);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_maybe_network);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
@@ -3209,7 +3160,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_override_sender_name);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_quoted_msg);
-  NAPI_EXPORT_FUNCTION(dcn_msg_get_real_chat_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_received_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_setupcodebegin);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_showpadlock);

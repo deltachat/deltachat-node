@@ -144,18 +144,6 @@ export class Message {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
 
-  /**
-   * The ID of chat the message belongs to.
-   * To get details about the chat, pass the returned ID to dc_get_chat().
-   * In contrast to Message.getChatId(), this property contains the chat-id also
-   * for messages in the deaddrop.
-   *
-   * @return The ID of the chat the message belongs to, 0 on errors.
-   */
-  get realChatId(): number {
-    return binding.dcn_msg_get_real_chat_id(this.dc_msg)
-  }
-
   getDuration(): number {
     return binding.dcn_msg_get_duration(this.dc_msg)
   }
