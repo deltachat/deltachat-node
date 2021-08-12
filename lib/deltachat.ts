@@ -8,7 +8,7 @@ import { ChatList } from './chatlist'
 import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
-import { mkdtempSync } from 'fs'
+import { existsSync, fstat, mkdtempSync } from 'fs'
 import { mkdir } from 'fs/promises'
 import path from 'path'
 import { Locations } from './locations'
@@ -86,7 +86,7 @@ export class DeltaChat extends EventEmitter {
     data2: number | string
   ) {
     const eventString = EventId2EventName[eventId]
-    console.log('event', eventString, accountId, data1, data2)
+    debug('event', eventString, accountId, data1, data2)
     debug(eventString, data1, data2)
     if (!this.emit) {
       console.log('Received an event but EventEmitter is already destroyed.')
@@ -158,7 +158,12 @@ export class DeltaChat extends EventEmitter {
   }
 
   static newTemporary() {
-    const directory = join(tmpdir(), 'deltachat-')
+    let directory = null
+    while (true) {
+      const randomString = Math.random().toString(36).substr(2, 5)
+      directory = join(tmpdir(), 'deltachat-' + randomString)
+      if (!existsSync(directory)) break
+    }
     const dc = new DeltaChat(directory)
     const accountId = dc.addAccount()
     const context = dc.accountContext(accountId)
