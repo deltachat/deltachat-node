@@ -64,46 +64,45 @@ describe('static tests', function () {
   })
 })
 
-/*
+
 describe('Basic offline Tests', function () {
   it('opens a context', async function () {
-    const dc = new DeltaChat()
-    await dc.open(mkTempDir())
-    strictEqual(dc.isConfigured(), false)
+    const {dc, context} = DeltaChat.newTemporary()
+    
+    strictEqual(context.isConfigured(), false)
     dc.close()
   })
 
   it('set config', async function () {
-    const dc = new DeltaChat()
-    await dc.open(mkTempDir())
+    const {dc, context} = DeltaChat.newTemporary()
 
-    dc.setConfig('bot', true)
-    strictEqual(dc.getConfig('bot'), '1')
-    dc.setConfig('bot', false)
-    strictEqual(dc.getConfig('bot'), '0')
-    dc.setConfig('bot', '1')
-    strictEqual(dc.getConfig('bot'), '1')
-    dc.setConfig('bot', '0')
-    strictEqual(dc.getConfig('bot'), '0')
-    dc.setConfig('bot', 1)
-    strictEqual(dc.getConfig('bot'), '1')
-    dc.setConfig('bot', 0)
-    strictEqual(dc.getConfig('bot'), '0')
+    context.setConfig('bot', true)
+    strictEqual(context.getConfig('bot'), '1')
+    context.setConfig('bot', false)
+    strictEqual(context.getConfig('bot'), '0')
+    context.setConfig('bot', '1')
+    strictEqual(context.getConfig('bot'), '1')
+    context.setConfig('bot', '0')
+    strictEqual(context.getConfig('bot'), '0')
+    context.setConfig('bot', 1)
+    strictEqual(context.getConfig('bot'), '1')
+    context.setConfig('bot', 0)
+    strictEqual(context.getConfig('bot'), '0')
 
-    dc.setConfig('bot', null)
-    strictEqual(dc.getConfig('bot'), '')
+    context.setConfig('bot', null)
+    strictEqual(context.getConfig('bot'), '')
 
     strictEqual(
-      dc.getConfig('selfstatus'),
+      context.getConfig('selfstatus'),
       'Sent with my Delta Chat Messenger: https://delta.chat'
     )
-    dc.setConfig('selfstatus', 'hello')
-    strictEqual(dc.getConfig('selfstatus'), 'hello')
-    dc.setConfig('selfstatus', '')
-    strictEqual(dc.getConfig('selfstatus'), '')
-    dc.setConfig('selfstatus', null)
+    context.setConfig('selfstatus', 'hello')
+    strictEqual(context.getConfig('selfstatus'), 'hello')
+    context.setConfig('selfstatus', '')
+    strictEqual(context.getConfig('selfstatus'), '')
+    context.setConfig('selfstatus', null)
     strictEqual(
-      dc.getConfig('selfstatus'),
+      context.getConfig('selfstatus'),
       'Sent with my Delta Chat Messenger: https://delta.chat'
     )
 
@@ -111,22 +110,24 @@ describe('Basic offline Tests', function () {
   })
 
   it('configure with either missing addr or missing mail_pw throws', async function () {
-    const dc = new DeltaChat()
-    await dc.open(mkTempDir())
+    this.timeout(3000);
+    const {dc, context} = DeltaChat.newTemporary()
+    dc.startEvents()
 
     await expect(
-      dc.configure({ addr: 'delta1@delta.localhost' })
+      context.configure({ addr: 'delta1@delta.localhost' })
     ).to.eventually.be.rejectedWith('Please enter a password.')
-    await expect(dc.configure({ mailPw: 'delta1' })).to.eventually.be.rejected
+    await expect(context.configure({ mailPw: 'delta1' })).to.eventually.be.rejected
 
+    dc.stopIO()
     dc.close()
   })
 
   it('dc.getInfo()', async function () {
-    const dc = new DeltaChat()
-    await dc.open(mkTempDir())
+    const {dc, context} = DeltaChat.newTemporary()
 
-    const info = await dc.getInfo()
+
+    const info = await context.getInfo()
     expect(typeof info).to.be.equal('object')
     expect(info).to.contain.keys([
       'arch',
@@ -165,7 +166,7 @@ describe('Basic offline Tests', function () {
     dc.close()
   })
 })
-
+/*
 describe('Offline Tests with unconfigured account', function () {
   let dc = null
   let directory = ''

@@ -39,7 +39,6 @@ export class DeltaChat extends EventEmitter {
     this.dcn_account = binding.dcn_accounts_new(os, cwd)
   }
 
-
   accounts() {
     return binding.dcn_accounts_get_all(this.dcn_account)
   }
@@ -65,7 +64,7 @@ export class DeltaChat extends EventEmitter {
       this.dcn_account,
       account_id
     )
-    return new Context(native_context)
+    return new Context(this, native_context)
   }
 
   close() {
@@ -86,6 +85,7 @@ export class DeltaChat extends EventEmitter {
     data2: number | string
   ) {
     const eventString = EventId2EventName[eventId]
+    console.log('event', eventString, accountId, data1, data2)
     debug(eventString, data1, data2)
     if (!this.emit) {
       console.log('Received an event but EventEmitter is already destroyed.')
@@ -102,7 +102,6 @@ export class DeltaChat extends EventEmitter {
     )
     debug('Started event handler')
   }
-
 
   startIO() {
     binding.dcn_accounts_start_io(this.dcn_account)

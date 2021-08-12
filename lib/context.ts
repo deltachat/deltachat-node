@@ -33,10 +33,11 @@ interface NativeAccount {}
  */
 export class Context {
   dcn_context: NativeContext
+  dc: DeltaChat
 
-  constructor(context: NativeContext) {
+  constructor(dc: DeltaChat, context: NativeContext) {
     debug('DeltaChat constructor')
-
+    this.dc = dc
     this.dcn_context = context
   }
 
@@ -44,7 +45,6 @@ export class Context {
     binding.dcn_context_unref(this.dcn_context)
     this.dcn_context = null
   }
-
 
   acceptChat(chatId: number) {
     binding.dcn_accept_chat(this.dcn_context, chatId)
@@ -126,6 +126,30 @@ export class Context {
   configure(opts: any): Promise<void> {
     return new Promise((resolve, reject) => {
       debug('configure')
+
+      const onSuccess = () => {
+        removeListeners()
+        resolve()
+      }
+      const onFail = (error) => {
+        removeListeners()
+        reject(new Error(error))
+      }
+
+      const onConfigure = (accountId, data1, data2) => {
+        if (data1 === 0) return onFail(data2)
+        else if (data1 === 1000) return onSuccess()
+      }
+
+      const removeListeners = () => {
+        this.dc.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+      }
+
+      const registerListeners = () => {
+        this.dc.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+      }
+
+      registerListeners()
 
       if (!opts) opts = {}
       Object.keys(opts).forEach((key) => {
