@@ -110,7 +110,6 @@ describe('Basic offline Tests', function () {
   })
 
   it('configure with either missing addr or missing mail_pw throws', async function () {
-    this.timeout(3000);
     const {dc, context} = DeltaChat.newTemporary()
     dc.startEvents()
 
@@ -119,7 +118,6 @@ describe('Basic offline Tests', function () {
     ).to.eventually.be.rejectedWith('Please enter a password.')
     await expect(context.configure({ mailPw: 'delta1' })).to.eventually.be.rejected
 
-    dc.stopIO()
     dc.close()
   })
 

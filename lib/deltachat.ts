@@ -68,6 +68,7 @@ export class DeltaChat extends EventEmitter {
   }
 
   close() {
+    this.stopIO()
     debug('unrefing context')
     binding.dcn_accounts_unref(this.dcn_account)
     debug('Unref end')
