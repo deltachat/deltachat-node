@@ -45,6 +45,15 @@ export class Context {
     this.dcn_context = null
   }
 
+
+  acceptChat(chatId: number) {
+    binding.dcn_accept_chat(this.dcn_context, chatId)
+  }
+
+  blockChat(chatId: number) {
+    binding.dcn_block_chat(this.dcn_context, chatId)
+  }
+
   addAddressBook(addressBook: string) {
     debug(`addAddressBook ${addressBook}`)
     return binding.dcn_add_address_book(this.dcn_context, addressBook)
@@ -439,7 +448,7 @@ export class Context {
   static getSystemInfo() {
     debug('DeltaChat.getSystemInfo')
 
-    const { dc, context } = DeltaChat.newTemp()
+    const { dc, context } = DeltaChat.newTemporary()
     const info = DeltaChat.parseGetInfo(
       binding.dcn_get_info(context.dcn_context)
     )

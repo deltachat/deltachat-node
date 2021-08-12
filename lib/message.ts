@@ -108,7 +108,6 @@ export class Message {
     const quotedMessage = this.getQuotedMessage()
     return {
       chatId: this.getChatId(),
-      realChatId: this.realChatId,
       duration: this.getDuration(),
       file: this.getFile(),
       fromId: this.getFromId(),

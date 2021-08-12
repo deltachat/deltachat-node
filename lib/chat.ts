@@ -46,6 +46,10 @@ export class Chat {
     return Boolean(binding.dcn_chat_is_self_talk(this.dc_chat))
   }
 
+  isContactRequest(): boolean {
+    return Boolean(binding.dcn_chat_is_contact_request(this.dc_chat))
+  }
+
   isUnpromoted(): boolean {
     return Boolean(binding.dcn_chat_is_unpromoted(this.dc_chat))
   }

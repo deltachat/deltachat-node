@@ -39,35 +39,28 @@ export class DeltaChat extends EventEmitter {
     this.dcn_account = binding.dcn_accounts_new(os, cwd)
   }
 
-  start_event_handler() {
-    binding.dcn_accounts_start_event_handler(
-      this.dcn_account,
-      this.handleCoreEvent.bind(this)
-    )
-    debug('Started event handler')
-  }
 
   accounts() {
     return binding.dcn_accounts_get_all(this.dcn_account)
   }
 
-  select_account(account_id: number) {
+  selectAccount(account_id: number) {
     return binding.dcn_accounts_select_account(this.dcn_account, account_id)
   }
 
-  selected_account(): number {
+  selectedAccount(): number {
     return binding.dcn_accounts_get_selected_account(this.dcn_account)
   }
 
-  add_account(): number {
+  addAccount(): number {
     return binding.dcn_accounts_add_account(this.dcn_account)
   }
 
-  remove_account(account_id: number) {
+  removeAccount(account_id: number) {
     return binding.dcn_accounts_remove_account(this.dcn_account, account_id)
   }
 
-  account_context(account_id: number) {
+  accountContext(account_id: number) {
     const native_context = binding.dcn_accounts_get_account(
       this.dcn_account,
       account_id
@@ -101,6 +94,15 @@ export class DeltaChat extends EventEmitter {
     }
     this.emit(eventString, accountId, data1, data2)
   }
+
+  startEvents() {
+    binding.dcn_accounts_start_event_handler(
+      this.dcn_account,
+      this.handleCoreEvent.bind(this)
+    )
+    debug('Started event handler')
+  }
+
 
   startIO() {
     binding.dcn_accounts_start_io(this.dcn_account)
@@ -155,17 +157,17 @@ export class DeltaChat extends EventEmitter {
     return result
   }
 
-  static newTemp() {
+  static newTemporary() {
     const tmp_path = join(tmpdir(), 'deltachat-')
     const dc = new DeltaChat(tmp_path)
-    const accountId = dc.add_account()
-    const context = dc.account_context(accountId)
+    const accountId = dc.addAccount()
+    const context = dc.accountContext(accountId)
     return { dc, context, accountId }
   }
 
   static getProviderFromEmail(email: string) {
     debug('DeltaChat.getProviderFromEmail')
-    const { dc, context } = DeltaChat.newTemp()
+    const { dc, context } = DeltaChat.newTemporary()
     const provider = binding.dcn_provider_new_from_email(
       context.dcn_context,
       email

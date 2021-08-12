@@ -431,6 +431,7 @@ NAPI_METHOD(dcn_check_qr) {
   return result;
 }
 
+
 NAPI_METHOD(dcn_configure) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
@@ -440,6 +441,26 @@ NAPI_METHOD(dcn_configure) {
   TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_accept_chat) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+
+  dc_accept_chat(dcn_context->dc_context, chat_id);
+
+  NAPI_RETURN_UNDEFINED()
+}
+
+NAPI_METHOD(dcn_block_chat) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(chat_id, 1);
+  
+  dc_block_chat(dcn_context->dc_context, chat_id);
+
+  NAPI_RETURN_UNDEFINED()
 }
 
 NAPI_ASYNC_CARRIER_BEGIN(dcn_continue_key_transfer)
@@ -1601,6 +1622,19 @@ NAPI_METHOD(dcn_chat_is_muted) {
 
   NAPI_RETURN_INT32(is_muted);
 }
+
+NAPI_METHOD(dcn_chat_is_contact_request) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  //TRACE("calling..");
+  int is_contact_request = dc_chat_is_contact_request(dc_chat);
+  //TRACE("result %d", is_muted);
+
+  NAPI_RETURN_INT32(is_contact_request);
+}
+
+
 
 /**
  * dc_chatlist_t
@@ -3066,6 +3100,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_is_configured);
   NAPI_EXPORT_FUNCTION(dcn_is_contact_in_chat);
 
+
+
+  NAPI_EXPORT_FUNCTION(dcn_accept_chat);
+  NAPI_EXPORT_FUNCTION(dcn_block_chat);
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
@@ -3106,6 +3144,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_is_protected);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_device_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_muted);
+  NAPI_EXPORT_FUNCTION(dcn_chat_is_contact_request);
 
   /**
    * dc_chatlist_t
