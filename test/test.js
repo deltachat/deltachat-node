@@ -164,72 +164,66 @@ describe('Basic offline Tests', function () {
     dc.close()
   })
 })
-/*
+
 describe('Offline Tests with unconfigured account', function () {
-  let dc = null
-  let directory = ''
+  let [dc, context, accountId, directory] = [null, null, null, null]
 
   this.beforeEach(async function () {
-    dc = new DeltaChat()
-    directory = mkTempDir()
-    await dc.open(directory)
+    let tmp = DeltaChat.newTemporary()
+    dc = tmp.dc
+    context = tmp.context
+    accountId = tmp.accountId
+    directory = tmp.directory
+    dc.startEvents()
   })
 
   this.afterEach(async function () {
     if (dc) {
       try {
         dc.close()
-        dc = null
       } catch (error) {
         console.error(error)
       }
     }
-    directory = ''
-  })
 
-  it('calling a method without an open context should fail with an error', async function () {
-    dc.close()
-    await expect(() => dc.getConfig('addr')).to.throw(
-      'Provided dc_context is null, did you close the context or not open it?',
-      'Call to dc method after context got unrefed failed'
-    )
-
-    // Yeyy no segmentation fault :)
     dc = null
+    context = null
+    accountId = null
+    directory = null
   })
 
-  it('invalid dc.joinSecurejoin', async function () {
-    expect(dc.joinSecurejoin('test')).to.be.eventually.rejected
+  it('invalid context.joinSecurejoin', async function () {
+    expect(context.joinSecurejoin('test')).to.be.eventually.rejected
   })
 
   it('Device Chat', async function () {
     const deviceChatMessageText = 'test234'
 
-    expect((await dc.getChatList(0, '', null)).getCount()).to.equal(
+    expect((await context.getChatList(0, '', null)).getCount()).to.equal(
       0,
       'no device chat after setup'
     )
 
-    await dc.addDeviceMessage('test', deviceChatMessageText)
+    await context.addDeviceMessage('test', deviceChatMessageText)
 
-    const chatList = await dc.getChatList(0, '', null)
+    const chatList = await context.getChatList(0, '', null)
     expect(chatList.getCount()).to.equal(
       1,
       'device chat after adding device msg'
     )
 
     const deviceChatId = await chatList.getChatId(0)
-    const deviceChat = await dc.getChat(deviceChatId)
+    const deviceChat = await context.getChat(deviceChatId)
     expect(deviceChat.isDeviceTalk()).to.be.true
     expect(deviceChat.toJson().isDeviceTalk).to.be.true
 
-    const deviceChatMessages = await dc.getChatMessages(deviceChatId, 0, 0)
+    const deviceChatMessages = await context.getChatMessages(deviceChatId, 0, 0)
     expect(deviceChatMessages.length).to.be.equal(
       1,
       'device chat has added message'
     )
 
-    const deviceChatMessage = await dc.getMessage(deviceChatMessages[0])
+    const deviceChatMessage = await context.getMessage(deviceChatMessages[0])
     expect(deviceChatMessage.getText()).to.equal(
       deviceChatMessageText,
       'device chat message has the inserted text'
@@ -237,21 +231,19 @@ describe('Offline Tests with unconfigured account', function () {
   })
 
   it('should have e2ee enabled and right blobdir', function () {
-    expect(dc.getConfig('e2ee_enabled')).to.equal('1', 'e2eeEnabled correct')
-    expect(dc.getBlobdir()).to.equal(
-      join(directory, 'db.sqlite-blobs'),
-      'correct blobdir'
-    )
+    expect(context.getConfig('e2ee_enabled')).to.equal('1', 'e2eeEnabled correct')
+    expect(String(context.getBlobdir()).startsWith(directory), 'blobdir should be inside temp directory')
+    expect(String(context.getBlobdir()).endsWith('db.sqlite-blobs'), 'blobdir end with "db.sqlite-blobs"')
   })
 
   it('should create chat from contact and Chat methods', async function () {
-    const contactId = dc.createContact('aaa', 'aaa@site.org')
+    const contactId = context.createContact('aaa', 'aaa@site.org')
 
-    strictEqual(dc.lookupContactIdByAddr('aaa@site.org'), contactId)
-    strictEqual(dc.lookupContactIdByAddr('nope@site.net'), 0)
+    strictEqual(context.lookupContactIdByAddr('aaa@site.org'), contactId)
+    strictEqual(context.lookupContactIdByAddr('nope@site.net'), 0)
 
-    let chatId = dc.createChatByContactId(contactId)
-    let chat = dc.getChat(chatId)
+    let chatId = context.createChatByContactId(contactId)
+    let chat = context.getChat(chatId)
 
     strictEqual(
       chat.getVisibility(),
@@ -268,39 +260,39 @@ describe('Offline Tests with unconfigured account', function () {
     strictEqual(chat.isProtected(), false, 'not verified')
     strictEqual(typeof chat.color, 'string', 'color is a string')
 
-    strictEqual(dc.getDraft(chatId), null, 'no draft message')
-    dc.setDraft(chatId, dc.messageNew().setText('w00t!'))
+    strictEqual(context.getDraft(chatId), null, 'no draft message')
+    context.setDraft(chatId, context.messageNew().setText('w00t!'))
     strictEqual(
-      dc.getDraft(chatId).toJson().text,
+      context.getDraft(chatId).toJson().text,
       'w00t!',
       'draft text correct'
     )
-    dc.setDraft(chatId, null)
-    strictEqual(dc.getDraft(chatId), null, 'draft removed')
+    context.setDraft(chatId, null)
+    strictEqual(context.getDraft(chatId), null, 'draft removed')
 
-    strictEqual(dc.getChatIdByContactId(contactId), chatId)
-    expect(dc.getChatContacts(chatId)).to.deep.equal([contactId])
+    strictEqual(context.getChatIdByContactId(contactId), chatId)
+    expect(context.getChatContacts(chatId)).to.deep.equal([contactId])
 
-    dc.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED)
+    context.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED)
     strictEqual(
-      dc.getChat(chatId).getVisibility(),
+      context.getChat(chatId).getVisibility(),
       C.DC_CHAT_VISIBILITY_ARCHIVED,
       'chat archived'
     )
-    dc.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL)
+    context.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL)
     strictEqual(
       chat.getVisibility(),
       C.DC_CHAT_VISIBILITY_NORMAL,
       'chat unarchived'
     )
 
-    chatId = dc.createGroupChat('unverified group', false)
-    chat = dc.getChat(chatId)
+    chatId = context.createGroupChat('unverified group', false)
+    chat = context.getChat(chatId)
     strictEqual(chat.isProtected(), false, 'is not verified')
     strictEqual(chat.getType(), C.DC_CHAT_TYPE_GROUP, 'group chat')
-    expect(dc.getChatContacts(chatId)).to.deep.equal([C.DC_CONTACT_ID_SELF])
+    expect(context.getChatContacts(chatId)).to.deep.equal([C.DC_CONTACT_ID_SELF])
 
-    const draft2 = dc.getDraft(chatId)
+    const draft2 = context.getDraft(chatId)
     expect(draft2, 'unptomoted group has a draft by default')
     const draftJson = draft2.toJson()
     expect(
@@ -308,63 +300,63 @@ describe('Offline Tests with unconfigured account', function () {
       'default text'
     ).to.be.true
 
-    dc.setChatName(chatId, 'NEW NAME')
-    strictEqual(dc.getChat(chatId).getName(), 'NEW NAME', 'name updated')
+    context.setChatName(chatId, 'NEW NAME')
+    strictEqual(context.getChat(chatId).getName(), 'NEW NAME', 'name updated')
 
-    chatId = dc.createGroupChat('a verified group', true)
-    chat = dc.getChat(chatId)
+    chatId = context.createGroupChat('a verified group', true)
+    chat = context.getChat(chatId)
     strictEqual(chat.isProtected(), true, 'is verified')
   })
 
   it('test setting profile image', async function () {
-    const chatId = dc.createGroupChat('testing profile image group', false)
+    const chatId = context.createGroupChat('testing profile image group', false)
     const image = 'image.jpeg'
     const imagePath = join(__dirname, 'fixtures', image)
-    const blobs = dc.getBlobdir()
+    const blobs = context.getBlobdir()
 
-    dc.setChatProfileImage(chatId, imagePath)
-    const blobPath = dc.getChat(chatId).getProfileImage()
+    context.setChatProfileImage(chatId, imagePath)
+    const blobPath = context.getChat(chatId).getProfileImage()
     expect(blobPath.startsWith(blobs)).to.be.true
     expect(blobPath.endsWith(image)).to.be.true
 
-    dc.setChatProfileImage(chatId, null)
-    expect(dc.getChat(chatId).getProfileImage()).to.be.equal(
+    context.setChatProfileImage(chatId, null)
+    expect(context.getChat(chatId).getProfileImage()).to.be.equal(
       null,
       'image is null'
     )
   })
 
   it('test setting ephemeral timer', function () {
-    const chatId = dc.createGroupChat('testing ephemeral timer')
+    const chatId = context.createGroupChat('testing ephemeral timer')
 
     strictEqual(
-      dc.getChatEphemeralTimer(chatId),
+      context.getChatEphemeralTimer(chatId),
       0,
       'ephemeral timer is not set by default'
     )
 
-    dc.setChatEphemeralTimer(chatId, 60)
+    context.setChatEphemeralTimer(chatId, 60)
     strictEqual(
-      dc.getChatEphemeralTimer(chatId),
+      context.getChatEphemeralTimer(chatId),
       60,
       'ephemeral timer is set to 1 minute'
     )
 
-    dc.setChatEphemeralTimer(chatId, 0)
-    strictEqual(dc.getChatEphemeralTimer(chatId), 0, 'ephemeral timer is reset')
+    context.setChatEphemeralTimer(chatId, 0)
+    strictEqual(context.getChatEphemeralTimer(chatId), 0, 'ephemeral timer is reset')
   })
 
   it('should create and delete chat', function () {
-    const chatId = dc.createGroupChat('GROUPCHAT')
-    const chat = dc.getChat(chatId)
+    const chatId = context.createGroupChat('GROUPCHAT')
+    const chat = context.getChat(chatId)
     strictEqual(chat.getId(), chatId, 'correct chatId')
-    dc.deleteChat(chat.getId())
-    strictEqual(dc.getChat(chatId), null, 'chat removed')
+    context.deleteChat(chat.getId())
+    strictEqual(context.getChat(chatId), null, 'chat removed')
   })
 
   it('new message and Message methods', function () {
     const text = 'w00t!'
-    const msg = dc.messageNew().setText(text)
+    const msg = context.messageNew().setText(text)
 
     strictEqual(msg.getChatId(), 0, 'chat id 0 before sent')
     strictEqual(msg.getDuration(), 0, 'duration 0 before sent')
@@ -450,8 +442,8 @@ describe('Offline Tests with unconfigured account', function () {
   })
 
   it('Contact methods', function () {
-    const contactId = dc.createContact('First Last', 'first.last@site.org')
-    const contact = dc.getContact(contactId)
+    const contactId = context.createContact('First Last', 'first.last@site.org')
+    const contact = context.getContact(contactId)
 
     strictEqual(contact.getAddress(), 'first.last@site.org', 'correct address')
     strictEqual(typeof contact.color, 'string', 'color is a string')
@@ -473,66 +465,66 @@ describe('Offline Tests with unconfigured account', function () {
       'Name Three',
       'name3@site.org',
     ]
-    const count = dc.addAddressBook(addresses.join('\n'))
+    const count = context.addAddressBook(addresses.join('\n'))
     strictEqual(count, addresses.length / 2)
-    dc.getContacts(0, 'Name ')
-      .map((id) => dc.getContact(id))
+    context.getContacts(0, 'Name ')
+      .map((id) => context.getContact(id))
       .forEach((contact) => {
         expect(contact.getName().startsWith('Name ')).to.be.true
       })
   })
 
   it('delete contacts', function () {
-    const id = dc.createContact('someuser', 'someuser@site.com')
-    const contact = dc.getContact(id)
+    const id = context.createContact('someuser', 'someuser@site.com')
+    const contact = context.getContact(id)
     strictEqual(contact.getId(), id, 'contact id matches')
-    strictEqual(dc.deleteContact(id), true, 'delete call succesful')
-    strictEqual(dc.getContact(id), null, 'contact is gone')
+    strictEqual(context.deleteContact(id), true, 'delete call succesful')
+    strictEqual(context.getContact(id), null, 'contact is gone')
   })
 
   it('adding and removing a contact from a chat', function () {
-    const chatId = dc.createGroupChat('adding_and_removing')
-    const contactId = dc.createContact('Add Remove', 'add.remove@site.com')
-    strictEqual(dc.addContactToChat(chatId, contactId), true, 'contact added')
-    strictEqual(dc.isContactInChat(chatId, contactId), true, 'contact in chat')
+    const chatId = context.createGroupChat('adding_and_removing')
+    const contactId = context.createContact('Add Remove', 'add.remove@site.com')
+    strictEqual(context.addContactToChat(chatId, contactId), true, 'contact added')
+    strictEqual(context.isContactInChat(chatId, contactId), true, 'contact in chat')
     strictEqual(
-      dc.removeContactFromChat(chatId, contactId),
+      context.removeContactFromChat(chatId, contactId),
       true,
       'contact removed'
     )
     strictEqual(
-      dc.isContactInChat(chatId, contactId),
+      context.isContactInChat(chatId, contactId),
       false,
       'contact not in chat'
     )
   })
 
   it('blocking contacts', function () {
-    const id = dc.createContact('badcontact', 'bad@site.com')
+    const id = context.createContact('badcontact', 'bad@site.com')
 
-    strictEqual(dc.getBlockedCount(), 0)
-    strictEqual(dc.getContact(id).isBlocked(), false)
-    expect(dc.getBlockedContacts()).to.be.empty
+    strictEqual(context.getBlockedCount(), 0)
+    strictEqual(context.getContact(id).isBlocked(), false)
+    expect(context.getBlockedContacts()).to.be.empty
 
-    dc.blockContact(id, true)
-    strictEqual(dc.getBlockedCount(), 1)
-    strictEqual(dc.getContact(id).isBlocked(), true)
-    expect(dc.getBlockedContacts()).to.deep.equal([id])
+    context.blockContact(id, true)
+    strictEqual(context.getBlockedCount(), 1)
+    strictEqual(context.getContact(id).isBlocked(), true)
+    expect(context.getBlockedContacts()).to.deep.equal([id])
 
-    dc.blockContact(id, false)
-    strictEqual(dc.getBlockedCount(), 0)
-    strictEqual(dc.getContact(id).isBlocked(), false)
-    expect(dc.getBlockedContacts()).to.be.empty
+    context.blockContact(id, false)
+    strictEqual(context.getBlockedCount(), 0)
+    strictEqual(context.getContact(id).isBlocked(), false)
+    expect(context.getBlockedContacts()).to.be.empty
   })
 
   it('ChatList methods', function () {
     const ids = [
-      dc.createGroupChat('groupchat1'),
-      dc.createGroupChat('groupchat11'),
-      dc.createGroupChat('groupchat111'),
+      context.createGroupChat('groupchat1'),
+      context.createGroupChat('groupchat11'),
+      context.createGroupChat('groupchat111'),
     ]
 
-    let chatList = dc.getChatList(0, 'groupchat1', null)
+    let chatList = context.getChatList(0, 'groupchat1', null)
     strictEqual(chatList.getCount(), 3, 'should contain above chats')
     expect(ids.indexOf(chatList.getChatId(0))).not.to.equal(-1)
     expect(ids.indexOf(chatList.getChatId(1))).not.to.equal(-1)
@@ -550,21 +542,21 @@ describe('Offline Tests with unconfigured account', function () {
     expect(lot.getTimestamp() > 0, 'timestamp set').to.be.true
 
     const text = 'Custom new group message, yo!'
-    dc.setStockTranslation(C.DC_STR_NEWGROUPDRAFT, text)
-    dc.createGroupChat('groupchat1111')
-    chatList = dc.getChatList(0, 'groupchat1111', null)
+    context.setStockTranslation(C.DC_STR_NEWGROUPDRAFT, text)
+    context.createGroupChat('groupchat1111')
+    chatList = context.getChatList(0, 'groupchat1111', null)
     strictEqual(
       chatList.getSummary(0).getText2(),
       text,
       'custom new group message'
     )
 
-    dc.setChatVisibility(ids[0], C.DC_CHAT_VISIBILITY_ARCHIVED)
-    chatList = dc.getChatList(C.DC_GCL_ARCHIVED_ONLY, 'groupchat1', null)
+    context.setChatVisibility(ids[0], C.DC_CHAT_VISIBILITY_ARCHIVED)
+    chatList = context.getChatList(C.DC_GCL_ARCHIVED_ONLY, 'groupchat1', null)
     strictEqual(chatList.getCount(), 1, 'only one archived')
   })
 })
-
+/*
 
 describe('Accounts api tests', function () {
   it('account api bindings', function () {

@@ -158,11 +158,11 @@ export class DeltaChat extends EventEmitter {
   }
 
   static newTemporary() {
-    const tmp_path = join(tmpdir(), 'deltachat-')
-    const dc = new DeltaChat(tmp_path)
+    const directory = join(tmpdir(), 'deltachat-')
+    const dc = new DeltaChat(directory)
     const accountId = dc.addAccount()
     const context = dc.accountContext(accountId)
-    return { dc, context, accountId }
+    return { dc, context, accountId, directory }
   }
 
   static getProviderFromEmail(email: string) {
