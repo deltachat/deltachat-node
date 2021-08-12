@@ -12,7 +12,7 @@ import { tmpdir } from 'os'
 import { Context } from '../dist/context'
 chai.use(chaiAsPromised)
 
-
+/*
 describe('static tests', function () {
   it('reverse lookup of events', function () {
     const eventKeys = Object.keys(EventId2EventName).map((k) => Number(k))
@@ -53,7 +53,7 @@ describe('static tests', function () {
     ])
   })
 
-  it('static dc.getProviderFromEmail("example@example.com")', function () {
+  it('static context.getProviderFromEmail("example@example.com")', function () {
     const provider = DeltaChat.getProviderFromEmail('example@example.com')
 
     expect(provider).to.deep.equal({
@@ -121,7 +121,7 @@ describe('Basic offline Tests', function () {
     dc.close()
   })
 
-  it('dc.getInfo()', async function () {
+  it('context.getInfo()', async function () {
     const {dc, context} = DeltaChat.newTemporary()
 
 
@@ -556,99 +556,53 @@ describe('Offline Tests with unconfigured account', function () {
     strictEqual(chatList.getCount(), 1, 'only one archived')
   })
 })
-/*
 
-describe('Accounts api tests', function () {
-  it('account api bindings', function () {
-    
-    let accounts = binding.dcn_accounts_new("Desktop/Linux", "/dev/null");
-    expect(accounts).to.equal(null)
-
-
-    accounts = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
-    expect(accounts).to.not.equal(null)
-
-    accounts = binding.dcn_accounts_unref(accounts);
-    expect(accounts).to.equal(undefined)
-
-    accounts = binding.dcn_accounts_new("Desktop/Linux", mkTempDirPath());
-    expect(accounts).to.not.equal(null)
-    const account_id_a = binding.dcn_accounts_add_account(accounts)
-    expect(accounts).to.not.equal(0)
-
-    const account_id_b = binding.dcn_accounts_add_account(accounts)
-    expect(accounts).to.not.equal(0)
-
-    let all_accounts = binding.dcn_accounts_get_all(accounts)
-
-    expect(all_accounts).to.be.deep.equal([account_id_a, account_id_b])
-
-    let result = binding.dcn_accounts_remove_account(accounts, account_id_a)
-    expect(result).to.equal(1)
-    
-    all_accounts = binding.dcn_accounts_get_all(accounts)
-    expect(all_accounts).to.be.deep.equal([account_id_b])
-
-    const account_id_c = binding.dcn_accounts_add_account(accounts)
-    expect(result).to.not.equal(0)
-
-    result = binding.dcn_accounts_select_account(accounts, account_id_c)
-    expect(result).to.equal(1)
- 
-    let dcn_context = binding.dcn_accounts_get_selected_account(accounts)
-    expect(result).to.not.equal(null)
-
-    result = binding.dcn_accounts_select_account(accounts, account_id_a)
-    expect(result).to.equal(0)
-    
-    dcn_context = binding.dcn_accounts_get_selected_account(accounts)
-    expect(result).to.equal(0)
-
-    result = binding.dcn_accounts_select_account(accounts, account_id_b)
-    expect(result).to.equal(1)
-    
-    dcn_context = binding.dcn_accounts_get_selected_account(accounts)
-    expect(result).to.not.equal(null)
-    
-  })
-})
+*/
 
 describe('Integration tests', function () {
   this.timeout(60 * 1000) // increase timeout to 1min
-  /** @type {DeltaChat} */
-  /*
-  let dc = null
-  let dc2 = null
-  let directory = ''
-  let account = null
+  
+
+  let [dc, context, accountId, directory, account] = [null, null, null, null, null]
+
+  let [dc2, context2, accountId2, directory2, account2] = [null, null, null, null, null]
 
   this.beforeEach(async function () {
-    directory = mkTempDir()
-    dc = new DeltaChat(directory)
-    dc.start_event_handler()
+    let tmp = DeltaChat.newTemporary()
+    dc = tmp.dc
+    context = tmp.context
+    accountId = tmp.accountId
+    directory = tmp.directory
+    dc.startEvents()
   })
 
   this.afterEach(async function () {
     if (dc) {
       try {
-        try {
-          dc.stopIO()
-          dc2.stopIO()
-        } catch (_e) {}
         dc.close()
-        dc = null
-        if (dc2) {
-          try {
-            dc2.close()
-          } catch (_e) {}
-          dc2 = null
-        }
       } catch (error) {
         console.error(error)
       }
     }
-    directory = ''
+    if (dc2) {
+      try {
+        dc2.close()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    dc = null
+    context = null
+    accountId = null
+    directory = null
+
+    dc2 = null
+    context2 = null
+    accountId2 = null
+    directory2 = null
   })
+
 
   this.beforeAll(async function () {
     if (!process.env.DCC_NEW_TMP_EMAIL) {
@@ -667,22 +621,9 @@ describe('Integration tests', function () {
     }
   })
 
-  // TODO 1. to 4. below would cover dc.open() completely
-  // 1. test dc.open() where mkdirp fails (e.g. with no permissions)
-  // 2. test failing dc._open() (what would make it fail in core?)
-  // 3. test setting up context with e2ee_enabled set to false + close
-  // 4. test opening an already configured account (re-open above)
-
-  it('test dc.open() where mkdirp fails (e.g. with no permissions)')
-
-  it('test failing dc._open() (what would make it fail in core?)')
-
-  it('test setting up context with e2ee_enabled set to false + close')
-
-  it('test opening an already configured account (re-open above)')
 
   it('configure', async function () {
-    strictEqual(dc.isConfigured(), false, 'should not be configured')
+    strictEqual(context.isConfigured(), false, 'should not be configured')
 
     // Not sure what's the best way to check the events
     // TODO: check the events
@@ -700,7 +641,7 @@ describe('Integration tests', function () {
     // dc.on('ALL', (event, data1, data2) => console.log('ALL', event, data1, data2))
 
     await expect(
-      dc.configure({
+      context.configure({
         addr: account.email,
         mail_pw: account.password,
 
@@ -710,38 +651,31 @@ describe('Integration tests', function () {
       })
     ).to.be.eventually.fulfilled
 
-    strictEqual(dc.getConfig('addr'), account.email, 'addr correct')
-    strictEqual(dc.getConfig('displayname'), 'Delta One', 'displayName correct')
+    strictEqual(context.getConfig('addr'), account.email, 'addr correct')
+    strictEqual(context.getConfig('displayname'), 'Delta One', 'displayName correct')
     strictEqual(
-      dc.getConfig('selfstatus'),
+      context.getConfig('selfstatus'),
       'From Delta One with <3',
       'selfStatus correct'
     )
+    expect(context.getConfig('selfavatar').endsWith('avatar.png'), 'selfavatar correct')
+    strictEqual(context.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
+    strictEqual(context.getConfig('inbox_watch'), '1', 'inbox_watch')
+    strictEqual(context.getConfig('sentbox_watch'), '0', 'sentbox_watch')
+    strictEqual(context.getConfig('mvbox_watch'), '0', 'mvbox_watch')
+    strictEqual(context.getConfig('mvbox_move'), '0', 'mvbox_move')
     strictEqual(
-      dc.getConfig('selfavatar'),
-      join(directory, 'db.sqlite-blobs', 'avatar.png'),
-      'selfavatar correct'
-    )
-    strictEqual(dc.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
-    strictEqual(dc.getConfig('inbox_watch'), '1', 'inbox_watch')
-    strictEqual(dc.getConfig('sentbox_watch'), '0', 'sentbox_watch')
-    strictEqual(dc.getConfig('mvbox_watch'), '0', 'mvbox_watch')
-    strictEqual(dc.getConfig('mvbox_move'), '0', 'mvbox_move')
-    strictEqual(
-      dc.getConfig('save_mime_headers'),
+      context.getConfig('save_mime_headers'),
       '',
       'save_mime_headers correct'
     )
-    strictEqual(
-      dc.getBlobdir(),
-      join(directory, 'db.sqlite-blobs'),
-      'correct blobdir'
-    )
-    strictEqual(dc.isConfigured(), true, 'is configured')
+
+    expect(context.getBlobdir().endsWith('db.sqlite-blobs'), 'correct blobdir')
+    strictEqual(context.isConfigured(), true, 'is configured')
 
     // whole re-configure to only change displayname: what the heck? (copied this from the old test)
     await expect(
-      dc.configure({
+      context.configure({
         addr: account.email,
         mail_pw: account.password,
         displayname: 'Delta Two',
@@ -750,7 +684,7 @@ describe('Integration tests', function () {
       })
     ).to.be.eventually.fulfilled
     strictEqual(
-      dc.getConfig('displayname'),
+      context.getConfig('displayname'),
       'Delta Two',
       'updated displayName correct'
     )
@@ -759,8 +693,8 @@ describe('Integration tests', function () {
   // TODO send text message to chat, check message count and delivered status etc
   it('send text message to chat, check message count and delivered status etc')
 
-  // TODO test dc.createChatByMsgId()
-  it('test deaddrop: dc.createChatByMsgId()')
+  // TODO test context.createChatByMsgId()
+  it('test deaddrop: context.createChatByMsgId()')
 
   it('Autocrypt setup - key transfer', async function () {
     // Spawn a second dc instance with same account
@@ -768,7 +702,7 @@ describe('Integration tests', function () {
     //   console.log('FIRST ', event, data1, data2)
     // )
     await expect(
-      dc.configure({
+      context.configure({
         addr: account.email,
         mail_pw: account.password,
 
@@ -778,24 +712,32 @@ describe('Integration tests', function () {
       })
     ).to.be.eventually.fulfilled
     dc.startIO()
-    dc2 = new DeltaChat()
-    await dc2.open(mkTempDir())
+    const tmp2 = DeltaChat.newTemporary()
+    context2 = tmp2.context
+    dc2 = tmp2.dc
+    directory2 = tmp2.directory
+    accountId2 = tmp2.accountId
+
     let setupCode = null
     const waitForSetupCode = waitForSomething()
     const waitForEnd = waitForSomething()
-    dc.on('DC_EVENT_MSGS_CHANGED', async (chatId, msgId) => {
+    dc.on('ALL', (event, accountId, chatId, msgId) => {
+      console.log(event,'accountId: ', accountId, chatId, msgId)
+    })
+    dc.on('DC_EVENT_MSGS_CHANGED', async (accountId, chatId, msgId) => {
+      console.log('DC_EVENT_MSGS_CHANGED', chatId, msgId)
       if (
-        !dc.getChat(chatId).isSelfTalk() ||
-        !dc.getMessage(msgId).isSetupmessage()
+        !context.getChat(chatId).isSelfTalk() ||
+        !context.getMessage(msgId).isSetupmessage()
       ) {
         return
       }
       let setupCode = await waitForSetupCode.promise
       // console.log('incoming msg', { setupCode })
-      const messages = dc.getChatMessages(chatId, 0, 0)
+      const messages = context.getChatMessages(chatId, 0, 0)
       expect(messages.indexOf(msgId) !== -1, 'msgId is in chat messages').to.be
         .true
-      const result = await dc.continueKeyTransfer(msgId, setupCode)
+      const result = await context.continueKeyTransfer(msgId, setupCode)
       expect(result === true, 'continueKeyTransfer was successful').to.be.true
 
       waitForEnd.done()
@@ -805,7 +747,7 @@ describe('Integration tests', function () {
     //   console.log('SECOND', event, data1, data2)
     // )
     await expect(
-      dc2.configure({
+      context2.configure({
         addr: account.email,
         mail_pw: account.password,
 
@@ -815,7 +757,8 @@ describe('Integration tests', function () {
       })
     ).to.be.eventually.fulfilled
     dc2.startIO()
-    setupCode = await dc2.initiateKeyTransfer()
+    describe('Sending autocrypt setup code')
+    setupCode = await context2.initiateKeyTransfer()
     waitForSetupCode.done(setupCode)
     // console.log('setupCode is: ' + setupCode)
     expect(typeof setupCode).to.equal('string', 'setupCode is string')
@@ -825,13 +768,14 @@ describe('Integration tests', function () {
 
   it('configure using invalid password should fail', async function () {
     await expect(
-      dc.configure({
+      context.configure({
         addr: 'hpk5@testrun.org',
         mail_pw: 'asd',
       })
     ).to.be.eventually.rejected
   })
 })
+
 
 /**
  * @returns {{done: (result?)=>void, promise:Promise<any> }}
@@ -845,19 +789,4 @@ function waitForSomething() {
     done: resolvePromise,
     promise,
   }
-}
-
-/**
- * @returns string
- */
-function mkTempDir() {
-  return mkdtempSync(join(tmpdir(), 'deltachat-'))
-}
-
-
-const MKTEMPDIR_CHARS = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
-function mkTempDirPath() {
-  const temp_path = join(tmpdir(), 'deltachat-' + [null, null, null, null, null].map(() => MKTEMPDIR_CHARS[parseInt(Math.random() * MKTEMPDIR_CHARS.length)]).join(''))
-  // if temp_path exists() { return mkTempDirPath() }
-  return temp_path
 }
