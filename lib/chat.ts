@@ -5,11 +5,14 @@ import rawDebug from 'debug'
 const debug = rawDebug('deltachat:node:chat')
 import { C } from './constants'
 import { integerToHexColor } from './util'
+import { ChatJSON } from './types'
 
 interface NativeChat {}
 /**
  * Wrapper around dc_chat_t*
  */
+
+
 export class Chat {
   constructor(public dc_chat: NativeChat) {
     debug('Chat constructor')
@@ -74,7 +77,7 @@ export class Chat {
     return Boolean(binding.dcn_chat_is_muted(this.dc_chat))
   }
 
-  toJson() {
+  toJson(): ChatJSON {
     debug('toJson')
     const visibility = this.getVisibility()
     return {
@@ -89,6 +92,7 @@ export class Chat {
       isUnpromoted: this.isUnpromoted(),
       isProtected: this.isProtected(),
       isDeviceTalk: this.isDeviceTalk(),
+      isContactRequest: this.isContactRequest(),
       muted: this.isMuted(),
     }
   }

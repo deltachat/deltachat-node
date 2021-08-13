@@ -33,10 +33,14 @@ interface NativeAccount {}
  */
 export class DeltaChat extends EventEmitter {
   dcn_account: NativeAccount
+  accountDir: string
+
   constructor(cwd: string, os = 'deltachat-node') {
     debug('DeltaChat constructor')
     super()
-    this.dcn_account = binding.dcn_accounts_new(os, cwd)
+
+    this.accountDir = cwd
+    this.dcn_account = binding.dcn_accounts_new(os, this.accountDir)
   }
 
   accounts() {
