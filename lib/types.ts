@@ -7,17 +7,17 @@ export type ChatTypes =
   | C.DC_CHAT_TYPE_UNDEFINED
 
 export interface ChatJSON {
-  archived: boolean;
-  pinned: boolean;
-  color: string;
-  id: number;
-  name: string;
-  profileImage: string;
-  type: number;
-  isSelfTalk: boolean;
-  isUnpromoted: boolean;
-  isProtected: boolean;
-  isDeviceTalk: boolean;
-  isContactRequest: boolean;
-  muted: boolean;
+  archived: boolean
+  pinned: boolean
+  color: string
+  id: number
+  name: string
+  profileImage: string
+  type: number
+  isSelfTalk: boolean
+  isUnpromoted: boolean
+  isProtected: boolean
+  isDeviceTalk: boolean
+  isContactRequest: boolean
+  muted: boolean
 }

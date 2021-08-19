@@ -584,20 +584,12 @@ describe('Integration tests', function () {
         console.error(error)
       }
     }
-    if (dc2) {
-      try {
-        dc2.close()
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
+    
     dc = null
     context = null
     accountId = null
     directory = null
 
-    dc2 = null
     context2 = null
     accountId2 = null
     directory2 = null
@@ -696,7 +688,7 @@ describe('Integration tests', function () {
   // TODO test context.createChatByMsgId()
   it('test deaddrop: context.createChatByMsgId()')
 
-  it('Autocrypt setup - key transfer', async function () {
+  it('Autocrypt setup - key transfer', async function (done) {
     // Spawn a second dc instance with same account
     // dc.on('ALL', (event, data1, data2) =>
     //   console.log('FIRST ', event, data1, data2)
@@ -711,27 +703,30 @@ describe('Integration tests', function () {
         selfavatar: join(__dirname, 'fixtures', 'avatar.png'),
       })
     ).to.be.eventually.fulfilled
+    
     dc.startIO()
-    const tmp2 = DeltaChat.newTemporary()
-    context2 = tmp2.context
-    dc2 = tmp2.dc
-    directory2 = tmp2.directory
-    accountId2 = tmp2.accountId
-
+    const accountId2 = dc.addAccount()
+    console.log('accountId2:', accountId2)
+    context2 = dc.accountContext(accountId2)
+    
     let setupCode = null
     const waitForSetupCode = waitForSomething()
     const waitForEnd = waitForSomething()
-    dc.on('ALL', (event, accountId, chatId, msgId) => {
-      console.log(event,'accountId: ', accountId, chatId, msgId)
+
+
+    dc.on('ALL', (event, accountId, data1, data2) => {
+      console.log('['+accountId+']', event, data1, data2)
     })
+    
     dc.on('DC_EVENT_MSGS_CHANGED', async (accountId, chatId, msgId) => {
-      console.log('DC_EVENT_MSGS_CHANGED', chatId, msgId)
+      console.log('['+accountId+'] DC_EVENT_MSGS_CHANGED',chatId, msgId)
       if (
         !context.getChat(chatId).isSelfTalk() ||
         !context.getMessage(msgId).isSetupmessage()
       ) {
         return
       }
+      console.log('Setupcode!')
       let setupCode = await waitForSetupCode.promise
       // console.log('incoming msg', { setupCode })
       const messages = context.getChatMessages(chatId, 0, 0)
@@ -741,11 +736,9 @@ describe('Integration tests', function () {
       expect(result === true, 'continueKeyTransfer was successful').to.be.true
 
       waitForEnd.done()
+      done()
     })
 
-    // dc2.on('ALL', (event, data1, data2) =>
-    //   console.log('SECOND', event, data1, data2)
-    // )
     await expect(
       context2.configure({
         addr: account.email,
@@ -756,12 +749,13 @@ describe('Integration tests', function () {
         selfavatar: join(__dirname, 'fixtures', 'avatar.png'),
       })
     ).to.be.eventually.fulfilled
-    dc2.startIO()
-    describe('Sending autocrypt setup code')
+    
+    console.log('Sending autocrypt setup code')
     setupCode = await context2.initiateKeyTransfer()
     waitForSetupCode.done(setupCode)
-    // console.log('setupCode is: ' + setupCode)
+    console.log('setupCode is: ' + setupCode)
     expect(typeof setupCode).to.equal('string', 'setupCode is string')
+    
 
     await waitForEnd.promise
   })
