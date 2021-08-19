@@ -560,7 +560,7 @@ describe('Offline Tests with unconfigured account', function () {
 */
 
 describe('Integration tests', function () {
-  this.timeout(60 * 1000) // increase timeout to 1min
+  this.timeout(60 * 3000) // increase timeout to 1min
   
 
   let [dc, context, accountId, directory, account] = [null, null, null, null, null]
@@ -688,7 +688,7 @@ describe('Integration tests', function () {
   // TODO test context.createChatByMsgId()
   it('test deaddrop: context.createChatByMsgId()')
 
-  it('Autocrypt setup - key transfer', async function (done) {
+  it('Autocrypt setup - key transfer', async function () {
     // Spawn a second dc instance with same account
     // dc.on('ALL', (event, data1, data2) =>
     //   console.log('FIRST ', event, data1, data2)
@@ -718,9 +718,10 @@ describe('Integration tests', function () {
       console.log('['+accountId+']', event, data1, data2)
     })
     
-    dc.on('DC_EVENT_MSGS_CHANGED', async (accountId, chatId, msgId) => {
+    dc.on('DC_EVENT_MSGS_CHANGED', async (aId, chatId, msgId) => {
       console.log('['+accountId+'] DC_EVENT_MSGS_CHANGED',chatId, msgId)
       if (
+        aId != accountId ||
         !context.getChat(chatId).isSelfTalk() ||
         !context.getMessage(msgId).isSetupmessage()
       ) {
@@ -736,7 +737,6 @@ describe('Integration tests', function () {
       expect(result === true, 'continueKeyTransfer was successful').to.be.true
 
       waitForEnd.done()
-      done()
     })
 
     await expect(
@@ -749,9 +749,11 @@ describe('Integration tests', function () {
         selfavatar: join(__dirname, 'fixtures', 'avatar.png'),
       })
     ).to.be.eventually.fulfilled
+    dc.startIO()
     
     console.log('Sending autocrypt setup code')
     setupCode = await context2.initiateKeyTransfer()
+    console.log('Sent autocrypt setup code')
     waitForSetupCode.done(setupCode)
     console.log('setupCode is: ' + setupCode)
     expect(typeof setupCode).to.equal('string', 'setupCode is string')
