@@ -469,7 +469,6 @@ export class Context {
     binding.dcn_start_io(this.dcn_context)
   }
 
-
   stopIO(): void {
     debug(`stopIO`)
     binding.dcn_stop_io(this.dcn_context)
