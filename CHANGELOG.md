@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+**ATTENTION**: This release includes many breaking changes
+
 ## Changed
 - constructor of DeltaChat changed, it directly opens a accounts object now
 - all api calls got moved from DeltaChat class to Context. You can retrieve it through `DeltaChat.accountContext()`
