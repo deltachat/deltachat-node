@@ -464,6 +464,17 @@ export class Context {
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
   }
 
+  startIO(): void {
+    debug(`startIO`)
+    binding.dcn_start_io(this.dcn_context)
+  }
+
+
+  stopIO(): void {
+    debug(`stopIO`)
+    binding.dcn_stop_io(this.dcn_context)
+  }
+
   stopOngoingProcess(): void {
     debug(`stopOngoingProcess`)
     binding.dcn_stop_ongoing_process(this.dcn_context)
