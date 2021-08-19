@@ -693,6 +693,7 @@ describe('Integration tests', function () {
     // dc.on('ALL', (event, data1, data2) =>
     //   console.log('FIRST ', event, data1, data2)
     // )
+    dc.stopIO()
     await expect(
       context.configure({
         addr: account.email,
@@ -703,8 +704,7 @@ describe('Integration tests', function () {
         selfavatar: join(__dirname, 'fixtures', 'avatar.png'),
       })
     ).to.be.eventually.fulfilled
-    
-    dc.startIO()
+
     const accountId2 = dc.addAccount()
     console.log('accountId2:', accountId2)
     context2 = dc.accountContext(accountId2)
@@ -739,6 +739,7 @@ describe('Integration tests', function () {
       waitForEnd.done()
     })
 
+    dc.stopIO()
     await expect(
       context2.configure({
         addr: account.email,
