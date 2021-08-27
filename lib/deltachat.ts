@@ -32,7 +32,7 @@ interface NativeAccount {}
  * Wrapper around dcn_context_t*
  */
 export class DeltaChat extends EventEmitter {
-  dcn_account: NativeAccount
+  dcn_accounts: NativeAccount
   accountDir: string
 
   constructor(cwd: string, os = 'deltachat-node') {
@@ -40,47 +40,51 @@ export class DeltaChat extends EventEmitter {
     super()
 
     this.accountDir = cwd
-    this.dcn_account = binding.dcn_accounts_new(os, this.accountDir)
+    this.dcn_accounts = binding.dcn_accounts_new(os, this.accountDir)
   }
 
   accounts() {
-    return binding.dcn_accounts_get_all(this.dcn_account)
+    return binding.dcn_accounts_get_all(this.dcn_accounts)
   }
 
   selectAccount(account_id: number) {
-    return binding.dcn_accounts_select_account(this.dcn_account, account_id)
+    return binding.dcn_accounts_select_account(this.dcn_accounts, account_id)
   }
 
   selectedAccount(): number {
-    return binding.dcn_accounts_get_selected_account(this.dcn_account)
+    return binding.dcn_accounts_get_selected_account(this.dcn_accounts)
   }
 
   addAccount(): number {
-    return binding.dcn_accounts_add_account(this.dcn_account)
+    return binding.dcn_accounts_add_account(this.dcn_accounts)
   }
 
   removeAccount(account_id: number) {
-    return binding.dcn_accounts_remove_account(this.dcn_account, account_id)
+    return binding.dcn_accounts_remove_account(this.dcn_accounts, account_id)
   }
 
   accountContext(account_id: number) {
     const native_context = binding.dcn_accounts_get_account(
-      this.dcn_account,
+      this.dcn_accounts,
       account_id
     )
     return new Context(this, native_context)
   }
 
+  migrateAccount(dbfile: string): number {
+    return binding.dcn_accounts_migrate_account(this.dcn_accounts, dbfile)
+  }
+
   close() {
     this.stopIO()
     debug('unrefing context')
-    binding.dcn_accounts_unref(this.dcn_account)
+    binding.dcn_accounts_unref(this.dcn_accounts)
     debug('Unref end')
   }
 
-  emit(event: string | symbol, account_id: number, ...args: any[]): boolean {
-    super.emit('ALL', event, account_id, ...args)
-    return super.emit(event, account_id, ...args)
+  emit(event: string | symbol, account_id: number, data1: any, data2: any): boolean {
+    super.emit('ALL', event, account_id, data1, data2)
+    return super.emit(event, account_id, data1, data2)
   }
 
   handleCoreEvent(
@@ -101,19 +105,23 @@ export class DeltaChat extends EventEmitter {
   }
 
   startEvents() {
+    console.log('xxx', this.dcn_accounts)
+    if (this.dcn_accounts === null) {
+      throw new Error('dcn_account is null')
+    }
     binding.dcn_accounts_start_event_handler(
-      this.dcn_account,
+      this.dcn_accounts,
       this.handleCoreEvent.bind(this)
     )
     debug('Started event handler')
   }
 
   startIO() {
-    binding.dcn_accounts_start_io(this.dcn_account)
+    binding.dcn_accounts_start_io(this.dcn_accounts)
   }
 
   stopIO() {
-    binding.dcn_accounts_stop_io(this.dcn_account)
+    binding.dcn_accounts_stop_io(this.dcn_accounts)
   }
 
   static async createTempUser(url: string) {

@@ -9,7 +9,7 @@
 #include <deltachat.h>
 #include "napi-macros-extensions.h"
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define TRACE(fmt, ...) fprintf(stderr, "> module.c:%d %s() " fmt "\n", __LINE__, __func__, ##__VA_ARGS__)
@@ -277,7 +277,10 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* _c
     &result);
 
   if (status != napi_ok) {
-    TRACE("Unable to call event_handler callback");
+    TRACE("Unable to call event_handler callback2");
+    napi_extended_error_info* error_result;
+    NAPI_STATUS_THROWS(napi_get_last_error_info(env, &error_result));
+    printf("%s\n", error_result->error_message);
   }
 }
 
@@ -881,6 +884,22 @@ NAPI_METHOD(dcn_get_contacts) {
   return js_array;
 }
 
+NAPI_METHOD(dcn_get_connectivity) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  int connectivity = dc_get_connectivity(dcn_context->dc_context);
+  NAPI_RETURN_INT32(connectivity);
+}
+
+NAPI_METHOD(dcn_get_connectivity_html) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  char* connectivity = dc_get_connectivity(dcn_context->dc_context);
+  NAPI_RETURN_AND_UNREF_STRING(connectivity);
+}
+
 NAPI_METHOD(dcn_was_device_msg_ever_added) {
   NAPI_ARGV(2);
   NAPI_DCN_CONTEXT();
@@ -1064,7 +1083,7 @@ NAPI_METHOD(dcn_imex) {
   NAPI_ARGV_UTF8_MALLOC(param1, 2);
   NAPI_ARGV_UTF8_MALLOC(param2, 3);
 
-  //TRACE("calling..");
+  TRACE("calling..");
   dc_imex(dcn_context->dc_context,
           what,
           param1,
@@ -1072,7 +1091,7 @@ NAPI_METHOD(dcn_imex) {
 
   free(param1);
   free(param2);
-  //TRACE("done");
+  TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
 }
@@ -2698,8 +2717,15 @@ NAPI_METHOD(dcn_accounts_new) {
   NAPI_ARGV(2);
   NAPI_ARGV_UTF8_MALLOC(os_name, 0);
   NAPI_ARGV_UTF8_MALLOC(dir, 1);
+  TRACE("calling..");
 
   dcn_accounts_t* dcn_accounts = calloc(1, sizeof(dcn_accounts_t));
+  printf("dcn_accounts: %i", dcn_accounts);
+  if (dcn_accounts == NULL) {
+    napi_throw_error(env, NULL, "dcn_accounts is null"); \
+  }
+
+
   dcn_accounts->dc_accounts = dc_accounts_new(os_name, dir);
 
   napi_value result;
@@ -2975,7 +3001,10 @@ static void call_accounts_js_event_handler(napi_env env, napi_value js_callback,
     &result);
 
   if (status != napi_ok) {
-    TRACE("Unable to call event_handler callback");
+    TRACE("Unable to call event_handler callback2");
+    napi_extended_error_info* error_result;
+    NAPI_STATUS_THROWS(napi_get_last_error_info(env, &error_result));
+    printf("%s\n", error_result->error_message);
   }
 }
 
@@ -3082,6 +3111,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_contact);
   NAPI_EXPORT_FUNCTION(dcn_get_contact_encrinfo);
   NAPI_EXPORT_FUNCTION(dcn_get_contacts);
+  NAPI_EXPORT_FUNCTION(dcn_get_connectivity);
+  NAPI_EXPORT_FUNCTION(dcn_get_connectivity_html);
   NAPI_EXPORT_FUNCTION(dcn_was_device_msg_ever_added);
   NAPI_EXPORT_FUNCTION(dcn_get_draft);
   NAPI_EXPORT_FUNCTION(dcn_get_fresh_msg_cnt);

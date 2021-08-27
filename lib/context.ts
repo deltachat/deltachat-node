@@ -500,6 +500,14 @@ export class Context {
     return result
   }
 
+  getConnectivity(): number {
+    return binding.dcn_get_connectivity(this.dcn_context)
+  }
+
+  getConnectivityHTML(): String {
+    return binding.dcn_get_connectivity_html(this.dcn_context)
+  }
+
   importExport(what: number, param1: string, param2 = '') {
     debug(`importExport ${what} ${param1} ${param2}`)
     binding.dcn_imex(this.dcn_context, what, param1, param2)
