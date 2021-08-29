@@ -12,7 +12,6 @@ import { tmpdir } from 'os'
 import { Context } from '../dist/context'
 chai.use(chaiAsPromised)
 
-/*
 describe('static tests', function () {
   it('reverse lookup of events', function () {
     const eventKeys = Object.keys(EventId2EventName).map((k) => Number(k))
@@ -557,7 +556,6 @@ describe('Offline Tests with unconfigured account', function () {
   })
 })
 
-*/
 
 describe('Integration tests', function () {
   this.timeout(60 * 3000) // increase timeout to 1min

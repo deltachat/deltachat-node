@@ -82,7 +82,12 @@ export class DeltaChat extends EventEmitter {
     debug('Unref end')
   }
 
-  emit(event: string | symbol, account_id: number, data1: any, data2: any): boolean {
+  emit(
+    event: string | symbol,
+    account_id: number,
+    data1: any,
+    data2: any
+  ): boolean {
     super.emit('ALL', event, account_id, data1, data2)
     return super.emit(event, account_id, data1, data2)
   }

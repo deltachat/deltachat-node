@@ -896,7 +896,7 @@ NAPI_METHOD(dcn_get_connectivity_html) {
   NAPI_ARGV(1);
   NAPI_DCN_CONTEXT();
 
-  char* connectivity = dc_get_connectivity(dcn_context->dc_context);
+  char* connectivity = dc_get_connectivity_html(dcn_context->dc_context);
   NAPI_RETURN_AND_UNREF_STRING(connectivity);
 }
 
@@ -2899,6 +2899,7 @@ static void accounts_event_handler_thread_func(void* arg)
   dc_event_t* event;
   while (true) {
     event = dc_accounts_get_next_event(dc_accounts_event_emitter);
+    printf("event %i\n", event);
     if (event == NULL) {
       //TRACE("received NULL event, skipping");
       continue;
@@ -2917,6 +2918,7 @@ static void accounts_event_handler_thread_func(void* arg)
 
 
     napi_status status = napi_call_threadsafe_function(dcn_accounts->threadsafe_event_handler, event, napi_tsfn_blocking);
+    printf("Finished calling event handler\n");
 
     if (status == napi_closing) {
       TRACE("JS function got released, bailing");
