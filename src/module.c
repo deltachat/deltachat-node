@@ -280,7 +280,6 @@ static void call_js_event_handler(napi_env env, napi_value js_callback, void* _c
     TRACE("Unable to call event_handler callback2");
     napi_extended_error_info* error_result;
     NAPI_STATUS_THROWS(napi_get_last_error_info(env, &error_result));
-    printf("%s\n", error_result->error_message);
   }
 }
 
@@ -2720,7 +2719,6 @@ NAPI_METHOD(dcn_accounts_new) {
   TRACE("calling..");
 
   dcn_accounts_t* dcn_accounts = calloc(1, sizeof(dcn_accounts_t));
-  printf("dcn_accounts: %i", dcn_accounts);
   if (dcn_accounts == NULL) {
     napi_throw_error(env, NULL, "dcn_accounts is null"); \
   }
@@ -2899,7 +2897,6 @@ static void accounts_event_handler_thread_func(void* arg)
   dc_event_t* event;
   while (true) {
     event = dc_accounts_get_next_event(dc_accounts_event_emitter);
-    printf("event %i\n", event);
     if (event == NULL) {
       //TRACE("received NULL event, skipping");
       continue;
@@ -2918,7 +2915,6 @@ static void accounts_event_handler_thread_func(void* arg)
 
 
     napi_status status = napi_call_threadsafe_function(dcn_accounts->threadsafe_event_handler, event, napi_tsfn_blocking);
-    printf("Finished calling event handler\n");
 
     if (status == napi_closing) {
       TRACE("JS function got released, bailing");
@@ -3006,7 +3002,6 @@ static void call_accounts_js_event_handler(napi_env env, napi_value js_callback,
     TRACE("Unable to call event_handler callback2");
     napi_extended_error_info* error_result;
     NAPI_STATUS_THROWS(napi_get_last_error_info(env, &error_result));
-    printf("%s\n", error_result->error_message);
   }
 }
 
