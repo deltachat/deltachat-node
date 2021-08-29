@@ -8,6 +8,7 @@
 - constructor of DeltaChat changed, it directly opens a accounts object now
 - all api calls got moved from DeltaChat class to Context. You can retrieve it through `DeltaChat.accountContext()`
 - `DeltaChat.newTempContext()` is now called `DeltaChat.newTemporary()`
+- Update deltachat-core-rust to 1.60.0
 
 ## Added
 - `dcn_chat_is_contact_request()` and `chat.isContactRequest()`
