@@ -43,7 +43,7 @@ jobs:
 
       - name: Build deltachat-core-rust & bindings
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm run build
+        run: npm run build || cat /tmp/*.toml
  
       - name: Tests (+ Integration tests)
         run: npm run test
