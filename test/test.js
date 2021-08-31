@@ -680,12 +680,6 @@ describe('Integration tests', function () {
     )
   })
 
-  // TODO send text message to chat, check message count and delivered status etc
-  it('send text message to chat, check message count and delivered status etc')
-
-  // TODO test context.createChatByMsgId()
-  it('test deaddrop: context.createChatByMsgId()')
-
   it('Autocrypt setup - key transfer', async function () {
     // Spawn a second dc instance with same account
     // dc.on('ALL', (event, data1, data2) =>
