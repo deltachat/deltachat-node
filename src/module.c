@@ -187,7 +187,18 @@ static void event_handler_thread_func(void* arg)
 
   dc_event_emitter_t* emitter = dc_get_event_emitter(dc_context);
   dc_event_t* event;
-  while ((event = dc_get_next_event(emitter)) != NULL) {
+  while (true) {
+    if (emitter == NULL) {
+      TRACE("event emitter is null, bailing");
+      break;
+    }
+
+    event = dc_get_next_event(emitter);
+    if (event == NULL) {
+      TRACE("event is null, bailing");
+      break;
+    }
+
     if (!dcn_context->threadsafe_event_handler) {
       TRACE("threadsafe_event_handler not set, bailing");
       break;

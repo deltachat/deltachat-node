@@ -63,7 +63,6 @@ describe('static tests', function () {
   })
 })
 
-
 describe('Basic offline Tests', function () {
   it('opens a context', async function () {
     const {dc, context} = DeltaChat.newTemporary()
@@ -168,6 +167,7 @@ describe('Offline Tests with unconfigured account', function () {
   let [dc, context, accountId, directory] = [null, null, null, null]
 
   this.beforeEach(async function () {
+    console.log('Starting dc')
     let tmp = DeltaChat.newTemporary()
     dc = tmp.dc
     context = tmp.context
@@ -177,8 +177,13 @@ describe('Offline Tests with unconfigured account', function () {
   })
 
   this.afterEach(async function () {
+    if (context) {
+	context.stopOngoingProcess()
+    }
     if (dc) {
       try {
+	console.log('Closing dc')
+	dc.stopIO()
         dc.close()
       } catch (error) {
         console.error(error)
@@ -189,6 +194,7 @@ describe('Offline Tests with unconfigured account', function () {
     context = null
     accountId = null
     directory = null
+    console.log('done')
   })
 
   it('invalid context.joinSecurejoin', async function () {
@@ -227,6 +233,7 @@ describe('Offline Tests with unconfigured account', function () {
       deviceChatMessageText,
       'device chat message has the inserted text'
     )
+    console.log('done1')
   })
 
   it('should have e2ee enabled and right blobdir', function () {
@@ -556,7 +563,6 @@ describe('Offline Tests with unconfigured account', function () {
   })
 })
 
-
 describe('Integration tests', function () {
   this.timeout(60 * 3000) // increase timeout to 1min
   
@@ -575,8 +581,24 @@ describe('Integration tests', function () {
   })
 
   this.afterEach(async function () {
+    if (context) {
+	try {
+	 context.stopOngoingProcess()
+	} catch (error) {
+	 console.error(error)
+	}
+    }
+    if (context2) {
+	try {
+	 context2.stopOngoingProcess()
+	} catch (error) {
+	 console.error(error)
+	}
+    }
+
     if (dc) {
       try {
+	dc.stopIO();
         dc.close()
       } catch (error) {
         console.error(error)
