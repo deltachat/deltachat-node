@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.60.0] - 2021-01-09
+
 **ATTENTION**: This release includes many breaking changes
 
 ## Changed

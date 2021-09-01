@@ -49,4 +49,4 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test || cat /tmp/*.toml
+        run: npm run test
