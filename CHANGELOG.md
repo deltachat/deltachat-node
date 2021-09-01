@@ -2,6 +2,32 @@
 
 ## [Unreleased][unreleased]
 
+**ATTENTION**: This release includes many breaking changes
+
+## Changed
+- constructor of DeltaChat changed, it directly opens a accounts object now
+- all api calls got moved from DeltaChat class to Context. You can retrieve it through `DeltaChat.accountContext()`
+- `DeltaChat.newTempContext()` is now called `DeltaChat.newTemporary()`
+- Update deltachat-core-rust to 1.60.0
+
+## Added
+- `dcn_chat_is_contact_request()` and `chat.isContactRequest()`
+- `dcn_accept_chat` and `context.acceptChat()`
+- `dcn_block_chat` and `context.blockChat()`
+- `dcn_accounts_get_all` and `DeltaChat.accounts()`
+- `dcn_accounts_add_account` and `DeltaChat.addAccount()`
+- `dcn_accounts_get_selected_account` and `DeltaChat.selectAccount()`
+- `dcn_accounts_new` and `DeltaChat constructor`
+- `dcn_accounts_remove_account` and `DeltaChat.removeAccount`
+- `dcn_accounts_get_account` and `DeltaChat.accountContext`
+- `dcn_accounts_start_event_handler` and `DeltaChat.startEvents`
+
+## Removed
+- `dcn_create_chat_by_msg_id()`
+- `dcn_decide_on_contact_request()`
+- `dcn_marknoticed_contact()`
+- `dcn_msg_get_real_chat_id()` and `chat.getRealChatId()`, as deaddrops got removed, use `chat.getChatId()` instead
+
 ## [1.56.2] - 2021-23-07
 
 ### Fixed

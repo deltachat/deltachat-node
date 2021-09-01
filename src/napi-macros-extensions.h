@@ -19,6 +19,18 @@
     NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
   }
 
+#define NAPI_DCN_ACCOUNTS() \
+  dcn_accounts_t* dcn_accounts; \
+  NAPI_STATUS_THROWS(napi_get_value_external(env, argv[0], (void**)&dcn_accounts)); \
+  if (!dcn_accounts) { \
+    const char* msg = "Provided dnc_acounts is null"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
+  } \
+  if (!dcn_accounts->dc_accounts) { \
+    const char* msg = "Provided dc_accounts is null, did you unref the accounts object?"; \
+    NAPI_STATUS_THROWS(napi_throw_type_error(env, NULL, msg)); \
+  }
+
 
 #define NAPI_DC_CHAT() \
   dc_chat_t* dc_chat; \
@@ -59,6 +71,12 @@
   napi_value return_int64; \
   NAPI_STATUS_THROWS(napi_create_bigint_int64(env, name, &return_int64)); \
   return return_int64;
+
+#define NAPI_RETURN_INT32(name) \
+  napi_value return_int32; \
+  NAPI_STATUS_THROWS(napi_create_int32(env, name, &return_int32)); \
+  return return_int32;
+
 
 #define NAPI_RETURN_AND_UNREF_STRING(name) \
   napi_value return_value; \

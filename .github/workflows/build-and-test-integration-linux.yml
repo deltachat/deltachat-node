@@ -43,10 +43,10 @@ jobs:
 
       - name: Build deltachat-core-rust & bindings
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm run build
+        run: npm run build 
  
       - name: Tests (+ Integration tests)
-        run: npm run test
+        run: npm run test || cat /tmp/*.toml
         env:
           DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
 
