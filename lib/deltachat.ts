@@ -110,7 +110,6 @@ export class DeltaChat extends EventEmitter {
   }
 
   startEvents() {
-    console.log('xxx', this.dcn_accounts)
     if (this.dcn_accounts === null) {
       throw new Error('dcn_account is null')
     }

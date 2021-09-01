@@ -167,7 +167,6 @@ describe('Offline Tests with unconfigured account', function () {
   let [dc, context, accountId, directory] = [null, null, null, null]
 
   this.beforeEach(async function () {
-    console.log('Starting dc')
     let tmp = DeltaChat.newTemporary()
     dc = tmp.dc
     context = tmp.context
@@ -182,7 +181,6 @@ describe('Offline Tests with unconfigured account', function () {
     }
     if (dc) {
       try {
-	console.log('Closing dc')
 	dc.stopIO()
         dc.close()
       } catch (error) {
@@ -194,7 +192,6 @@ describe('Offline Tests with unconfigured account', function () {
     context = null
     accountId = null
     directory = null
-    console.log('done')
   })
 
   it('invalid context.joinSecurejoin', async function () {
@@ -233,7 +230,6 @@ describe('Offline Tests with unconfigured account', function () {
       deviceChatMessageText,
       'device chat message has the inserted text'
     )
-    console.log('done1')
   })
 
   it('should have e2ee enabled and right blobdir', function () {
