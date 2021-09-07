@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- rename `DeltaChat` to `AccountManager`
+- rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
+
+## Fixed
+- Fix documentation comment of `AccountManager`
+- Fix configure for multiple accounts at once
+
 ## [1.60.0] - 2021-01-09
 
 **ATTENTION**: This release includes many breaking changes
