@@ -186,13 +186,16 @@ export class DeltaChat extends EventEmitter {
     return { dc, context, accountId, directory }
   }
 
+  /** get information about the provider
+   * 
+   * This function creates a temporary context to be standalone,
+   * if posible use `Context.getProviderFromEmail` instead. (otherwise potential proxy settings are not used)
+   * @deprecated
+   */
   static getProviderFromEmail(email: string) {
     debug('DeltaChat.getProviderFromEmail')
     const { dc, context } = DeltaChat.newTemporary()
-    const provider = binding.dcn_provider_new_from_email(
-      context.dcn_context,
-      email
-    )
+    const provider = context.getProviderFromEmail(email)
     context.unref()
     dc.close()
     if (!provider) {
