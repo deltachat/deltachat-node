@@ -3,16 +3,7 @@
 import binding from '../binding'
 import { C, EventId2EventName } from './constants'
 import { EventEmitter } from 'events'
-import { Chat } from './chat'
-import { ChatList } from './chatlist'
-import { Contact } from './contact'
-import { Message } from './message'
-import { Lot } from './lot'
-import { existsSync, fstat, mkdtempSync } from 'fs'
-import { mkdir } from 'fs/promises'
-import path from 'path'
-import { Locations } from './locations'
-import pick from 'lodash.pick'
+import { existsSync } from 'fs'
 import rawDebug from 'debug'
 import { tmpdir } from 'os'
 import { join } from 'path'
@@ -20,18 +11,12 @@ import { Context } from './context'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
-const DC_SHOW_EMAILS = [
-  C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS,
-  C.DC_SHOW_EMAILS_ALL,
-  C.DC_SHOW_EMAILS_OFF,
-]
-interface NativeContext {}
 interface NativeAccount {}
 
 /**
- * Wrapper around dcn_context_t*
+ * Wrapper around dcn_account_t*
  */
-export class DeltaChat extends EventEmitter {
+export class AccountManager extends EventEmitter {
   dcn_accounts: NativeAccount
   accountDir: string
 
@@ -43,7 +28,7 @@ export class DeltaChat extends EventEmitter {
     this.dcn_accounts = binding.dcn_accounts_new(os, this.accountDir)
   }
 
-  accounts() {
+  getAllAccountIds() {
     return binding.dcn_accounts_get_all(this.dcn_accounts)
   }
 
@@ -68,7 +53,7 @@ export class DeltaChat extends EventEmitter {
       this.dcn_accounts,
       account_id
     )
-    return new Context(this, native_context)
+    return new Context(this, native_context, account_id)
   }
 
   migrateAccount(dbfile: string): number {
@@ -180,7 +165,7 @@ export class DeltaChat extends EventEmitter {
       directory = join(tmpdir(), 'deltachat-' + randomString)
       if (!existsSync(directory)) break
     }
-    const dc = new DeltaChat(directory)
+    const dc = new AccountManager(directory)
     const accountId = dc.addAccount()
     const context = dc.accountContext(accountId)
     return { dc, context, accountId, directory }
@@ -194,7 +179,7 @@ export class DeltaChat extends EventEmitter {
    */
   static getProviderFromEmail(email: string) {
     debug('DeltaChat.getProviderFromEmail')
-    const { dc, context } = DeltaChat.newTemporary()
+    const { dc, context } = AccountManager.newTemporary()
     const provider = context.getProviderFromEmail(email)
     context.unref()
     dc.close()

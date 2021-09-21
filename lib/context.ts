@@ -9,41 +9,34 @@ import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
 import { mkdtempSync } from 'fs'
-import { mkdir } from 'fs/promises'
-import path from 'path'
 import { Locations } from './locations'
 import pick from 'lodash.pick'
 import rawDebug from 'debug'
-import { tmpdir } from 'os'
-import { join } from 'path'
-import { DeltaChat } from './deltachat'
+import { AccountManager } from './deltachat'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
-const DC_SHOW_EMAILS = [
-  C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS,
-  C.DC_SHOW_EMAILS_ALL,
-  C.DC_SHOW_EMAILS_OFF,
-]
 interface NativeContext {}
-interface NativeAccount {}
 
 /**
  * Wrapper around dcn_context_t*
  */
 export class Context {
-  dcn_context: NativeContext
-  dc: DeltaChat
-
-  constructor(dc: DeltaChat, context: NativeContext) {
+  constructor(
+    readonly manager: AccountManager,
+    private inner_dcn_context: NativeContext,
+    readonly account_id: number
+  ) {
     debug('DeltaChat constructor')
-    this.dc = dc
-    this.dcn_context = context
+  }
+
+  get dcn_context() {
+    return this.inner_dcn_context
   }
 
   unref() {
     binding.dcn_context_unref(this.dcn_context)
-    this.dcn_context = null
+    this.inner_dcn_context = null
   }
 
   acceptChat(chatId: number) {
@@ -137,16 +130,19 @@ export class Context {
       }
 
       const onConfigure = (accountId, data1, data2) => {
+        if (this.account_id !== accountId) {
+          return
+        }
         if (data1 === 0) return onFail(data2)
         else if (data1 === 1000) return onSuccess()
       }
 
       const removeListeners = () => {
-        this.dc.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+        this.manager.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
       }
 
       const registerListeners = () => {
-        this.dc.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+        this.manager.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
       }
 
       registerListeners()
@@ -394,7 +390,7 @@ export class Context {
   getInfo() {
     debug('getInfo')
     const info = binding.dcn_get_info(this.dcn_context)
-    return DeltaChat.parseGetInfo(info)
+    return AccountManager.parseGetInfo(info)
   }
 
   getMessage(messageId: number) {
@@ -482,8 +478,8 @@ export class Context {
   static getSystemInfo() {
     debug('DeltaChat.getSystemInfo')
 
-    const { dc, context } = DeltaChat.newTemporary()
-    const info = DeltaChat.parseGetInfo(
+    const { dc, context } = AccountManager.newTemporary()
+    const info = AccountManager.parseGetInfo(
       binding.dcn_get_info(context.dcn_context)
     )
     const result = pick(info, [

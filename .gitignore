@@ -10,3 +10,4 @@ prebuilds/
 *.tar.gz
 dist/
 docs/
+.DS_Store

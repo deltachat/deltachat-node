@@ -4,6 +4,15 @@
 
 ## Added
 - `context.getProviderFromEmail(email:string)`
+
+## Changed
+- rename `DeltaChat` to `AccountManager`
+- rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
+
+## Fixed
+- Fix documentation comment of `AccountManager`
+- Fix configure for multiple accounts at once
+
 ## Deprecated
 - `DeltaChat.getProviderFromEmail(email:string)`, please use `context.getProviderFromEmail(email:string)` instead
 
