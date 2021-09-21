@@ -811,4 +811,21 @@ export class Context {
       binding.dcn_set_chat_mute_duration(this.dcn_context, chatId, duration)
     )
   }
+
+  /** get information about the provider */
+  getProviderFromEmail(email: string) {
+    debug('DeltaChat.getProviderFromEmail')
+    const provider = binding.dcn_provider_new_from_email(
+      this.dcn_context,
+      email
+    )
+    if (!provider) {
+      return undefined
+    }
+    return {
+      before_login_hint: binding.dcn_provider_get_before_login_hint(provider),
+      overview_page: binding.dcn_provider_get_overview_page(provider),
+      status: binding.dcn_provider_get_status(provider),
+    }
+  }
 }
