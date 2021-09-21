@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- `context.getProviderFromEmail(email:string)`
+## Deprecated
+- `DeltaChat.getProviderFromEmail(email:string)`, please use `context.getProviderFromEmail(email:string)` instead
+
 ## [1.60.0] - 2021-01-09
 
 **ATTENTION**: This release includes many breaking changes
