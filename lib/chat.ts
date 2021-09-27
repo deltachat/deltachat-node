@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import binding from '../binding'
+import binding from './binding'
 import rawDebug from 'debug'
 const debug = rawDebug('deltachat:node:chat')
 import { C } from './constants'

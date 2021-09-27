@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
+import binding from './binding'
 import { Lot } from './lot'
 import { Chat } from './chat'
 const debug = require('debug')('deltachat:node:chatlist')

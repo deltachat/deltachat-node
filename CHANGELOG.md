@@ -8,6 +8,7 @@
 ## Changed
 - rename `DeltaChat` to `AccountManager`
 - rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
+- enable strict typescript
 
 ## Fixed
 - Fix documentation comment of `AccountManager`

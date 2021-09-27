@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import binding from '../binding'
+import binding from './binding'
 import { C } from './constants'
 import { Lot } from './lot'
 import { Chat } from './chat'
