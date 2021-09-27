@@ -9,6 +9,8 @@
 - rename `DeltaChat` to `AccountManager`
 - rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
 - enable strict typescript
+- update typescript to version `3.9.10`
+- enable typescript declaration map to help IDEs to jump to the ts source files, not the declaration files. 
 
 ## Fixed
 - Fix documentation comment of `AccountManager`

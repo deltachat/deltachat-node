@@ -64,6 +64,6 @@
     "prebuildify-ci": "^1.0.4",
     "prettier": "^2.0.5",
     "typedoc": "^0.17.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.9.10"
   }
 }
