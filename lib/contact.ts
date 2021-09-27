@@ -2,7 +2,7 @@ import { integerToHexColor } from './util'
 
 /* eslint-disable camelcase */
 
-const binding = require('../binding')
+import binding from './binding'
 const debug = require('debug')('deltachat:node:contact')
 
 interface NativeContact {}

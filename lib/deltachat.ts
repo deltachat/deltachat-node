@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
-import binding from '../binding'
-import { C, EventId2EventName } from './constants'
+import binding from './binding'
+import { EventId2EventName } from './constants'
 import { EventEmitter } from 'events'
 import { existsSync } from 'fs'
 import rawDebug from 'debug'
@@ -142,7 +142,7 @@ export class AccountManager extends EventEmitter {
 
   static parseGetInfo(info: string) {
     debug('static _getInfo')
-    const result = {}
+    const result: { [key: string]: string } = {}
 
     const regex = /^(\w+)=(.*)$/i
     info
@@ -172,7 +172,7 @@ export class AccountManager extends EventEmitter {
   }
 
   /** get information about the provider
-   * 
+   *
    * This function creates a temporary context to be standalone,
    * if posible use `Context.getProviderFromEmail` instead. (otherwise potential proxy settings are not used)
    * @deprecated

@@ -1,14 +1,12 @@
 /* eslint-disable camelcase */
 
-import binding from '../binding'
-import { C, EventId2EventName } from './constants'
-import { EventEmitter } from 'events'
+import binding from './binding'
+import { C } from './constants'
 import { Chat } from './chat'
 import { ChatList } from './chatlist'
 import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
-import { mkdtempSync } from 'fs'
 import { Locations } from './locations'
 import pick from 'lodash.pick'
 import rawDebug from 'debug'
@@ -36,7 +34,7 @@ export class Context {
 
   unref() {
     binding.dcn_context_unref(this.dcn_context)
-    this.inner_dcn_context = null
+    ;(this.inner_dcn_context as any) = null
   }
 
   acceptChat(chatId: number) {
@@ -124,12 +122,12 @@ export class Context {
         removeListeners()
         resolve()
       }
-      const onFail = (error) => {
+      const onFail = (error: string) => {
         removeListeners()
         reject(new Error(error))
       }
 
-      const onConfigure = (accountId, data1, data2) => {
+      const onConfigure = (accountId: number, data1: number, data2: string) => {
         if (this.account_id !== accountId) {
           return
         }
@@ -164,7 +162,7 @@ export class Context {
         this.dcn_context,
         Number(messageId),
         setupCode,
-        (result) => resolve(result === 1)
+        (result: number) => resolve(result === 1)
       )
     })
   }
@@ -291,7 +289,7 @@ export class Context {
     )
   }
 
-  getChatMessages(chatId: number, flags, marker1before) {
+  getChatMessages(chatId: number, flags: number, marker1before: number) {
     debug(`getChatMessages ${chatId} ${flags} ${marker1before}`)
     return binding.dcn_get_chat_msgs(
       this.dcn_context,
@@ -509,7 +507,7 @@ export class Context {
     binding.dcn_imex(this.dcn_context, what, param1, param2)
   }
 
-  importExportHasBackup(dir) {
+  importExportHasBackup(dir: string) {
     debug(`importExportHasBackup ${dir}`)
     return binding.dcn_imex_has_backup(this.dcn_context, dir)
   }

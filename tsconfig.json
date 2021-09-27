@@ -6,7 +6,9 @@
         "module": "commonjs",
         "target": "es5",
         "esModuleInterop": true,
-        "declaration": true
+        "declaration": true,
+        "strictNullChecks": true,
+        "strict": true
     },
     "typedocOptions": {
         "mode": "file",
