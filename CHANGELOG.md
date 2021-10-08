@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+
+## [1.60.1] - 2021-08-10
+
 ## Added
 - `context.getProviderFromEmail(email:string)`
 
@@ -1247,7 +1250,13 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.56.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.60.1...HEAD
+
+[1.60.1]: https://github.com/deltachat/deltachat-node/compare/v1.60.0...v1.60.1
+
+[1.60.0]: https://github.com/deltachat/deltachat-node/compare/v1.56.2...v1.60.0
+
+[1.56.2]: https://github.com/deltachat/deltachat-node/compare/v1.56.1...v1.56.2
 
 [1.56.1]: https://github.com/deltachat/deltachat-node/compare/v1.56.0...v1.56.1
 
