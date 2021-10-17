@@ -1,4 +1,5 @@
 {
+  # documentation about the format of this file can be found under https://gyp.gsrc.io/docs/InputFormatReference.md
   # Variables can be specified when calling node-gyp as so:
   #   node-gyp configure -- -Dvarname=value
   "variables": {
