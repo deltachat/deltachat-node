@@ -1456,6 +1456,20 @@ NAPI_METHOD(dcn_set_config_null) {
   NAPI_RETURN_INT32(status);
 }
 
+NAPI_METHOD(dcn_set_config_from_qr) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(qr, 1);
+
+  //TRACE("calling..");
+  int status = dc_set_config_from_qr(dcn_context->dc_context, qr);
+  //TRACE("result %d", status);
+
+  free(qr);
+
+  NAPI_RETURN_INT32(status);
+}
+
 NAPI_METHOD(dcn_estimate_deletion_cnt) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -3165,6 +3179,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_set_chat_mute_duration);
   NAPI_EXPORT_FUNCTION(dcn_set_config);
   NAPI_EXPORT_FUNCTION(dcn_set_config_null);
+  NAPI_EXPORT_FUNCTION(dcn_set_config_from_qr);
   NAPI_EXPORT_FUNCTION(dcn_estimate_deletion_cnt);
   NAPI_EXPORT_FUNCTION(dcn_set_draft);
   NAPI_EXPORT_FUNCTION(dcn_set_stock_translation);

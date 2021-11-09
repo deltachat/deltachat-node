@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- added missing `context.setConfigFromQr(qrcodeContent:string)`
 
 ## [1.60.1] - 2021-08-10
 
