@@ -713,6 +713,12 @@ export class Context {
     }
   }
 
+  setConfigFromQr(qrcodeContent: string): boolean {
+    return Boolean(
+      binding.dcn_set_config_from_qr(this.dcn_context, qrcodeContent)
+    )
+  }
+
   estimateDeletionCount(fromServer: boolean, seconds: number): number {
     debug(`estimateDeletionCount fromServer: ${fromServer} seconds: ${seconds}`)
     return binding.dcn_estimate_deletion_cnt(
