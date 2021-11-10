@@ -54,6 +54,30 @@ building from source or clone this repository and follow this steps:
 2. `cd deltachat-node`
 3. `npm i`
 
+### Workaround to build for x86_64 on Apple's M1
+deltachat doesn't support universal (fat) binaries (that contain builds for both cpu architectures) yet, until it does you can use the following workaround to get x86_64 builds:
+```
+$ fnm install 14 --arch i386
+$ fnm use 14
+$ node -p process.arch
+# result should be i386
+$ cd deltachat-core-rust && rustup target add x86_64-apple-darwin && cd -
+
+$ CARGO_BUILD_TARGET=x86_64-apple-darwin npm run build
+$ npm run test
+```
+
+(when using [fnm](https://github.com/Schniz/fnm) instead of nvm, you can select the architecture)
+If your node and electron are already build for arm64 you can also try bulding for arm:
+```
+$ fnm install 16 --arch arm64
+$ fnm use 16
+$ node -p process.arch
+# result should be arm64
+$ npm_config_arch=arm64 npm run build
+$ npm run test
+```
+
 ## Usage
 
 ```js
