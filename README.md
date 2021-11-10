@@ -86,33 +86,29 @@ $ npm run test
 ## Usage
 
 ```js
-const DeltaChat = require('deltachat-node').default
-const dc = new DeltaChat()
+const { Context } = require('deltachat-node')
 
 const opts = {
   addr: '[email]',
-  mail_pw: '[password]'
+  mail_pw: '[password]',
 }
 
 const contact = '[email]'
 
 async function main() {
-  const dc = new DeltaChat()
-
+  const dc = Context.open('./')
   dc.on('ALL', console.log.bind(null, 'core |'))
-  await dc.open('./')
-  
+
   try {
     await dc.configure(opts)
   } catch (err) {
-    console.error("Failed to configure because of: ", err)
-    dc.close()
+    console.error('Failed to configure because of: ', err)
+    dc.unref()
     return
   }
 
   dc.startIO()
   console.log('fully configured')
-
 
   const contactId = dc.createContact('Test', contact)
   const chatId = dc.createChatByContactId(contactId)
@@ -124,12 +120,13 @@ async function main() {
     console.log('Message sent, shutting down...')
     dc.stopIO()
     console.log('stopped io')
-    dc.close()
+    dc.unref()
   })
 }
 
 main()
 ```
+this example can also be found in the examples folder [examples/send_message.js](./examples/send_message.js)
 
 ### Generating Docs
 

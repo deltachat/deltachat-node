@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import binding from './binding'
-import { C } from './constants'
+import { C, EventId2EventName } from './constants'
 import { Chat } from './chat'
 import { ChatList } from './chatlist'
 import { Contact } from './contact'
@@ -10,6 +10,8 @@ import { Lot } from './lot'
 import { Locations } from './locations'
 import rawDebug from 'debug'
 import { AccountManager } from './deltachat'
+import { join } from 'path'
+import { EventEmitter } from 'stream'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
@@ -17,14 +19,46 @@ interface NativeContext {}
 
 /**
  * Wrapper around dcn_context_t*
+ *
+ * only acts as event emitter when created in standalone mode (without account manager)
+ * with `Context.open`
  */
-export class Context {
+export class Context extends EventEmitter {
   constructor(
-    readonly manager: AccountManager,
+    readonly manager: AccountManager | null,
     private inner_dcn_context: NativeContext,
     readonly account_id: number
   ) {
+    super()
     debug('DeltaChat constructor')
+  }
+
+  /** Opens a stanalone context (without an account manager)
+   * automatically starts the event handler */
+  static open(cwd: string): Context {
+    const dbFile = join(cwd, 'db.sqlite')
+    const context = new Context(null, binding.dcn_context_new(dbFile), 42)
+    debug('Opened context')
+    function handleCoreEvent(
+      eventId: number,
+      data1: number,
+      data2: number | string
+    ) {
+      const eventString = EventId2EventName[eventId]
+      debug(eventString, data1, data2)
+      if (!context.emit) {
+        console.log('Received an event but EventEmitter is already destroyed.')
+        console.log(eventString, 42, data1, data2)
+        return
+      }
+      context.emit(eventString, 42, data1, data2)
+    }
+    binding.dcn_start_event_handler(
+      context.dcn_context,
+      handleCoreEvent.bind(this)
+    )
+    debug('Started event handler')
+    return context
   }
 
   get dcn_context() {
@@ -145,11 +179,14 @@ export class Context {
       }
 
       const removeListeners = () => {
-        this.manager.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+        ;(this.manager || this).removeListener(
+          'DC_EVENT_CONFIGURE_PROGRESS',
+          onConfigure
+        )
       }
 
       const registerListeners = () => {
-        this.manager.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
+        ;(this.manager || this).on('DC_EVENT_CONFIGURE_PROGRESS', onConfigure)
       }
 
       registerListeners()
@@ -492,34 +529,12 @@ export class Context {
     binding.dcn_stop_ongoing_process(this.dcn_context)
   }
 
+  /**
+   *
+   * @deprectated please use `AccountManager.getSystemInfo()` instead
+   */
   static getSystemInfo() {
-    debug('DeltaChat.getSystemInfo')
-
-    const { dc, context } = AccountManager.newTemporary()
-    const info = AccountManager.parseGetInfo(
-      binding.dcn_get_info(context.dcn_context)
-    )
-    const {
-      deltachat_core_version,
-      sqlite_version,
-      sqlite_thread_safe,
-      libetpan_version,
-      openssl_version,
-      compile_date,
-      arch,
-    } = info
-    const result = {
-      deltachat_core_version,
-      sqlite_version,
-      sqlite_thread_safe,
-      libetpan_version,
-      openssl_version,
-      compile_date,
-      arch,
-    }
-    context.unref()
-    dc.close()
-    return result
+    return AccountManager.getSystemInfo()
   }
 
   getConnectivity(): number {

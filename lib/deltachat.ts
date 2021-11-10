@@ -8,6 +8,7 @@ import rawDebug from 'debug'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { Context } from './context'
+import pick from 'lodash.pick'
 const debug = rawDebug('deltachat:node:index')
 
 const noop = function () {}
@@ -152,6 +153,27 @@ export class AccountManager extends EventEmitter {
     const accountId = dc.addAccount()
     const context = dc.accountContext(accountId)
     return { dc, context, accountId, directory }
+  }
+
+  static getSystemInfo() {
+    debug('DeltaChat.getSystemInfo')
+
+    const { dc, context } = AccountManager.newTemporary()
+    const info = AccountManager.parseGetInfo(
+      binding.dcn_get_info(context.dcn_context)
+    )
+    const result = pick(info, [
+      'deltachat_core_version',
+      'sqlite_version',
+      'sqlite_thread_safe',
+      'libetpan_version',
+      'openssl_version',
+      'compile_date',
+      'arch',
+    ])
+    context.unref()
+    dc.close()
+    return result
   }
 
   /** get information about the provider
