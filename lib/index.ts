@@ -2,6 +2,7 @@ import { AccountManager } from './deltachat'
 
 export default AccountManager
 
+export { Context } from './context'
 export { Chat } from './chat'
 export { ChatList } from './chatlist'
 export { C } from './constants'

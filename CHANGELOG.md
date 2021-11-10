@@ -8,6 +8,7 @@ Please update if you use an older version! ([`nvm`](https://github.com/nvm-sh/nv
 
 ### Changed
 - update node version from `14` to `16`
+- move `Context.getSystemInfo()` to `AccountManager.getSystemInfo()`
 
 ## [1.77.0] - 2022-04-14
 
