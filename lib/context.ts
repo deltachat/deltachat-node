@@ -166,6 +166,11 @@ export class Context {
       )
     })
   }
+  /** @returns chatId */
+  createBroadcastList(): number {
+    debug(`createBroadcastList`)
+    return binding.dcn_create_broadcast_list(this.dcn_context)
+  }
 
   /** @returns chatId */
   createChatByContactId(contactId: number): number {
@@ -620,6 +625,10 @@ export class Context {
       throw new Error('invalid msg object')
     }
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
+  }
+
+  downloadFullMessage(messageId: number) {
+    binding.dcn_download_full_msg(this.dcn_context, messageId)
   }
 
   /**

@@ -3,7 +3,12 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- `context.createBroadcastList(): number`
+- `context.downloadFullMessage(messageId: number)`
 - added missing `context.setConfigFromQr(qrcodeContent:string)`
+
+## Changed
+- Update deltachat-core-rust to 1.61.0
 
 ## [1.60.1] - 2021-08-10
 

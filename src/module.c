@@ -575,6 +575,17 @@ NAPI_METHOD(dcn_create_chat_by_contact_id) {
   NAPI_RETURN_UINT32(chat_id);
 }
 
+NAPI_METHOD(dcn_create_broadcast_list) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  //TRACE("calling..");
+  uint32_t chat_id = dc_create_broadcast_list(dcn_context->dc_context);
+  //TRACE("result %d", chat_id);
+
+  NAPI_RETURN_UINT32(chat_id);
+}
+
 NAPI_METHOD(dcn_create_contact) {
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
@@ -1208,6 +1219,18 @@ NAPI_METHOD(dcn_marknoticed_chat) {
 
   //TRACE("calling..");
   dc_marknoticed_chat(dcn_context->dc_context, chat_id);
+  //TRACE("done");
+
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_download_full_msg) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+
+  //TRACE("calling..");
+  dc_download_full_msg(dcn_context->dc_context, msg_id);
   //TRACE("done");
 
   NAPI_RETURN_UNDEFINED();
@@ -3116,6 +3139,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_configure);
   NAPI_EXPORT_FUNCTION(dcn_continue_key_transfer);
   NAPI_EXPORT_FUNCTION(dcn_create_chat_by_contact_id);
+  NAPI_EXPORT_FUNCTION(dcn_create_broadcast_list);
   NAPI_EXPORT_FUNCTION(dcn_create_contact);
   NAPI_EXPORT_FUNCTION(dcn_create_group_chat);
   NAPI_EXPORT_FUNCTION(dcn_delete_chat);
@@ -3164,6 +3188,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_join_securejoin);
   NAPI_EXPORT_FUNCTION(dcn_lookup_contact_id_by_addr);
   NAPI_EXPORT_FUNCTION(dcn_marknoticed_chat);
+  NAPI_EXPORT_FUNCTION(dcn_download_full_msg);
   NAPI_EXPORT_FUNCTION(dcn_markseen_msgs);
   NAPI_EXPORT_FUNCTION(dcn_maybe_network);
   NAPI_EXPORT_FUNCTION(dcn_msg_new);
