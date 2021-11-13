@@ -195,7 +195,7 @@ describe('Offline Tests with unconfigured account', function () {
   })
 
   it('invalid context.joinSecurejoin', async function () {
-    expect(context.joinSecurejoin('test')).to.be.eventually.rejected
+    expect(context.joinSecurejoin('test')).to.be.eq(0)
   })
 
   it('Device Chat', async function () {

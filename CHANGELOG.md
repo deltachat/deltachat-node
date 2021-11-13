@@ -9,7 +9,8 @@
 - added missing `context.setConfigFromQr(qrcodeContent:string)`
 
 ## Changed
-- Update deltachat-core-rust to 1.61.0
+- BREAKING: `joinSecurejoin(qrCode: string): number` returns immediately now (no promise anymore): On errors, 0 is returned, however, most errors will happen during handshake later on.
+- Update deltachat-core-rust to 1.64.0
 
 ## [1.60.1] - 2021-08-10
 
