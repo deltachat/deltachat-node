@@ -6,6 +6,13 @@ import { Lot } from './lot'
 import { Chat } from './chat'
 const debug = require('debug')('deltachat:node:message')
 
+export enum MessageDownloadState {
+  Available = C.DC_DOWNLOAD_AVAILABLE,
+  Done = C.DC_DOWNLOAD_DONE,
+  Failure = C.DC_DOWNLOAD_FAILURE,
+  InProgress = C.DC_DOWNLOAD_IN_PROGRESS,
+}
+
 /**
  * Helper class for message states so you can do e.g.
  *
@@ -108,6 +115,7 @@ export class Message {
     const quotedMessage = this.getQuotedMessage()
     return {
       chatId: this.getChatId(),
+      downloadState: this.downloadState,
       duration: this.getDuration(),
       file: this.getFile(),
       fromId: this.getFromId(),
@@ -141,6 +149,10 @@ export class Message {
 
   getChatId(): number {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
+  }
+
+  get downloadState(): MessageDownloadState {
+    return binding.dcn_msg_get_download_state(this.dc_msg)
   }
 
   getDuration(): number {

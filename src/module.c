@@ -1958,6 +1958,17 @@ NAPI_METHOD(dcn_lot_get_timestamp) {
  * dc_msg_t
  */
 
+NAPI_METHOD(dcn_msg_get_download_state) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  //TRACE("calling..");
+  uint32_t download_state = dc_msg_get_download_state(dc_msg);
+  //TRACE("result %d", download_state);
+
+  NAPI_RETURN_UINT32(download_state);
+}
+
 NAPI_METHOD(dcn_msg_get_chat_id) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -3249,6 +3260,7 @@ NAPI_INIT() {
    * dc_msg_t
    */
 
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_download_state);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_chat_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_file);
