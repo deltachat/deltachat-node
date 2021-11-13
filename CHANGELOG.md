@@ -5,6 +5,7 @@
 ## Added
 - `context.createBroadcastList(): number`
 - `context.downloadFullMessage(messageId: number)`
+- added missing `chat.canSend`
 - added missing `context.setConfigFromQr(qrcodeContent:string)`
 
 ## Changed

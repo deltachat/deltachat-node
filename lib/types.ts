@@ -17,6 +17,7 @@ export interface ChatJSON {
   isSelfTalk: boolean
   isUnpromoted: boolean
   isProtected: boolean
+  canSend: boolean
   isDeviceTalk: boolean
   isContactRequest: boolean
   muted: boolean

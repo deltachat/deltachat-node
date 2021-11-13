@@ -1656,6 +1656,17 @@ NAPI_METHOD(dcn_chat_is_unpromoted) {
   NAPI_RETURN_INT32(is_unpromoted);
 }
 
+NAPI_METHOD(dcn_chat_can_send) {
+  NAPI_ARGV(1);
+  NAPI_DC_CHAT();
+
+  //TRACE("calling..");
+  int can_send = dc_chat_can_send(dc_chat);
+  //TRACE("result %d", can_send);
+
+  NAPI_RETURN_INT32(can_send);
+}
+
 NAPI_METHOD(dcn_chat_is_protected) {
   NAPI_ARGV(1);
   NAPI_DC_CHAT();
@@ -3224,6 +3235,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_chat_get_type);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_self_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_unpromoted);
+  NAPI_EXPORT_FUNCTION(dcn_chat_can_send);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_protected);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_device_talk);
   NAPI_EXPORT_FUNCTION(dcn_chat_is_muted);
