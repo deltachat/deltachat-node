@@ -116,6 +116,7 @@ describe('Basic offline Tests', function () {
     ).to.eventually.be.rejectedWith('Please enter a password.')
     await expect(context.configure({ mailPw: 'delta1' })).to.eventually.be.rejected
 
+    context.stopOngoingProcess()
     dc.close()
   })
 
