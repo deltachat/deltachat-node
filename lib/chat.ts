@@ -60,6 +60,10 @@ export class Chat {
     return Boolean(binding.dcn_chat_is_protected(this.dc_chat))
   }
 
+  get canSend(): boolean {
+    return Boolean(binding.dcn_chat_can_send(this.dc_chat))
+  }
+
   isDeviceTalk(): boolean {
     return Boolean(binding.dcn_chat_is_device_talk(this.dc_chat))
   }
@@ -90,6 +94,7 @@ export class Chat {
       isSelfTalk: this.isSelfTalk(),
       isUnpromoted: this.isUnpromoted(),
       isProtected: this.isProtected(),
+      canSend: this.canSend,
       isDeviceTalk: this.isDeviceTalk(),
       isContactRequest: this.isContactRequest(),
       muted: this.isMuted(),

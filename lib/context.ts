@@ -166,6 +166,11 @@ export class Context {
       )
     })
   }
+  /** @returns chatId */
+  createBroadcastList(): number {
+    debug(`createBroadcastList`)
+    return binding.dcn_create_broadcast_list(this.dcn_context)
+  }
 
   /** @returns chatId */
   createChatByContactId(contactId: number): number {
@@ -537,23 +542,11 @@ export class Context {
 
   /**
    *
-   * @returns {Promise<number>} Promise that resolves into the resulting chat id
+   * @returns resulting chat id or 0 on error
    */
-  joinSecurejoin(qrCode: string): Promise<number> {
+  joinSecurejoin(qrCode: string): number {
     debug(`joinSecurejoin ${qrCode}`)
-    return new Promise((resolve, reject) => {
-      binding.dcn_join_securejoin(
-        this.dcn_context,
-        qrCode,
-        (result: number) => {
-          if (result !== 0) {
-            resolve(result)
-          } else {
-            reject('The out-of-band verification failed or was aborted')
-          }
-        }
-      )
-    })
+    return binding.dcn_join_securejoin(this.dcn_context, qrCode)
   }
 
   lookupContactIdByAddr(addr: string): number {
@@ -620,6 +613,10 @@ export class Context {
       throw new Error('invalid msg object')
     }
     return binding.dcn_send_msg(this.dcn_context, Number(chatId), msg.dc_msg)
+  }
+
+  downloadFullMessage(messageId: number) {
+    binding.dcn_download_full_msg(this.dcn_context, messageId)
   }
 
   /**

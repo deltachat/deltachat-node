@@ -28,7 +28,7 @@
     "testCoverage": "nyc mocha -r esm test/test.js --growl --reporter=spec",
     "hallmark": "hallmark --fix",
     "lint": "prettier --check \"lib/**/*.{ts,tsx}\"",
-    "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\""
+    "lint-fix": "prettier --write \"lib/**/*.{ts,tsx}\" \"test/**/*.js\""
   },
   "homepage": "https://github.com/deltachat/deltachat-node",
   "repository": {

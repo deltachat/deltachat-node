@@ -183,13 +183,6 @@ export class AccountManager extends EventEmitter {
     const provider = context.getProviderFromEmail(email)
     context.unref()
     dc.close()
-    if (!provider) {
-      return undefined
-    }
-    return {
-      before_login_hint: binding.dcn_provider_get_before_login_hint(provider),
-      overview_page: binding.dcn_provider_get_overview_page(provider),
-      status: binding.dcn_provider_get_status(provider),
-    }
+    return provider
   }
 }
