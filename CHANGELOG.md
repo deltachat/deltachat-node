@@ -2,72 +2,69 @@
 
 ## [Unreleased][unreleased]
 
-## Added
+## [1.65.0] - 2021-11-21
 
-- `context.createBroadcastList(): number`
-- `context.downloadFullMessage(messageId: number)`
-- `message.downloadState`
-- added missing `chat.canSend`
-- added missing `context.setConfigFromQr(qrcodeContent:string)`
+### Changed
 
-## Changed
+- Upgrade to core 1.61 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`4e71cd6`](https://github.com/deltachat/deltachat-node/commit/4e71cd6)) (Simon Laux)
 
-- BREAKING: `joinSecurejoin(qrCode: string): number` returns immediately now (no promise anymore): On errors, 0 is returned, however, most errors will happen during handshake later on.
-- Update deltachat-core-rust to 1.65.0
+### Added
+
+- Add `message.downloadState` ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`92a90c8`](https://github.com/deltachat/deltachat-node/commit/92a90c8)) (Simon Laux)
+- Add missing `chat.canSend` ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`d4dabc4`](https://github.com/deltachat/deltachat-node/commit/d4dabc4)) (Simon Laux)
+- Add missing command to readme ([`135836e`](https://github.com/deltachat/deltachat-node/commit/135836e)) (Simon Laux)
+
+  ```
+  followup #526
+  ```
+- Add setConfigFromQr ([`e89da5c`](https://github.com/deltachat/deltachat-node/commit/e89da5c)) (Simon Laux)
+- Add workarounds to build on m1 to readme ([`9297787`](https://github.com/deltachat/deltachat-node/commit/9297787)) (Simon Laux)
+- Add link to gyp format docs ([#524](https://github.com/deltachat/deltachat-node/issues/524)) ([`6db2d13`](https://github.com/deltachat/deltachat-node/commit/6db2d13)) (Simon Laux)
+
+### Fixed
+
+- Fix tests ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`fb03ba8`](https://github.com/deltachat/deltachat-node/commit/fb03ba8)) (jikstra)
+- Fix configure test not quitting/shutting down deltachat properly ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`2f666aa`](https://github.com/deltachat/deltachat-node/commit/2f666aa)) (jikstra)
+- Fix segmentation fault in DeltaChat.getProviderFromEmail() ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`96c515b`](https://github.com/deltachat/deltachat-node/commit/96c515b)) (jikstra)
+
+### Uncategorized
+
+- Update CHANGELOG ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`d1fd42a`](https://github.com/deltachat/deltachat-node/commit/d1fd42a)) (jikstra)
+- Let prettier format test/test.js too ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`1c08330`](https://github.com/deltachat/deltachat-node/commit/1c08330)) (jikstra)
+- Update deltachat-core-rust to 1.65.0 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`6e85063`](https://github.com/deltachat/deltachat-node/commit/6e85063)) (jikstra)
+- Update deltachat-core-rust to 1.64.0 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`6c46980`](https://github.com/deltachat/deltachat-node/commit/6c46980)) (Simon Laux)
+- format binding.gyp that it is easier to read ([#524](https://github.com/deltachat/deltachat-node/issues/524)) ([`72c2c63`](https://github.com/deltachat/deltachat-node/commit/72c2c63)) (Simon Laux)
+- tsconfig ignore core folder ([#524](https://github.com/deltachat/deltachat-node/issues/524)) ([`f19dff2`](https://github.com/deltachat/deltachat-node/commit/f19dff2)) (Simon Laux)
 
 ## [1.60.1] - 2021-08-10
 
-## Added
+### Fixed
 
-- `context.getProviderFromEmail(email:string)`
+- Fix formatting ([`1860832`](https://github.com/deltachat/deltachat-node/commit/1860832)) (Simon Laux)
 
-## Changed
+### Uncategorized
 
-- rename `DeltaChat` to `AccountManager`
-- rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
-- enable strict typescript
-- update typescript to version `3.9.10`
-- enable typescript declaration map to help IDEs to jump to the ts source files, not the declaration files.
+- Prepare for v1.60.1 ([`1f186e4`](https://github.com/deltachat/deltachat-node/commit/1f186e4)) (jikstra)
+- Update typescript to fix that some of the generated types did not have the explicit null case included ([`d08de3f`](https://github.com/deltachat/deltachat-node/commit/d08de3f)) (Simon Laux)
 
-## Fixed
+  ```
+  enable typescript declaration map
+  ```
+- strict typescript ([`673c276`](https://github.com/deltachat/deltachat-node/commit/673c276)) (Simon Laux)
 
-- Fix documentation comment of `AccountManager`
-- Fix configure for multiple accounts at once
+  ```
+  and remove old unused imports
+  ```
+- provide an integrated version of getProviderFromEmail ([#522](https://github.com/deltachat/deltachat-node/issues/522)) ([`d6dc0a4`](https://github.com/deltachat/deltachat-node/commit/d6dc0a4)) (Simon Laux)
 
-## Deprecated
-
-- `DeltaChat.getProviderFromEmail(email:string)`, please use `context.getProviderFromEmail(email:string)` instead
+  ```
+  that uses the context
+  ```
+- make package workflow shouldn't run tests ([`808e5cc`](https://github.com/deltachat/deltachat-node/commit/808e5cc)) (jikstra)
 
 ## [1.60.0] - 2021-01-09
 
 **ATTENTION**: This release includes many breaking changes
-
-## Changed
-
-- constructor of DeltaChat changed, it directly opens a accounts object now
-- all api calls got moved from DeltaChat class to Context. You can retrieve it through `DeltaChat.accountContext()`
-- `DeltaChat.newTempContext()` is now called `DeltaChat.newTemporary()`
-- Update deltachat-core-rust to 1.60.0
-
-## Added
-
-- `dcn_chat_is_contact_request()` and `chat.isContactRequest()`
-- `dcn_accept_chat` and `context.acceptChat()`
-- `dcn_block_chat` and `context.blockChat()`
-- `dcn_accounts_get_all` and `DeltaChat.accounts()`
-- `dcn_accounts_add_account` and `DeltaChat.addAccount()`
-- `dcn_accounts_get_selected_account` and `DeltaChat.selectAccount()`
-- `dcn_accounts_new` and `DeltaChat constructor`
-- `dcn_accounts_remove_account` and `DeltaChat.removeAccount`
-- `dcn_accounts_get_account` and `DeltaChat.accountContext`
-- `dcn_accounts_start_event_handler` and `DeltaChat.startEvents`
-
-## Removed
-
-- `dcn_create_chat_by_msg_id()`
-- `dcn_decide_on_contact_request()`
-- `dcn_marknoticed_contact()`
-- `dcn_msg_get_real_chat_id()` and `chat.getRealChatId()`, as deaddrops got removed, use `chat.getChatId()` instead
 
 ## [1.56.2] - 2021-23-07
 
@@ -1265,124 +1262,313 @@ const { C } = require('deltachat-node')
 
 :seedling: Initial release.
 
+## [Added] - YYYY-MM-DD
+
+- `context.createBroadcastList(): number`
+- `context.downloadFullMessage(messageId: number)`
+- `message.downloadState`
+- added missing `chat.canSend`
+- added missing `context.setConfigFromQr(qrcodeContent:string)`
+
+## [Added] - YYYY-MM-DD
+
+- `context.getProviderFromEmail(email:string)`
+
+## [Added] - YYYY-MM-DD
+
+- `dcn_chat_is_contact_request()` and `chat.isContactRequest()`
+- `dcn_accept_chat` and `context.acceptChat()`
+- `dcn_block_chat` and `context.blockChat()`
+- `dcn_accounts_get_all` and `DeltaChat.accounts()`
+- `dcn_accounts_add_account` and `DeltaChat.addAccount()`
+- `dcn_accounts_get_selected_account` and `DeltaChat.selectAccount()`
+- `dcn_accounts_new` and `DeltaChat constructor`
+- `dcn_accounts_remove_account` and `DeltaChat.removeAccount`
+- `dcn_accounts_get_account` and `DeltaChat.accountContext`
+- `dcn_accounts_start_event_handler` and `DeltaChat.startEvents`
+
+## [Changed] - YYYY-MM-DD
+
+- BREAKING: `joinSecurejoin(qrCode: string): number` returns immediately now (no promise anymore): On errors, 0 is returned, however, most errors will happen during handshake later on.
+- Update deltachat-core-rust to 1.65.0
+
+## [Changed] - YYYY-MM-DD
+
+- rename `DeltaChat` to `AccountManager`
+- rename `DeltaChat.accounts()` to `AccountManager.getAllAccountIds()`
+- enable strict typescript
+- update typescript to version `3.9.10`
+- enable typescript declaration map to help IDEs to jump to the ts source files, not the declaration files.
+
+## [Changed] - YYYY-MM-DD
+
+- constructor of DeltaChat changed, it directly opens a accounts object now
+- all api calls got moved from DeltaChat class to Context. You can retrieve it through `DeltaChat.accountContext()`
+- `DeltaChat.newTempContext()` is now called `DeltaChat.newTemporary()`
+- Update deltachat-core-rust to 1.60.0
+
+## [Deprecated] - YYYY-MM-DD
+
+- `DeltaChat.getProviderFromEmail(email:string)`, please use `context.getProviderFromEmail(email:string)` instead
+
+## [Fixed] - YYYY-MM-DD
+
+- Fix documentation comment of `AccountManager`
+- Fix configure for multiple accounts at once
+
+## [Removed] - YYYY-MM-DD
+
+- `dcn_create_chat_by_msg_id()`
+- `dcn_decide_on_contact_request()`
+- `dcn_marknoticed_contact()`
+- `dcn_msg_get_real_chat_id()` and `chat.getRealChatId()`, as deaddrops got removed, use `chat.getChatId()` instead
+
 ## Removed
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.60.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.65.0...HEAD
+
+[1.65.0]: https://github.com/deltachat/deltachat-node/compare/v1.60.1...v1.65.0
+
 [1.60.1]: https://github.com/deltachat/deltachat-node/compare/v1.60.0...v1.60.1
+
 [1.60.0]: https://github.com/deltachat/deltachat-node/compare/v1.56.2...v1.60.0
+
 [1.56.2]: https://github.com/deltachat/deltachat-node/compare/v1.56.1...v1.56.2
+
 [1.56.1]: https://github.com/deltachat/deltachat-node/compare/v1.56.0...v1.56.1
+
 [1.56.0]: https://github.com/deltachat/deltachat-node/compare/v1.55.0...v1.56.0
+
 [1.55.1]: https://github.com/deltachat/deltachat-node/compare/v1.55.0...v1.55.1
+
 [1.55.0]: https://github.com/deltachat/deltachat-node/compare/v1.54.0...v1.55.0
+
 [1.54.0]: https://github.com/deltachat/deltachat-node/compare/v1.51.1...v1.54.0
+
 [1.51.1]: https://github.com/deltachat/deltachat-node/compare/v1.51.0...v1.51.1
+
 [1.51.0]: https://github.com/deltachat/deltachat-node/compare/v1.50.0...v1.51.0
+
 [1.50.0]: https://github.com/deltachat/deltachat-node/compare/v1.49.0...v1.50.0
+
 [1.49.0]: https://github.com/deltachat/deltachat-node/compare/v1.47.0...v1.49.0
+
 [1.47.0]: https://github.com/deltachat/deltachat-node/compare/v1.46.0...v1.47.0
+
 [1.46.0]: https://github.com/deltachat/deltachat-node/compare/v1.45.0...v1.46.0
+
 [1.45.0]: https://github.com/deltachat/deltachat-node/compare/v1.44.0...v1.45.0
+
 [1.44.0]: https://github.com/deltachat/deltachat-node/compare/v1.42.1...v1.44.0
+
 [1.43.0]: https://github.com/deltachat/deltachat-node/compare/v1.42.0...v1.43.0
+
 [1.42.1]: https://github.com/deltachat/deltachat-node/compare/v1.42.0...v1.42.1
+
 [1.42.0]: https://github.com/deltachat/deltachat-node/compare/v1.41.0...v1.42.0
+
 [1.41.0]: https://github.com/deltachat/deltachat-node/compare/v1.40.0...v1.41.0
+
 [1.40.0]: https://github.com/deltachat/deltachat-node/compare/v1.39.0...v1.40.0
+
 [1.39.0]: https://github.com/deltachat/deltachat-node/compare/v1.35.0...v1.39.0
+
 [1.35.0]: https://github.com/deltachat/deltachat-node/compare/v1.34.0...v1.35.0
+
 [1.34.0]: https://github.com/deltachat/deltachat-node/compare/v1.33.0...v1.34.0
+
 [1.33.0]: https://github.com/deltachat/deltachat-node/compare/v1.32.1...v1.33.0
+
 [1.32.1]: https://github.com/deltachat/deltachat-node/compare/v1.32.0...v1.32.1
+
 [1.32.0]: https://github.com/deltachat/deltachat-node/compare/v1.29.2...v1.32.0
+
 [1.29.2]: https://github.com/deltachat/deltachat-node/compare/v1.29.1...v1.29.2
+
 [1.29.1]: https://github.com/deltachat/deltachat-node/compare/v1.29.0...v1.29.1
+
 [1.29.0]: https://github.com/deltachat/deltachat-node/compare/v1.28.0...v1.29.0
+
 [1.28.0]: https://github.com/deltachat/deltachat-node/compare/v1.27.0...v1.28.0
+
 [1.27.0]: https://github.com/deltachat/deltachat-node/compare/v1.26.0...v1.27.0
+
 [1.26.0]: https://github.com/deltachat/deltachat-node/compare/v1.25.0...v1.26.0
+
 [1.25.0]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.26...v1.25.0
+
 [1.0.0-beta.26]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.25...v1.0.0-beta.26
+
 [1.0.0-beta.25]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23.1...v1.0.0-beta.25
+
 [1.0.0-beta.23.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.23...v1.0.0-beta.23.1
+
 [1.0.0-beta.23]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.22...v1.0.0-beta.23
+
 [1.0.0-beta.22]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.21...v1.0.0-beta.22
+
 [1.0.0-beta.21]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.18...v1.0.0-beta.21
+
 [1.0.0-beta.20]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-beta.18...1.0.0-beta.20
+
 [1.0.0-beta.18]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.15...1.0.0-beta.18
+
 [1.0.0-beta.15]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.11...1.0.0-beta.15
+
 [1.0.0-beta.11]: https://github.com/deltachat/deltachat-node/compare/1.0.0-beta.10...1.0.0-beta.11
+
 [1.0.0-beta.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.12...1.0.0-beta.10
+
 [1.0.0-alpha.12]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.11...v1.0.0-alpha.12
+
 [1.0.0-alpha.11]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.10...v1.0.0-alpha.11
+
 [1.0.0-alpha.10]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.9...v1.0.0-alpha.10
+
 [1.0.0-alpha.9]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.7...v1.0.0-alpha.9
+
 [1.0.0-alpha.7]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.6...v1.0.0-alpha.7
+
 [1.0.0-alpha.6]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.3...v1.0.0-alpha.6
+
 [1.0.0-alpha.3]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
+
 [1.0.0-alpha.2]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
+
 [1.0.0-alpha.1]: https://github.com/deltachat/deltachat-node/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
+
 [1.0.0-alpha.0]: https://github.com/deltachat/deltachat-node/compare/v0.44.0...v1.0.0-alpha.0
+
 [0.44.0]: https://github.com/deltachat/deltachat-node/compare/v0.43.0...v0.44.0
+
 [0.43.0]: https://github.com/deltachat/deltachat-node/compare/v0.42.0...v0.43.0
+
 [0.42.0]: https://github.com/deltachat/deltachat-node/compare/v0.40.2...v0.42.0
+
 [0.40.2]: https://github.com/deltachat/deltachat-node/compare/v0.40.1...v0.40.2
+
 [0.40.1]: https://github.com/deltachat/deltachat-node/compare/v0.40.0...v0.40.1
+
 [0.40.0]: https://github.com/deltachat/deltachat-node/compare/v0.39.0...v0.40.0
+
 [0.39.0]: https://github.com/deltachat/deltachat-node/compare/v0.38.0...v0.39.0
+
 [0.38.0]: https://github.com/deltachat/deltachat-node/compare/v0.36.0...v0.38.0
+
 [0.36.0]: https://github.com/deltachat/deltachat-node/compare/v0.35.0...v0.36.0
+
 [0.35.0]: https://github.com/deltachat/deltachat-node/compare/v0.30.1...v0.35.0
+
 [0.30.1]: https://github.com/deltachat/deltachat-node/compare/v0.30.0...v0.30.1
+
 [0.30.0]: https://github.com/deltachat/deltachat-node/compare/v0.29.0...v0.30.0
+
 [0.29.0]: https://github.com/deltachat/deltachat-node/compare/v0.28.2...v0.29.0
+
 [0.28.2]: https://github.com/deltachat/deltachat-node/compare/v0.28.1...v0.28.2
+
 [0.28.1]: https://github.com/deltachat/deltachat-node/compare/v0.28.0...v0.28.1
+
 [0.28.0]: https://github.com/deltachat/deltachat-node/compare/v0.27.0...v0.28.0
+
 [0.27.0]: https://github.com/deltachat/deltachat-node/compare/v0.26.1...v0.27.0
+
 [0.26.1]: https://github.com/deltachat/deltachat-node/compare/v0.26.0...v0.26.1
+
 [0.26.0]: https://github.com/deltachat/deltachat-node/compare/v0.25.0...v0.26.0
+
 [0.25.0]: https://github.com/deltachat/deltachat-node/compare/v0.24.0...v0.25.0
+
 [0.24.0]: https://github.com/deltachat/deltachat-node/compare/v0.23.1...v0.24.0
+
 [0.23.1]: https://github.com/deltachat/deltachat-node/compare/v0.23.0...v0.23.1
+
 [0.23.0]: https://github.com/deltachat/deltachat-node/compare/v0.22.1...v0.23.0
+
 [0.22.1]: https://github.com/deltachat/deltachat-node/compare/v0.22.0...v0.22.1
+
 [0.22.0]: https://github.com/deltachat/deltachat-node/compare/v0.21.0...v0.22.0
+
 [0.21.0]: https://github.com/deltachat/deltachat-node/compare/v0.20.0...v0.21.0
+
 [0.20.0]: https://github.com/deltachat/deltachat-node/compare/v0.19.2...v0.20.0
+
 [0.19.2]: https://github.com/deltachat/deltachat-node/compare/v0.19.1...v0.19.2
+
 [0.19.1]: https://github.com/deltachat/deltachat-node/compare/v0.19.0...v0.19.1
+
 [0.19.0]: https://github.com/deltachat/deltachat-node/compare/v0.18.2...v0.19.0
+
 [0.18.2]: https://github.com/deltachat/deltachat-node/compare/v0.18.1...v0.18.2
+
 [0.18.1]: https://github.com/deltachat/deltachat-node/compare/v0.18.0...v0.18.1
+
 [0.18.0]: https://github.com/deltachat/deltachat-node/compare/v0.17.1...v0.18.0
+
 [0.17.1]: https://github.com/deltachat/deltachat-node/compare/v0.17.0...v0.17.1
+
 [0.17.0]: https://github.com/deltachat/deltachat-node/compare/v0.16.0...v0.17.0
+
 [0.16.0]: https://github.com/deltachat/deltachat-node/compare/v0.15.0...v0.16.0
+
 [0.15.0]: https://github.com/deltachat/deltachat-node/compare/v0.14.0...v0.15.0
+
 [0.14.0]: https://github.com/deltachat/deltachat-node/compare/v0.13.1...v0.14.0
+
 [0.13.1]: https://github.com/deltachat/deltachat-node/compare/v0.13.0...v0.13.1
+
 [0.13.0]: https://github.com/deltachat/deltachat-node/compare/v0.12.0...v0.13.0
+
 [0.12.0]: https://github.com/deltachat/deltachat-node/compare/v0.11.0...v0.12.0
+
 [0.11.0]: https://github.com/deltachat/deltachat-node/compare/v0.10.0...v0.11.0
+
 [0.10.0]: https://github.com/deltachat/deltachat-node/compare/v0.9.4...v0.10.0
+
 [0.9.4]: https://github.com/deltachat/deltachat-node/compare/v0.9.3...v0.9.4
+
 [0.9.3]: https://github.com/deltachat/deltachat-node/compare/v0.9.2...v0.9.3
+
 [0.9.2]: https://github.com/deltachat/deltachat-node/compare/v0.9.1...v0.9.2
+
 [0.9.1]: https://github.com/deltachat/deltachat-node/compare/v0.9.0...v0.9.1
+
 [0.9.0]: https://github.com/deltachat/deltachat-node/compare/v0.8.0...v0.9.0
+
 [0.8.0]: https://github.com/deltachat/deltachat-node/compare/v0.7.0...v0.8.0
+
 [0.7.0]: https://github.com/deltachat/deltachat-node/compare/v0.6.2...v0.7.0
+
 [0.6.2]: https://github.com/deltachat/deltachat-node/compare/v0.6.1...v0.6.2
+
 [0.6.1]: https://github.com/deltachat/deltachat-node/compare/v0.6.0...v0.6.1
+
 [0.6.0]: https://github.com/deltachat/deltachat-node/compare/v0.5.1...v0.6.0
+
 [0.5.1]: https://github.com/deltachat/deltachat-node/compare/v0.5.0...v0.5.1
+
 [0.5.0]: https://github.com/deltachat/deltachat-node/compare/v0.4.1...v0.5.0
+
 [0.4.1]: https://github.com/deltachat/deltachat-node/compare/v0.4.0...v0.4.1
+
 [0.4.0]: https://github.com/deltachat/deltachat-node/compare/v0.3.0...v0.4.0
+
 [0.3.0]: https://github.com/deltachat/deltachat-node/compare/v0.2.0...v0.3.0
+
 [0.2.0]: https://github.com/deltachat/deltachat-node/compare/v0.1.1...v0.2.0
+
 [0.1.1]: https://github.com/deltachat/deltachat-node/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/deltachat/deltachat-node/compare/vRemoved...v0.1.0
+
+[0.1.0]: https://github.com/deltachat/deltachat-node/compare/vAdded...v0.1.0
+
+[added]: https://github.com/deltachat/deltachat-node/compare/vChanged...vAdded
+
+[changed]: https://github.com/deltachat/deltachat-node/compare/vDeprecated...vChanged
+
+[deprecated]: https://github.com/deltachat/deltachat-node/compare/vFixed...vDeprecated
+
+[fixed]: https://github.com/deltachat/deltachat-node/compare/vRemoved...vFixed
+
+[removed]: https://github.com/deltachat/deltachat-node/compare/vRemoved...vRemoved
