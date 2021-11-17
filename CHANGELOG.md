@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Added 
+
+- Add `context.getSecurejoinQrCodeSVG(chatId = 0)` 
+
 ## [1.65.0] - 2021-11-21
 
 ### Changed

@@ -1064,6 +1064,18 @@ NAPI_METHOD(dcn_get_securejoin_qr) {
   NAPI_RETURN_AND_UNREF_STRING(code);
 }
 
+NAPI_METHOD(dcn_get_securejoin_qr_svg) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(group_chat_id, 1);
+
+  //TRACE("calling..");
+  char* svg = dc_get_securejoin_qr_svg(dcn_context->dc_context, group_chat_id);
+  //TRACE("result %s", code);
+
+  NAPI_RETURN_AND_UNREF_STRING(svg);
+}
+
 NAPI_METHOD(dcn_imex) {
   NAPI_ARGV(4);
   NAPI_DCN_CONTEXT();
@@ -3164,6 +3176,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_get_next_media);
   NAPI_EXPORT_FUNCTION(dcn_set_chat_visibility);
   NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr);
+  NAPI_EXPORT_FUNCTION(dcn_get_securejoin_qr_svg);
   NAPI_EXPORT_FUNCTION(dcn_imex);
   NAPI_EXPORT_FUNCTION(dcn_imex_has_backup);
   NAPI_EXPORT_FUNCTION(dcn_initiate_key_transfer);
