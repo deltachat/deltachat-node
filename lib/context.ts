@@ -463,6 +463,11 @@ export class Context {
     return binding.dcn_get_securejoin_qr(this.dcn_context, Number(chatId))
   }
 
+  getSecurejoinQrCodeSVG(chatId: number): string {
+    debug(`getSecurejoinQrCodeSVG ${chatId}`)
+    return binding.dcn_get_securejoin_qr_svg(this.dcn_context, chatId)
+  }
+
   startIO(): void {
     debug(`startIO`)
     binding.dcn_start_io(this.dcn_context)

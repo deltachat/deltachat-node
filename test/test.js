@@ -306,14 +306,6 @@ describe('Offline Tests with unconfigured account', function () {
       C.DC_CONTACT_ID_SELF,
     ])
 
-    const draft2 = context.getDraft(chatId)
-    expect(draft2, 'unptomoted group has a draft by default')
-    const draftJson = draft2.toJson()
-    expect(
-      draftJson.text.startsWith("Hello, I've just created the group"),
-      'default text'
-    ).to.be.true
-
     context.setChatName(chatId, 'NEW NAME')
     strictEqual(context.getChat(chatId).getName(), 'NEW NAME', 'name updated')
 
@@ -556,27 +548,6 @@ describe('Offline Tests with unconfigured account', function () {
     expect(ids.indexOf(chatList.getChatId(0))).not.to.equal(-1)
     expect(ids.indexOf(chatList.getChatId(1))).not.to.equal(-1)
     expect(ids.indexOf(chatList.getChatId(2))).not.to.equal(-1)
-
-    const lot = chatList.getSummary(0)
-    strictEqual(lot.getId(), 0, 'lot has no id')
-    strictEqual(lot.getState(), C.DC_STATE_OUT_DRAFT, 'correct state')
-    strictEqual(lot.getText1(), 'Draft', 'text1 is set')
-    strictEqual(lot.getText1Meaning(), C.DC_TEXT1_DRAFT, 'text1 meaning')
-    expect(
-      lot.getText2().startsWith("Hello, I've just created"),
-      'new group draft message'
-    ).to.be.true
-    expect(lot.getTimestamp() > 0, 'timestamp set').to.be.true
-
-    const text = 'Custom new group message, yo!'
-    context.setStockTranslation(C.DC_STR_NEWGROUPDRAFT, text)
-    context.createGroupChat('groupchat1111')
-    chatList = context.getChatList(0, 'groupchat1111', null)
-    strictEqual(
-      chatList.getSummary(0).getText2(),
-      text,
-      'custom new group message'
-    )
 
     context.setChatVisibility(ids[0], C.DC_CHAT_VISIBILITY_ARCHIVED)
     chatList = context.getChatList(C.DC_GCL_ARCHIVED_ONLY, 'groupchat1', null)
