@@ -2,9 +2,15 @@
 
 ## [Unreleased][unreleased]
 
-### Added 
+## [1.67.0] - 2021-11-25
 
-- Add `context.getSecurejoinQrCodeSVG(chatId = 0)` 
+### Added
+
+- Add `context.getSecurejoinQrCodeSVG(chatId)` 
+
+### Changed
+
+- Upgrade to core 1.67
 
 ## [1.65.0] - 2021-11-21
 
@@ -1331,7 +1337,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.65.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.67.0...HEAD
+
+[1.67.0]: https://github.com/deltachat/deltachat-node/compare/v1.65.0...v1.67.0
 
 [1.65.0]: https://github.com/deltachat/deltachat-node/compare/v1.60.1...v1.65.0
 
