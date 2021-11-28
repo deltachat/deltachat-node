@@ -306,6 +306,9 @@ describe('Offline Tests with unconfigured account', function () {
       C.DC_CONTACT_ID_SELF,
     ])
 
+    const draft2 = context.getDraft(chatId)
+    expect(draft2 == null, 'unpromoted group has no draft by default')
+
     context.setChatName(chatId, 'NEW NAME')
     strictEqual(context.getChat(chatId).getName(), 'NEW NAME', 'name updated')
 
@@ -548,6 +551,19 @@ describe('Offline Tests with unconfigured account', function () {
     expect(ids.indexOf(chatList.getChatId(0))).not.to.equal(-1)
     expect(ids.indexOf(chatList.getChatId(1))).not.to.equal(-1)
     expect(ids.indexOf(chatList.getChatId(2))).not.to.equal(-1)
+
+    const lot = chatList.getSummary(0)
+    strictEqual(lot.getId(), 0, 'lot has no id')
+    strictEqual(lot.getState(), C.DC_STATE_UNDEFINED, 'correct state')
+
+    const text = 'No messages.'
+    context.createGroupChat('groupchat1111')
+    chatList = context.getChatList(0, 'groupchat1111', null)
+    strictEqual(
+      chatList.getSummary(0).getText2(),
+      text,
+      'custom new group message'
+    )
 
     context.setChatVisibility(ids[0], C.DC_CHAT_VISIBILITY_ARCHIVED)
     chatList = context.getChatList(C.DC_GCL_ARCHIVED_ONLY, 'groupchat1', null)
