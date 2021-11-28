@@ -23,6 +23,7 @@ export class Contact {
       status: this.status,
       displayName: this.getDisplayName(),
       id: this.getId(),
+      lastSeen: this.lastSeen,
       name: this.getName(),
       profileImage: this.getProfileImage(),
       nameAndAddr: this.getNameAndAddress(),
@@ -62,6 +63,10 @@ export class Contact {
 
   getId(): number {
     return binding.dcn_contact_get_id(this.dc_contact)
+  }
+
+  get lastSeen(): number {
+    return binding.dcn_contact_get_last_seen(this.dc_contact)
   }
 
   getName(): string {

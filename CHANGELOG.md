@@ -2,6 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [1.68.0] - 2021-11-28
+
+### Added
+
+- Add `contact.lastSeen`
+
+### Changed
+
+- Upgrade to core 1.68
+
 ## [1.67.0] - 2021-11-25
 
 ### Added
@@ -13,10 +23,9 @@
 - Upgrade to core 1.67
 
 ## [1.65.0] - 2021-11-21
-
 ### Changed
 
-- Upgrade to core 1.61 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`4e71cd6`](https://github.com/deltachat/deltachat-node/commit/4e71cd6)) (Simon Laux)
+- Upgrade to core 1.65 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`4e71cd6`](https://github.com/deltachat/deltachat-node/commit/4e71cd6)) (Simon Laux)
 
 ### Added
 
