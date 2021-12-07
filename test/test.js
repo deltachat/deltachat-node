@@ -467,6 +467,7 @@ describe('Offline Tests with unconfigured account', function () {
     strictEqual(contact.getProfileImage(), null, 'no contact image')
     strictEqual(contact.isBlocked(), false, 'not blocked')
     strictEqual(contact.isVerified(), false, 'unverified status')
+    strictEqual(contact.stats, 0, 'last seen unknown')
   })
 
   it('create contacts from address book', function () {
