@@ -2,11 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+## [1.70.0] - 2021-12-09
+
+### Changed
+
+- Upgrade to core 1.68.0
+
 ## [1.68.0] - 2021-11-29
 
 ### Changed
 
-- Upgrade to core 1.70.0
+- Upgrade to core 1.68.0
 
 ### Added
 
@@ -27,6 +33,7 @@
 - Upgrade to core 1.67
 
 ## [1.65.0] - 2021-11-21
+
 ### Changed
 
 - Upgrade to core 1.65 ([#528](https://github.com/deltachat/deltachat-node/issues/528)) ([`4e71cd6`](https://github.com/deltachat/deltachat-node/commit/4e71cd6)) (Simon Laux)
@@ -1350,7 +1357,11 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.67.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.70.0...HEAD
+
+[1.70.0]: https://github.com/deltachat/deltachat-node/compare/v1.68.0...v1.70.0
+
+[1.68.0]: https://github.com/deltachat/deltachat-node/compare/v1.67.0...v1.68.0
 
 [1.67.0]: https://github.com/deltachat/deltachat-node/compare/v1.65.0...v1.67.0
 
