@@ -4,13 +4,17 @@
 
 ## [1.68.0] - 2021-11-29
 
+### Changed
+
+- Upgrade to core 1.70.0
+
 ### Added
 
 - Add `contact.lastSeen`
 
 ### Changed
 
-- Upgrade to core 1.68
+- Upgrade to core 1.68.0
 
 ## [1.67.0] - 2021-11-25
 
