@@ -77,6 +77,11 @@
   NAPI_STATUS_THROWS(napi_create_int32(env, name, &return_int32)); \
   return return_int32;
 
+#define NAPI_RETURN_INT64(name) \
+  napi_value return_int64; \
+  NAPI_STATUS_THROWS(napi_create_int64(env, name, &return_int64)); \
+  return return_int64;
+
 
 #define NAPI_RETURN_AND_UNREF_STRING(name) \
   napi_value return_value; \

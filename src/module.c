@@ -1877,8 +1877,8 @@ NAPI_METHOD(dcn_contact_get_status) {
 NAPI_METHOD(dcn_contact_get_last_seen) {
   NAPI_ARGV(1);
   NAPI_DC_CONTACT();
-  int timestamp = dc_contact_get_last_seen(dc_contact);
-  NAPI_RETURN_INT32(timestamp);
+  int64_t timestamp = dc_contact_get_last_seen(dc_contact);
+  NAPI_RETURN_INT64(timestamp);
 }
 
 NAPI_METHOD(dcn_contact_is_blocked) {
