@@ -2,6 +2,20 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Upgrade to core unreleased upcomming 1.71
+- `message.setQuote(quotedMessage: Message | null)` - you can now remove quotes from draft messages
+
+### Added
+
+- Add `message.forcePlaintext()`
+
+### Removed
+
+- removed config value `inbox_watch`
+- removed config value `mvbox_watch`
+
 ## [1.70.0] - 2021-12-09
 
 ### Changed
