@@ -1,5 +1,5 @@
 // @ts-check
-import DeltaChat from '../dist'
+import DeltaChat, { Message } from '../dist'
 import binding from '../binding'
 
 import { strictEqual } from 'assert'
@@ -130,34 +130,48 @@ describe('Basic offline Tests', function () {
       'arch',
       'bcc_self',
       'blobdir',
+      'bot',
       'configured_mvbox_folder',
       'configured_sentbox_folder',
       'database_dir',
       'database_version',
+      'delete_device_after',
+      'delete_server_after',
       'deltachat_core_version',
       'display_name',
+      'download_limit',
       'e2ee_enabled',
       'entered_account_settings',
+      'fetch_existing_msgs',
       'fingerprint',
       'folders_configured',
-      'inbox_watch',
       'is_configured',
       'journal_mode',
+      'key_gen_type',
+      'last_housekeeping',
       'level',
       'mdns_enabled',
+      'media_quality',
       'messages_in_contact_requests',
       'mvbox_move',
-      'mvbox_watch',
+      'num_cpus',
       'number_of_chat_messages',
       'number_of_chats',
       'number_of_contacts',
       'private_key_count',
       'public_key_count',
+      'quota_exceeding',
+      'scan_all_folders_debounce_secs',
       'selfavatar',
+      'send_sync_msgs',
+      'sentbox_move',
       'sentbox_watch',
+      'show_emails',
+      'socks5_enabled',
       'sqlite_version',
       'uptime',
       'used_account_settings',
+      'webrtc_instance'
     ])
 
     dc.close()
@@ -570,6 +584,17 @@ describe('Offline Tests with unconfigured account', function () {
     chatList = context.getChatList(C.DC_GCL_ARCHIVED_ONLY, 'groupchat1', null)
     strictEqual(chatList.getCount(), 1, 'only one archived')
   })
+
+  it('Remove qoute from (draft) message', function () {
+    context.addDeviceMessage("test_qoute", "test")
+    const msgId = context.getChatMessages(10, 0, 0)[0]
+    const msg = context.messageNew()
+
+    msg.setQuote(context.getMessage(msgId))
+    expect(msg.getQuotedMessage()).to.not.be.null
+    msg.setQuote(null)
+    expect(msg.getQuotedMessage()).to.be.null
+  })
 })
 
 describe('Integration tests', function () {
@@ -697,9 +722,7 @@ describe('Integration tests', function () {
       'selfavatar correct'
     )
     strictEqual(context.getConfig('e2ee_enabled'), '1', 'e2ee_enabled correct')
-    strictEqual(context.getConfig('inbox_watch'), '1', 'inbox_watch')
     strictEqual(context.getConfig('sentbox_watch'), '0', 'sentbox_watch')
-    strictEqual(context.getConfig('mvbox_watch'), '0', 'mvbox_watch')
     strictEqual(context.getConfig('mvbox_move'), '0', 'mvbox_move')
     strictEqual(
       context.getConfig('save_mime_headers'),

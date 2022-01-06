@@ -321,8 +321,12 @@ export class Message {
     return this
   }
 
-  setQuote(quotedMessage: Message) {
-    binding.dcn_msg_set_quote(this.dc_msg, quotedMessage.dc_msg)
+  setQuote(quotedMessage: Message | null) {
+    if (quotedMessage === null) {
+      binding.dcn_msg_remove_quote(this.dc_msg)
+    } else {
+      binding.dcn_msg_set_quote(this.dc_msg, quotedMessage?.dc_msg)
+    }
     return this
   }
 
@@ -339,5 +343,13 @@ export class Message {
   setOverrideSenderName(senderName: string) {
     binding.dcn_msg_set_override_sender_name(this.dc_msg, senderName)
     return this
+  }
+
+  /** Force the message to be sent in plain text.
+   *
+   * This API is for bots, there is no need to expose it in the UI.
+   */
+  forcePlaintext() {
+    binding.dcn_msg_force_plaintext(this.dc_msg)
   }
 }

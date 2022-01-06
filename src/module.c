@@ -2384,6 +2384,14 @@ NAPI_METHOD(dcn_msg_latefiling_mediasize) {
   NAPI_RETURN_UNDEFINED();
 }
 
+
+NAPI_METHOD(dcn_msg_force_plaintext) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+  dc_msg_force_plaintext(dc_msg);
+  NAPI_RETURN_UNDEFINED();
+}
+
 NAPI_METHOD(dcn_msg_set_dimension) {
   NAPI_ARGV(3);
   NAPI_DC_MSG();
@@ -2459,6 +2467,14 @@ NAPI_METHOD(dcn_msg_set_quote) {
   NAPI_ARGV_DC_MSG(dc_msg_quote, 1)
 
   dc_msg_set_quote(dc_msg, dc_msg_quote);
+  NAPI_RETURN_UNDEFINED();
+}
+
+NAPI_METHOD(dcn_msg_remove_quote) {
+  NAPI_ARGV(1);
+  NAPI_ARGV_DC_MSG(dc_msg, 0)
+  
+  dc_msg_set_quote(dc_msg, NULL);
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -3317,12 +3333,14 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_is_sent);
   NAPI_EXPORT_FUNCTION(dcn_msg_is_setupmessage);
   NAPI_EXPORT_FUNCTION(dcn_msg_latefiling_mediasize);
+  NAPI_EXPORT_FUNCTION(dcn_msg_force_plaintext);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_dimension);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_duration);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_override_sender_name);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_html);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);
+  NAPI_EXPORT_FUNCTION(dcn_msg_remove_quote);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_location);
 
