@@ -322,11 +322,7 @@ export class Message {
   }
 
   setQuote(quotedMessage: Message | null) {
-    if (quotedMessage === null) {
-      binding.dcn_msg_remove_quote(this.dc_msg)
-    } else {
-      binding.dcn_msg_set_quote(this.dc_msg, quotedMessage?.dc_msg)
-    }
+    binding.dcn_msg_set_quote(this.dc_msg, quotedMessage?.dc_msg)
     return this
   }
 
