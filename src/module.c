@@ -2464,17 +2464,11 @@ NAPI_METHOD(dcn_msg_set_html) {
 NAPI_METHOD(dcn_msg_set_quote) {
   NAPI_ARGV(2);
   NAPI_ARGV_DC_MSG(dc_msg, 0)
-  NAPI_ARGV_DC_MSG(dc_msg_quote, 1)
+
+  dc_msg_t* dc_msg_quote = NULL;
+  napi_get_value_external(env, argv[1], (void**)&dc_msg_quote);
 
   dc_msg_set_quote(dc_msg, dc_msg_quote);
-  NAPI_RETURN_UNDEFINED();
-}
-
-NAPI_METHOD(dcn_msg_remove_quote) {
-  NAPI_ARGV(1);
-  NAPI_ARGV_DC_MSG(dc_msg, 0)
-  
-  dc_msg_set_quote(dc_msg, NULL);
   NAPI_RETURN_UNDEFINED();
 }
 
@@ -3340,7 +3334,6 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_set_file);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_html);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_quote);
-  NAPI_EXPORT_FUNCTION(dcn_msg_remove_quote);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_text);
   NAPI_EXPORT_FUNCTION(dcn_msg_set_location);
 
