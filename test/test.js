@@ -92,7 +92,7 @@ describe('Basic offline Tests', function () {
 
     strictEqual(
       context.getConfig('selfstatus'),
-      'Sent with my Delta Chat Messenger: https://delta.chat'
+      ''
     )
     context.setConfig('selfstatus', 'hello')
     strictEqual(context.getConfig('selfstatus'), 'hello')
@@ -101,7 +101,7 @@ describe('Basic offline Tests', function () {
     context.setConfig('selfstatus', null)
     strictEqual(
       context.getConfig('selfstatus'),
-      'Sent with my Delta Chat Messenger: https://delta.chat'
+      ''
     )
 
     dc.close()
