@@ -115,6 +115,7 @@ export class Message {
     const quotedMessage = this.getQuotedMessage()
     return {
       chatId: this.getChatId(),
+      webxdcInfo: this.webxdcInfo,
       downloadState: this.downloadState,
       duration: this.getDuration(),
       file: this.getFile(),
@@ -144,6 +145,7 @@ export class Message {
       videochatType: this.getVideochatType(),
       videochatUrl: this.getVideochatUrl(),
       overrideSenderName: this.overrideSenderName,
+      parentId: this.parent?.getId(),
     }
   }
 
@@ -151,8 +153,17 @@ export class Message {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
 
+  get webxdcInfo() {
+    return JSON.parse(binding.dcn_msg_get_webxdc_info(this.dc_msg))
+  }
+
   get downloadState(): MessageDownloadState {
     return binding.dcn_msg_get_download_state(this.dc_msg)
+  }
+
+  get parent(): Message | null {
+    let msg = binding.dcn_msg_get_parent(this.dc_msg)
+    return msg ? new Message(msg) : null
   }
 
   getDuration(): number {

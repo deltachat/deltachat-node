@@ -44,6 +44,10 @@ export class AccountManager extends EventEmitter {
     return binding.dcn_accounts_add_account(this.dcn_accounts)
   }
 
+  addClosedAccount(): number {
+    return binding.dcn_accounts_add_closed_account(this.dcn_accounts)
+  }
+
   removeAccount(account_id: number) {
     return binding.dcn_accounts_remove_account(this.dcn_accounts, account_id)
   }

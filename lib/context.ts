@@ -32,6 +32,16 @@ export class Context {
     return this.inner_dcn_context
   }
 
+  get is_open() {
+    return Boolean(binding.dcn_context_is_open())
+  }
+
+  open(passphrase?: string) {
+    return Boolean(
+      binding.dcn_context_open(this.dcn_context, passphrase ? passphrase : '')
+    )
+  }
+
   unref() {
     binding.dcn_context_unref(this.dcn_context)
     ;(this.inner_dcn_context as any) = null
@@ -834,4 +844,57 @@ export class Context {
       status: binding.dcn_provider_get_status(provider),
     }
   }
+
+  sendWebxdcStatusUpdate<T>(
+    msgId: number,
+    json: WebxdcSendingStateUpdate<T>,
+    descr: string
+  ) {
+    return Boolean(
+      binding.dcn_send_webxdc_status_update(
+        this.dcn_context,
+        msgId,
+        JSON.stringify(json),
+        descr
+      )
+    )
+  }
+
+  getWebxdcStatusUpdates<T>(
+    msgId: number,
+    statusUpdateId = 0
+  ): WebxdcRecievedStateUpdate<T>[] {
+    return JSON.parse(
+      binding.dcn_get_webxdc_status_updates(
+        this.dcn_context,
+        msgId,
+        statusUpdateId
+      )
+    )
+  }
+
+  /** the string contains the binary data, it is an "u8 string", maybe we will use a more efficient type in the future. */
+  getWebxdcBlob(message: Message, filename: string): string {
+    return binding.dcn_msg_get_webxdc_blob(message.dc_msg, filename)
+  }
+}
+
+export type WebxdcSendingStateUpdate<T> = {
+  /** the payload, deserialized json:
+   * any javascript primitive, array or object. */
+  payload: T
+  /** optional, short, informational message that will be added to the chat,
+   * eg. "Alice voted" or "Bob scored 123 in MyGame";
+   * usually only one line of text is shown,
+   * use this option sparingly to not spam the chat. */
+  info?: string
+  /** optional, short text, shown beside app icon;
+   * it is recommended to use some aggregated value,
+   * eg. "8 votes", "Highscore: 123" */
+  summary?: string
+}
+
+export type WebxdcRecievedStateUpdate<T> = {
+  /** the payload, deserialized json */
+  payload: T
 }
