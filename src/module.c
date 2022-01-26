@@ -155,13 +155,50 @@ NAPI_METHOD(dcn_context_new) {
   TRACE("creating new dc_context");
 
   dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
-  dcn_context->dc_context = dc_context_new("deltachat-node", db_file, NULL);
+  dcn_context->dc_context = dc_context_new(NULL, db_file, NULL);
 
 
   napi_value result;
   NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
                                           NULL, NULL, &result));
   return result;
+}
+
+NAPI_METHOD(dcn_context_new_closed) {
+  NAPI_ARGV(1);
+
+  NAPI_ARGV_UTF8_MALLOC(db_file, 0);
+
+  TRACE("creating new closed dc_context");
+
+  dcn_context_t* dcn_context = calloc(1, sizeof(dcn_context_t));
+  dcn_context->dc_context = dc_context_new_closed(db_file);
+
+
+  napi_value result;
+  NAPI_STATUS_THROWS(napi_create_external(env, dcn_context,
+                                          NULL, NULL, &result));
+  return result;
+}
+
+NAPI_METHOD(dcn_context_open) {
+  NAPI_ARGV(2);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UTF8_MALLOC(passphrase, 1);
+
+  int result = dc_context_open(dcn_context->dc_context, passphrase);
+  free(passphrase);
+
+  NAPI_RETURN_UINT32(result);
+}
+
+NAPI_METHOD(dcn_context_is_open) {
+  NAPI_ARGV(1);
+  NAPI_DCN_CONTEXT();
+
+  int result = dc_context_is_open(dcn_context->dc_context);
+
+  NAPI_RETURN_UINT32(result);
 }
 
 /**
@@ -1977,6 +2014,23 @@ NAPI_METHOD(dcn_lot_get_timestamp) {
  * dc_msg_t
  */
 
+NAPI_METHOD(dcn_msg_get_parent) {
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  napi_value result;
+  dc_msg_t* msg = dc_msg_get_parent(dc_msg);
+
+  if (msg == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &result));
+  } else {
+    NAPI_STATUS_THROWS(napi_create_external(env, msg, finalize_msg,
+                                            NULL, &result));
+  }
+
+  return result;
+}
+
 NAPI_METHOD(dcn_msg_get_download_state) {
   NAPI_ARGV(1);
   NAPI_DC_MSG();
@@ -2280,6 +2334,15 @@ NAPI_METHOD(dcn_msg_get_width) {
   //TRACE("result %d", width);
 
   NAPI_RETURN_INT32(width);
+}
+
+NAPI_METHOD(dcn_msg_get_webxdc_info){
+  NAPI_ARGV(1);
+  NAPI_DC_MSG();
+
+  char* result_json = dc_msg_get_webxdc_info(dc_msg);
+
+  NAPI_RETURN_AND_UNREF_STRING(result_json);
 }
 
 NAPI_METHOD(dcn_msg_has_deviating_timestamp) {
@@ -2774,7 +2837,48 @@ NAPI_METHOD(dcn_provider_get_status) {
   //TRACE("result %s", status);
 
   NAPI_RETURN_INT32(status)
-} 
+}
+
+// webxdc
+
+NAPI_METHOD(dcn_send_webxdc_status_update){
+  NAPI_ARGV(4);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+  NAPI_ARGV_UTF8_MALLOC(json, 2);
+  NAPI_ARGV_UTF8_MALLOC(descr, 3);
+
+  int result = dc_send_webxdc_status_update(dcn_context->dc_context, msg_id, json, descr);
+  free(json);
+  free(descr);
+
+  NAPI_RETURN_UINT32(result);
+}
+
+NAPI_METHOD(dcn_get_webxdc_status_updates){
+  NAPI_ARGV(3);
+  NAPI_DCN_CONTEXT();
+  NAPI_ARGV_UINT32(msg_id, 1);
+  NAPI_ARGV_UINT32(status_update_id, 2);
+
+  char* result_json = dc_get_webxdc_status_updates(dcn_context->dc_context, msg_id, status_update_id);
+
+  NAPI_RETURN_AND_UNREF_STRING(result_json);
+}
+
+// todo dc_msg_get_webxdc_blob
+NAPI_METHOD(dcn_msg_get_webxdc_blob){
+  NAPI_ARGV(2);
+  NAPI_DC_MSG();
+  NAPI_ARGV_UTF8_MALLOC(filename, 1);
+
+  size_t _size;
+  char* u8string = dc_msg_get_webxdc_blob(dc_msg, filename, &_size);
+  free(filename);
+
+  NAPI_RETURN_AND_UNREF_STRING(u8string);
+}
+
 
 // dc_accounts_*
 
@@ -2817,6 +2921,15 @@ NAPI_METHOD(dcn_accounts_add_account) {
   NAPI_DCN_ACCOUNTS();
 
   int account_id = dc_accounts_add_account(dcn_accounts->dc_accounts);
+  
+  NAPI_RETURN_UINT32(account_id);
+}
+
+NAPI_METHOD(dcn_accounts_add_closed_account) {
+  NAPI_ARGV(1);
+  NAPI_DCN_ACCOUNTS();
+
+  int account_id = dc_accounts_add_closed_account(dcn_accounts->dc_accounts);
   
   NAPI_RETURN_UINT32(account_id);
 }
@@ -3116,6 +3229,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_accounts_new);
   NAPI_EXPORT_FUNCTION(dcn_accounts_unref);
   NAPI_EXPORT_FUNCTION(dcn_accounts_add_account);
+  NAPI_EXPORT_FUNCTION(dcn_accounts_add_closed_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_migrate_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_remove_account);
   NAPI_EXPORT_FUNCTION(dcn_accounts_get_all);
@@ -3136,6 +3250,9 @@ NAPI_INIT() {
    */
 
   NAPI_EXPORT_FUNCTION(dcn_context_new);
+  NAPI_EXPORT_FUNCTION(dcn_context_new_closed);
+  NAPI_EXPORT_FUNCTION(dcn_context_open);
+  NAPI_EXPORT_FUNCTION(dcn_context_is_open);
   NAPI_EXPORT_FUNCTION(dcn_context_unref);
   NAPI_EXPORT_FUNCTION(dcn_start_event_handler);
 
@@ -3291,6 +3408,7 @@ NAPI_INIT() {
    * dc_msg_t
    */
 
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_parent);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_download_state);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_chat_id);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_duration);
@@ -3318,6 +3436,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_msg_get_videochat_type);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_videochat_url);
   NAPI_EXPORT_FUNCTION(dcn_msg_get_width);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_webxdc_info);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_deviating_timestamp);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_location);
   NAPI_EXPORT_FUNCTION(dcn_msg_has_html);
@@ -3365,5 +3484,11 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(dcn_array_get_contact_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_chat_id);
   NAPI_EXPORT_FUNCTION(dcn_array_get_marker);
+
+  /** webxdc **/
+
+  NAPI_EXPORT_FUNCTION(dcn_send_webxdc_status_update);
+  NAPI_EXPORT_FUNCTION(dcn_get_webxdc_status_updates);
+  NAPI_EXPORT_FUNCTION(dcn_msg_get_webxdc_blob);
 }
 
