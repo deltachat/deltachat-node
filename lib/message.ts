@@ -153,8 +153,11 @@ export class Message {
     return binding.dcn_msg_get_chat_id(this.dc_msg)
   }
 
-  get webxdcInfo() {
-    return JSON.parse(binding.dcn_msg_get_webxdc_info(this.dc_msg))
+  get webxdcInfo(): { name: string; icon: string; summary: string } | null {
+    let info = binding.dcn_msg_get_webxdc_info(this.dc_msg)
+    return info
+      ? JSON.parse(binding.dcn_msg_get_webxdc_info(this.dc_msg))
+      : null
   }
 
   get downloadState(): MessageDownloadState {
