@@ -90,19 +90,13 @@ describe('Basic offline Tests', function () {
     context.setConfig('bot', null)
     strictEqual(context.getConfig('bot'), '')
 
-    strictEqual(
-      context.getConfig('selfstatus'),
-      ''
-    )
+    strictEqual(context.getConfig('selfstatus'), '')
     context.setConfig('selfstatus', 'hello')
     strictEqual(context.getConfig('selfstatus'), 'hello')
     context.setConfig('selfstatus', '')
     strictEqual(context.getConfig('selfstatus'), '')
     context.setConfig('selfstatus', null)
-    strictEqual(
-      context.getConfig('selfstatus'),
-      ''
-    )
+    strictEqual(context.getConfig('selfstatus'), '')
 
     dc.close()
   })
@@ -171,7 +165,7 @@ describe('Basic offline Tests', function () {
       'sqlite_version',
       'uptime',
       'used_account_settings',
-      'webrtc_instance'
+      'webrtc_instance',
     ])
 
     dc.close()
@@ -586,7 +580,7 @@ describe('Offline Tests with unconfigured account', function () {
   })
 
   it('Remove qoute from (draft) message', function () {
-    context.addDeviceMessage("test_qoute", "test")
+    context.addDeviceMessage('test_qoute', 'test')
     const msgId = context.getChatMessages(10, 0, 0)[0]
     const msg = context.messageNew()
 

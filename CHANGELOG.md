@@ -10,6 +10,14 @@
 ### Added
 
 - Add `message.forcePlaintext()`
+- Add `AccountManager.addClosedAccount()`
+- Add `Context.is_open`
+- Add `Context.open(passphrase?: string)`
+- Add `Message.webxdcInfo`
+- Add `Message.parent`
+- Add `Context.sendWebxdcStatusUpdate(msgId:number, json: WebxdcSendingStateUpdate, descr: string)`
+- Add `Context.getWebxdcStatusUpdates(msgId: number, statusUpdateId = 0):WebxdcRecievedStateUpdate[]`
+- Add `getWebxdcBlob(message: Message, filename: string):string`
 
 ### Removed
 
