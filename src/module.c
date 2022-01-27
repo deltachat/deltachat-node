@@ -2866,7 +2866,6 @@ NAPI_METHOD(dcn_get_webxdc_status_updates){
   NAPI_RETURN_AND_UNREF_STRING(result_json);
 }
 
-// todo dc_msg_get_webxdc_blob
 NAPI_METHOD(dcn_msg_get_webxdc_blob){
   NAPI_ARGV(2);
   NAPI_DC_MSG();
@@ -2880,7 +2879,7 @@ NAPI_METHOD(dcn_msg_get_webxdc_blob){
   napi_value jsbuffer;
   NAPI_STATUS_THROWS(napi_create_buffer_copy(env,
                                     size,
-                                    &data,
+                                    data,
                                     NULL,
                                     &jsbuffer))
 
