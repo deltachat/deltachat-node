@@ -113,9 +113,10 @@ export class Message {
   toJson() {
     debug('toJson')
     const quotedMessage = this.getQuotedMessage()
+    const viewType = binding.dcn_msg_get_viewtype(this.dc_msg)
     return {
       chatId: this.getChatId(),
-      webxdcInfo: this.webxdcInfo,
+      webxdcInfo: viewType == C.DC_MSG_WEBXDC ? this.webxdcInfo : null,
       downloadState: this.downloadState,
       duration: this.getDuration(),
       file: this.getFile(),
@@ -129,7 +130,7 @@ export class Message {
       timestamp: this.getTimestamp(),
       hasLocation: this.hasLocation(),
       hasHTML: this.hasHTML,
-      viewType: binding.dcn_msg_get_viewtype(this.dc_msg),
+      viewType,
       state: binding.dcn_msg_get_state(this.dc_msg),
       hasDeviatingTimestamp: this.hasDeviatingTimestamp(),
       showPadlock: this.getShowpadlock(),
