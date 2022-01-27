@@ -2872,11 +2872,21 @@ NAPI_METHOD(dcn_msg_get_webxdc_blob){
   NAPI_DC_MSG();
   NAPI_ARGV_UTF8_MALLOC(filename, 1);
 
-  size_t _size;
-  char* u8string = dc_msg_get_webxdc_blob(dc_msg, filename, &_size);
+  size_t size;
+  char* data = dc_msg_get_webxdc_blob(dc_msg, filename, &size);
   free(filename);
 
-  NAPI_RETURN_AND_UNREF_STRING(u8string);
+  // https://nodejs.org/api/n-api.html#napi_create_buffer_copy
+  napi_value jsbuffer;
+  NAPI_STATUS_THROWS(napi_create_buffer_copy(env,
+                                    size,
+                                    &data,
+                                    NULL,
+                                    &jsbuffer))
+
+  free(data);
+
+  return jsbuffer;
 }
 
 

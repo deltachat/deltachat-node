@@ -874,7 +874,7 @@ export class Context {
   }
 
   /** the string contains the binary data, it is an "u8 string", maybe we will use a more efficient type in the future. */
-  getWebxdcBlob(message: Message, filename: string): string {
+  getWebxdcBlob(message: Message, filename: string): Buffer {
     return binding.dcn_msg_get_webxdc_blob(message.dc_msg, filename)
   }
 }
