@@ -15,8 +15,8 @@
 - Add `Context.open(passphrase?: string)`
 - Add `Message.webxdcInfo`
 - Add `Message.parent`
-- Add `Context.sendWebxdcStatusUpdate(msgId:number, json: WebxdcSendingStateUpdate, descr: string)`
-- Add `Context.getWebxdcStatusUpdates(msgId: number, statusUpdateId = 0):WebxdcRecievedStateUpdate[]`
+- Add `Context.sendWebxdcStatusUpdate(msgId:number, json: WebxdcSendingStatusUpdate, descr: string)`
+- Add `Context.getWebxdcStatusUpdates(msgId: number, statusUpdateId = 0):WebxdcReceivedStatusUpdate[]`
 - Add `getWebxdcBlob(message: Message, filename: string):string`
 
 ### Removed
