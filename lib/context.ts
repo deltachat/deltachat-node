@@ -847,7 +847,7 @@ export class Context {
 
   sendWebxdcStatusUpdate<T>(
     msgId: number,
-    json: WebxdcSendingStateUpdate<T>,
+    json: WebxdcSendingStatusUpdate<T>,
     descr: string
   ) {
     return Boolean(
@@ -863,7 +863,7 @@ export class Context {
   getWebxdcStatusUpdates<T>(
     msgId: number,
     statusUpdateId = 0
-  ): WebxdcRecievedStateUpdate<T>[] {
+  ): WebxdcReceivedStatusUpdate<T>[] {
     return JSON.parse(
       binding.dcn_get_webxdc_status_updates(
         this.dcn_context,
@@ -879,7 +879,7 @@ export class Context {
   }
 }
 
-export type WebxdcSendingStateUpdate<T> = {
+type WebxdcSendingStatusUpdate<T> = {
   /** the payload, deserialized json:
    * any javascript primitive, array or object. */
   payload: T
@@ -894,7 +894,7 @@ export type WebxdcSendingStateUpdate<T> = {
   summary?: string
 }
 
-export type WebxdcRecievedStateUpdate<T> = {
+type WebxdcReceivedStatusUpdate<T> = {
   /** the payload, deserialized json */
   payload: T
 }
