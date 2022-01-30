@@ -2875,15 +2875,18 @@ NAPI_METHOD(dcn_msg_get_webxdc_blob){
   char* data = dc_msg_get_webxdc_blob(dc_msg, filename, &size);
   free(filename);
 
-  // https://nodejs.org/api/n-api.html#napi_create_buffer_copy
   napi_value jsbuffer;
-  NAPI_STATUS_THROWS(napi_create_buffer_copy(env,
-                                    size,
-                                    data,
-                                    NULL,
-                                    &jsbuffer))
-
-  free(data);
+  if (data == NULL) {
+    NAPI_STATUS_THROWS(napi_get_null(env, &jsbuffer));
+  } else {
+    // https://nodejs.org/api/n-api.html#napi_create_buffer_copy
+    NAPI_STATUS_THROWS(napi_create_buffer_copy(env,
+                                      size,
+                                      data,
+                                      NULL,
+                                      &jsbuffer))
+    free(data);
+  }
 
   return jsbuffer;
 }
