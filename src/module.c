@@ -2885,7 +2885,7 @@ NAPI_METHOD(dcn_msg_get_webxdc_blob){
                                       data,
                                       NULL,
                                       &jsbuffer))
-    free(data);
+    dc_str_unref(data);
   }
 
   return jsbuffer;
