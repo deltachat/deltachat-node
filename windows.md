@@ -6,7 +6,7 @@ E.g via <https://git-scm.com/download/win>
 
 ## install node
 
-Download and install `v10` from <https://nodejs.org/en/>
+Download and install `v14` from <https://nodejs.org/en/>
 
 ## install rust
 
