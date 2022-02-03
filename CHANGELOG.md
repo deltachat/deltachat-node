@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Upgrade to core unreleased upcomming 1.71
+- Upgrade to deltachat-core version `1.75.0`
 - `message.setQuote(quotedMessage: Message | null)` - you can now remove quotes from draft messages
 
 ### Added
