@@ -41,7 +41,7 @@ npm install deltchat-node
 
 ## Dependencies
 
-- Nodejs >= `v14.0.0`
+- Nodejs >= `v16.0.0`
 - rustup (optional if you can't use the prebuilds)
 
 > On Windows, you may need to also install **Perl** to be able to compile deltachat-core.
@@ -61,10 +61,10 @@ building from source or clone this repository and follow this steps:
 deltachat doesn't support universal (fat) binaries (that contain builds for both cpu architectures) yet, until it does you can use the following workaround to get x86_64 builds:
 
 ```
-$ fnm install 14 --arch i386
-$ fnm use 14
+$ fnm install 17 --arch x64
+$ fnm use 17
 $ node -p process.arch
-# result should be i386
+# result should be x64
 $ cd deltachat-core-rust && rustup target add x86_64-apple-darwin && cd -
 $ git apply patches/m1_build_use_x86_64.patch
 $ CARGO_BUILD_TARGET=x86_64-apple-darwin npm run build
