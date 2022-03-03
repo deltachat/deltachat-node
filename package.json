@@ -36,7 +36,7 @@
     "url": "https://github.com/deltachat/deltachat-node.git"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
-    "@types/node": "^14.17.5",
+    "@types/node": "^16.11.26",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
