@@ -751,7 +751,7 @@ export class Context {
     )
   }
 
-  setDraft(chatId: number, msg: Message) {
+  setDraft(chatId: number, msg: Message | null) {
     debug(`setDraft ${chatId}`)
     binding.dcn_set_draft(
       this.dcn_context,
