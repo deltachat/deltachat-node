@@ -4,6 +4,7 @@
 
 ## Fixed
 - fix export backup
+- fix `Context.setDraft(chatId: number, msg: Message | null)` msg argument type to allow for removing drafts
 
 ## [1.75.1] - 2022-02-03
 
