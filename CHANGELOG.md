@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+
+- remove dependency on `lodash.pick`
+
 ## Fixed
 - fix export backup
 - fix `Context.setDraft(chatId: number, msg: Message | null)` msg argument type to allow for removing drafts

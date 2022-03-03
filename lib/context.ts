@@ -8,7 +8,6 @@ import { Contact } from './contact'
 import { Message } from './message'
 import { Lot } from './lot'
 import { Locations } from './locations'
-import pick from 'lodash.pick'
 import rawDebug from 'debug'
 import { AccountManager } from './deltachat'
 const debug = rawDebug('deltachat:node:index')
@@ -500,15 +499,24 @@ export class Context {
     const info = AccountManager.parseGetInfo(
       binding.dcn_get_info(context.dcn_context)
     )
-    const result = pick(info, [
-      'deltachat_core_version',
-      'sqlite_version',
-      'sqlite_thread_safe',
-      'libetpan_version',
-      'openssl_version',
-      'compile_date',
-      'arch',
-    ])
+    const {
+      deltachat_core_version,
+      sqlite_version,
+      sqlite_thread_safe,
+      libetpan_version,
+      openssl_version,
+      compile_date,
+      arch,
+    } = info
+    const result = {
+      deltachat_core_version,
+      sqlite_version,
+      sqlite_thread_safe,
+      libetpan_version,
+      openssl_version,
+      compile_date,
+      arch,
+    }
     context.unref()
     dc.close()
     return result
