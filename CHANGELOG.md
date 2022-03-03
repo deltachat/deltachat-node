@@ -2,11 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.75.2] - 2022-03-03
+
 ## Changed
 
 - remove dependency on `lodash.pick`
 
 ## Fixed
+
 - fix export backup
 - fix `Context.setDraft(chatId: number, msg: Message | null)` msg argument type to allow for removing drafts
 
@@ -1395,7 +1398,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.75.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.75.2...HEAD
+
+[1.75.2]: https://github.com/deltachat/deltachat-node/compare/v1.75.1...v1.75.2
 
 [1.75.1]: https://github.com/deltachat/deltachat-node/compare/v1.75.0...v1.75.1
 
