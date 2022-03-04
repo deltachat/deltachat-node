@@ -18,6 +18,8 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         if: matrix.os == 'windows-2022'
+        run: |
+          npm config set msvs_version 2022
 
       - name: System info
         run: |
