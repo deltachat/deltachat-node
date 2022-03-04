@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.75.3] - 2022-03-04
+
+## Changed
+
+- upgrade `node-gyp` to version `9.0.0` to fix the github build action not finding Visual Studio on windows
+
 ## [1.75.2] - 2022-03-03
 
 ## Changed
@@ -1398,7 +1404,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.75.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.75.3...HEAD
+
+[1.75.3]: https://github.com/deltachat/deltachat-node/compare/v1.75.2...v1.75.3
 
 [1.75.2]: https://github.com/deltachat/deltachat-node/compare/v1.75.1...v1.75.2
 
