@@ -1,6 +1,6 @@
 {
   "name": "deltachat-node",
-  "version": "1.75.2",
+  "version": "1.75.3",
   "description": "node.js bindings for deltachat-core",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -55,7 +55,7 @@
     "esm": "^3.2.25",
     "hallmark": "^2.0.0",
     "mocha": "^8.2.1",
-    "node-gyp": "^6.0.0",
+    "node-gyp": "^9.0.0",
     "nyc": "^15.0.0",
     "opn-cli": "^5.0.0",
     "prebuildify": "^3.0.0",
