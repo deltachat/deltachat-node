@@ -22,6 +22,6 @@ if (process.env.USE_SYSTEM_LIBDELTACHAT === 'true') {
 }
 
 if (!existsSync(join(__dirname, '..', 'dist'))) {
-  console.log('[i] Didn\'t find already build typescript bindings. Trying to transpile them. If this fail, make sure typescript is installed ;)')
+  console.log('[i] Didn\'t find already built typescript bindings. Trying to transpile them. If this fail, make sure typescript is installed ;)')
   run('npm run build:bindings:ts')
 }
