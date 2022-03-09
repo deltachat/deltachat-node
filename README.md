@@ -44,6 +44,8 @@ npm install deltchat-node
 - Nodejs >= `v14.0.0`
 - rustup (optional if you can't use the prebuilds)
 
+> On Windows, you may need to also install **Perl** to be able to compile deltachat-core.
+
 ## Build from source
 
 If you want to build from source, make sure that you have `rustup` installed.
