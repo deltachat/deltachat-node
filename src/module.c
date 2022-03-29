@@ -2859,9 +2859,9 @@ NAPI_METHOD(dcn_get_webxdc_status_updates){
   NAPI_ARGV(3);
   NAPI_DCN_CONTEXT();
   NAPI_ARGV_UINT32(msg_id, 1);
-  NAPI_ARGV_UINT32(status_update_id, 2);
+  NAPI_ARGV_UINT32(serial, 2);
 
-  char* result_json = dc_get_webxdc_status_updates(dcn_context->dc_context, msg_id, status_update_id);
+  char* result_json = dc_get_webxdc_status_updates(dcn_context->dc_context, msg_id, serial);
 
   NAPI_RETURN_AND_UNREF_STRING(result_json);
 }

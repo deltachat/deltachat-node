@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- new webxdc api signature for `Context.getWebxdcStatusUpdates`
+
 ## [1.76.0] - 2022-03-04
 
 ## Changed
