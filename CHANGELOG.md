@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Removed
+
+- `createTempUser()`
+
 ## [1.76.0] - 2022-03-04
 
 ## Changed

@@ -117,27 +117,6 @@ export class AccountManager extends EventEmitter {
     binding.dcn_accounts_stop_io(this.dcn_accounts)
   }
 
-  static async createTempUser(url: string) {
-    const fetch = require('node-fetch')
-
-    async function postData(url = '') {
-      // Default options are marked with *
-      const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'cache-control': 'no-cache',
-        },
-        referrerPolicy: 'no-referrer', // no-referrer, *client
-      })
-      return response.json() // parses JSON response into native JavaScript objects
-    }
-
-    return await postData(url)
-  }
-
   static maybeValidAddr(addr: string) {
     debug('DeltaChat.maybeValidAddr')
     if (addr === null) return false
