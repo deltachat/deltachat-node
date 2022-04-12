@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+
+- Upgrade to deltachat-core version `1.77.0`
+
 ## [1.76.0] - 2022-03-04
 
 ## Changed
