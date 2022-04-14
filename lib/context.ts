@@ -870,14 +870,10 @@ export class Context {
 
   getWebxdcStatusUpdates<T>(
     msgId: number,
-    statusUpdateId = 0
+    serial = 0
   ): WebxdcReceivedStatusUpdate<T>[] {
     return JSON.parse(
-      binding.dcn_get_webxdc_status_updates(
-        this.dcn_context,
-        msgId,
-        statusUpdateId
-      )
+      binding.dcn_get_webxdc_status_updates(this.dcn_context, msgId, serial)
     )
   }
 
@@ -905,4 +901,13 @@ type WebxdcSendingStatusUpdate<T> = {
 type WebxdcReceivedStatusUpdate<T> = {
   /** the payload, deserialized json */
   payload: T
+  /** the serial number of this update. Serials are larger `0` and newer serials have higher numbers. */
+  serial: number
+  /** the maximum serial currently known.
+   *  If `max_serial` equals `serial` this update is the last update (until new network messages arrive). */
+  max_serial: number
+  /** optional, short, informational message. */
+  info?: string
+  /** optional, short text, shown beside app icon. If there are no updates, an empty JSON-array is returned. */
+  summary?: string
 }
