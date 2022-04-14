@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.77.0] - 2022-04-14
+
 ## Removed
 - `createTempUser()`
 
@@ -1417,7 +1419,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.77.0...HEAD
+
+[1.77.0]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...v1.77.0
 
 [1.76.0]: https://github.com/deltachat/deltachat-node/compare/v1.75.3...v1.76.0
 
