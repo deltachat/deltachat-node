@@ -12,6 +12,27 @@ import { tmpdir } from 'os'
 import { Context } from '../dist/context'
 chai.use(chaiAsPromised)
 
+async function createTempUser(url) {
+  const fetch = require('node-fetch')
+
+  async function postData(url = '') {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'cache-control': 'no-cache',
+      },
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+    })
+    return response.json() // parses JSON response into native JavaScript objects
+  }
+
+  return await postData(url)
+}
+
 describe('static tests', function () {
   it('reverse lookup of events', function () {
     const eventKeys = Object.keys(EventId2EventName).map((k) => Number(k))
@@ -663,7 +684,7 @@ describe('Integration tests', function () {
       this.skip()
     }
 
-    account = await DeltaChat.createTempUser(process.env.DCC_NEW_TMP_EMAIL)
+    account = await createTempUser(process.env.DCC_NEW_TMP_EMAIL)
     if (!account || !account.email || !account.password) {
       console.log(
         "We didn't got back an account from the api, skip intergration tests"
