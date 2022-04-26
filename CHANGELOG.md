@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.77.1] - 2022-04-26
+
 ### BREAKING: we now use node 16
 we now use node version 16.
 Please update if you use an older version! ([`nvm`](https://github.com/nvm-sh/nvm) or [`fnm`](https://github.com/Schniz/fnm) are helpful for this).
@@ -9,6 +11,9 @@ Please update if you use an older version! ([`nvm`](https://github.com/nvm-sh/nv
 ### Changed
 - update node version from `14` to `16`
 - move `Context.getSystemInfo()` to `AccountManager.getSystemInfo()`
+
+### Fixed
+- fix that context was not usable standalone without account managrer anymore.
 
 ## [1.77.0] - 2022-04-14
 
@@ -1427,7 +1432,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.77.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.77.1...HEAD
+
+[1.77.1]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...v1.77.1
 
 [1.77.0]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...v1.77.0
 
