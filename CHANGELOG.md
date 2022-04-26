@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+### BREAKING: we now use node 16
+we now use node version 16.
+Please update if you use an older version! ([`nvm`](https://github.com/nvm-sh/nvm) or [`fnm`](https://github.com/Schniz/fnm) are helpful for this).
+
+### Changed
+- update node version from `14` to `16`
+
 ## [1.77.0] - 2022-04-14
 
 ## Removed
