@@ -19,7 +19,7 @@
     "build:bindings:c:c": "npx node-gyp rebuild",
     "build:bindings:c:postinstall": "node scripts/postinstall.js",
     "build:bindings:ts": "tsc",
-    "prebuildify": "prebuildify -t 10.16.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
+    "prebuildify": "prebuildify -t 16.13.0 --napi --strip --postinstall \"node scripts/postinstall.js --prebuild\"",
     "download-prebuilds": "prebuildify-ci download",
     "submodule": "git submodule update --recursive --init",
     "test": "npm run test:lint && npm run test:mocha",
