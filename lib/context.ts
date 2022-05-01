@@ -48,10 +48,11 @@ export class Context extends EventEmitter {
       debug(eventString, data1, data2)
       if (!context.emit) {
         console.log('Received an event but EventEmitter is already destroyed.')
-        console.log(eventString, 42, data1, data2)
+        console.log(eventString, data1, data2)
         return
       }
-      context.emit(eventString, 42, data1, data2)
+      context.emit(eventString, data1, data2)
+      context.emit("ALL", data1, data2)
     }
     binding.dcn_start_event_handler(
       context.dcn_context,

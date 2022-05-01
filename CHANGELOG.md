@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.78.0] - 2022-05-01
+
+### Changed
+- Upgrade to deltachat-core version `1.78.0`
+
+### Fixed
+- fix standalone (without account manager) context events (remove accountid, and add `ALL` event)
+
 ## [1.77.1] - 2022-04-26
 
 ### BREAKING: we now use node 16
@@ -13,7 +21,7 @@ Please update if you use an older version! ([`nvm`](https://github.com/nvm-sh/nv
 - move `Context.getSystemInfo()` to `AccountManager.getSystemInfo()`
 
 ### Fixed
-- fix that context was not usable standalone without account managrer anymore.
+- fix that context was not usable standalone without account manager anymore.
 
 ## [1.77.0] - 2022-04-14
 
