@@ -52,7 +52,7 @@ export class Context extends EventEmitter {
         return
       }
       context.emit(eventString, data1, data2)
-      context.emit("ALL", data1, data2)
+      context.emit('ALL', data1, data2)
     }
     binding.dcn_start_event_handler(
       context.dcn_context,
