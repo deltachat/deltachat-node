@@ -52,7 +52,7 @@ export class Context extends EventEmitter {
         return
       }
       context.emit(eventString, data1, data2)
-      context.emit('ALL', data1, data2)
+      context.emit('ALL', eventString, data1, data2)
     }
     binding.dcn_start_event_handler(
       context.dcn_context,
@@ -171,12 +171,20 @@ export class Context extends EventEmitter {
         reject(new Error(error))
       }
 
-      const onConfigure = (accountId: number, data1: number, data2: string) => {
-        if (this.account_id !== accountId) {
-          return
+      let onConfigure: (...args: any[]) => void
+      if (this.account_id === null) {
+        onConfigure = (data1: number, data2: string) => {
+          if (data1 === 0) return onFail(data2)
+          else if (data1 === 1000) return onSuccess()
         }
-        if (data1 === 0) return onFail(data2)
-        else if (data1 === 1000) return onSuccess()
+      } else {
+        onConfigure = (accountId: number, data1: number, data2: string) => {
+          if (this.account_id !== accountId) {
+            return
+          }
+          if (data1 === 0) return onFail(data2)
+          else if (data1 === 1000) return onSuccess()
+        }
       }
 
       const removeListeners = () => {
