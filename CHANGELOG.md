@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.79.1] - 2022-05-02
+
 ### Fixed
 - don't ignore core sourcefiles, prevented npm installation on architectures with no prebuild
 
@@ -1448,7 +1450,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.79.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.79.1...HEAD
+
+[1.79.1]: https://github.com/deltachat/deltachat-node/compare/v1.79.0...v1.79.1
 
 [1.79.0]: https://github.com/deltachat/deltachat-node/compare/v1.78.0...v1.79.0
 
