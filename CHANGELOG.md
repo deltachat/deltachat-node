@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- don't ignore core sourcefiles, prevented npm installation on architectures with no prebuild
+
 ## [1.79.0] - 2022-05-02
 
 ### Changed

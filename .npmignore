@@ -16,15 +16,11 @@ deltachat-core-rust/.gitattributes
 deltachat-core-rust/appveyor.yml
 deltachat-core-rust/ci/
 deltachat-core-rust/ci_scripts/
-deltachat-core-rust/examples/
 deltachat-core-rust/python/
-deltachat-core-rust/tests/
 deltachat-core-rust/target
-deltachat-core-rust/test-data
 deltachat-core-rust/proptest-regressions
 deltachat-core-rust/deltachat-ffi/Doxyfile
 deltachat-core-rust/scripts
-deltachat-core-rust/benches
 deltachat-core-rust/webxdc.md
 deltachat-core-rust/standards.md
 deltachat-core-rust/draft/
