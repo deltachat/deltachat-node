@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-## [1.78.0] - 2022-05-01
+## [1.78.0] - 2022-05-02
 
 ### Changed
 - Upgrade to deltachat-core version `1.78.0`
@@ -1440,9 +1440,11 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.77.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.78.0...HEAD
 
-[1.77.1]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...v1.77.1
+[1.78.0]: https://github.com/deltachat/deltachat-node/compare/v1.77.1...v1.78.0
+
+[1.77.1]: https://github.com/deltachat/deltachat-node/compare/v1.77.0...v1.77.1
 
 [1.77.0]: https://github.com/deltachat/deltachat-node/compare/v1.76.0...v1.77.0
 
