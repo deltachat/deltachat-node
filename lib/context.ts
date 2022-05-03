@@ -27,7 +27,7 @@ export class Context extends EventEmitter {
   constructor(
     readonly manager: AccountManager | null,
     private inner_dcn_context: NativeContext,
-    readonly account_id: number
+    readonly account_id: number | null
   ) {
     super()
     debug('DeltaChat constructor')
@@ -37,7 +37,7 @@ export class Context extends EventEmitter {
    * automatically starts the event handler */
   static open(cwd: string): Context {
     const dbFile = join(cwd, 'db.sqlite')
-    const context = new Context(null, binding.dcn_context_new(dbFile), 42)
+    const context = new Context(null, binding.dcn_context_new(dbFile), null)
     debug('Opened context')
     function handleCoreEvent(
       eventId: number,

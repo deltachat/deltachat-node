@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.79.3] - 2022-05-03
+
+### Fixed
+- fix standalone context: configure promise would still not return (wrong account id)
+
 ## [1.79.2] - 2022-05-02
 
 ### Fixed
@@ -1455,7 +1460,9 @@ const { C } = require('deltachat-node')
 
 - Remove `dc_msg_has_deviating_timestamp` prototype [**@link2xt**](https://github.com/link2xt)
 
-[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.79.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-node/compare/v1.79.3...HEAD
+
+[1.79.3]: https://github.com/deltachat/deltachat-node/compare/v1.79.2...v1.79.3
 
 [1.79.2]: https://github.com/deltachat/deltachat-node/compare/v1.79.1...v1.79.2
 
