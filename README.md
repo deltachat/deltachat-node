@@ -1,3 +1,9 @@
+# IMPORTANT: This repo is deprecated! - deltachat-node has moved to core repo.
+
+deltachat-node **was moved** to the core repo in [deltachat-core-rust#3283](https://github.com/deltachat/deltachat-core-rust/pull/3283).
+
+**New location**: <https://github.com/deltachat/deltachat-core-rust/tree/master/node>
+
 # deltachat-node
 
 > node.js bindings for [`deltachat-core-rust`][deltachat-core-rust]
